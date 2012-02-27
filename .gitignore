@@ -1,0 +1,9 @@
+app/.DS_Store
+app/tmp/*
+app/tmp/
+app/tmp
+.DS_Store
+app/config/core.php
+app/config/database.php
+core.php
+database.php

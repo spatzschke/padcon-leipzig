@@ -1,0 +1,671 @@
+/**
+ *
+ * Generic CSS for padcon-leipzig.de 2011
+ *
+ */
+
+body {
+	background: url(../img/layout/bg_high.png) 0 0 transparent;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 150%;
+	color: #003D4C;
+	position: relative;
+}
+
+body.catalog {
+	background: none;	
+}
+
+a, a:active, a:focus {
+	text-decoration: none;
+	color: #003D4C;
+}
+
+a:hover {
+	color: #f79433;
+}
+
+b {
+	font-weight: bold;	
+}
+
+h1, h1 b{
+	font-size: 20px;
+	font-weight: normal;
+	color: #003D4C;
+}
+
+#navigationBandage {
+	position: absolute;
+	top: 280px;
+	left: 0;
+	height: 80px;
+	width: 100%; 
+	background-color: #346AA6;
+}
+
+#footerBandage {
+    background-color: #346AA6;
+    bottom: 50px;
+	left: 0;
+    height: 35px;
+    position: absolute;
+    width: 100%;
+}
+ 
+#container {
+	
+	position: relative;
+	width: 1004px;
+	margin: 0 auto;	
+}
+
+
+#header {
+	background: url(../img/layout/bg_header.png) 0 0 transparent;
+	height: 271px;
+	color: #346AA6;
+	margin-top: 20px;
+}
+
+#header .lettering {
+	background: url("../img/layout/h_lettering.png") repeat scroll 0 0 transparent;
+    height: 87px;
+    left: 50px;
+    position: absolute;
+    top: 145px;
+    width: 518px;	
+}
+
+#header .logo {
+	background: url("../img/layout/h_logo.png") no-repeat scroll 250px 0 transparent;
+    font-family: Arial;
+    font-size: 70px;
+    font-style: italic;
+    font-weight: bold;
+    height: 141px;
+    padding-top: 30px;
+    position: absolute;
+    right: 50px;
+    top: 50px;
+    width: 522px;
+}
+
+#header a, #header a:hover {
+	color: #346AA6;
+}
+
+#header .caption {
+   font-size: 25px;
+    font-weight: bold;
+    position: absolute;
+    right: 50px;
+    top: 240px;
+}
+
+#topNavigation {
+	background: url(../img/layout/bg_border_trans.png) repeat-y 0 0 transparent;
+	padding: 0 18px;
+    width: 968px;
+	height: 80px;	
+}	
+
+#topNavigation .bgColor{
+	background-color: #346AA6;
+    height: 100%;
+    width: 100%;
+	position: relative;	
+}
+
+#topNavigation ul {
+	height: 100%;
+	position: absolute;
+}
+
+#topNavigation li {
+	display: inline;
+	height: 114px;
+	float: left;
+}
+
+#topNavigation a {
+	width: 200px;
+	height: 114px;
+	color: #FFFFFF;
+	text-decoration: none;
+	font-size: 18px;
+	font-weight: bold;
+		
+}
+
+#topNavigation a > div {
+	float: left;
+	width: 110px;	
+}
+
+#topNavigation a .image {
+	height: 114px;
+	width: 114px;
+	background: url(../img/layout/n_buttons.png) repeat-y 0 0 transparent;
+}
+
+#topNavigation a.product .image {
+	background-position: 0px 0px;
+}
+
+#topNavigation a.catalog .image {
+	background-position: -122px 0px;
+}
+
+#topNavigation a.partner .image {
+	background-position: -244px 0px;
+}
+
+#topNavigation a.product:hover .image {
+	background-position: 0px 0px;
+}
+
+#topNavigation a.catalog:hover .image {
+	background-position: -122px 0px;
+}
+
+#topNavigation a.partner:hover .image {
+	background-position: -244px 0px;
+}
+
+#topNavigation a .linkText {
+	margin-left: 5px;
+    margin-top: 40px;
+}
+
+#topNavigation a:hover .linkText {
+	color: #f79433;
+}
+
+#topNavigation .search {
+	float: right;
+    margin-right: 50px;
+    margin-top: 32px;
+    width: 150px;
+	position: relative;	
+}
+
+#topNavigation .search div{
+    height: 16px;
+    left: 10px;
+    position: absolute;
+    top: 11px;
+    width: 15px;
+	display: none;	
+}
+
+#topNavigation .search .cancel {
+	background: url("../img/cancel.png") no-repeat scroll 0 0 transparent;	
+}
+
+#topNavigation .search .cancel:hover {
+	background-position: 0px -18px;	
+}
+
+#topNavigation .search input{
+	background: url("../img/search.png") no-repeat scroll 0 0 #346AA6;
+    border: 0 none;
+    padding: 11px 37px 12px 15px;
+    width: 125px;
+	color: #346aa6;
+}
+
+#content {
+	background: url(../img/layout/bg_border.png) repeat-y 0 0 transparent;
+	padding: 60px 80px 20px;
+	min-height: 500px;
+	clear: both;
+    color: #333333;
+    overflow: auto;
+}
+
+#footer {
+	background: url(../img/layout/bg_footer.png) repeat-y 0 0 transparent;	
+	height: 80px;
+	padding: 0 18px;
+    width: 968px;
+}
+
+#footer .footerContent{
+	background-color: #346AA6;
+	color: #FFFFFF;
+	font-size: 14px;
+	font-weight: bold;
+	height: 20px;
+	width: 948;
+	padding: 10px;
+}
+
+#footer .footerContent > *{
+	float: left; 
+}
+
+#footer a{
+	float: left;
+	color: #FFFFFF;
+	margin: 0 10px;
+}
+
+#footer a:hover{
+	color: #f79433;
+}
+
+#footer .copyright{
+	float: right;
+	margin-right: 10px;
+}
+
+
+#news p.contentParagraph {
+	background: url("../img/horizontal_devider.png") no-repeat scroll 0 0 transparent;
+    padding: 20px;
+    text-align: center;	
+}
+
+.categoryItem {
+	width: 278px;
+	height: 53px;
+	float: left;
+	font-size: 18px;
+	padding: 32px 0px;	
+}
+
+.categoryItem .text{
+	width: 260px;
+	text-align: center;
+	font-weight: bold;
+}
+
+#partnerCategories a .categoryItem {
+	padding-top: 23px;
+	height: 62px;	
+}
+
+#catalogs a .categoryItem {
+	height: 53px;	
+}
+
+a .categoryItemLeft {
+	margin: 0 30px;
+	padding-right: 5px;
+	padding-left: 100px;
+}
+
+a .categoryItemRight {	
+	padding-right: 100px;
+	padding-left: 5px;
+}
+
+a:hover .categoryItemLeft, a:hover .categoryItemRight {
+	color: #003D4C;	
+}
+
+#categories a .categoryItem { background: url("../img/btn_category.jpg") no-repeat scroll 0 0 transparent; }
+#categories a:hover .categoryItem-physio { background-position: -379px 0; }
+#categories a .categoryItem-physio { background-position: 4px 0; }
+#categories a:hover .categoryItem-pflege { background-position: -777px 0; }
+#categories a .categoryItem-pflege { background-position: -1165px 0; }
+#categories a:hover .categoryItem-intensiv { background-position: -379px -117px; }
+#categories a .categoryItem-intensiv { background-position: 4px -117px; }
+#categories a:hover .categoryItem-op { background-position: -777px -117px; }
+#categories a .categoryItem-op { background-position: -1165px -117px; }
+#categories a:hover .categoryItem-rontgen { background-position: -379px -236px; }
+#categories a .categoryItem-rontgen { background-position: 4px  -236px; }
+#categories a:hover .categoryItem-notfall { background-position: -777px -236px; }
+#categories a .categoryItem-notfall { background-position: -1165px  -236px; }
+#categories a:hover .categoryItem-baby { background-position: -379px -355px; }
+#categories a .categoryItem-baby { background-position: 4px -355px; }
+#categories a:hover .categoryItem-funktion { background-position: -777px -355px; }
+#categories a .categoryItem-funktion { background-position: -1165px -355px; }
+
+#partnerCategories a .categoryItem { background: url("../img/btn_partner.jpg") no-repeat scroll 0 0 transparent; }
+#partnerCategories a:hover .categoryItem-lagerung { background-position: -15px -20px; }
+#partnerCategories a .categoryItem-lagerung { background-position: -406px -20px; }
+#partnerCategories a .categoryItem-transport { background-position: -406px -139px; }
+#partnerCategories a:hover .categoryItem-transport { background-position: -15px -139px; }
+#partnerCategories a .categoryItem-medizinpflege { background-position: -406px -256px; }
+#partnerCategories a:hover .categoryItem-medizinpflege { background-position: -15px -256px; }
+#partnerCategories a .categoryItem-transfer { background-position: -1204px -19px; }
+#partnerCategories a:hover .categoryItem-transfer { background-position: -813px -19px; }
+#partnerCategories a .categoryItem-stahl { background-position: -1204px -138px; }
+#partnerCategories a:hover .categoryItem-stahl { background-position: -813px -138px; }
+#partnerCategories a .categoryItem-technik { background-position: -1204px -255px; }
+#partnerCategories a:hover .categoryItem-technik { background-position: -813px -255px; }
+#partnerCategories #c6 .text { margin-top: 8px; }
+
+#catalogs a .categoryItem { background: url("../img/btn_catalog.jpg") no-repeat scroll 0 0 transparent; }
+#catalogs a .categoryItem-physio { background-position: -416px -10px; }
+#catalogs a:hover .categoryItem-physio { background-position: -14px -11px; }
+#catalogs a .categoryItem-pflege { background-position: -1220px -10px; }
+#catalogs a:hover .categoryItem-pflege { background-position: -818px -11px; }
+#catalogs a .categoryItem-intensiv { background-position: -416px -129px; }
+#catalogs a:hover .categoryItem-intensiv { background-position: -14px -130px; }
+#catalogs a .categoryItem-op { background-position: -1219px -127px; }
+#catalogs a:hover .categoryItem-op { background-position: -817px -128px; }
+#catalogs a .categoryItem-rontgen { background-position: -416px -247px; }
+#catalogs a:hover .categoryItem-rontgen { background-position: -13px  -248px; }
+#catalogs a .categoryItem-notfall { background-position: -1219px -246px; }
+#catalogs a:hover .categoryItem-notfall { background-position: -817px  -247px; }
+#catalogs a .categoryItem-baby { background-position: -416px -370px; }
+#catalogs a:hover .categoryItem-baby { background-position: -14px -371px; }
+#catalogs a .categoryItem-funktion { background-position: -1219px -368px; }
+#catalogs a:hover .categoryItem-funktion { background-position: -817px -369px; }
+#catalogs .categoryItem .text{ margin-top: -14px; line-height: 150%;}
+
+.productListItem, .partnerListItem {
+	width: 855px;
+	margin-bottom: 15px;
+	float: left;	
+	
+	background:url(../img/horizontal_devider.png) no-repeat 0 bottom transparent
+}
+.productListItem2 .productItemHeader{
+	background:url(../img/bg_productItemHeader.png) no-repeat 0 0 transparent;
+	height: 14px;
+	width: 100%;
+	float: left;		
+}
+
+.productListItem2 .productItemCenter{
+	background:url(../img/bg_productItemCenter.png) repeat-y 0 0 transparent;
+	float: left;	
+	width: 100%;	
+}
+
+.partnerItemCenter {
+	float: left;
+    position: relative;
+    width: 100%;	
+}
+
+.productListItem2 .productItemFooter{
+	background:url(../img/bg_productItemFooter.png) no-repeat 0 0 transparent;
+	height: 17px;
+	width: 100%;
+	float: left;		
+}
+
+.productListItem .productItemCenter, .productListItem .productItemHeader{
+	position: relative;
+}
+
+.productListItem .productItemCenter .loader{
+	position: absolute;
+	top: 65px;
+	width: 20px;
+	display: none;	
+}
+
+.productListItem .productItemImage, .partnerListItem .partnerItemImage{	
+	float: left;
+    height: 118px;
+    margin: 10px 40px;
+    padding: 10px;
+    width: 198px;
+	margin-bottom: 30px;
+}
+
+.productListItem .productItemImage, .partnerListItem .partnerItemImage {
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.productListItem-physio .productItemImage { background:url(../img/img_product/img_productItem-physio.png) no-repeat 0 0 transparent; }
+.productListItem-pflege .productItemImage { background:url(../img/img_product/img_productItem-pflege.png) no-repeat 0 0 transparent; }
+.productListItem-intensiv .productItemImage { background:url(../img/img_product/img_productItem-intensiv.png) no-repeat 0 0 transparent; }
+.productListItem-op .productItemImage { background:url(../img/img_product/img_productItem-op.png) no-repeat 0 0 transparent; }
+.productListItem-rontgen .productItemImage { background:url(../img/img_product/img_productItem-rontgen.png) no-repeat 0 0 transparent; }
+.productListItem-notfall .productItemImage { background:url(../img/img_product/img_productItem-notfall.png) no-repeat 0 0 transparent; }
+.productListItem-baby .productItemImage { background:url(../img/img_product/img_productItem-mutter.png) no-repeat 0 0 transparent; }
+.productListItem-funktion .productItemImage { background:url(../img/img_product/img_productItem-funktion.png) no-repeat 0 0 transparent; }
+
+.productListItem .productItemImage img, .partnerListItem .partnerItemImage img{	
+	left: 50%;
+    margin-left: -80px;
+    position: relative;
+    width: 160px;
+	height: 123px;
+}
+
+.partnerListItem .partnerItemImage img{
+	width: auto;
+	max-width: 160px;	
+	height: auto;
+}
+
+.productListItem .productItemContent, .partnerListItem .partnerItemContent{
+	float: left;	
+	width: 338px;
+	padding: 10px 0;	
+	font-size: 14px;
+	color: #346AA6;
+	margin-bottom: 30px;
+}
+
+.productListItem .productItemContent label {
+	float: left;
+    width: 65px;	
+}
+
+.productListItem .productItemContent label.color {
+	padding-top: 5px;
+	height: 30px;
+}
+
+.productListItem .productItemContent .productItemNumber{	
+}
+
+.productListItem .productItemContent .productItemName, .partnerListItem .partnerItemContent .partnerItemName{	
+	font-size: 20px;
+	font-weight: bold;
+	margin: 5px 0 10px -1px;
+}
+
+.productListItem .productItemContent .productItemMaterial{	
+}
+
+.productListItem .productItemContent .productItemColor{	
+	height: 30px;
+	margin: 5px 0;
+}
+
+.productItemColor .colorItem {
+	height: 29px;
+	width: 29px;
+	float: left;
+	margin: 0 10px 5px 0;	
+}
+
+.productItemColor .colorItem img {
+	height: 30px;
+	width: 30px;
+	float: left;	
+}
+
+
+.productListItem .productItemContent .productItemSize{	
+	width: 100%;
+	float: left;
+}
+
+.productListItem .productItemFeaturesHeader{
+	margin: 0 0 5px 15px;
+	text-decoration:underline;
+}
+
+.productListItem .productItemFeatures, .partnerListItem .partnerItemLink{
+	color: #346AA6;	
+	float: left;
+	width: 210px;
+	margin-bottom: 30px;
+}
+
+.productListItem .productItemFeatures li{
+	background:url(../img/featureList_Point.png) no-repeat 0 1px transparent;
+	display: block;
+    line-height: 120%;
+    padding: 0 0 10px 24px;
+}
+
+.partnerListItem .partnerItemLink{
+	bottom: -15px;
+    height: 100%;
+    margin-bottom: 0;
+    margin-right: 60px;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    width: 150px;
+}
+
+.products h1 {
+	margin-bottom: 20px;	
+}
+
+.catalogs a, .catalogs a:visited, .catalogs a:active {
+	color: #346AA6;
+}
+
+.catalogs .download {
+	padding: 0 60px;
+	margin-top: -20px;
+}
+
+.catalogs .download span {
+	font-weight: bold;
+}
+
+.catalogs .download .text{
+	float: left;
+	margin-top: 30px;
+}
+
+.catalogs .download img{
+	float: left;
+	border: 0 none;
+}
+
+.catalogs .info {
+	color: #666666;
+    float: left;
+    font-size: 11px;
+    margin: 0 125px;
+    position: absolute;
+    top: 95px;
+	z-index: 1000;
+}
+
+.catalogs embed:active, .catalogs embed, .catalogs embed:focus {
+	border: 0px solid white;
+	outline: none;
+	position: absolute;
+	z-index: 1;
+	top: 105px;
+	left: 0;
+}
+
+.contact {
+	width: 50%;	
+	float: left;
+	color: #346AA6;
+}
+
+.contact h1, .contact h2 {
+	color: #003D4C;
+	font-size: 20px;	
+}
+
+.contact h2 {
+	font-size: 18px;
+	margin: 15px 0 10px 20px;	
+}
+
+.contact .static {
+	margin-left: 20px;	
+}
+
+.contactForm {
+	margin-top: 20px;	
+}
+
+.contactStatic {
+	margin-top: 40px;	
+}
+
+.contactForm h2{
+	margin-left: 5px;	
+}
+
+.contactForm label{
+	font-size: 100%;
+}
+
+.contactForm .inputName, .contactForm .inputMail{
+	clear: none;
+    float: left;
+    width: 46%;
+}
+
+div.message {
+	background-color: transparent;
+    margin: 0 25%;
+    position: relative;
+    text-align: center;
+    top: 26px;
+    width: 50%;
+	color: #000000;
+}
+
+div.message.error{
+	
+}
+
+div.message.success{
+	
+}
+
+div.message.info{
+	
+}
+
+div.message.attention{
+	
+}
+
+div.form, div.index, div.view {
+	overflow: auto;	
+}
+
+input, textarea {
+	font-size: 90%;
+	padding: 2px;	
+}
+
+form div {
+	margin-bottom: 0;	
+}
+
+
+
+form .submit input[type="submit"]  ,input[type="submit"], div.actions ul li a, td.actions a {
+    background: -moz-linear-gradient(center top , #9cbbea, #5682af) repeat scroll 0 0 #5682af;
+    border: 1px solid #244663;
+    border-radius: 8px 8px 8px 8px;
+    color: #ffffff;
+    font-weight: normal;
+    min-width: 0;
+    padding: 4px 8px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #000000;
+}
+
+input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form .submit input[type="submit"]:hover {
+    background: -moz-linear-gradient(center top , #5682af, #9cbbea) repeat scroll 0 0 #5682af;
+	text-decoration: none;
+}

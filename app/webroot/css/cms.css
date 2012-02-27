@@ -1,0 +1,25 @@
+.cmsComponent .welcome {
+margin-left: 20%;
+width: 60%;
+}
+
+.cmsComponent .welcome .abs{
+margin-bottom: 20px;
+line-height: 140%;
+}
+
+.cmsComponent .welcome .abs.first{
+text-align: center;
+line-height: 230%;
+}
+
+.cmsComponent .welcome p{
+margin-bottom: 5px;
+}
+
+.cmsComponent .welcome h2{
+width:100%;
+font-weight: bold;
+font-weight: 110%;
+color: #003D4C;
+}
