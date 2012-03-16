@@ -81,3 +81,4 @@
 	
 	Router::connect('/Anmelden', array('controller' => 'Users', 'action' => 'login'));
 	Router::connect('/Abmelden', array('controller' => 'Users', 'action' => 'logout'));
+	Router::connect('/produkte.php', array('controller' => 'Categories', 'action' => 'overview'));
