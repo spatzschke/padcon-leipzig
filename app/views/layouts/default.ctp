@@ -25,8 +25,10 @@
 		<?php __('padcon Leipzig | '); ?>
 		<?php echo $title_for_layout; ?>
 	</title>
+	<meta name="google-site-verification" content="zo3K00lLOLEMmMOCEHokLniDrdkWxkCbRAbmq4QWp7I" />
 	<?php
 		echo $this->Html->meta('icon');
+		
 
 		echo $this->Html->css('reset');
 		echo $this->Html->css('cms');
