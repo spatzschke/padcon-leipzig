@@ -22,7 +22,7 @@ $(document).ready(function() {
 						}, 250, function() {
 							 $('#topNavigation .search .cancel').show(100);
 					  });
-				var str = $('#topNavigation .search input').val().trim();
+				var str = $('#topNavigation .search input').val();
 				var nStr = '';
 				
 				if(!isNaN(str)) {
@@ -42,14 +42,14 @@ $(document).ready(function() {
 					
 					 var xhr = $.ajax({
 						 type: 'POST',
-						 url:"\/Products\/search\/",
+						 url:"\/padcon-leipzig\/Products\/search\/",
 						 data: data,
 						 success:function (data, textStatus) {
 								$('#content').html('');
 								$('#content').html(data);
 								$('#topNavigation .search .loader').hide(100);
 								
-						 }, 
+						 } 
 					 });
 				} else {
 					$.ajax({
@@ -57,7 +57,7 @@ $(document).ready(function() {
 						 success:function (data, textStatus) {
 								$('#content').html('');
 								$('#content').html(data);
-						 }, 
+						 } 
 					 });	
 				}
 				 
@@ -82,7 +82,7 @@ function cleanSearch() {
 			 success:function (data, textStatus) {
 					$('#content').html('');
 					$('#content').html(data);
-			 }, 
+			 } 
 		 });
 }
 
@@ -94,7 +94,7 @@ function loadAjaxContent(url, e) {
 					
 					$('#content').html('');
 					$('#content').html(data);
-			 },
+			 }
 		 });	
 	
 }

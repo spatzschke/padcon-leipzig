@@ -222,7 +222,7 @@ h1, h1 b{
 	min-height: 500px;
 	clear: both;
     color: #333333;
-    overflow: auto;
+    overflow: hidden;
 }
 
 #footer {
@@ -557,7 +557,7 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
     font-size: 11px;
     margin: 0 125px;
     position: absolute;
-    top: 95px;
+    top: 85px;
 	z-index: 1000;
 }
 
