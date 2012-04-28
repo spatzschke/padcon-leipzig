@@ -42,7 +42,7 @@ $(document).ready(function() {
 					
 					 var xhr = $.ajax({
 						 type: 'POST',
-						 url:"\/padcon-leipzig\/Products\/search\/",
+						 url:"\/Products\/search\/",
 						 data: data,
 						 success:function (data, textStatus) {
 								$('#content').html('');
