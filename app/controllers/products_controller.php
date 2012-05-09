@@ -10,7 +10,9 @@ class ProductsController extends AppController {
 			$this->Auth->fields = array('username' => 'email', 'password' => 'password');
 			$this->Auth->allow('listing', 'sizeBuilder', 'getColors', 'search');
 			
+			$this->set('auth',$this->Auth->user());
 		}
+		
 	}
 
 	function index() {

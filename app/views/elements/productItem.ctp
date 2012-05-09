@@ -5,6 +5,7 @@
 	$präfix_size = 'Maße';
 	$productItemFeaturesHeader = 'Eigenschaften';
 	
+	
 ?>		
 
 <div id="p<?php e($product['Product']['product_number']);?>" class="productListItem productListItem-<?php e($product['Category']['short']);?>">
@@ -12,14 +13,20 @@
     <div class="productItemCenter">
     	<div class="loader"><img src="<?php e($this->webroot.'img/ajax.gif'); ?>" alt="Ladevorgang"/></div>
     	<div class="productItemImage">	
-        	<a class="mediaURL" href="<?php e($product['Image'][0]['path'].'.'.$product['Image'][0]['ext']);?>">
-            	<img src="<?php if(count($product['Image']) == 0) {
-					e($this->webroot.'img/no_pic.png');
+        	<?php if(count($product['Image']) == 0) {
+					if(isset($auth)) {
+						e('<a class="mediaURL"  href="http://media.padcon-leipzig.de/index.php?p='.$product['Product']['product_number'].'&c=99"><img src="'.$this->webroot.'img/no_pic.png" alt="'.$product['Product']['name'].'" /></a>');
+					} else {
+						e('<img src="'.$this->webroot.'img/no_pic.png" alt="'.$product['Product']['name'].'" />');
+					}
 				} else {
-					e($product['Image'][0]['path'].'t.'.$product['Image'][0]['ext']);
+					if(isset($auth)) {
+						e('<a class="mediaURL"  href="http://media.padcon-leipzig.de/index.php?p='.$product['Product']['product_number'].'&c=99"><img src="'.$product['Image'][0]['path'].'t.'.$product['Image'][0]['ext'].'" alt="'.$product['Product']['name'].'" image-rel="'.$product['Image'][0]['path'].'.'.$product['Image'][0]['ext'].'" /></a>');
+					} else {
+						e('<a class="mediaURL"><img src="'.$product['Image'][0]['path'].'t.'.$product['Image'][0]['ext'].'" alt="'.$product['Product']['name'].'" image-rel="'.$product['Image'][0]['path'].'.'.$product['Image'][0]['ext'].'" /></a>');
+					}
 				}
-				?>" alt="<?php e($product['Product']['name']);?>" />
-        	</a>
+			?>
         </div>
     	<div class="productItemContent">
             <div class="productItemNumber"><?php e($präfix_number);?><?php e($product['Product']['product_number']);?></div>

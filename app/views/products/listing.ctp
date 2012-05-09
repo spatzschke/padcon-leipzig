@@ -1,5 +1,6 @@
 <div class="products">
 	<?php
+	
 		foreach ($products as $product):
 		
 			echo $this->element('productItem', array('product' => $product));
@@ -8,22 +9,16 @@
         <?php echo $this->Html->css('colorbox');?>
 		<?php echo $this->Html->script('jquery.colorbox-min.js');?>
         
+        
+       
         <script>
 		var src = $(".colorItem").find("img").attr("src");
-		
-			$(".mediaURL").colorbox({
-				iframe:true, 
-				width:"810", 
-				height:"600", 
-				overlayClose: true,
-				onOpen: function () {
-					$(this).parent().parent().find('.loader').hide();	
-				},
-				onLoad: function() {
-    				//$('#cboxClose').remove();
-				}
-
-			});
+			
+			/*
+			
+			*/
+			
+			
 			
 			$('.colorItem').bind({
 			  mouseenter: function() {
@@ -48,6 +43,56 @@
 			  }
 			});
 
+			<?php
+			
+			if(!isset($auth)) {
+				
+			?>
+				$('.mediaURL').bind({
+				click: function() {
+					
+					
+					var image = $(this).find('img').attr('image-rel');
+					var box = '	<img id="image" src="'+image+'" width="768" height="557"/>';
+					
+					$.colorbox({
+						html:box,
+						width:'810', 
+						height:'600', 
+						overlayClose: true,
+						onOpen: function () {
+							$(this).parent().parent().find('.loader').hide();
+								
+						},
+						onLoad: function() {
+							//$('#cboxClose').remove();
+						}
+		
+					});	
+				}
+			});
+			<?php
+			} else {
+				
+			
+	
+			echo "
+			$('.mediaURL').colorbox({
+						iframe:true,
+						width:'292', 
+						height:'292', 
+						overlayClose: false,
+						onOpen: function () {
+							$(this).parent().parent().find('.loader').hide();
+								
+						}, 
+						onLoad: function() {
+							$('#cboxClose').remove();
+						}
+		
+					
+			});
+			
 			function saveImageInDb(response) {
 				 
 				 var data = {
@@ -61,7 +106,7 @@
 				 
 				 $.ajax({
 					 type: 'POST',
-					 url:"\/Images\/add\/",
+					 url:'\/Images\/add\/',
 					 data: response,
 					 success:function (data, textStatus) {
 						 	$('#p'+response['data']['product_number']).find('.message').html();
@@ -74,6 +119,10 @@
 				 }); 
 				 
 			}
+			";}
+			?>
+			
+			
 
 		</script>
 </div>
