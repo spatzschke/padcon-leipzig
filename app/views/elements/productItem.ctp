@@ -15,7 +15,7 @@
     	<div class="productItemImage">	
         	<?php if(count($product['Image']) == 0) {
 					if(isset($auth)) {
-						e('<a class="mediaURL"  href="http://padcon-leipzig.de/media/index.php?p='.$product['Product']['product_number'].'&c=99"><img src="'.$this->webroot.'img/no_pic.png" alt="'.$product['Product']['name'].'" /></a>');
+						e('<a class="mediaURL"  href="'.$_SERVER['SERVER_NAME'].'/media/index.php?p='.$product['Product']['product_number'].'&c=99"><img src="'.$this->webroot.'img/no_pic.png" alt="'.$product['Product']['name'].'" /></a>');
 					} else {
 						e('<img src="'.$this->webroot.'img/no_pic.png" alt="'.$product['Product']['name'].'" />');
 					}
