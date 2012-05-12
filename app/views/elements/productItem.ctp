@@ -15,13 +15,13 @@
     	<div class="productItemImage">	
         	<?php if(count($product['Image']) == 0) {
 					if(isset($auth)) {
-						e('<a class="mediaURL"  href="'.$_SERVER['SERVER_NAME'].'/media/index.php?p='.$product['Product']['product_number'].'&c=99"><img src="'.$this->webroot.'img/no_pic.png" alt="'.$product['Product']['name'].'" /></a>');
+						e('<a class="mediaURL"  href="'.FULL_BASE_URL.'/media/index.php?p='.$product['Product']['product_number'].'&c=99"><img src="'.$this->webroot.'img/no_pic.png" alt="'.$product['Product']['name'].'" /></a>');
 					} else {
 						e('<img src="'.$this->webroot.'img/no_pic.png" alt="'.$product['Product']['name'].'" />');
 					}
 				} else {
 					if(isset($auth)) {
-						e('<a class="mediaURL"  href="http://media.padcon-leipzig.de/index.php?p='.$product['Product']['product_number'].'&c=99"><img src="'.$product['Image'][0]['path'].'t.'.$product['Image'][0]['ext'].'" alt="'.$product['Product']['name'].'" image-rel="'.$product['Image'][0]['path'].'.'.$product['Image'][0]['ext'].'" /></a>');
+						e('<a class="mediaURL"  href="'.FULL_BASE_URL.'/media/index.php?p='.$product['Product']['product_number'].'&c=99"><img src="'.$product['Image'][0]['path'].'t.'.$product['Image'][0]['ext'].'" alt="'.$product['Product']['name'].'" image-rel="'.$product['Image'][0]['path'].'.'.$product['Image'][0]['ext'].'" /></a>');
 					} else {
 						e('<a class="mediaURL"><img src="'.$product['Image'][0]['path'].'t.'.$product['Image'][0]['ext'].'" alt="'.$product['Product']['name'].'" image-rel="'.$product['Image'][0]['path'].'.'.$product['Image'][0]['ext'].'" /></a>');
 					}
