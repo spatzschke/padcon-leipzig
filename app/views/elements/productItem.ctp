@@ -21,9 +21,9 @@
 					}
 				} else {
 					if(isset($auth)) {
-						e('<a class="mediaURL"  href="'.FULL_BASE_URL.'/media/index.php?p='.$product['Product']['product_number'].'&c=99"><img src="'.$product['Image'][0]['path'].'t.'.$product['Image'][0]['ext'].'" alt="'.$product['Product']['name'].'" image-rel="'.$product['Image'][0]['path'].'.'.$product['Image'][0]['ext'].'" /></a>');
+						e('<a class="mediaURL"  href="'.FULL_BASE_URL.'/media/index.php?p='.$product['Product']['product_number'].'&c=99"><img class="lazy" src="'.$product['Image'][0]['path'].'t.'.$product['Image'][0]['ext'].'" alt="'.$product['Product']['name'].'" image-rel="'.$product['Image'][0]['path'].'.'.$product['Image'][0]['ext'].'" /></a>');
 					} else {
-						e('<a class="mediaURL"><img src="'.$product['Image'][0]['path'].'t.'.$product['Image'][0]['ext'].'" alt="'.$product['Product']['name'].'" image-rel="'.$product['Image'][0]['path'].'.'.$product['Image'][0]['ext'].'" /></a>');
+						e('<a class="mediaURL"><img class="lazy" src="'.$this->webroot.'img/lazyload.gif" data-original="'.$product['Image'][0]['path'].'t.'.$product['Image'][0]['ext'].'" alt="'.$product['Product']['name'].'" image-rel="'.$product['Image'][0]['path'].'.'.$product['Image'][0]['ext'].'" /></a>');
 					}
 				}
 			?>

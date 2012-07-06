@@ -8,10 +8,12 @@
 		endforeach; ?>
         <?php echo $this->Html->css('colorbox');?>
 		<?php echo $this->Html->script('jquery.colorbox-min.js');?>
-        
+        <?php echo $javascript->link('jquery.lazyload.min.js', false);?>
         
        
         <script>
+        
+        
 		var src = $(".colorItem").find("img").attr("src");
 			
 			/*

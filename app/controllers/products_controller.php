@@ -4,6 +4,7 @@ class ProductsController extends AppController {
 	var $name = 'Products';
 	public $uses = array('Product', 'Material', 'Size', 'Color', 'Image');
 	var $components = array('RequestHandler', 'Auth', 'Session');
+	var $helpers = array('Html', 'Javascript');
 	
 	public function beforeFilter() {
 		if(isset($this->Auth)) {

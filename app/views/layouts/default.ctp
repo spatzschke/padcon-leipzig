@@ -34,17 +34,15 @@
 		echo $this->Html->css('cms');
 		echo $this->Html->css('cake.generic');
 		
-		echo $this->Html->css('colorbox');
-		
 		echo $this->Html->css('screen');
 		
-		echo $this->Html->script('https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js');
+		echo $this->Html->script('https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js');
 		
-		echo $this->Html->script('jquery.colorbox-min.js');
+		echo $scripts_for_layout;		
 		
 		echo $this->Html->script('main');
 	
-		echo $scripts_for_layout;
+
 	?>
 </head>
 <body>
