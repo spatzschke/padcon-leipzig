@@ -36,7 +36,15 @@
 				<?php e($product['Material']['name']);?></div>
             <div class="productItemColor">
 				<label class="color"><?php e($präfix_color);?>:</label>
-				<?php e($this->element('productItemColorSlider', array('material_id' => $product['Material']['id']))); ?></div>
+				
+					<ul id="colorCarousel<?php e($product['Product']['product_number']);?>" >
+						<?php e($this->element('productItemColorSlider', array('material_id' => $product['Material']['id']))); ?>
+					</ul>
+				
+				<script type="text/javascript">
+					$('#colorCarousel<?php e($product['Product']['product_number']);?>').jcarousel({});
+				</script>
+			</div>
             <div class="productItemSize">
 				<label><?php e($präfix_size);?>:</label>
             	<?php $this->requestAction('Products/sizeBuilder/'.$product['Size']['id']); ?>

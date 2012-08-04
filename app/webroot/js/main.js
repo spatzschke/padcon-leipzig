@@ -12,6 +12,7 @@ $(document).ready(function() {
 			
 			$("img.lazy").lazyload();
 			
+			
 			$('#topNavigation .search .cancel').click(function() {
 				cleanSearch();
 			});
