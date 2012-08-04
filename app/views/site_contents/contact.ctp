@@ -23,7 +23,7 @@
     <h2>Telefon</h2>
     <div class="static">
     	Tel.: 0341 - 358 1802 <br />
-    	Fax.: 0341 - 358f 1895 <br />
+    	Fax.: 0341 - 358 1895 <br />
 	</div>
 	<h2>eMail</h2>
     <div class="static">
