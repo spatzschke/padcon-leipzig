@@ -717,14 +717,14 @@ input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form 
   .jcarousel-next-horizontal {
     background: url("../img/colorSliderRight.png") no-repeat scroll 0 0 transparent;
    cursor: pointer;
-    height: 90px;
+    height: 17px;
     position: absolute;
     right: -120px;
-    top: -38px;
+    top: 6px;
     width: 32px;
 }
   .jcarousel-next-horizontal:hover,   .jcarousel-next-horizontal:focus {
-    background-position: -32px 0;
+    background-position: 0px 0;
 }
   .jcarousel-next-horizontal:active {
     background-position: -64px 0;
@@ -736,10 +736,10 @@ input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form 
   .jcarousel-prev-horizontal {
     background: url("../img/colorSliderLeft.png") no-repeat scroll 0 0 transparent;
     cursor: pointer;
-    height: 90px;
+    height: 17px;
     left: 73px;
     position: absolute;
-    top: -38px;
+    top: 6px;
     width: 32px;
 }
 
