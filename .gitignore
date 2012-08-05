@@ -7,3 +7,5 @@ app/config/core.php
 app/config/database.php
 core.php
 database.php
+
+app/webroot/css/cms.css
