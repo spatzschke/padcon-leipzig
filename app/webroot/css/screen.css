@@ -451,7 +451,7 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 
 .productListItem .productItemContent label {
 	float: left;
-    width: 65px;	
+    width: 75px;	
 }
 
 .productListItem .productItemContent label.color {
@@ -691,7 +691,7 @@ input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form 
 }
   .jcarousel-clip-horizontal {
     width: 234px;
-    left: 35px;
+    left: 25px;
 }
   .jcarousel-clip-vertical {
     height: 245px;
@@ -732,7 +732,7 @@ input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form 
     background-position: -34px -26px;
 }
   .jcarousel-next-disabled-horizontal,   .jcarousel-next-disabled-horizontal:hover,   .jcarousel-next-disabled-horizontal:focus,   .jcarousel-next-disabled-horizontal:active {
-    background-position: -34px -52px;
+    background-position: -34px -152px;
     cursor: default;
 }
   .jcarousel-prev-horizontal {
@@ -752,7 +752,7 @@ input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form 
     background-position: 0px -26px;
 }
   .jcarousel-prev-disabled-horizontal,   .jcarousel-prev-disabled-horizontal:hover,   .jcarousel-prev-disabled-horizontal:focus,   .jcarousel-prev-disabled-horizontal:active {
-    background-position: 0px -52px;
+    background-position: 0px -152px;
     cursor: default;
 }
 
