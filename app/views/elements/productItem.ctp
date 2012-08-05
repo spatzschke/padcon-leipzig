@@ -36,7 +36,7 @@
 				<?php e($product['Material']['name']);?></div>
             <div class="productItemColor">
 				<label class="color"><?php e($präfix_color);?>:</label>
-				
+					<div class="colorSliderShadow"></div>
 					<ul id="colorCarousel<?php e($product['Product']['product_number']);?>" >
 						<?php e($this->element('productItemColorSlider', array('material_id' => $product['Material']['id']))); ?>
 					</ul>

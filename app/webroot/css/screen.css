@@ -677,6 +677,8 @@ input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form 
     direction: rtl;
 }
   .jcarousel-container-horizontal {
+    left: -28px;
+    top: -19px;
     width: 245px;
 }
   .jcarousel-container-vertical {
@@ -715,7 +717,7 @@ input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form 
     color: #000000;
 }
   .jcarousel-next-horizontal {
-    background: url("../img/colorSliderRight.png") no-repeat scroll 0 0 transparent;
+    background: url("../img/colorSliderBtn.png") no-repeat scroll -34px -2px transparent;
    cursor: pointer;
     height: 17px;
     position: absolute;
@@ -724,17 +726,17 @@ input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form 
     width: 32px;
 }
   .jcarousel-next-horizontal:hover,   .jcarousel-next-horizontal:focus {
-    background-position: 0px 0;
+    background-position: -34px -26px;
 }
   .jcarousel-next-horizontal:active {
-    background-position: -64px 0;
+    background-position: -34px -26px;
 }
   .jcarousel-next-disabled-horizontal,   .jcarousel-next-disabled-horizontal:hover,   .jcarousel-next-disabled-horizontal:focus,   .jcarousel-next-disabled-horizontal:active {
-    background-position: -96px 0;
+    background-position: -34px -52px;
     cursor: default;
 }
   .jcarousel-prev-horizontal {
-    background: url("../img/colorSliderLeft.png") no-repeat scroll 0 0 transparent;
+    background: url("../img/colorSliderBtn.png") no-repeat scroll 0 -2px transparent;
     cursor: pointer;
     height: 17px;
     left: 73px;
@@ -744,14 +746,18 @@ input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form 
 }
 
   .jcarousel-prev-horizontal:hover,   .jcarousel-prev-horizontal:focus {
-    background-position: -32px 0;
+    background-position: 0px -26px;
 }
   .jcarousel-prev-horizontal:active {
-    background-position: -64px 0;
+    background-position: 0px -26px;
 }
   .jcarousel-prev-disabled-horizontal,   .jcarousel-prev-disabled-horizontal:hover,   .jcarousel-prev-disabled-horizontal:focus,   .jcarousel-prev-disabled-horizontal:active {
-    background-position: -96px 0;
+    background-position: 0px -52px;
     cursor: default;
 }
 
-
+.colorSliderShadow {
+	background-image: url("../img/colorSliderShadow.png");
+	width: 100px;
+	height: 20px;
+}
