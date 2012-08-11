@@ -31,20 +31,22 @@
     	<div class="productItemContent">
             <div class="productItemNumber"><?php e($präfix_number);?><?php e($product['Product']['product_number']);?></div>
             <div class="productItemName"><?php e($product['Product']['name']);?></div>
-            <div class="productItemMaterial">
-				<label><?php e($präfix_material);?>:</label> 
-				<?php e($product['Material']['name']);?></div>
-            <div class="productItemColor">
-				<label class="color"><?php e($präfix_color);?>:</label>
-					<div class="colorSliderShadow"></div>
-					<ul id="colorCarousel<?php e($product['Product']['product_number']);?>" >
-						<?php e($this->element('productItemColorSlider', array('material_id' => $product['Material']['id']))); ?>
-					</ul>
-				
-				<script type="text/javascript">
-					$('#colorCarousel<?php e($product['Product']['product_number']);?>').jcarousel({});
-				</script>
-			</div>
+            <?php if(!empty($product['Material']['name'])) {?>
+	            <div class="productItemMaterial">
+					<label><?php e($präfix_material);?>:</label> 
+					<?php e($product['Material']['name']);?></div>
+	            <div class="productItemColor">
+					<label class="color"><?php e($präfix_color);?>:</label>
+						<div class="colorSliderShadow"></div>
+						<ul id="colorCarousel<?php e($product['Product']['product_number']);?>" >
+							<?php e($this->element('productItemColorSlider', array('material_id' => $product['Material']['id']))); ?>
+						</ul>
+					
+					<script type="text/javascript">
+						$('#colorCarousel<?php e($product['Product']['product_number']);?>').jcarousel({});
+					</script>
+				</div>
+			<?php }?>
             <div class="productItemSize">
 				<label><?php e($präfix_size);?>:</label>
             	<?php $this->requestAction('Products/sizeBuilder/'.$product['Size']['id']); ?>
