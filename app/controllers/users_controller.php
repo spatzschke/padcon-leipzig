@@ -2,18 +2,24 @@
 class UsersController extends AppController {
 
 	var $name = 'Users';
-	public $components = array('Auth', 'Session', 'Session');
+	public $components = array('Auth', 'Session');
 	
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			$this->Auth->fields = array('username' => 'email', 'password' => 'password');
 			$this->Auth->deny('*');
+			$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'dashboard','add', 'admin' => true,'prefix' => 'admin','layout' => 'admin');
 			
+
 		}
 	}
 	
+	function admin_login() {
+		$this->render('login');	
+	}
+	
 	function login() {
-			
+		
 	}
 	
 	function logout() {
@@ -24,6 +30,8 @@ class UsersController extends AppController {
 		$this->User->recursive = 0;
 		$this->set('users', $this->paginate());
 	}
+	
+	
 
 	function view($id = null) {
 		if (!$id) {
@@ -74,5 +82,22 @@ class UsersController extends AppController {
 		}
 		$this->Session->setFlash(__('User was not deleted', true));
 		$this->redirect(array('action' => 'index'));
+	}
+	
+	//admin
+	
+	function admin_dashboard() {
+		$this->layout = 'admin';
+	}
+	
+	function admin_index() {
+		$this->layout = 'admin';
+		$this->User->recursive = 0;
+		$this->set('users', $this->paginate());
+	}
+	
+	function getUser() {
+		$users = $this->User->find('all');
+		return $users;
 	}
 }

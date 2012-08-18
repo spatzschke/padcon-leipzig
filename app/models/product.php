@@ -6,7 +6,7 @@ class Product extends AppModel {
 		'category_id' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
+				'message' => 'Es sind nur Zahlen von 0-9 erlaubt!',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -14,7 +14,7 @@ class Product extends AppModel {
 			),
 			'notempty' => array(
 				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
+				'message' => 'Darf nicht leer sein!',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -24,27 +24,42 @@ class Product extends AppModel {
 		'name' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
+				'message' => 'Darf nicht leer sein!',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'isUnique' => array(
+			 	'rule' => array('isUnique'),
+			 	'message' => 'Der Produktname ist bereits vorhanden!'
+			 ),
 		),
 		'product_number' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'message' => 'Darf nicht leer sein!',
+				
 			),
+			'alphaNumeric' => array(
+				'rule' => array('alphaNumeric'),
+				'message' => 'Es sind nur Zahlen von 0-9 erlaubt!',
+				//'allowEmpty' => false,
+				
+			),
+			 'isUnique' => array(
+			 	'rule' => array('isUnique'),
+			 	'message' => 'Die Produktnummer ist bereits vorhanden!'
+			 ),
+			 'minLength' => array(
+			  	'rule' => array('minLength', 5),
+			  	'message' => 'Die Produktnummer muss mindestens 5 Zeichen haben!'
+			  ),
 		),
 		'featurelist' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
+				'message' => 'Darf nicht leer sein!',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule

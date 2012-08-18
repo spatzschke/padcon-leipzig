@@ -34,7 +34,20 @@
  */
 class AppController extends Controller {
 	
-	var $components = array('RequestHandler');
+	var $components = array('RequestHandler', 'Auth');
+	
+	function beforeFilter() {
+	
+	    if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
+	        $this->layout = 'admin';
+
+
+	    } else {
+	       $this->layout = 'user';  
+	    } 
+
+    }
+
 	
 	function beforeRender() {
 		if ($this->RequestHandler->isAjax()) {

@@ -28,6 +28,10 @@
  */
 	Router::connect('/', array('controller' => 'news', 'action' => 'start'));
 	//Router::connect('/', array('controller' => 'Products', 'action' => 'index'));
+	
+	Router::connect('/admin', array('controller' => 'users', 'action' => 'dashboard','add','search', 'admin' => true,'prefix' => 'admin','layout' => 'admin'));
+	
+	
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */
@@ -82,3 +86,4 @@
 	Router::connect('/Anmelden', array('controller' => 'Users', 'action' => 'login'));
 	Router::connect('/Abmelden', array('controller' => 'Users', 'action' => 'logout'));
 	Router::connect('/produkte.php', array('controller' => 'Categories', 'action' => 'overview'));
+
