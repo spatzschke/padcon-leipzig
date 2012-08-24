@@ -30,13 +30,10 @@ $(document).ready(function() {
 	          });
 	          
 	    loadIframe('ProductImageUpload', updateURL($('#ProductImageUpload').attr('src'), 'c', str))
-	    
 
 	});
 			
 });
-
-
 
 function saveImageInDb(response) {
 				 
@@ -95,9 +92,6 @@ function updateURL(currUrl, param, paramVal){
     var finalURL = baseURL+"?"+newAdditionalURL+rows_txt;
     return finalURL;
 }
-
-
-
 </script>
 
 
@@ -124,28 +118,23 @@ function updateURL(currUrl, param, paramVal){
 					<?php
 						
 						echo $this->Form->input('id', array('data-model' => 'Product', 'data-field' => 'id'));
-						echo $this->Form->input('product_number', array('data-model' => 'Product', 'data-field' => 'product_number', 'error' => array('wrap' => 'label', 'class' => 'error-message', 'style' => 'display:none;')));
+						echo $this->Form->input('product_number', array('label' => 'Produktnummer', 'data-model' => 'Product', 'data-field' => 'product_number', 'error' => array('wrap' => 'label', 'class' => 'error-message', 'style' => 'display:none;')));
 						
-						echo $this->Form->input('name', array('data-model' => 'Product', 'data-field' => 'name'));
-						echo $this->Form->input('category_id', array('empty' => 'Bitte Kategorie waehlen', 'data-model' => 'Product', 'data-field' => 'category_id'));
-						echo $this->Form->input('material_id', array('empty' => 'Bitte Material waehlen', 'data-model' => 'Product', 'data-field' => 'material_id'));
-						echo $this->Form->input('price', array('data-model' => 'Product', 'data-field' => 'price'));
-						echo $this->Form->input('size_id', array('empty' => 'Bitte Groesse waehlen', 'data-model' => 'Product', 'data-field' => 'size_id'));
-						
-						
-						
+						echo $this->Form->input('name', array('label' => 'Produktname', 'data-model' => 'Product', 'data-field' => 'name'));
+						echo $this->Form->input('category_id', array('label' => 'Kategorie', 'empty' => 'Bitte Kategorie wŠhlen', 'data-model' => 'Product', 'data-field' => 'category_id'));
+						echo $this->Form->input('material_id', array('label' => 'Material', 'empty' => 'Bitte Material Šhlen', 'data-model' => 'Product', 'data-field' => 'material_id'));
+						echo $this->Form->input('price', array('label' => 'Preis', 'data-model' => 'Product', 'data-field' => 'price'));
+						echo $this->Form->input('size_id', array('label' => 'Grš§e', 'empty' => 'Bitte Grš§e wŠhlen', 'data-model' => 'Product', 'data-field' => 'size_id'));
 					?>
 					</div>
 					<div class="span4">
 					<?php	
-						echo $this->Form->input('description', array('data-model' => 'Product', 'data-field' => 'description'));
-						echo $this->Form->input('featurelist', array('data-model' => 'Product', 'data-field' => 'featurelist'));
+						echo $this->Form->input('description', array('label' => 'Beschreibung', 'data-model' => 'Product', 'data-field' => 'description'));
+						echo $this->Form->input('featurelist', array('label' => 'Featureliste', 'data-model' => 'Product', 'data-field' => 'featurelist'));
 						
 						
-						echo $this->Form->input('active', array('data-model' => 'Product', 'data-field' => 'active'));
-						echo $this->Form->input('new', array('data-model' => 'Product', 'data-field' => 'new'));
-						
-						
+						echo $this->Form->input('active', array('label' => 'Aktiv', 'data-model' => 'Product', 'data-field' => 'active'));
+						echo $this->Form->input('new', array('label' => 'Neuheit', 'data-model' => 'Product', 'data-field' => 'new'));
 					?>
 					
 					</div>

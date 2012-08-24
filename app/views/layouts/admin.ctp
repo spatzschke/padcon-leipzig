@@ -1,8 +1,9 @@
+<?php header('Content-type: text/html; charset=utf-8'); ?> 
 <!doctype html>
 <html lang="en">
 
 <head>
-	<meta charset="utf-8"/>
+	<meta charset="UTF-8"/>
 	<title>padcon Leipzig | Adminbereich</title>
 	<?php
 		echo $this->Html->meta('icon');

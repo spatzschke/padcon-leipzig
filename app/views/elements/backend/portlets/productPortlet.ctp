@@ -37,7 +37,7 @@ $(document).ready(function() {
 					<th><?php __('Featurelist');?></th>-->
 					<th><?php __('Kategorie');?></th>
 					<th><?php __('Material');?></th>
-					<th><?php __('Grš§e');?></th>
+					<th><?php __('GrÃ¶ÃŸe');?></th>
 				<!--<th><?php __('Preis');?></th>
 					<th><?php __('Neu');?></th>
 					<th><?php __('Aktiv');?></th>
