@@ -15,12 +15,12 @@
 				.$this->Html->link('<div class="image"></div><div class="linkText">Fachhandel</div>','/Fachhandel', array('class'=>'partner', 'escape'=>false)).
 			'</li>
 		</ul>
-		
+		');/*
 		<div class="search">
 			<div class="cancel"></div>
 			<input class="text" placeholder="Suche"/>
 		</div>
+*/
 
-
-	');
+	
 ?>	
