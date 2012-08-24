@@ -5,10 +5,11 @@
 	$präfix_size = 'Maße';
 	$productItemFeaturesHeader = 'Eigenschaften';
 	
+	echo $javascript->link('jquery.jcarousel.min.js', false);
 	
 ?>		
 
-<div id="p<?php e($product['Product']['product_number']);?>" class="productListItem productListItem-<?php e($product['Category']['short']);?>">
+<div id="p<?php e($product['Product']['product_number']);?>" class="productListItem productListItem-<?php echo $product['Category']['short'];?>">
 	<div class="productItemHeader"></div>
     <div class="productItemCenter">
     	<div class="loader"><img src="<?php e($this->webroot.'img/ajax.gif'); ?>" alt="Ladevorgang"/></div>

@@ -7,7 +7,7 @@
 $(document).ready(function() {
 	
 			$('#filter .search input').dynamicSearch({
-				url: "\/padcon-leipzig\/Products\/search\/"
+				url: "<?php echo FULL_BASE_URL.$this->base;?>\/Products\/search\/"
 			});
 });
 

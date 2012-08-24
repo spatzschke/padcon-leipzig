@@ -29,9 +29,13 @@
 	Router::connect('/', array('controller' => 'news', 'action' => 'start'));
 	//Router::connect('/', array('controller' => 'Products', 'action' => 'index'));
 	
-	Router::connect('/admin', array('controller' => 'users', 'action' => 'dashboard','add','search', 'admin' => true,'prefix' => 'admin','layout' => 'admin'));
-	
-	
+//	Router::connect('/admin', array('controller' => 'users', 'action' => 'dashboard','add','search', 'admin' => true,'prefix' => 'admin','layout' => 'admin'));
+
+    
+    Router::connect('/admin', array('controller' => 'pages', 'action' => 'index', 'admin' => true));
+
+    
+    	
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */

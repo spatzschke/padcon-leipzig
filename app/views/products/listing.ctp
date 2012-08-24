@@ -9,7 +9,6 @@
         <?php echo $this->Html->css('colorbox');?>
 		<?php echo $this->Html->script('jquery.colorbox-min.js');?>
         <?php echo $javascript->link('jquery.lazyload.min.js', false);?>
-        <?php echo $javascript->link('jquery.jcarousel.min.js', false);?>
        
         <script>
         

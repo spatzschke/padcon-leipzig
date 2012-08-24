@@ -8,7 +8,7 @@ class UsersController extends AppController {
 		if(isset($this->Auth)) {
 			$this->Auth->fields = array('username' => 'email', 'password' => 'password');
 			$this->Auth->deny('*');
-			$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'dashboard','add', 'admin' => true,'prefix' => 'admin','layout' => 'admin');
+			$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'dashboard', 'admin' => true,'prefix' => 'admin','layout' => 'admin');
 			
 
 		}

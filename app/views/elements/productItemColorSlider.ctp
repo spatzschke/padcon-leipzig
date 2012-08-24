@@ -1,6 +1,8 @@
 <?php 
 
+
 	$colors = $this->requestAction('Products/getColors/'.$material_id);
+
 	
 	foreach ($colors as $color):
 		

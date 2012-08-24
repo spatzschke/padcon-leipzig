@@ -902,21 +902,21 @@ font-size: 14px;}
 	float: left; 
 }
 
-.module input.success {
+.module input.success, .module select.success, .module textarea.success {
 	border-color: #468847;
     color: #468847;
 }
-.module input:focus.success {
+.module input:focus.success, .module select:focus.success, .module textarea:focus.success {
 	border-color: #356635;
     box-shadow: 0 0 6px #7ABA7B;
 }
     
-.module input:focus.error {
+.module input:focus.error, .module select:focus.error, .module textarea:focus.error {
 	border-color: #953B39;
 	box-shadow: 0 0 6px #D59392;
 }
 
-.module input.error {
+.module input.error, .module select.error, .module textarea.error {
 border-color: #B94A48;
     color: #B94A48;
 }
@@ -933,6 +933,10 @@ border-color: #B94A48;
 }
 .validationIcon.error {
 	background-image: url(../../img/icon/exclamation.png);
+}
+
+.error-message {
+	display: none;
 }
 
 .popover-inner {

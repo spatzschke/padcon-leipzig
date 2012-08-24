@@ -38,7 +38,7 @@ class AppController extends Controller {
 	
 	function beforeFilter() {
 	
-	    if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
+	    if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin' && isset($this->Auth)) {
 	        $this->layout = 'admin';
 
 
@@ -50,6 +50,7 @@ class AppController extends Controller {
 
 	
 	function beforeRender() {
+	
 		if ($this->RequestHandler->isAjax()) {
 			$this->layout = 'ajax';
 			Configure::write('debug', 0);

@@ -15,7 +15,7 @@
            
             var defaults = {
 	            field: obj,
-	            url: "",
+	            url: "\/Products\/search\/",
 	            ajaxLoader: '.loader',
 	            cancel: '.cancel',
 	            content: '.productPortlet tbody'
@@ -39,7 +39,7 @@
 				
 				 xhr = $.ajax({
 					 type: 'POST',
-					 url:'\/padcon-leipzig\/Products\/validate\/',
+					 url:options.url,
 					 data: data,
 					 success:function (data, textStatus) {
 							$(options.content).hide(500).html(data).show(500);							    		

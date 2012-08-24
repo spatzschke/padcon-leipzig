@@ -7,16 +7,13 @@ class ProductsController extends AppController {
 	var $helpers = array('Html', 'Javascript');
 	
 	public function beforeFilter() {
+
 		if(isset($this->Auth)) {
 			$this->Auth->fields = array('username' => 'email', 'password' => 'password');
 			$this->Auth->allow('listing', 'sizeBuilder', 'getColors', 'search', 'liveValidate');
 			
-			$this->set('auth',$this->Auth->user());
+			$this->set('auth',$this->Auth->user());	
 		}
-		if($this->Auth) {
-			$this->layout = 'admin';
-		}
-		
 	}
 
 	function index() {
@@ -25,6 +22,8 @@ class ProductsController extends AppController {
 	}
 	
 	function admin_index() {
+		$this->layout = 'admin';
+	
 		$products = $this->getProducts(null);
 		
 		$this->set(compact('products'));
@@ -114,7 +113,7 @@ class ProductsController extends AppController {
 			$this->Product->create();
 			if ($this->Product->save($this->data)) {
 				$this->Session->setFlash(__('The product has been saved', true));
-				$this->redirect(array('action' => 'index'));
+				//$this->redirect(array('action' => 'edit', $this->data['Product']['product_number']));
 			} else {
 				$this->Session->setFlash(__('The product could not be saved. Please, try again.', true));
 			}
@@ -124,6 +123,11 @@ class ProductsController extends AppController {
 		$sizes = $this->Product->Size->find('list');
 		$carts = $this->Product->Cart->find('list');
 		$this->set(compact('categories', 'materials', 'sizes', 'carts'));
+	}
+	
+	function admin_add($id = null) {
+		$this->add($id);
+		$this->layout = 'admin';
 	}
 
 	function edit($id = null) {
@@ -134,7 +138,7 @@ class ProductsController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->Product->save($this->data)) {
 				$this->Session->setFlash(__('The product has been saved', true));
-				$this->redirect(array('action' => 'index'));
+				
 			} else {
 				$this->Session->setFlash(__('The product could not be saved. Please, try again.', true));
 			}
@@ -142,29 +146,38 @@ class ProductsController extends AppController {
 		}
 		if (empty($this->data)) {
 			$this->data = $this->Product->read(null, $id);
+			$colors = $this->Color->find('list',array('conditions' => array('Color.material_id' => ($this->data['Material']['id'])), 'fields' => array('Color.name')));
+			
 		}
 		$categories = $this->Product->Category->find('list');
 		$materials = $this->Product->Material->find('list');
+		
 		$sizes = $this->Product->Size->find('list');
 		$carts = $this->Product->Cart->find('list');
-		$this->set(compact('categories', 'materials', 'sizes', 'carts'));
+		$this->set(compact('categories', 'materials', 'sizes', 'carts', 'colors'));
 	}
 	
 	function admin_edit($id = null) {
 		$this->edit($id);
+		$this->layout = 'admin';
 	}
 
 	function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for product', true));
-			$this->redirect(array('action'=>'index'));
+			//$this->redirect(array('action'=>'index'));
 		}
 		if ($this->Product->delete($id)) {
 			$this->Session->setFlash(__('Product deleted', true));
 			$this->redirect(array('action'=>'index'));
 		}
 		$this->Session->setFlash(__('Product was not deleted', true));
-		$this->redirect(array('action' => 'index'));
+			$this->redirect(array('action' => 'index'));
+	}
+	
+	function admin_delete($id = null) {
+		$this->delete($id);
+		$this->layout = 'admin';
 	}
 	
 	function search($searchString = null) {
@@ -217,11 +230,14 @@ class ProductsController extends AppController {
 		    
 		    	$product[$this->data['Model']][$this->data['Field']] = $validateString;
 		    	
-				if ($this->Product->save($product)) {
-					$status['status'] = 'save success';				
-				} else {
-					$status['status'] = 'save error';
-				}
+		    	if($this->data['autoSave'] == 'true') {
+		    	
+					if ($this->Product->save($product)) {
+						$status['status'] = 'save success';				
+					} else {
+						$status['status'] = 'save error';
+					}
+				} 
 			
 			}
 	
@@ -242,6 +258,12 @@ class ProductsController extends AppController {
 	}
 	
 	function reloadProductItem($id = null) {
+	
+		if($this->data['Id']) {
+			
+			$id = $this->data['Id'];
+		}
+		
 		$product = $this->Product->find('first',array('conditions' => array('Product.id' => $id)));
 		$this->set('product', $product);
 		$this->render('/elements/productItem');

@@ -18,7 +18,7 @@
 					<td><?php echo $product['Product']['modified']; ?>&nbsp;</td>-->
 					<td class="actions">
 						
-						<?php echo $this->Html->link($html->image("backend/icn_edit.png"), array('controller' => 'Products', 'action' => 'edit', $product['Product']['id']), array('escape' => false)); ?>
+						<?php echo $this->Html->link($html->image("backend/icn_edit.png"), array('admin' => true, 'controller' => 'Products', 'action' => 'edit', $product['Product']['id']), array('escape' => false)); ?>
 						<?php echo $this->Html->link($html->image("backend/icn_trash.png"), array('controller' => 'Products', 'action' => 'delete', $product['Product']['id']), array('escape' => false), sprintf(__('Are you sure you want to delete # %s?', true), $product['Product']['id'])); ?>
 					</td>
 				</tr> 
