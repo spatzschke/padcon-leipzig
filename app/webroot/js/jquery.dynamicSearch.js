@@ -18,7 +18,9 @@
 	            url: "\/Products\/search\/",
 	            ajaxLoader: '.loader',
 	            cancel: '.cancel',
-	            content: '.productPortlet tbody'
+	            content: '.productPortlet tbody',
+	            renderTemplate: '/elements/backend/portlets/productPortletTableContent',
+	            showAnimation: true
             };
         var options = $.extend(defaults, options);
            
@@ -33,16 +35,18 @@
 		        }				
 				var str = $(options.field).val();
 			
-				var data = {
-						data: {str : str}
-		};
+				var data = 'data[str]='+str+
+			       				'&data[template]='+options.renderTemplate;
 				
+								
 				 xhr = $.ajax({
 					 type: 'POST',
 					 url:options.url,
 					 data: data,
 					 success:function (data, textStatus) {
+					 	if(options.showAnimation) {
 							$(options.content).hide(500).html(data).show(500);							    		
+						}
 					 } 
 				 }); 
 			});

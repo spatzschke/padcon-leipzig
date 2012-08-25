@@ -17,7 +17,7 @@ $(document).ready(function() {
 				cleanSearch();
 			});
 			
-			$('#topNavigation .search').keyup(function() {
+			/*$('#topNavigation .search').keyup(function() {
 				
 				
 				 $('#topNavigation .search input').animate({
@@ -45,7 +45,7 @@ $(document).ready(function() {
 					
 					 var xhr = $.ajax({
 						 type: 'POST',
-						 url:"\/Products\/search\/",
+						 url:"\/padcon-leipzig\/Products\/search\/",
 						 data: data,
 						 success:function (data, textStatus) {
 								$('#content').html('');
@@ -69,7 +69,7 @@ $(document).ready(function() {
 			$('.ajax').click(function(e) {
 				loadAjaxContent($(this).attr('href'), e)
 			});
-			
+			*/
 });
 
 function cleanSearch() {

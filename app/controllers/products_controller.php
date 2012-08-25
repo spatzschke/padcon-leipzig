@@ -186,15 +186,15 @@ class ProductsController extends AppController {
 			echo $this->admin_search($searchString);
 		} else {
 	
-			if (!$searchString && empty($this->data)) {
-				$this->Session->setFlash(__('Invalid product', true));
-			}
-			if($this->data['searchNumber'] == '') {
-				$products = $this->Product->find('all',array('conditions' => array('Product.active' => '1', 'Product.name LIKE' => '%'.$this->data['searchStr'].'%' )));
-			} else {
-				$products = $this->Product->find('all',array('conditions' => array('Product.active' => '1', 'Product.product_number LIKE' => $this->data['searchNumber'].'%' )));	
-			}
-			$this->set(compact('products'));
+			$products = $this->Product->find('all',array('conditions' => array("OR" => 
+			array (	'Product.name LIKE' 			=> '%'.$this->data['str'].'%' ,
+					'Product.product_number LIKE' 	=> '%'.$this->data['str'].'%' ,
+					'Material.name LIKE' 	=> '%'.$this->data['str'].'%', 
+					'Category.name LIKE' 	=> '%'.$this->data['str'].'%', 
+					'Size.name LIKE' 	=> '%'.$this->data['str'].'%'))));	
+		
+			$this->set('products', $products);
+			$this->render($this->data['template']);
 			$this->set('title_for_layout','Suchergebnis'); 
 		}
 		
@@ -210,7 +210,7 @@ class ProductsController extends AppController {
 					'Size.name LIKE' 	=> '%'.$this->data['str'].'%'))));	
 		
 		$this->set('products', $products);
-		$this->render('/elements/backend/portlets/productPortletTableContent');
+		$this->render($this->data['template']);
 	}
 	
 	function liveValidate($string = null) {
