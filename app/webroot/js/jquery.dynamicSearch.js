@@ -20,7 +20,7 @@
 	            cancel: '.cancel',
 	            content: '.productPortlet tbody',
 	            originContent: '',
-	            renderTemplate: '/elements/backend/portlets/productPortletTableContent',
+	            renderTemplate: '',
 	            showAnimation: true
             };
         var options = $.extend(defaults, options);
