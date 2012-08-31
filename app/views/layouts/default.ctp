@@ -39,6 +39,9 @@
 		echo $this->Html->script('https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js');
 		
 		echo $this->Html->script('jquery.dynamicSearch');
+		echo $this->Html->script('jquery.jcarousel.min');
+		echo $this->Html->script('jquery.lazyload.min');
+
 		
 		echo $scripts_for_layout;		
 		
@@ -61,15 +64,27 @@
             	<?php echo $this->element('navigation'); ?>
             </div>
         </div>
-		<div id="content">
+		<div id="wrapper">
 
 			<?php echo $this->Session->flash(); ?>
 
-			<div class="cmsComponent"><?php e($this->element('loadCMSContent', array('position' => 'top'))); ?></div>
+			<div class="searchContent">
+				<div class="headLoader">
+					<img src="<?php echo $this->webroot.'img/ajax_64.gif'; ?>" alt="Ladevorgang"/>
+					<div class="titel">Lade Inhalte</div>
+				</div>
+				<div class="result"></div>
+			</div>
 
-			<?php echo $content_for_layout; ?>
-            
-            <div class="cmsComponent"><?php e($this->element('loadCMSContent', array('position' => 'bottom'))); ?></div>
+			<div id="content">
+
+				<div class="cmsComponent"><?php e($this->element('loadCMSContent', array('position' => 'top'))); ?></div>
+
+				<?php echo $content_for_layout; ?>
+            	
+				<div class="cmsComponent"><?php e($this->element('loadCMSContent', array('position' => 'bottom'))); ?></div>
+				
+			</div>
 
 		</div>
 		<div id="footer">

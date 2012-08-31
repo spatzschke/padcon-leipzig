@@ -9,9 +9,11 @@
 	$(document).ready(function() {
 	
 		$('#topNavigation .search input').dynamicSearch({
-			url: "<?php echo FULL_BASE_URL.$this->base;?>\/Products\/search\/",
-			content: '#content',
-			renderTemplate: 'products/search',
+			url: "<?php echo FULL_BASE_URL.$this->base;?>/Products/search/",
+			content: '.searchContent .result',
+			ajaxLoader: '.searchContent .headLoader',
+			originContent: '#content',
+			cancel: '#topNavigation .search .cancel',
 			showAnimation: false
 		});
 	});

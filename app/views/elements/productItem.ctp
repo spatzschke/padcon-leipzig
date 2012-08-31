@@ -12,7 +12,7 @@
 <div id="p<?php e($product['Product']['product_number']);?>" class="productListItem productListItem-<?php echo $product['Category']['short'];?>">
 	<div class="productItemHeader"></div>
     <div class="productItemCenter">
-    	<div class="loader"><img src="<?php e($this->webroot.'img/ajax.gif'); ?>" alt="Ladevorgang"/></div>
+    	<div class="loader"><img src="<?php echo $this->webroot.'img/ajax.gif'; ?>" alt="Ladevorgang"/></div>
     	<div class="productItemImage">	
         	<?php if(count($product['Image']) == 0) {
 					if(isset($auth)) {

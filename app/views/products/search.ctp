@@ -1,3 +1,8 @@
+<?php
+
+
+?>
+
 <div class="products searchResult">
 
 	<h1>Suchergebnis</h1>
@@ -44,47 +49,7 @@
 			  }
 			});
 			
-			$(".mediaURL").colorbox({
-				iframe:true, 
-				width:"292", 
-				height:"292", 
-				overlayClose: false,
-				onOpen: function () {
-					$(this).parent().parent().find('.loader').toggle();	
-				},
-				onLoad: function() {
-    				$('#cboxClose').remove();
-				}
-
-			});
-
-			function saveImageInDb(response) {
-				 
-				 var data = {
-					    data: {
-							product_number : response['data']['product_number'],
-							color : response['data']['color'],
-							path : response['data']['path'],
-							ext : response['data']['ext'],
-						}
-			     };
-				 
-				 $.ajax({
-					 type: 'POST',
-					 url:"\/Images\/add\/",
-					 data: response,
-					 success:function (data, textStatus) {
-						 	$('#p'+response['data']['product_number']).find('.message').html();
-							$('#p'+response['data']['product_number']+' .productItemImage').find('img').attr('src',response['data']['path']+'t.'+response['data']['ext']+'?'+new Date().getTime());
-							$.colorbox.close(function() {
-								$('#p'+response['data']['product_number']).find('.loader').toggle();
-							});
-					 }, 
-					 
-					
-				 }); 
-				 
-			}
+			
 
 		</script>
 

@@ -46,6 +46,7 @@ class PagesController extends AppController {
  * @access public
  */
 	var $helpers = array('Html', 'Session');
+	var $components = array('Auth');
 
 /**
  * This controller does not use a model
@@ -54,6 +55,14 @@ class PagesController extends AppController {
  * @access public
  */
 	var $uses = array();
+	
+	public function beforeFilter() {
+
+		if(isset($this->Auth)) {
+			$this->Auth->allow('*');
+			
+		}
+	}
 
 /**
  * Displays a view

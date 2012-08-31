@@ -121,12 +121,14 @@ h1, h1 b{
 #topNavigation ul {
 	height: 100%;
 	position: absolute;
+	margin-left: 15px;
 }
 
 #topNavigation li {
 	display: inline;
 	height: 114px;
 	float: left;
+	margin: 0 6px;
 }
 
 #topNavigation a {
@@ -193,9 +195,9 @@ h1, h1 b{
 
 #topNavigation .search div{
     height: 16px;
-    left: 10px;
+    right: -15px;
     position: absolute;
-    top: 11px;
+    top: 10px;
     width: 15px;
 	display: none;	
 }
@@ -211,18 +213,23 @@ h1, h1 b{
 #topNavigation .search input{
 	background: url("../img/search.png") no-repeat scroll 0 0 #346AA6;
     border: 0 none;
-    padding: 11px 37px 12px 15px;
-    width: 125px;
-	color: #346aa6;
+    color: #346AA6;
+    padding: 11px 34px 12px;
+    width: 110px;
 }
 
-#content {
+#wrapper {
 	background: url(../img/layout/bg_border.png) repeat-y 0 0 transparent;
 	padding: 60px 80px 20px;
 	min-height: 500px;
 	clear: both;
     color: #333333;
     overflow: hidden;
+}
+
+#content {
+	padding: 0;
+	overflow: visible;
 }
 
 #footer {
@@ -761,3 +768,39 @@ input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form 
 	width: 100px;
 	height: 20px;
 }
+
+
+/* Searchcontent */
+
+.searchContent {
+	position: relative;
+}
+
+.searchContent .headLoader {
+	background-color: white;
+    border: 1px solid black;
+    border-radius: 20px 20px 20px 20px;
+    box-shadow: 1px 1px 2px 0 #666666;
+    left: 380px;
+    padding: 10px;
+    position: absolute;
+    width: 111px;
+    z-index: 9999;
+    display: none;
+}
+
+.searchContent .headLoader img {
+	margin-bottom: 10px;
+    margin-left: 25px;
+}
+
+.searchContent .headLoader .titel {
+	width: 100%;
+	float: left;
+	font-size: 15px;
+    font-weight: bold;
+    color: #346AA6;
+    padding-left: 13px; 
+}
+
+

@@ -17,6 +17,7 @@
 		echo '<![endif]-->';
 		
 		echo $this->Html->script('https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js');
+		echo $this->Html->script('jquery.lazyload.min');
 		
 		echo $scripts_for_layout;		
 		

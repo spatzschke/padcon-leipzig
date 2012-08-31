@@ -194,7 +194,11 @@ class ProductsController extends AppController {
 					'Size.name LIKE' 	=> '%'.$this->data['str'].'%'))));	
 		
 			$this->set('products', $products);
-			$this->render($this->data['template']);
+			
+			if($this->data['template'] != '') {
+				$this->render($this->data['template']);
+			}
+			
 			$this->set('title_for_layout','Suchergebnis'); 
 		}
 		
@@ -210,7 +214,10 @@ class ProductsController extends AppController {
 					'Size.name LIKE' 	=> '%'.$this->data['str'].'%'))));	
 		
 		$this->set('products', $products);
-		$this->render($this->data['template']);
+		
+		if(isset($this->data['template'])) {
+			$this->render($this->data['template']);
+		}
 	}
 	
 	function liveValidate($string = null) {
