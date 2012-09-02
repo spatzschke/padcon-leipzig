@@ -45,7 +45,7 @@ class UsersController extends AppController {
 		if (!empty($this->data)) {
 			$this->User->create();
 			if ($this->User->save($this->data)) {
-				//$this->Session->setFlash(__('The user has been saved', true));
+				$this->Session->setFlash(__('The user has been saved', true));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.', true));
@@ -94,6 +94,13 @@ class UsersController extends AppController {
 		$this->layout = 'admin';
 		$this->User->recursive = 0;
 		$this->set('users', $this->paginate());
+		$this->render('/elements/backend/portlets/userPortlet');
+	}
+	
+	function admin_add($id = null) {
+		$this->layout = 'admin';
+		$this->add($id);
+		$this->render('/elements/backend/portlets/userDetailPortlet');
 	}
 	
 	function getUser() {

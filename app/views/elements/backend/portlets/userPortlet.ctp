@@ -2,7 +2,7 @@
 
 <article class="module width_full">
 		<header>
-			<h3 class="tabs_involved"><?php __('Benutzer');?></h3>
+			<h3 class="tabs_involved"><?php __('Kundenkonto');?></h3>
 			<ul class="tabs">
 	   			<li><a href="#tab1">Posts</a></li>
 	    		<li><a href="#tab2">Comments</a></li>
@@ -16,18 +16,9 @@
 				<tr> 
    					<th></th> 
     			<!--<th><?php __('ID');?></th>-->
-					<th><?php __('Titel');?></th>
-					<th><?php __('Vorname');?></th>
-					<th><?php __('Nachname');?></th>
-					<th><?php __('Organisation');?></th>
-				<!--<th><?php __('Stra§e');?></th>
-					<th><?php __('PLZ');?></th>
-					<th><?php __('Stadt');?></th>-->
 					<th><?php __('eMail');?></th>
-				<!--<th><?php __('Tel.');?></th>
-					<th><?php __('Fax.');?></th>
-					<th><?php __('Passwort');?></th>
-					<th><?php __('Erstellt');?></th>
+					<th><?php __('Letzter Login');?></th>
+					<!--<th><?php __('Erstellt');?></th>
 					<th><?php __('Bearbeitet');?></th>-->
 					<th class="actions"><?php __('');?></th>
 				</tr> 
@@ -44,18 +35,9 @@
 				<tr<?php echo $class;?>>
 					<td></td>
 				<!--<td><?php echo $user['User']['id']; ?>&nbsp;</td>-->
-					<td><?php echo $user['User']['title']; ?>&nbsp;</td>
-					<td><?php echo $user['User']['first_name']; ?>&nbsp;</td>
-					<td><?php echo $user['User']['last_name']; ?>&nbsp;</td>
-					<td><?php echo $user['User']['organisation']; ?>&nbsp;</td>
-				<!--<td><?php echo $user['User']['street']; ?>&nbsp;</td>
-					<td><?php echo $user['User']['postal_code']; ?>&nbsp;</td>
-					<td><?php echo $user['User']['city']; ?>&nbsp;</td>-->
 					<td><?php echo $user['User']['email']; ?>&nbsp;</td>
-				<!--<td><?php echo $user['User']['phone']; ?>&nbsp;</td>
-					<td><?php echo $user['User']['fax']; ?>&nbsp;</td>
-					<td><?php echo $user['User']['password']; ?>&nbsp;</td>
-					<td><?php echo $user['User']['created']; ?>&nbsp;</td>
+					<td><?php echo $user['User']['last_login']; ?>&nbsp;</td>
+				<!--<td><?php echo $user['User']['created']; ?>&nbsp;</td>
 					<td><?php echo $user['User']['modified']; ?>&nbsp;</td>-->
 					<td class="actions">
 						

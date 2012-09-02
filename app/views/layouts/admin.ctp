@@ -54,6 +54,8 @@
 		
 	<section id="main" class="column">
 		
+		<?php echo $this->Session->flash(); ?>
+		
 		<?php echo $content_for_layout; ?>
 		
 		<div class="spacer"></div>
