@@ -123,7 +123,8 @@ function updateURL(currUrl, param, paramVal){
 						echo $this->Form->input('name', array('label' => 'Produktname',  'data-field' => 'name'));
 						echo $this->Form->input('category_id', array('label' => 'Kategorie', 'empty' => 'Bitte Kategorie wählen',  'data-field' => 'category_id'));
 						echo $this->Form->input('material_id', array('label' => 'Material', 'empty' => 'Bitte Material ählen',  'data-field' => 'material_id'));
-						echo $this->Form->input('price', array('label' => 'Preis',  'data-field' => 'price'));
+						echo $this->Form->input('base_price', array('label' => 'Einkaufspreis',  'data-field' => 'base_price'));
+						echo $this->Form->input('retail_price', array('label' => 'Verkaufspreis',  'data-field' => 'retail_price'));
 						echo $this->Form->input('size_id', array('label' => 'Größe', 'empty' => 'Bitte Größe wählen',  'data-field' => 'size_id'));
 					?>
 					</div>

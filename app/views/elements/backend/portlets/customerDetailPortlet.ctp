@@ -46,8 +46,8 @@ $(document).ready(function() {
 					</div>
 					<div class="span4">
 					<?php	
-						echo $this->Form->input('street', array('Straße / Nr.' => 'Titel', 'data-model' => 'Customer', 'data-field' => 'street', 'autoComplete' => true));
-						echo $this->Form->input('postal_code', array('PLZ' => 'Titel', 'data-model' => 'Customer', 'data-field' => 'postal_code', 'autoComplete' => true));
+						echo $this->Form->input('street', array('label' => 'Straße / Nr.', 'data-model' => 'Customer', 'data-field' => 'street', 'autoComplete' => true));
+						echo $this->Form->input('postal_code', array('label' => 'PLZ', 'data-model' => 'Customer', 'data-field' => 'postal_code', 'autoComplete' => true));
 						echo $this->Form->input('city', array('label' => 'Stadt', 'data-model' => 'Customer', 'data-field' => 'city', 'autoComplete' => true));
 					?>
 					

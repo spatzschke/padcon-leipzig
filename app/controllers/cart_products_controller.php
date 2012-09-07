@@ -6,9 +6,7 @@ class CartProductsController extends AppController {
 	
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
-			$this->Auth->fields = array('username' => 'email', 'password' => 'password');
 			$this->Auth->deny('*');
-			
 		}
 	}
 

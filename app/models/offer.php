@@ -14,7 +14,7 @@ class Offer extends AppModel {
 		),
 		'User' => array(
 			'className' => 'Customer',
-			'foreignKey' => 'custmer_id',
+			'foreignKey' => 'customer_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

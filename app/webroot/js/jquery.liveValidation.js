@@ -181,12 +181,6 @@
 		
 					
 			obj = null;
-			
-			if( xhr != null ) {
-	                xhr.abort();
-	                oldObj = null;
-	                xhr = null;
-		        }
 				
 			
 			if (e.which == 13) {

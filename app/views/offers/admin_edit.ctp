@@ -1,7 +1,7 @@
 <div class="offers form">
 <?php echo $this->Form->create('Offer');?>
 	<fieldset>
-		<legend><?php __('Edit Offer'); ?></legend>
+		<legend><?php __('Admin Edit Offer'); ?></legend>
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('cart_id');

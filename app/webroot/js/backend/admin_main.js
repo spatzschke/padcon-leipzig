@@ -25,3 +25,10 @@
 
 });
 
+function reloadMiniCart() {
+	
+	
+	
+	
+}
+

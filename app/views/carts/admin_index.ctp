@@ -4,6 +4,7 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('id');?></th>
 			<th><?php echo $this->Paginator->sort('session_id');?></th>
+			<th><?php echo $this->Paginator->sort('active');?></th>
 			<th><?php echo $this->Paginator->sort('created');?></th>
 			<th><?php echo $this->Paginator->sort('modified');?></th>
 			<th class="actions"><?php __('Actions');?></th>
@@ -19,6 +20,7 @@
 	<tr<?php echo $class;?>>
 		<td><?php echo $cart['Cart']['id']; ?>&nbsp;</td>
 		<td><?php echo $cart['Cart']['session_id']; ?>&nbsp;</td>
+		<td><?php echo $cart['Cart']['active']; ?>&nbsp;</td>
 		<td><?php echo $cart['Cart']['created']; ?>&nbsp;</td>
 		<td><?php echo $cart['Cart']['modified']; ?>&nbsp;</td>
 		<td class="actions">

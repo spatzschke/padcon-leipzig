@@ -13,20 +13,22 @@ class Cart extends AppModel {
 			'order' => ''
 		)
 	);
-
-	var $hasMany = array(
-		'CartProduct' => array(
-			'className' => 'CartProduct',
+	
+	var $hasAndBelongsToMany = array(
+		'Product' => array(
+			'className' => 'Product',
+			'joinTable' => 'cart_products',
 			'foreignKey' => 'cart_id',
-			'dependent' => false,
+			'associationForeignKey' => 'id',
+			'unique' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
 			'limit' => '',
 			'offset' => '',
-			'exclusive' => '',
 			'finderQuery' => '',
-			'counterQuery' => ''
+			'deleteQuery' => '',
+			'insertQuery' => ''
 		)
 	);
 
