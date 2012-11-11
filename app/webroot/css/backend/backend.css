@@ -1022,7 +1022,7 @@ a.addToCart.loading {
     color: #666666;
     font-size: 11px;
     padding: 0;
-    width: 290px;
+    width: auto;
     min-height: auto;
     height: auto;
     margin: auto;
@@ -1112,10 +1112,16 @@ article.offer {
 }
 
 .offerSheet .price {
-	text-align: right;
 	float: left;
 	width: 70px;
 }
+
+.offerSheet .price input{
+	margin-top: -2px;
+    text-align: right;
+    width: 60px;
+}
+
 .offerSheet .pos {
 	text-align: center;
 	width: 25px;

@@ -78,9 +78,8 @@ function saveAndReloadOfferHeader(id) {
 				echo '</div>';
 				echo '<div class="controls span12">';
 				
-					echo 'Seite: ';
+					echo '<label> Seite: </label>';
 					echo $this->Form->input('status', array('label' => false, 'data-model' => 'Offer', 'data-field' => 'status', 'autoComplete' => false, 'div' => false, 'class' => 'noValid span8', 'type' => 'hidden'));
-				
 				echo '</div>';
 			?>	
 
