@@ -12,7 +12,7 @@ class Offer extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'User' => array(
+		'Customer' => array(
 			'className' => 'Customer',
 			'foreignKey' => 'customer_id',
 			'conditions' => '',

@@ -12,5 +12,10 @@ class MaterialsController extends AppController {
 			
 		}
 	}
+	
+	function getMaterial($id = null){
+		
+		return $this->Material->findById($id);;
+	} 
 
 }

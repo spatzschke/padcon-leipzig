@@ -8,8 +8,9 @@
 	<?php
 		echo $this->Html->meta('icon');
 		
-		echo $this->Html->css('backend/backend');
 		echo $this->Html->css('backend/bootstrap');
+		echo $this->Html->css('backend/backend');
+		
 		
 		echo '<!--[if lt IE 9]>';
 			echo $this->Html->css('backend/ie');
@@ -18,6 +19,9 @@
 		
 		echo $this->Html->script('https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js');
 		echo $this->Html->script('jquery.lazyload.min');
+		echo $this->Html->script('backend/jquery.iphone-style-checkboxes');
+		
+		echo $this->Html->css('backend/jquery.iphone-style-checkboxes');
 		
 		echo $scripts_for_layout;		
 		

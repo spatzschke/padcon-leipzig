@@ -30,6 +30,8 @@ a:hover {
 text-decoration: underline;
 }
 
+body .row-fluid .firstItem { margin: 0;}
+
 
 /* Header */
 
@@ -493,7 +495,6 @@ margin-bottom: 8px}
 
 .tablesorter {
 width: 100%;
-margin: -5px 0 0 0;
 }
 
 .tablesorter td{
@@ -977,4 +978,163 @@ a.addToCart.loading {
 	background: url(../../img/ajax.gif) no-repeat;
 	height: 20px;
 	width: 20px;
+}
+
+/* Offer */
+
+.controls-row [class*="span"] + [class*="span"] {
+    margin-left: 4px;
+}
+
+#main .row-fluid .offerInfo h1{
+	border-bottom: 1px solid black;
+    font-size: 16px;
+    line-height: normal;
+    margin-top: 0;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.offerInfo { float: left; border: 1px solid black; padding-bottom: 5px}
+
+.row-fluid .offerInfo * { line-height: 15px; min-height: 15px }
+
+.row-fluid .offerInfo label {
+    font-size: 11px;
+    color: black;
+}
+
+#main .row-fluid .offerInfo input{
+	width: 64%;
+}
+
+.offer input, .offer select {
+	border-radius: 0;
+	box-shadow: none;
+	-moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color -moz-use-text-color #AAAAAA;
+    border-image: none;
+    border-style: none none dotted;
+    border-width: 0 0 1px;
+    color: #666666;
+    font-size: 11px;
+    padding: 0;
+    width: 290px;
+    min-height: auto;
+    height: auto;
+    margin: auto;
+    background-color: transparent;
+}
+
+.row-fluid.offer select {
+	margin-top: 5px;
+	border: 0 none;
+}
+
+.row-fluid.offer input {
+	min-height: 17px;
+}
+
+.row-fluid.offer select {
+	min-height: 20px;
+}
+
+.offerSheet tr.cartProductHeader {
+	border-bottom: 0 none;
+}
+
+.offerSheet tr.cartProductHeader td, .offerSheet tr.offerFooter td{
+	padding-bottom: 0;
+	border: 0 none;
+}
+
+.offerSheet tr.cartProductFooter, .offerSheet tr.offerFooter {
+	border: 0 none;
+}
+
+.offerSheet tr.cartProductFooter td {
+	-moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color -moz-use-text-color #DDDDDD;
+    border-image: none;
+    border-style: none none solid;
+    border-width: 0 0 1px;
+    padding-top: 0;
+}
+
+.offerSheet tr.offerFooter td{ 
+	padding-top: 0;
+	padding-bottom: 0;
+	border: 0 none;
+}
+
+.offerSheet .table {
+	border-top: 1px solid #ddd;
+}
+
+.wood_bg {
+	background: url("../../img/backend/wood-bg.jpg") repeat scroll 0 0 transparent;
+    margin-top: -13px;
+    padding-top: 13px;
+    padding-bottom: 20px;
+}
+
+article.offer {
+	margin: 10px auto;
+    position: relative;
+    width: 595px;
+}
+
+.offerSheet {
+	border: 0 none;
+	margin-left: 0;
+	font-size: 11px;
+	margin-top: 20px
+}
+
+.offerSheet .module_content {
+	margin-left: 45px;
+	margin-right: 50px;
+}
+
+.offerSheet .sum_price {
+	text-align: right;
+	width: 90px;
+}
+
+.offerSheet .sum_price .double{
+	border-bottom: 2px double black; 
+}
+
+.offerSheet .price {
+	text-align: right;
+	float: left;
+	width: 70px;
+}
+.offerSheet .pos {
+	text-align: center;
+	width: 25px;
+}
+.offerSheet .amount {
+	text-align: center;
+	width: 90px;
+}
+.offerSheet .number {
+	text-align: left;
+	width: 90px;
+}
+
+.offerSheet .number .productNumber {
+	font-weight: bold;
+	font-size: 9px;
+}
+
+.offerSheet .productName {
+	font-weight: bold;
+	font-size: 12px;
 }

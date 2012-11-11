@@ -67,4 +67,9 @@ class SizesController extends AppController {
 		$this->Session->setFlash(__('Size was not deleted', true));
 		$this->redirect(array('action' => 'index'));
 	}
+	
+	function getSize($id = null){
+		
+		return $this->Size->findById($id);;
+	} 
 }

@@ -15,7 +15,7 @@ $(document).ready(function() {
 	$(".module form").liveValidation({
 						url: '<?php echo FULL_BASE_URL.$this->base;?>\/Products\/liveValidate\/',
 						urlBase: '<?php echo FULL_BASE_URL.$this->base;?>',
-						autoSave: false});
+						autoSave: false,});
 						
 	$("img.lazy").lazyload();
 	
@@ -31,6 +31,17 @@ $(document).ready(function() {
 	          
 	    loadIframe('ProductImageUpload', updateURL($('#ProductImageUpload').attr('src'), 'c', str))
 
+	});
+	
+	$('#ProductCustom').bind('click', function() {
+		
+		if($(this).val() == 1) {
+			loadCustomProductNumber();
+		} else {
+			$('#ProductProductNumber').val('');
+		}
+		
+		
 	});
 			
 });
@@ -92,6 +103,23 @@ function updateURL(currUrl, param, paramVal){
     var finalURL = baseURL+"?"+newAdditionalURL+rows_txt;
     return finalURL;
 }
+
+function loadCustomProductNumber() {
+	var obj = $('this');
+	
+	 $.ajax({
+		 type: 'POST',
+		 url:'<?php echo FULL_BASE_URL.$this->base;?>\/Products\/getNextCustomProductNumber\/',
+		 data: '',
+		 success:function (data, textStatus) {
+				$('#ProductProductNumber').val(data);
+		 } 
+		 
+		
+	 }); 
+
+	
+}
 </script>
 
 
@@ -122,8 +150,8 @@ function updateURL(currUrl, param, paramVal){
 						
 						echo $this->Form->input('name', array('label' => 'Produktname',  'data-field' => 'name'));
 						echo $this->Form->input('category_id', array('label' => 'Kategorie', 'empty' => 'Bitte Kategorie wählen',  'data-field' => 'category_id'));
-						echo $this->Form->input('material_id', array('label' => 'Material', 'empty' => 'Bitte Material ählen',  'data-field' => 'material_id'));
-						echo $this->Form->input('base_price', array('label' => 'Einkaufspreis',  'data-field' => 'base_price'));
+						echo $this->Form->input('material_id', array('label' => 'Material', 'empty' => 'Bitte Material wählen',  'data-field' => 'material_id'));
+						echo $this->Form->input('price', array('label' => 'Einkaufspreis',  'data-field' => 'price'));
 						echo $this->Form->input('retail_price', array('label' => 'Verkaufspreis',  'data-field' => 'retail_price'));
 						echo $this->Form->input('size_id', array('label' => 'Größe', 'empty' => 'Bitte Größe wählen',  'data-field' => 'size_id'));
 					?>
@@ -136,6 +164,10 @@ function updateURL(currUrl, param, paramVal){
 						
 						echo $this->Form->input('active', array('label' => 'Aktiv',  'data-field' => 'active'));
 						echo $this->Form->input('new', array('label' => 'Neuheit',  'data-field' => 'new'));
+						 	
+						if(empty($this->data['Product']['product_number'])) {
+							echo $this->Form->input('custom', array('label' => 'Sonderanfertigung',  'data-field' => 'custom'));
+						}
 					?>
 					
 					</div>

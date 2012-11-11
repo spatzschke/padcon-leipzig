@@ -178,7 +178,25 @@ class CustomersController extends AppController {
 		
 		$return = '';
 		
-		$customer = $this->Customer->find('first',array('conditions' => array('Customer.'.$this->data['Field'].' LIKE' => $this->data[$this->data['Model']][$this->data['Field']].'%')));	
+		$conditions = array('Customer.'.$this->data['Field'].' LIKE' => $this->data[$this->data['Model']][$this->data['Field']].'%');
+		
+		if(!empty($this->data['lock'])) {
+			$locked = explode(';',$this->data['lock']);
+			
+			foreach($locked as $lock) {
+				
+				$lock = explode('=', $lock);
+				
+				if(!empty($lock[1]) && $this->data['Field'] != $lock[0])
+					$conditions['Customer.'.$lock[0]] = $lock[1];
+				
+			}
+		}
+		
+		
+		
+		
+		$customer = $this->Customer->find('first',array('conditions' => $conditions));	
 		
 		
 		$return = $customer['Customer'];

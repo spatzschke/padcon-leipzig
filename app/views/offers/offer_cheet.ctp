@@ -1,8 +1,5 @@
 <?php 
 	echo $this->Html->script('jquery.bootstrap.modal', false);
-	echo $this->Html->script('jquery.autosize-min', false);
-	echo $this->Html->script('jquery.autoGrowInput', false);
-	echo $this->Html->script('jquery.caret.1.02.min', false);
 ?>
 
 <script>
@@ -27,11 +24,7 @@ $(document).ready(function() {
 		$('#main').load('<?php echo FULL_BASE_URL.$this->base;?>/Offers/viewActiveOffer');
 		
 	});
-	
-	
-
-	 
-	});
+});
 </script>
 				
 
@@ -49,35 +42,23 @@ $(document).ready(function() {
 	</div>
 </div>
 
-<div class="wood_bg">
 
-	<article class="module width_full offer row-fluid">
+<article class="module width_full offer">
 		
-		<div class="module_content row">
+		<div class="module_content row-fluid">
 
-			<div class="offerHead span12">
 
-			</div>
-
-			<div class="offerCustomer span5 firstItem">
 				<?php e($this->element('backend/portlets/customerSearchPortlet')); ?>
-			</div>
-			<div class="span2">
-			</div>
-			<div class="span5">	
+				
 				<?php e($this->element('backend/portlets/offerInfoPortlet')); ?>
-			</div>
-		
-			<div class="firstItem span12">
-				<article class="offerCartPortlet offerSheet">
-					<div >
-						<?php e($this->element('backend/portlets/offerCartHeaderPortlet')); ?>
-						<?php e($this->element('backend/portlets/offerCartPortlet')); ?>
-						<?php e($this->element('backend/portlets/offerCartFooterPortlet')); ?>
-					</div><!-- end of .tab_container -->
-				</article><!-- end of stats article -->
-			</div>
+
 		</div>
-	</article>
-	
-</div>
+		<div class="module_content row-fluid">
+		
+				<?php e($this->element('backend/portlets/offerCartHeaderPortlet')); ?>
+				<?php e($this->element('backend/portlets/offerCartPortlet')); ?>
+				<?php e($this->element('backend/portlets/offerCartFooterPortlet')); ?>
+
+		</div">
+</article>
+

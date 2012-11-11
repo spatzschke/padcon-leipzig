@@ -5,7 +5,6 @@
 	
 	$sum = null;
 
-	
 	if(!empty($cart)){
 ?>
 
@@ -13,11 +12,9 @@
 	
 	<h2>Aktiver Warenkorb</h2>
 	
-	 <?php debug($cart); ?>
-	
 	ID: <?php echo $cart['Cart']['id']; ?>
 	<br />
-	Count: <?php echo count($cart['CartProduct']); ?> 
+	Count: <?php echo $cart['Cart']['count']; ?> 
 	<br />
 	Verkaufssumme: <?php echo $cart['Cart']['sum_retail_price']; ?> €
 	<br />

@@ -12,5 +12,20 @@ class ColorsController extends AppController {
 			
 		}
 	}
+	
+	function getColor($id = null){
+		
+		if($id) {
+			return $this->Color->findById($id);
+		} else {
+			
+			$c['Color']['code'] = '00';
+			$c['Color']['name'] = 'Farblos';
+			
+			return $c;
+			
+		}
+		
+	} 
 
 }

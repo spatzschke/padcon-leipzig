@@ -2,6 +2,8 @@
 	$(document).ready(function() 
     	{ 
       	  $(".tablesorter").tablesorter(); 
+      	  
+      	  
    	 } 
 	);
 	$(document).ready(function() {

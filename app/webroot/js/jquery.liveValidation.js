@@ -13,8 +13,9 @@
 	            validationIcon: '.validationIcon',
 	            validationIconLabel: 'validationIcon',
 	            autoSave: true,
-	            livePreview: true
-				
+	            livePreview: true,
+				autoCompleteSuccess: function(){}
+,
             };
 	        var options = $.extend(defaults, options);
 	        
@@ -70,22 +71,23 @@
 	function bindField(actField, options) {
 		actField.data('oldVal', actField.val());
 	
-		 actField.bind("propertychange keyup input paste change", function(event){
+		 actField.bind("propertychange keyup input paste change focus", function(event){
 		      // If value has changed...
 		      
-		      if($(this).hasClass('noValid')) {
-			      $(this).unbind("propertychange keyup input paste change");
-			      return 0;
-		      }
+		     
 		      
 		      
 		      if($(this).attr('type') == 'checkbox') {
 			      
 			      if($(this).val() == 1) {
 				      actField.val(0);
+				      var id= actField.attr('id');
+				      $('#'+id+'_').val(0);
 						
 			      } else {
-				      actField.val(1)
+				      actField.val(1);
+				      var id= actField.attr('id');
+				      $('#'+id+'_').val(1);
 			      }
 			      
 		      }
@@ -96,7 +98,14 @@
 			
 			       var data = buildData(actField, options);
 			       	
-			       valid(data, actField, options, event);	       
+			       if(!actField.hasClass('noValid')) {	
+			      	 valid(data, actField, options, event);
+			       }
+			       
+			       if(actField.attr('autoComplete')) {
+							autoComplete(actField, options, event);
+						}
+	       
 			  }
 
 		});
@@ -107,12 +116,22 @@
 		if(actField.val() == '') {
 			return null;	
 		} 
-	
+		
+		var locked = '';
+		
+		options.form.find('input[data-lock="1"]').each(function(){
+			
+			locked += $(this).attr('data-field')+'='+$(this).val()+';';
+			
+		}); 
+			
+			
 		var data = 	'data['+options.form.attr('data-model')+']['+actField.attr('data-field')+']='+actField.val()+
        				'&data[Model]='+options.form.attr('data-model')+
        				'&data[Field]='+actField.attr('data-field')+
        				'&data[Id]='+actField.parents('form:first').find('#'+options.form.attr('data-model')+'Id').val();
        	data +=     '&data[autoSave]='+options.autoSave;
+       	data +=     '&data[lock]='+locked;
 			       
 		return data;
 
@@ -148,10 +167,7 @@
 						if(options.livePreview && options.autoSave) {
 							loadLivePreview(data, obj, options); 
 						}
-						if(actField.attr('autoComplete')) {
-							autoComplete(actField, options, event);
-						}
-						 
+												 
 					}			
 		 }
 	 }); 
@@ -177,7 +193,7 @@
 			oldObj = null,
 			xhr = null;	
 			
-		$('.input').keypress(function (e) {
+		$('input').keypress(function (e) {
 		
 					
 			obj = null;
@@ -185,9 +201,8 @@
 			
 			if (e.which == 13) {
 				
-				console.log('enter');
-				
-				if(field.val() != '' && oldObj != null) {
+				if(field.val() != '' && oldObj != null ) {
+					field.attr('data-lock', 1);
 					fillForm (oldObj, options);
 				}
 				
@@ -206,6 +221,17 @@
 			
 				return true;
 			}
+			
+			if (e.which === 9) {
+				
+						        
+		        console.log('tab');
+				
+				field.val('');
+			
+				return false;
+			}
+
 		});
 		
 		
@@ -243,7 +269,8 @@
 							        } 
 								});
 							});
-						} 		
+						}
+						 		
 					} 
 			 }); 
 		 // End - Autocomplete acitve Field
@@ -252,15 +279,13 @@
 	
 	function fillForm(obj, options) {
 		
-		console.log(obj);
-		
 		$(obj).each(function(i,val){
 		    $.each(val,function(k,v){
 		    	$(options.form).find('input').each(function() {
 			    	
 			    	if(k == $(this).attr('data-field')) {
 				       
-				       if($(this).val() == '') {
+				       if($(this).attr('data-lock') != '1' || $(this).attr('data-field') == 'id') {
 					        $(this).val(v);
 				       }
 				       
@@ -270,5 +295,6 @@
 		        
 			});
 		});
+		options.autoCompleteSuccess.call(this, obj['id']);
 		
 	}

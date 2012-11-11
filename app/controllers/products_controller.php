@@ -52,7 +52,32 @@ class ProductsController extends AppController {
 		$products = $this->Product->find('all',array('conditions' =>  $con,'order' => array('Product.product_number ASC')));
 		
 		return $products;
-	} 
+	}
+	
+	function getProduct($id = null){
+		
+		return $this->Product->findById($id);;
+	}  
+	
+	function seperatFeatureList($id = null) {
+		
+		$product = $this->getProduct($id);
+		$features  = explode("</li>", $product['Product']['featurelist']);
+		
+		$fea = array();
+		
+		foreach($features as $feature) {
+			
+			$feature = trim($feature);
+		
+			if(!empty($feature))
+				array_push($fea, str_replace(array('<li>','</li>'), "", $feature));
+			
+		}
+		
+		return $fea;
+		
+	}
 	
 	function sizeBuilder($id = null) {
 		$size = $this->Size->findById( $id );
@@ -274,5 +299,19 @@ class ProductsController extends AppController {
 		$product = $this->Product->find('first',array('conditions' => array('Product.id' => $id)));
 		$this->set('product', $product);
 		$this->render('/elements/productItem');
+	}
+	
+	function getNextCustomProductNumber() {
+	
+		$this->autoRender = false;
+		$this->layout = 'ajax';
+		
+		$custom =  $this->Product->find('all',array('conditions' => array('Product.custom' => 1) ,'order' => array('Product.created' => 'desc')));
+		
+		$number = str_split($custom['0']['Product']['product_number'], 3);
+		$number = 'Z'.date("y").str_pad(intVal($number[1])+1, 3, "0", STR_PAD_LEFT);
+		
+		return $number;
+		
 	}
 }

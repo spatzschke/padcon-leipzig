@@ -33,13 +33,13 @@ class CartsController extends AppController {
 		
 			$this->Cart->create();
 			if ($this->Cart->save($this->data)) {
-				$this->Session->setFlash(__('The Cart has been saved', true));
+				//$this->Session->setFlash(__('The Cart has been saved', true));
 				$last = $this->Cart->findById($this->Cart->id);
 				
 				return $last;
 				
 			} else {
-				$this->Session->setFlash(__('The Cart could not be saved. Please, try again.', true));
+				//$this->Session->setFlash(__('The Cart could not be saved. Please, try again.', true));
 			}
 		
 	}
@@ -48,9 +48,9 @@ class CartsController extends AppController {
 	
 		$this->autoRender = false;
 		
-		$cart = $this->Cart->find('first',array('conditions' =>  array('Cart.active' => '1')));
+		$cart = $this->Offer->find('first',array('conditions' =>  array('Offer.status' => 'active')));
 		
-		
+		$cart = $this->Cart->findById($cart['Offer']['cart_id']);
 		
 		return $cart;
 		
@@ -62,6 +62,7 @@ class CartsController extends AppController {
 		$this->autoRender = false;
 		$cart = null;
 		$cartProduct = null;
+		$activeCart = null;
 	
 		if($this->get_active_cart() == null) {
 			$activeCart = $this->admin_add();
@@ -69,39 +70,56 @@ class CartsController extends AppController {
 			$activeCart = $this->get_active_cart();
 		}
 		
+		
+		
+		
 		$cartProduct['CartProduct']['cart_id'] = $activeCart['Cart']['id'];
 		$cartProduct['CartProduct']['product_id'] = $id;
 		
 		$isIn = false;
-		
+				
 		foreach($activeCart['CartProduct'] as $cartProducts) {
+			
 			
 			if($cartProducts['product_id'] == $id) {
 				$amount = $cartProducts['amount'];
 				$cartProducts['amount'] = intval($amount) + 1;
 				$this->CartProduct->save($cartProducts);
-				$this->calcSumPrice();
+
 				$isIn = true;
 				break;
 			}
 			
 		}
 		
-		
-		
 		if(!$isIn) {
 			$this->CartProduct->create();
 			$this->CartProduct->save($cartProduct);
-			$this->calcSumPrice();
+			
 		}
+		
+		$this->calcSumPrice();
+		$this->updateCartCount($activeCart);
 		
 		
 	
 	}
 	
+	function updateCartCount($cart = null) {
+		
+		if($cart) {
+		
+			$cart['Cart']['count'] = count($cart['CartProduct']);
+			$this->Cart->save($cart);
+			
+		}
+		
+	}
+	
 	function reloadMiniCart() {
 		
-		
+		$this->calcSumPrice();
+		$this->updateCartCount($this->get_active_cart());
 		$this->render('/elements/backend/miniCart');
 
 	}
