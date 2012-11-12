@@ -3,7 +3,11 @@
 	echo $this->Html->script('jquery.autosize-min', false);
 	echo $this->Html->script('jquery.autoGrowInput', false);
 	echo $this->Html->script('jquery.caret.1.02.min', false);
+	echo $this->Html->script('jquery.liveValidation', false);
+	echo $this->Html->script('jquery.dynamicSearch', false);
+
 ?>
+
 
 <script>
 $(document).ready(function() {
@@ -28,12 +32,26 @@ $(document).ready(function() {
 		
 	});
 	
-	
+	$('.module form').liveValidation({
+		url: '<?php echo FULL_BASE_URL.$this->base;?>\/Customers\/liveValidate\/',
+		urlBase: '<?php echo FULL_BASE_URL.$this->base;?>',
+		autoSave: false,
+		autoCompleteSuccess: function(id){
+			saveAndReloadOfferHeader(id);
+		}
+	});	
 
-	 
-	});
+	$('#addToOffer').click(function() {
+
+		$('#add_to_offer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>/admin/Products/index');
+		$('#add_to_offer_modal').modal('show')
+
+	})
+ 
+});
 </script>
 				
+
 
 
 <div class="modal" id="active_offer_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -46,6 +64,19 @@ $(document).ready(function() {
 	<div class="modal-footer">
 		<button class="btn btn-success newOffer">Neues Angebot erstellen</button>
 		<button class="btn showActive">Aktives Angebot auswählen</button>
+	</div>
+</div>
+
+<div class="modal" id="add_to_offer_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none; width: 910px; left: 49%">
+	<div class="modal-header">
+		
+
+	</div>
+	<div class="modal-body">
+		
+	</div>
+	<div class="modal-footer">
+		
 	</div>
 </div>
 
@@ -70,11 +101,7 @@ $(document).ready(function() {
 		
 			<div class="firstItem span12">
 				<article class="offerCartPortlet offerSheet">
-					<div >
-						<?php e($this->element('backend/portlets/offerCartHeaderPortlet')); ?>
-						<?php e($this->element('backend/portlets/offerCartPortlet')); ?>
-						<?php e($this->element('backend/portlets/offerCartFooterPortlet')); ?>
-					</div><!-- end of .tab_container -->
+					<?php e($this->element('backend/portlets/offerSheet')); ?>
 				</article><!-- end of stats article -->
 			</div>
 		</div>

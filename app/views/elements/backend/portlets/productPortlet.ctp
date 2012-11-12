@@ -12,33 +12,28 @@ $(document).ready(function() {
 				renderTemplate: '/elements/backend/portlets/productPortletTableContent',
 			});
 			
-			$('.addToCart').bind('click', function(){
+			$('.addToCart').live('click', function(){
 				
 				var xhr = null,
 				obj = $(this);
 				
 				obj.addClass('loading');
-				
-				
-					
-					xhr = $.ajax({
-						 type: 'POST',
-						 url:obj.attr('href'),
-						 data: '',
-						 success:function (data, textStatus) {
-						 	
-						 	obj.removeClass('loading');
-						 	obj.addClass('added').attr('data-amount',1);
-						 	
-						 	$('#sidebar .miniCart').load('<?php echo FULL_BASE_URL.$this->base;?>/carts/reloadMiniCart');
-						 	
-						 } 
-					 }); 
-					
-			
-				
-				
 
+				xhr = $.ajax({
+					 type: 'POST',
+					 url:obj.attr('href'),
+					 data: '',
+					 success:function (data, textStatus) {
+					 	
+					 	obj.removeClass('loading');
+					 	obj.addClass('added').attr('data-amount',1);
+					 	
+					 	$('#sidebar .miniCart').load('<?php echo FULL_BASE_URL.$this->base;?>/carts/reloadMiniCart');
+					 	$('.offerSheet tbody').load('<?php echo FULL_BASE_URL.$this->base;?>/Carts/reloadCartSheetProducts');
+					 	$('.offerSheet tfoot').load('<?php echo FULL_BASE_URL.$this->base;?>/Carts/reloadCartResult');
+					} 
+				}); 
+				
 				return false;
 			});
 });

@@ -34,3 +34,29 @@ function reloadMiniCart() {
 	
 }
 
+function addToCart() {
+				
+	var xhr = null,
+	obj = $(this);
+	
+	obj.addClass('loading');
+	console.log('addToCart')
+	
+		
+		xhr = $.ajax({
+			 type: 'POST',
+			 url:obj.attr('href'),
+			 data: '',
+			 success:function (data, textStatus) {
+			 	
+			 	obj.removeClass('loading');
+			 	obj.addClass('added').attr('data-amount',1);
+			 	
+			 	$('#sidebar .miniCart').load('<?php echo FULL_BASE_URL.$this->base;?>/carts/reloadMiniCart');
+			 	
+			 } 
+		 }); 
+
+	return false;
+};
+

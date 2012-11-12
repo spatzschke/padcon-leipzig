@@ -1079,9 +1079,10 @@ a.addToCart.loading {
 
 .wood_bg {
 	background: url("../../img/backend/wood-bg.jpg") repeat scroll 0 0 transparent;
-    margin-top: -13px;
+    margin-top: -3px;
     padding-top: 13px;
     padding-bottom: 20px;
+    min-height: 755px;
 }
 
 article.offer {

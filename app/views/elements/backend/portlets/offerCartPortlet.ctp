@@ -24,17 +24,17 @@
 			<td class="amount">'.$cartProduct['amount'].'</td>
 			<td class="number"><input type="text" class="productNumber" value="pd-'.$product['Product']['product_number'].'-'.$color['Color']['code'].'" /> </br><input type="text" value="Fa. padcon" /></td>
 			<td colspan="4">
-				<input class="productName text" type="text" value="'.$product['Product']['name'].'" /><br />';
+				<input class="productName text span4" type="text" value="'.$product['Product']['name'].'" /><br />';
 				
 			foreach($features as $fea)	{
 			
-				echo '<input class="text" type="text" value="'.$fea.'" /><br />';
+				echo '<input class="text span4" type="text" value="'.$fea.'" /><br />';
 			
 			}
 				
 				
 		echo '
-				<input class="text" type="text" value="Bezug: '.$material['Material']['name'].', Farbe: '.$color['Color']['name'].'" />
+				<input class="text span4" type="text" value="Bezug: '.$material['Material']['name'].', Farbe: '.$color['Color']['name'].'" />
 			</td>
 		</tr>';
 		echo '<tr class="cartProductFooter"> 
@@ -46,5 +46,6 @@
 		</tr>';
 	}				
 							
-?>								
+?>	
+							
 			

@@ -7,19 +7,6 @@
 
 <script>
 
-$(document).ready(function() {
-
-	$('.module form').liveValidation({
-		url: '<?php echo FULL_BASE_URL.$this->base;?>\/Customers\/liveValidate\/',
-		urlBase: '<?php echo FULL_BASE_URL.$this->base;?>',
-		autoSave: false,
-		autoCompleteSuccess: function(id){
-				saveAndReloadOfferHeader(id);
-			}
-		});									
-});
-
-
 
 </script>
 

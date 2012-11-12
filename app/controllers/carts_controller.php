@@ -123,6 +123,14 @@ class CartsController extends AppController {
 		$this->render('/elements/backend/miniCart');
 
 	}
+
+	function reloadCartSheetProducts() {
+		$this->render('/elements/backend/portlets/offerCartPortlet');
+	}
+
+	function reloadCartResult() {
+		$this->render('/elements/backend/portlets/offerCartFooterPortlet');
+	}
 	
 	function calcSumPrice() {
 		
