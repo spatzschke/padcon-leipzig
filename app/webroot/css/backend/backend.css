@@ -420,7 +420,7 @@ background: #F1F1F4 url(../../img/backend/module_footer_bg.png) repeat-x;
 }
 
 .module_content {
-margin: 10px 20px;
+margin: 10px 50px;
 color: #666;}
 
 /* Module Widths */
@@ -1088,7 +1088,8 @@ a.addToCart.loading {
 article.offer {
 	margin: 10px auto;
     position: relative;
-    width: 595px;
+    width: 650px;
+    max-height: 923px
 }
 
 .offerSheet {
