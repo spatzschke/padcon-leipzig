@@ -29,8 +29,17 @@
 
 function reloadMiniCart() {
 	
+	$('#sidebar .miniCart').load('<?php echo FULL_BASE_URL.$this->base;?>/carts/reloadMiniCart');
 	
 	
+}
+
+function reloadCartCheet(url) {
+	
+	$('wood_bg').load(url, function(data) {
+	  console.log(data)
+	});
+
 	
 }
 
@@ -52,7 +61,7 @@ function addToCart() {
 			 	obj.removeClass('loading');
 			 	obj.addClass('added').attr('data-amount',1);
 			 	
-			 	$('#sidebar .miniCart').load('<?php echo FULL_BASE_URL.$this->base;?>/carts/reloadMiniCart');
+			 	reloadMiniCart();
 			 	
 			 } 
 		 }); 

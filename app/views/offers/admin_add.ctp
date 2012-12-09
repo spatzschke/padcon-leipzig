@@ -47,6 +47,10 @@ $(document).ready(function() {
 		$('#add_to_offer_modal').modal('show')
 
 	})
+
+	$("body").on("hidden", "#add_to_offer_modal", function(){
+	    $(this).removeData("modal");
+	  });
  
 });
 </script>
@@ -82,29 +86,8 @@ $(document).ready(function() {
 
 <div class="wood_bg">
 
-	<article class="module width_full offer row-fluid">
-		
-		<div class="module_content row">
-
-			<div class="offerHead span12">
-
-			</div>
-
-			<div class="offerCustomer span5 firstItem">
-				<?php e($this->element('backend/portlets/customerSearchPortlet')); ?>
-			</div>
-			<div class="span2">
-			</div>
-			<div class="span5">	
-				<?php e($this->element('backend/portlets/offerInfoPortlet')); ?>
-			</div>
-		
-			<div class="firstItem span12">
-				<article class="offerCartPortlet offerSheet">
-					<?php e($this->element('backend/portlets/offerSheet')); ?>
-				</article><!-- end of stats article -->
-			</div>
-		</div>
-	</article>
-	
+	<a id="addToOffer" href="#" class="btn">Produkt hinzufügen</a>
+	<div class="pages">
+		<?php e($this->element('backend/offer_cheet')); ?>
+	</div>
 </div>

@@ -29,8 +29,9 @@ $(document).ready(function() {
 					 	obj.addClass('added').attr('data-amount',1);
 					 	
 					 	$('#sidebar .miniCart').load('<?php echo FULL_BASE_URL.$this->base;?>/carts/reloadMiniCart');
-					 	$('.offerSheet tbody').load('<?php echo FULL_BASE_URL.$this->base;?>/Carts/reloadCartSheetProducts');
-					 	$('.offerSheet tfoot').load('<?php echo FULL_BASE_URL.$this->base;?>/Carts/reloadCartResult');
+					 
+					 	$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/Carts/reloadCartSheetProducts');
+					 	
 					} 
 				}); 
 				

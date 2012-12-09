@@ -125,7 +125,7 @@ class CartsController extends AppController {
 	}
 
 	function reloadCartSheetProducts() {
-		$this->render('/elements/backend/portlets/offerCartPortlet');
+		$this->render('/elements/backend/offer_cheet');
 	}
 
 	function reloadCartResult() {

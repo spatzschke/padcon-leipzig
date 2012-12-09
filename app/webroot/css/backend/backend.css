@@ -420,7 +420,7 @@ background: #F1F1F4 url(../../img/backend/module_footer_bg.png) repeat-x;
 }
 
 .module_content {
-margin: 10px 50px;
+margin: 10px 0px;
 color: #666;}
 
 /* Module Widths */
@@ -986,6 +986,14 @@ a.addToCart.loading {
     margin-left: 4px;
 }
 
+.sheetHeader .title { font-size: 22px; font-weight: bold; margin-top: 40px }
+.sheetHeader .title .small { font-size: 13px; font-weight: normal }
+.sheetHeader .logo { margin-top: 20px;}
+
+.addressHeader { font-size: 10px; border-bottom: 1px solid black; margin-bottom: 10px}
+
+.customerData { margin-top: 30px } 
+
 #main .row-fluid .offerInfo h1{
 	border-bottom: 1px solid black;
     font-size: 16px;
@@ -995,7 +1003,13 @@ a.addToCart.loading {
     text-transform: uppercase;
 }
 
-.offerInfo { float: left; border: 1px solid black; padding-bottom: 5px}
+.offerInfo { 
+	border: 1px solid black;
+    float: right;
+    padding-bottom: 5px;
+    width: 210px;
+    margin-top: 20px;
+}
 
 .row-fluid .offerInfo * { line-height: 15px; min-height: 15px }
 
@@ -1085,64 +1099,114 @@ a.addToCart.loading {
     min-height: 755px;
 }
 
+#addToOffer { position: fixed;}
+
 article.offer {
 	margin: 10px auto;
     position: relative;
-    width: 650px;
-    max-height: 923px
+    width: 550px;
+    padding: 0 50px;
+    height: 923px;
+    overflow: hidden
 }
 
 .offerSheet {
 	border: 0 none;
 	margin-left: 0;
 	font-size: 11px;
-	margin-top: 20px
+	margin-top: 20px;
+	float: left;
 }
+
+.offerHeader {
+	border-bottom: 1px dotted #000000;
+    border-top: 1px dotted #000000;
+    float: left;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    padding: 5px 0;
+}
+
+.offerHeader div {float: left;}
+
+.sheetItem { width: 100%; clear: both; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dotted #000; float: left;}
+.sheetItem > div, .sheetItem .content > div{float: left;}
+
+.offerMiddle .content { width: 315px; margin-left: 30px }
 
 .offerSheet .module_content {
 	margin-left: 45px;
-	margin-right: 50px;
 }
 
-.offerSheet .sum_price {
+.offerHeader .sum_price, .offerMiddle .sum_price {
 	text-align: right;
-	width: 90px;
+	width: 100px;
 }
 
-.offerSheet .sum_price .double{
-	border-bottom: 2px double black; 
+.pages .offerMiddle input, 
+.pages .row-fluid input,
+.pages .row-fluid select { min-height: auto }
+
+
+.offerMiddle .sum_price .double{
+	border-bottom: 1px double black; 
 }
 
-.offerSheet .price {
-	float: left;
-	width: 70px;
+.offerHeader .price, .offerMiddle .price {
+	margin-left: 40px;
 }
 
-.offerSheet .price input{
-	margin-top: -2px;
+.pages .row-fluid .offerText input.text { width: 100%; }
+
+.offerMiddle .price input {max-width: 65px}
+
+.offerMiddle .price input{
     text-align: right;
     width: 60px;
 }
 
-.offerSheet .pos {
+.offerHeader .pos, .offerMiddle .pos {
 	text-align: center;
 	width: 25px;
 }
-.offerSheet .amount {
+.offerHeader .amount, .offerMiddle .amount {
 	text-align: center;
 	width: 90px;
 }
-.offerSheet .number {
+
+.offerMiddle { float: left; width: 550px;}
+
+.offerMiddle .number {
 	text-align: left;
 	width: 90px;
 }
 
-.offerSheet .number .productNumber {
+.offerMiddle .number .productNumber {
 	font-weight: bold;
 	font-size: 9px;
 }
 
-.offerSheet .productName {
+.offerMiddle .productName {
 	font-weight: bold;
 	font-size: 12px;
+}
+
+.offerMiddle .size { width: 100px }
+.offerMiddle .price { width: 75px }
+.offerHeader .number { width: 120px;}
+.offerHeader .content { width: 130px; margin: 0;}
+.offerHeader .price { width: 45px;}
+
+.offerFooter, .offerFooter * { float: left; width: 100%; margin: 0}
+.offerFooter label { width: 30%; font-size: inherit;}
+.offerFooter p { width: 70%; text-align: right;}
+
+.pages .sheetFooter { 
+	border-top: 1px solid black;
+    bottom: 20px;
+    font-size: 9px;
+    line-height: 12px;
+    padding-top: 10px;
+    position: absolute;
+    width: 550px;
 }

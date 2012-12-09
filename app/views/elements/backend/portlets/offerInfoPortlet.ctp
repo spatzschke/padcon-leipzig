@@ -1,4 +1,4 @@
-<?php ?>
+<?php  ?>
 
 <script>
 
@@ -78,8 +78,8 @@ function saveAndReloadOfferHeader(id) {
 				echo '</div>';
 				echo '<div class="controls span12">';
 				
-					echo '<label> Seite: </label>';
-					echo $this->Form->input('status', array('label' => false, 'data-model' => 'Offer', 'data-field' => 'status', 'autoComplete' => false, 'div' => false, 'class' => 'noValid span8', 'type' => 'hidden'));
+					echo '<label class="span4"> Seite: </label>';
+					echo '<p class="span8">'.$page.' von '.$maxPage.'</p>';
 				echo '</div>';
 			?>	
 
