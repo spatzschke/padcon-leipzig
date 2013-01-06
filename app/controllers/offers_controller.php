@@ -3,7 +3,7 @@ class OffersController extends AppController {
 
 	var $name = 'Offers';
 	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'Customer');
-	public $components = array('Auth', 'Session');
+	public $components = array('Auth', 'Session', 'Mpdf.Mpdf');
 	
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
@@ -106,10 +106,23 @@ class OffersController extends AppController {
 		$this->Session->setFlash(__('Offer was not deleted', true));
 		$this->redirect(array('action' => 'index'));
 	}
+
+	function admin_create_pdf (){
+
+		$this->layout = 'admin';
+		$this->render('admin_add');
+		$content = $this->output;
+
+		$this->Mpdf->init();
+	    $this->Mpdf->setFilename('file.pdf');
+	    $this->Mpdf->setOutput('D');
+	    $this->Mpdf->shutdown($content);
+	    
+	}
 	
 	/*
 	
-		GETTR & SETTER
+		GETTeR & SETTER
 	
 	*/
 	

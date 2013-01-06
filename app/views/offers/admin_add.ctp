@@ -87,6 +87,7 @@ $(document).ready(function() {
 <div class="wood_bg">
 
 	<a id="addToOffer" href="#" class="btn">Produkt hinzufügen</a>
+	<a id="printOffer" href="create_pdf" class="btn">Angebot drucken</a>
 	<div class="pages">
 		<?php e($this->element('backend/offer_cheet')); ?>
 	</div>
