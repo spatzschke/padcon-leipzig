@@ -121,7 +121,7 @@ h1, h1 b{
 #topNavigation {
 	background: url(../img/layout/bg_border_trans.png) repeat-y 0 0 transparent;
 	padding: 0 18px;
-    width: 968px;
+    width: 100%;
 	height: 80px;	
 }	
 
@@ -201,37 +201,22 @@ h1, h1 b{
 
 #topNavigation .search {
 	float: right;
-    margin-right: 50px;
+    margin-right: 0px;
     margin-top: 32px;
-    width: 150px;
+    width: 200px;
 	position: relative;	
 }
 
-#topNavigation .search div{
+#topNavigation .search .cancel{
     height: 16px;
-    right: -15px;
+    right: 5px;
     position: absolute;
+    z-index: 100;
     top: 10px;
     width: 15px;
-	display: none;	
+	display: none;
+	cursor: pointer;	
 }
-
-#topNavigation .search .cancel {
-	background: url("../img/cancel.png") no-repeat scroll 0 0 transparent;	
-}
-
-#topNavigation .search .cancel:hover {
-	background-position: 0px -18px;	
-}
-
-#topNavigation .search input{
-	background: url("../img/search.png") no-repeat scroll 0 0 #346AA6;
-    border: 0 none;
-    color: #346AA6;
-    padding: 11px 34px 11px;
-    width: 110px;
-}
-
 #wrapper {
 	background: url(../img/layout/bg_border.png) repeat-y 0 0 transparent;
 	padding: 60px 80px 20px;
@@ -250,7 +235,7 @@ h1, h1 b{
 	background: url(../img/layout/bg_footer.png) repeat-y 0 0 transparent;	
 	height: 80px;
 	padding: 0 18px;
-    width: 968px;
+    width: 100%;
 }
 
 #footer .footerContent{
@@ -258,8 +243,8 @@ h1, h1 b{
 	color: #FFFFFF;
 	font-size: 14px;
 	font-weight: bold;
-	height: 20px;
-	width: 948;
+	height: 40px;
+	width: 100%;
 	padding: 10px;
 }
 
@@ -290,11 +275,11 @@ h1, h1 b{
 }
 
 .categoryItem {
-	width: 278px;
-	height: 53px;
 	float: left;
-	font-size: 18px;
-	padding: 32px 0px;	
+    font-size: 18px;
+    height: 117px;
+    padding: 32px 0;
+    width: 374px;
 }
 
 .categoryItem .text{
@@ -305,11 +290,11 @@ h1, h1 b{
 
 #partnerCategories a .categoryItem {
 	padding-top: 23px;
-	height: 62px;	
+	height: 118px;	
 }
 
 #catalogs a .categoryItem {
-	height: 53px;	
+	height: 115px;	
 }
 
 a .categoryItemLeft {
@@ -432,11 +417,9 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 .productListItem .productItemImage, .partnerListItem .partnerItemImage{	
 	float: left;
     height: 118px;
-    margin: 10px 40px;
+    margin: 10px 40px 30px 0;
     padding: 10px;
-    width: 198px;
-	height: 118px;
-	margin-bottom: 30px;
+    width: 218px;
 }
 
 .productListItem .productItemImage, .partnerListItem .partnerItemImage {
@@ -624,7 +607,7 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 }
 
 .contactStatic {
-	margin-top: 40px;	
+	margin-top: 60px;	
 }
 
 .contactForm h2{
@@ -671,36 +654,7 @@ div.form, div.index, div.view {
 	overflow: auto;	
 }
 
-input, textarea {
-	font-size: 90%;
-	padding: 2px;	
-}
-
-form div {
-	margin-bottom: 0;	
-}
-
-
-
-form .submit input[type="submit"]  ,input[type="submit"], div.actions ul li a, td.actions a {
-    background: -moz-linear-gradient(center top , #9cbbea, #5682af) repeat scroll 0 0 #5682af;
-    border: 1px solid #244663;
-    border-radius: 8px 8px 8px 8px;
-    color: #ffffff;
-    font-weight: normal;
-    min-width: 0;
-    padding: 4px 8px;
-    text-decoration: none;
-    text-shadow: 0 1px 0 #000000;
-}
-
-input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form .submit input[type="submit"]:hover {
-    background: -moz-linear-gradient(center top , #5682af, #9cbbea) repeat scroll 0 0 #5682af;
-	text-decoration: none;
-}
-
-
-  .jcarousel-direction-rtl {
+ .jcarousel-direction-rtl {
     direction: rtl;
 }
   .jcarousel-container-horizontal {
@@ -822,5 +776,18 @@ input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form 
     color: #346AA6;
     padding-left: 13px; 
 }
+
+/* Login */
+
+.users .container {
+	width: 650px;
+	
+}
+
+.row {
+	margin-bottom: 10px;
+}
+
+.alert { margin-bottom: 0;}
 
 

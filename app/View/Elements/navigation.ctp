@@ -40,11 +40,16 @@
 				.$this->Html->link('<div class="image"></div><div class="linkText">Fachhandel</div>','/Fachhandel', array('class'=>'partner', 'escape'=>false)).
 			'</li>
 		</ul>
+		<div class="input-group search">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+         	<input class="text form-control" placeholder="Suche"/>   
+         	<div class="cancel"><i class="glyphicon glyphicon-remove"></i></div>                                
+        </div>
+	
+			
+			
 		
-		<div class="search">
-			<div class="cancel"></div>
-			<input class="text" placeholder="Suche"/>
-		</div>
+		
 
 ';
 	

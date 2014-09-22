@@ -49,11 +49,11 @@ class SiteContentsController extends AppController {
 			$this->Email->sendAs = 'both';
 			$this->set('data', $this->data);
 			
-			if($this->Email->send() ) {
-				$this->Session->setFlash('Ihre Email wurde erfolgreich versandt!');
-				$this->redirect('/Kontakt');
+			if($this->Email->send()) {
+				$this->Session->setFlash('Ihre Email wurde erfolgreich versandt!', 'flash_message', array('class' => 'alert-success'));
+				
 			} else {
-				$this->Session->setFlash('Fehler');	
+				$this->Session->setFlash('Fehler beim versenden der Kontaktanfrage.', 'flash_message', array('class' => 'alert-danger'));	
 			}
 		}
 		$this->set('title_for_layout','Kontakt');

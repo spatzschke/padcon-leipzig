@@ -31,6 +31,7 @@
 		
 
 		echo $this->Html->css('reset');
+		echo $this->Html->css('backend/bootstrap_new');
 		echo $this->Html->css('cms');
 		echo $this->Html->css('cake.generic');
 		
@@ -41,6 +42,8 @@
 		echo $this->Html->script('jquery.dynamicSearch');
 		echo $this->Html->script('jquery.jcarousel.min');
 		echo $this->Html->script('jquery.lazyload.min');
+		
+		echo $this->Html->script('bootstrap.min');
 
 		
 		echo $scripts_for_layout;		
@@ -56,9 +59,9 @@
 
 	<div id="container">
 		<div id="header">
-			<div id="miniCart">
+			<!--<div id="miniCart">
     		
-    		</div>
+    		</div>>-->
 			<div class="lettering"></div>
             <?php echo $this->Html->link('<div class="logo">padcon</div>','/', array('escape'=>false, 'class' => '')); ?>
             <div class="caption">Fachhandel und Service für medizinische Einrichtungen</div>
@@ -110,6 +113,5 @@
 		  })();
 		
 	</script>
-	<?php echo $this->element('sql_dump'); ?>
 </body>
 </html>

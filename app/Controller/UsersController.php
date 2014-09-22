@@ -3,6 +3,18 @@
 // app/Controller/UsersController.php
 class UsersController extends AppController {
 
+	public $components = array(
+        'Auth' => array(
+        		'flash' => array(
+                'element' => 'flash_message',
+				'key' => 'auth',
+				'params' => array(
+					'class' => 'alert-danger'
+				)
+            )
+        )
+    );
+
     public function beforeFilter() {
 	    parent::beforeFilter();
 	    // Allow users to register and logout.
@@ -23,7 +35,7 @@ class UsersController extends AppController {
 					return $this->redirect(array('controller' => 'users', 'action' => 'dashboard', 'admin' => true,'prefix' => 'admin'));
 	        	}
 			}
-	        $this->Session->setFlash(__('Invalid username or password, try again'));
+	        $this->Session->setFlash('Der eingebene Benutzer oder das Passwort sind falsch!', 'flash_message', array('class' => 'alert-success'));
 	    }
 	}
 	
