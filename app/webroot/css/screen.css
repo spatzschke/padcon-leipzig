@@ -53,7 +53,21 @@ h1, h1 b{
     position: absolute;
     width: 100%;
 }
- 
+
+#miniCart{
+	position: absolute;
+	width: 70px;
+	height: 100px;
+	z-index: 300px;
+	background-color: red;
+	left: 80px;
+}
+
+#miniCart .miniCartCount {
+	font-size: 30px;
+    padding: 27px;
+}
+
 #container {
 	
 	position: relative;
@@ -214,7 +228,7 @@ h1, h1 b{
 	background: url("../img/search.png") no-repeat scroll 0 0 #346AA6;
     border: 0 none;
     color: #346AA6;
-    padding: 11px 34px 12px;
+    padding: 11px 34px 11px;
     width: 110px;
 }
 
@@ -369,7 +383,7 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 	width: 855px;
 	margin-bottom: 15px;
 	float: left;	
-	
+	position: relative;
 	background:url(../img/horizontal_devider.png) no-repeat 0 bottom transparent
 }
 .productListItem2 .productItemHeader{
@@ -383,6 +397,12 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 	background:url(../img/bg_productItemCenter.png) repeat-y 0 0 transparent;
 	float: left;	
 	width: 100%;	
+}
+
+.productListItem a.addToCart{
+	bottom: 40px;
+    position: absolute;
+    right: 0;
 }
 
 .partnerItemCenter {

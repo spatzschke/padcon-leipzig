@@ -1,0 +1,23 @@
+.wood_bg .buttons { 
+	display: none !important;
+}
+
+.pages *{color: black !important;}
+
+.pages .sheetFooter {
+	bottom: 0px;
+}
+
+article.offer.last {
+	height: 1080px;
+}
+
+article.offer .customerData .span12 {min-height: 21px;}
+
+.aditionalContent textarea {
+	
+	background: none;
+	border: none;
+	box-shadow: none;
+	
+}

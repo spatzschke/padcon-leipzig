@@ -27,20 +27,15 @@
 
 });
 
-function reloadMiniCart() {
-	
+function reloadMiniCart() {	
 	$('#sidebar .miniCart').load('<?php echo FULL_BASE_URL.$this->base;?>/carts/reloadMiniCart');
-	
-	
 }
 
 function reloadCartCheet(url) {
 	
 	$('wood_bg').load(url, function(data) {
 	  console.log(data)
-	});
-
-	
+	});	
 }
 
 function addToCart() {
@@ -69,3 +64,7 @@ function addToCart() {
 	return false;
 };
 
+function submitOfferSettings() {
+ 	console.log("submit");	
+	event.preventDefault();
+}
