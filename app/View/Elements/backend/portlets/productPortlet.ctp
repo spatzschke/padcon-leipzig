@@ -9,7 +9,7 @@ $(document).ready(function() {
 	
 			$('#filter .search input').dynamicSearch({
 				url: "<?php echo FULL_BASE_URL.$this->base;?>\/Products\/search\/",
-				renderTemplate: '/elements/backend/portlets/productPortletTableContent',
+				renderTemplate: '/Elements/backend/portlets/productPortletTableContent',
 			});
 			
 			$('.addToCart').on('click', function(){

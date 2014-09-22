@@ -89,13 +89,13 @@ class CustomersController extends AppController {
 		}
 		$this->set('customer', $this->Customer->read(null, $id));
 		debug($this->Customer->read(null, $id));
-		$this->render('/elements/backend/portlets/customerDetailPortlet');
+		$this->render('/Elements/backend/portlets/customerDetailPortlet');
 	}
 
 	function admin_add($id = null) {
 		$this->layout = 'admin';
 		$this->add($id);
-		$this->render('/elements/backend/portlets/customerDetailPortlet');
+		$this->render('/Elements/backend/portlets/customerDetailPortlet');
 	}
 
 	function admin_edit($id = null) {

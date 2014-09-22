@@ -110,13 +110,13 @@ class UsersController extends AppController {
 		$this->layout = 'admin';
 		$this->User->recursive = 0;
 		$this->set('users', $this->paginate());
-		$this->render('/elements/backend/portlets/userPortlet');
+		$this->render('/Elements/backend/portlets/userPortlet');
 	}
 	
 	function admin_add($id = null) {
 		$this->layout = 'admin';
 		$this->add($id);
-		$this->render('/elements/backend/portlets/userDetailPortlet');
+		$this->render('/Elements/backend/portlets/userDetailPortlet');
 	}
 	
 	function admin_delete($id = null) {

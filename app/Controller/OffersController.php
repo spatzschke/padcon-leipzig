@@ -188,7 +188,7 @@ Lieferzeit: ca. 2-3 Wochen
 		$offer['CartProducts'] = $this->getSettingCartProducts();
 		$this->request->data = $offer;
 		
-		$this->render('/elements/backend/portlets/settingsProductTable');
+		$this->render('/Elements/backend/portlets/settingsProductTable');
 	}
 
 	function getSettingCartProducts() {
@@ -299,7 +299,7 @@ Lieferzeit: ca. 2-3 Wochen
 		
 		$this->generateDataByOffer();
 		
-		$this->render('/elements/backend/offer_cheet');
+		$this->render('/Elements/backend/offer_cheet');
 	}
 	
 	function splitCustomerData()

@@ -174,7 +174,7 @@ class ProductsController extends AppController {
 			$product['Color'] = array_filter($colors);
 			
 			$this->request->data = $product;
-			$this->render('/elements/backend/portlets/productAddPortlet');
+			$this->render('/Elements/backend/portlets/productAddPortlet');
 		}
 		
 	}
@@ -323,7 +323,7 @@ class ProductsController extends AppController {
 		
 		$product = $this->Product->find('first',array('conditions' => array('Product.id' => $id)));
 		$this->set('product', $product);
-		$this->render('/elements/productItem');
+		$this->render('/Elements/productItem');
 	}
 	
 	function getNextCustomProductNumber() {

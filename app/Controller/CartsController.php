@@ -198,7 +198,7 @@ class CartsController extends AppController {
 		$this->layout = 'ajax';
 		$this->calcSumPriceByActiveCart();
 		$this->updateCartCount();
-		$this->render('/elements/miniCart');
+		$this->render('/Elements/miniCart');
 
 	}
 	
@@ -206,7 +206,7 @@ class CartsController extends AppController {
 		$this->layout = 'ajax';
 		$this->calcSumPriceByActiveCart();
 		$this->updateCartCount($this->get_active_cart());
-		$this->render('/elements/backend/miniCart');
+		$this->render('/Elements/backend/miniCart');
 
 	}
 
@@ -214,11 +214,11 @@ class CartsController extends AppController {
 		$this->layout = 'ajax';
 		$offer = $active = $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));
 		$this->set('offer', $offer);
-		$this->render('/elements/backend/offer_cheet');
+		$this->render('/Elements/backend/offer_cheet');
 	}
 
 	function reloadCartResult() {
-		$this->render('/elements/backend/portlets/offerCartFooterPortlet');
+		$this->render('/Elements/backend/portlets/offerCartFooterPortlet');
 	}
 	
 	function calcSumPrice($cart = null) {
