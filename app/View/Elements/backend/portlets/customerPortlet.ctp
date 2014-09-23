@@ -44,21 +44,21 @@ $(document).ready(function() {
 			<thead> 
 				<tr> 
    					<th></th> 
-    			<!--<th><?php __('ID');?></th>-->
-					<th><?php __('Anrede');?></th>
-					<th><?php __('Vorname');?></th>
-					<th><?php __('Nachname');?></th>
-					<th><?php __('Organisation');?></th>
-					<th><?php __('Abteilung');?></th>
-				<!--<th><?php __('Stra�e');?></th>
-					<th><?php __('PLZ');?></th>
-					<th><?php __('Stadt');?></th>
-					<th><?php __('eMail');?></th>
-					<th><?php __('Tel.');?></th>
-					<th><?php __('Fax.');?></th>
-					<th><?php __('Passwort');?></th>
-					<th><?php __('Erstellt');?></th>
-					<th><?php __('Bearbeitet');?></th>-->
+    			<!--<th><?php echo('ID');?></th>-->
+					<th><?php echo('Anrede');?></th>
+					<th><?php echo('Vorname');?></th>
+					<th><?php echo('Nachname');?></th>
+					<th><?php echo('Organisation');?></th>
+					<th><?php echo('Abteilung');?></th>
+				<!--<th><?php echo('Stra�e');?></th>
+					<th><?php echo('PLZ');?></th>
+					<th><?php echo('Stadt');?></th>
+					<th><?php echo('eMail');?></th>
+					<th><?php echo('Tel.');?></th>
+					<th><?php echo('Fax.');?></th>
+					<th><?php echo('Passwort');?></th>
+					<th><?php echo('Erstellt');?></th>
+					<th><?php echo('Bearbeitet');?></th>-->
 					<th class="actions"><?php __('');?></th>
 				</tr> 
 			</thead> 
@@ -70,7 +70,7 @@ $(document).ready(function() {
 					
 				?>
 				<tr<?php echo $class;?>>
-					<td><?php echo $this->Html->link('', array('admin' => true, 'controller' => 'Offers', 'action' => 'updateOffer', $user['Customer']['id']), array('escape' => false, 'class' => 'addToCart addCustomer')); ?></td>
+					<td><?php echo $this->Html->link('<i class="glyphicon glyphicon-open"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'updateOffer', $user['Customer']['id']), array('escape' => false, 'class' => 'addToCart addCustomer')); ?></td>
 				<!--<td><?php echo $user['Customer']['id']; ?>&nbsp;</td>-->
 					<td><?php echo $user['Customer']['salutation']; ?>&nbsp;</td>
 					<td><?php echo $user['Customer']['first_name']; ?>&nbsp;</td>
@@ -88,9 +88,9 @@ $(document).ready(function() {
 					<td class="actions">
 						
 					
-						<?php echo $this->Html->link($this->Html->image("backend/icn_search.png"), array('action' => 'view', $user['Customer']['id']), array('escape' => false)); ?>
-						<?php echo $this->Html->link($this->Html->image("backend/icn_edit.png"), array('action' => 'edit', $user['Customer']['id']), array('escape' => false)); ?>
-						<?php echo $this->Html->link($this->Html->image("backend/icn_trash.png"), array('action' => 'delete', $user['Customer']['id']), array('escape' => false), sprintf(__('Are you sure you want to delete # %s?', true), $user['User']['id'])); ?>
+						<?php echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('action' => 'view', $user['Customer']['id']), array('escape' => false)); ?>
+						<?php echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('action' => 'edit', $user['Customer']['id']), array('escape' => false)); ?>
+						<?php echo $this->Html->link('<i class="glyphicon glyphicon-trash"></i>', array('action' => 'delete', $user['Customer']['id']), array('escape' => false), sprintf(__('Are you sure you want to delete # %s?', true), $user['User']['id'])); ?>
 					</td>
 				</tr> 
 				<?php endforeach; ?>

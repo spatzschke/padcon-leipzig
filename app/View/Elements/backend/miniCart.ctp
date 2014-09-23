@@ -8,17 +8,16 @@
 	if(!empty($cart)){
 ?>
 
-<div class="miniCartContent well">
-	
-	<h2>Aktiver Warenkorb</h2>
-	ID: <?php echo $cart['Cart']['id']; ?> 
-	<br />
-	Anzahl: <?php echo $cart['Cart']['count']; ?> 
-	<br />
-	Verkaufssumme: <?php echo $cart['Cart']['sum_retail_price']; ?> €
-	<br />
-	Einkaufssumme: <?php echo $cart['Cart']['sum_base_price']; ?> €
-
+<div class="miniCartContent panel panel-default">
+	<div class="panel-body">
+		<h2>Aktives Angebot</h2>
+		<br />
+		Anzahl: <?php echo $cart['Cart']['count']; ?> 
+		<br />
+		Verkaufssumme: <?php echo $cart['Cart']['sum_retail_price']; ?> €
+		<br />
+		Einkaufssumme: <?php echo $cart['Cart']['sum_base_price']; ?> €
+		</div>
 </div>
 
 <?php } else {

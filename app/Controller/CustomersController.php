@@ -3,6 +3,7 @@ class CustomersController extends AppController {
 
 	var $name = 'Customers';
 	public $components = array('Auth', 'Session');
+	public $uses = array('Customer', 'Offer');
 	
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
@@ -22,20 +23,21 @@ class CustomersController extends AppController {
 
 	function view($id = null) {
 		if (!$id) {
-			$this->Session->setFlash(__('Invalid customer', true));
+			$this->Session->setFlash(__('Unbekannter Kunde', true), 'flash_message', array('class' => 'alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('customer', $this->Customer->read(null, $id));
 	}
 
 	function add() {
+
 		if (!empty($this->request->data)) {
 			$this->Customer->create();
 			if ($this->Customer->save($this->request->data)) {
-				$this->Session->setFlash(__('The customer has been saved', true));
-				$this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('Kunder wurde erfolgreich erstellt', true), 'flash_message', array('class' => 'alert-success'));
+			//	$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The customer could not be saved. Please, try again.', true));
+				$this->Session->setFlash(__('Kunde konnte nicht erstellt werden!. Bitte versuchen Sie es erneut.', true), 'flash_message', array('class' => 'alert-danger'));
 			}
 		}
 		$users = $this->Customer->User->find('list');
@@ -49,10 +51,10 @@ class CustomersController extends AppController {
 		}
 		if (!empty($this->request->data)) {
 			if ($this->Customer->save($this->request->data)) {
-				$this->Session->setFlash(__('The customer has been saved', true));
+				$this->Session->setFlash(__('Kunde wurde erfolgreich bearbeitet!', true), 'flash_message', array('class' => 'alert-success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The customer could not be saved. Please, try again.', true));
+				$this->Session->setFlash(__('Kunde konnte nicht bearbeitet werden!. Bitte versuchen Sie es erneut.', true), 'flash_message', array('class' => 'alert-danger'));
 			}
 		}
 		if (empty($this->request->data)) {
@@ -64,14 +66,14 @@ class CustomersController extends AppController {
 
 	function delete($id = null) {
 		if (!$id) {
-			$this->Session->setFlash(__('Invalid id for customer', true));
+			$this->Session->setFlash(__('Unbekannter Kunde', true), 'flash_message', array('class' => 'alert-warning'));
 			$this->redirect(array('action'=>'index'));
 		}
 		if ($this->Customer->delete($id)) {
-			$this->Session->setFlash(__('Customer deleted', true));
+			$this->Session->setFlash(__('Kunde wurde erfolgreich gelöscht!', true), 'flash_message', array('class' => 'alert-success'));
 			$this->redirect(array('action'=>'index'));
 		}
-		$this->Session->setFlash(__('Customer was not deleted', true));
+		$this->Session->setFlash(__('Kunde konnte nicht gelöscht werden!. Bitte versuchen Sie es erneut.', true), 'flash_message', array('class' => 'alert-danger'));
 		$this->redirect(array('action' => 'index'));
 	}
 	function admin_index($layout = null) {
@@ -84,17 +86,25 @@ class CustomersController extends AppController {
 	function admin_view($id = null) {
 		$this->layout = 'admin';
 		if (!$id) {
-			$this->Session->setFlash(__('Invalid customer', true));
+			$this->Session->setFlash(__('Unbekannter Kunde', true), 'flash_message', array('class' => 'alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->set('customer', $this->Customer->read(null, $id));
-		debug($this->Customer->read(null, $id));
-		$this->render('/Elements/backend/portlets/customerDetailPortlet');
+		$customer = $this->Customer->read(null, $id);
+		unset($customer['Offer']);
+		
+		
+		$customer += $this->getCustomerChartInformation($id);
+		
+		$this->request->data = $customer;
+				
+		$this->set('title_for_panel','Kundeninformationen');
+		$this->render('/Elements/backend/portlets/customerInfoPortlet');
 	}
 
 	function admin_add($id = null) {
 		$this->layout = 'admin';
-		$this->add($id);
+		$this->add($id = null);
+		$this->set('title_for_panel','Kunde anlegen');
 		$this->render('/Elements/backend/portlets/customerDetailPortlet');
 	}
 
@@ -105,10 +115,10 @@ class CustomersController extends AppController {
 		}
 		if (!empty($this->request->data)) {
 			if ($this->Customer->save($this->request->data)) {
-				$this->Session->setFlash(__('The customer has been saved', true));
+				$this->Session->setFlash(__('Kunde wurde erfolgreich bearbeitet!', true), 'flash_message', array('class' => 'alert-success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The customer could not be saved. Please, try again.', true));
+				$this->Session->setFlash(__('Kunde konnte nicht bearbeitet werden!. Bitte versuchen Sie es erneut.', true), 'flash_message', array('class' => 'alert-danger'));
 			}
 		}
 		if (empty($this->request->data)) {
@@ -119,16 +129,7 @@ class CustomersController extends AppController {
 	}
 
 	function admin_delete($id = null) {
-		if (!$id) {
-			$this->Session->setFlash(__('Invalid id for customer', true));
-			$this->redirect(array('action'=>'index'));
-		}
-		if ($this->Customer->delete($id)) {
-			$this->Session->setFlash(__('Customer deleted', true));
-			$this->redirect(array('action'=>'index'));
-		}
-		$this->Session->setFlash(__('Customer was not deleted', true));
-		$this->redirect(array('action' => 'index'));
+		$this->delete($id);
 	}
 	
 	function liveValidate($string = null) {
@@ -223,6 +224,38 @@ class CustomersController extends AppController {
 		
 		return $this->Customer->find('first', array('conditions' => array('id' => $id)));
 		
+	}
+	
+	function getCustomerChartInformation($id = null) {
+			
+		$tempCustomer['CustomerInformation'] = array();	
+		
+		
+		// Anzahl der Angebote zu einem Kunden
+		
+		$customerOfferCount = $this->Offer->find('count', array('conditions' => array('Offer.customer_id' => $id))); 
+		$allOfferCount = $this->Offer->find('count');
+		
+		$offerArray = array('title' => 'Angebot', 
+			'percent' => intval(($customerOfferCount * 100) / $allOfferCount),
+			'ownCount' => $customerOfferCount,
+			'allCount' => $allOfferCount			
+		);
+		
+		array_push($tempCustomer['CustomerInformation'], $offerArray);
+		
+		
+		// Gesamtumsatz eines Kunden
+				
+		$offerArray2 = array('title' => 'Angebot2', 
+			'percent' => intval(($customerOfferCount * 100) / $allOfferCount),
+			'ownCount' => $customerOfferCount,
+			'allCount' => $allOfferCount			
+		);
+		
+		array_push($tempCustomer['CustomerInformation'], $offerArray2);
+	
+		return $tempCustomer;
 	}
 
 }

@@ -8,7 +8,7 @@
 	<?php
 		echo $this->Html->meta('icon');
 		
-		echo $this->Html->css('backend/bootstrap');
+		echo $this->Html->css('backend/bootstrap_new');
 		echo $this->Html->css('backend/backend');
 		
 		
@@ -27,10 +27,29 @@
 		
 		echo $this->Html->script('backend/hideshow');
 		echo $this->Html->script('backend/jquery.tablesorter.min');
+		echo $this->Html->script('bootstrap.min');
+		echo $this->Html->script('backend/Chart.min');
 		
 		echo $this->Html->script('backend/admin_main');
 
 	?>
+	
+	<script type="text/javascript">
+		<!--
+		 
+		$(document).ready(function () {
+		 
+		window.setTimeout(function() {
+		    $(".alert").fadeTo(1500, 0).slideUp(500, function(){
+		        $(this).remove(); 
+		    });
+		}, 5000);
+		 
+		
+		 
+		});
+		//-->
+	</script>
 </head>
 
 
@@ -56,10 +75,12 @@
 	<?php echo $this->element('backend/navigation'); ?>
 		
 	<section id="main" class="column">
+		<div class="panel-body">
+			<?php echo $this->Session->flash(); ?>
 		
-		<?php echo $this->Session->flash(); ?>
+			<?php echo $content_for_layout; ?>
+		</div>
 		
-		<?php echo $content_for_layout; ?>
 		
 		<div class="spacer"></div>
 	</section>

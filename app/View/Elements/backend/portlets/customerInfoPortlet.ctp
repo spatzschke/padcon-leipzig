@@ -13,8 +13,7 @@ $(document).ready(function() {
 						url: '<?php echo FULL_BASE_URL.$this->base;?>\/Customers\/liveValidate\/',
 						urlBase: '<?php echo FULL_BASE_URL.$this->base;?>',
 						autoSave: false,
-						});
-									
+						});										
 });
 
 </script>
@@ -48,7 +47,9 @@ $(document).ready(function() {
 											'div' => FALSE,
 											'data-model' => 'Customer', 
 											'data-field' => 'salutation', 
-											'autoComplete' => true));
+											'autoComplete' => true,
+											'readonly' => 'readonly'
+										));
 										?>   
 									</div>                          
                             	</div>
@@ -61,7 +62,8 @@ $(document).ready(function() {
 											'data-model' => 'Customer',
 											'placeholder' => 'Titel',
 											'data-field' => 'title', 
-											'autoComplete' => true
+											'autoComplete' => true,
+											'readonly' => 'readonly'
 										));
 										?>                                      
 		                             </div>
@@ -75,7 +77,8 @@ $(document).ready(function() {
 									'data-model' => 'Customer',
 									'placeholder' => 'Vorname',
 									'data-field' => 'first_name', 
-									'autoComplete' => true
+									'autoComplete' => true,
+									'readonly' => 'readonly'
 								));
 								?>                                      
                              </div>
@@ -87,7 +90,8 @@ $(document).ready(function() {
 									'data-model' => 'Customer',
 									'placeholder' => 'Nachname',
 									'data-field' => 'last_name', 
-									'autoComplete' => true
+									'autoComplete' => true,
+									'readonly' => 'readonly'
 								));
 								?>                                      
                              </div>
@@ -102,7 +106,8 @@ $(document).ready(function() {
 									'data-field' => 'department', 
 									'autoComplete' => true,
 									'type' => 'textarea',
-									'rows' => '3'
+									'rows' => '3',
+									'readonly' => 'readonly'
 								));
 								?> 
 							</div>
@@ -115,7 +120,8 @@ $(document).ready(function() {
 									'data-model' => 'Customer',
 									'placeholder' => 'Email',
 									'data-field' => 'email', 
-									'autoComplete' => true
+									'autoComplete' => true,
+									'readonly' => 'readonly'
 								));
 								?>                                      
                              </div>
@@ -127,7 +133,8 @@ $(document).ready(function() {
 									'data-model' => 'Customer',
 									'placeholder' => 'Telefon',
 									'data-field' => 'phone', 
-									'autoComplete' => true
+									'autoComplete' => true,
+									'readonly' => 'readonly'
 								));
 								?>                                      
                              </div>
@@ -139,7 +146,8 @@ $(document).ready(function() {
 									'data-model' => 'Customer',
 									'placeholder' => 'Fax',
 									'data-field' => 'fax', 
-									'autoComplete' => true
+									'autoComplete' => true,
+									'readonly' => 'readonly'
 								));
 								?>                                      
                              </div>
@@ -158,7 +166,8 @@ $(document).ready(function() {
 									'placeholder' => 'Organisation',
 									'data-field' => 'organisation', 
 									'autoComplete' => true,
-									'type' => 'textarea'
+									'type' => 'textarea', 
+									'readonly' => 'readonly'
 								));
 								?> 
 							</div>
@@ -171,7 +180,8 @@ $(document).ready(function() {
 										'data-model' => 'Customer',
 										'placeholder' => 'Straße',
 										'data-field' => 'street', 
-										'autoComplete' => true
+										'autoComplete' => true, 
+										'readonly' => 'readonly'
 									));
 									?>                                      
 	                        </div>
@@ -186,7 +196,8 @@ $(document).ready(function() {
 											'data-model' => 'Customer',
 											'placeholder' => 'PLZ',
 											'data-field' => 'postal_code', 
-											'autoComplete' => true
+											'autoComplete' => true, 
+											'readonly' => 'readonly'
 										));
 										?>                                      
 		                             </div>
@@ -200,42 +211,84 @@ $(document).ready(function() {
 											'data-model' => 'Customer',
 											'placeholder' => 'Stadt',
 											'data-field' => 'city', 
-											'autoComplete' => true
+											'autoComplete' => true, 
+											'readonly' => 'readonly'
 										));
 										?>                                      
 		                             </div>
 		                         </div>
 							</div>
-                        
-							
-                       
-	                        
-						</div>
- 
-
-                                <div style="margin-top:10px" class="form-group">
+                    </div>
+                    
+                           <div style="margin-top:10px" class="form-group">
                                     <!-- Button -->
                                     <div class="col-sm-12 controls">
                                   
-	                                    	<?php 
-	                                    		if($this->request->params['action'] == 'admin_view') {
-	                                    			
-	                                    			echo '<input type="submit" value="Spechern" class="btn btn-success form-control">';
-	                                    		} else {
-	                                    			
-	                                    			echo '<input type="submit" value="Anlegen" class="btn btn-success form-control">';	
-	                                    		}
 	                                    	
-	                                    	?>
                                     	</div>
                                     </div>
                                 </div>
  
                      </form>
-
-
-
-                        </div>                     
-                    </div>  
+                    
+				</div>                     
+            <div class="panel panel-info" >
+	                     <div class="panel-heading">
+	                        <div class="panel-title">Kundenauswertung</div>
+	                        
+	                    </div>
+	                    
+	                    <?php 
+	                    
+	                    	$chartSize = '110';
+							$defaultColor = '#F7464A';
+							$defaultHighlightColor = '#FF5A5E';
+							$defaultTransparentColor = '#f5f5f5';
+	                    	
+	                   	?>
+	
+	                    <div class="panel-body" >
+	                    	<div class="col-md-12">
+	                    <div class="row">
+		                    
+		                     <?php foreach($this->data['CustomerInformation'] as $info) { ?>
+		                    
+		                    <div class="chartEntry col-md-4">
+		                    	<div class="title"><?php echo $info['title'] ?></div>
+		                    	<div class="chart">
+		                    		<div class="data"><?php echo $info['percent'] ?>%</div>
+		                    		<div id="canvas-holder">
+										<canvas id="chart-<?php echo $info['title'] ?>" width="<?php echo $chartSize ?>" height="<?php echo $chartSize ?>"/>
+										<script>
+											var data<?php echo $info['title'] ?> = [
+												{
+													value: <?php echo $info['ownCount'] ?>,
+													color:'<?php echo $defaultColor ?>',
+													highlight: '<?php echo $defaultHighlightColor ?>'
+												},
+												{
+													value: <?php echo $info['allCount'] ?>,
+													color: '<?php echo $defaultTransparentColor ?>',
+													highlight: '<?php echo $defaultTransparentColor ?>'
+													
+												}
+											];
+											var ctx<?php echo $info['title'] ?> = document.getElementById("chart-<?php echo $info['title'] ?>").getContext("2d");
+											window.myPie = new Chart(ctx<?php echo $info['title'] ?>).Doughnut(data<?php echo $info['title'] ?>, {});
+											
+											</script> 
+									</div>
+								</div>
+		                    </div>
+		                    
+		                    <?php } ?>
+		                    
+	                    </div>
+                    </div>
+	                    </div>
+	                </div>
+            
+            </div>  
+            
         </div>
     </div>

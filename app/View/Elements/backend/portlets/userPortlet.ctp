@@ -11,40 +11,41 @@
 			<thead> 
 				<tr> 
    					<th></th> 
-    			<!--<th><?php __('ID');?></th>-->
-					<th><?php __('eMail');?></th>
-					<th><?php __('Letzter Login');?></th>
-					<!--<th><?php __('Erstellt');?></th>
-					<th><?php __('Bearbeitet');?></th>-->
+    			<!--<th><?php echo('ID');?></th>-->
+					<th><?php echo('eMail');?></th>
+					<th><?php echo('Rolle');?></th>
+					<th><?php echo('Letzter Login');?></th>
+					<!--<th><?php echo('Erstellt');?></th>
+					<th><?php echo('Bearbeitet');?></th>-->
 					<th class="actions"><?php __('');?></th>
-				</tr> 
+				</tr> 
 			</thead> 
 			<tbody> 
 				<?php
 				$i = 0;
 				foreach ($users as $user):
 					$class = null;
-					if ($i++ % 2 == 0) {
-						$class = ' class="altrow"';
-					}
+					if ($user['User']['role'] != 'anonymous') {
+						
+					
 				?>
-				<tr<?php echo $class;?>>
+				<tr>
 					<td></td>
 				<!--<td><?php echo $user['User']['id']; ?>&nbsp;</td>-->
 					<td><?php echo $user['User']['username']; ?>&nbsp;</td>
 					<td><?php echo $user['User']['role']; ?>&nbsp;</td>
-					<td><?php echo $user['User']['last_login']; ?>&nbsp;</td>
+					<td><?php echo $user['User']['last_login'];?>&nbsp;</td>
 				<!--<td><?php echo $user['User']['created']; ?>&nbsp;</td>
 					<td><?php echo $user['User']['modified']; ?>&nbsp;</td>-->
 					<td class="actions">
 						
 					
-						<?php echo $this->Html->link($this->Html->image("backend/icn_search.png"), array('action' => 'view', $user['User']['id']), array('escape' => false)); ?>
-						<?php echo $this->Html->link($this->Html->image("backend/icn_edit.png"), array('action' => 'edit', $user['User']['id']), array('escape' => false)); ?>
-						<?php echo $this->Html->link($this->Html->image("backend/icn_trash.png"), array('action' => 'delete', $user['User']['id']), array('escape' => false), sprintf(__('Are you sure you want to delete # %s?', true), $user['User']['id'])); ?>
+						<?php echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('action' => 'view', $user['User']['id']), array('escape' => false)); ?>
+						<?php echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('action' => 'edit', $user['User']['id']), array('escape' => false)); ?>
+						<?php echo $this->Html->link('<i class="glyphicon glyphicon-trash"></i>', array('action' => 'delete', $user['User']['id']), array('escape' => false), sprintf(__('Are you sure you want to delete # %s?', true), $user['User']['id'])); ?>
 					</td>
 				</tr> 
-				<?php endforeach; ?>
+				<?php } endforeach; ?>
 			</tbody>
 			 
 			</table>

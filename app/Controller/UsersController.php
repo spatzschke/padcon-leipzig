@@ -35,7 +35,7 @@ class UsersController extends AppController {
 					return $this->redirect(array('controller' => 'users', 'action' => 'dashboard', 'admin' => true,'prefix' => 'admin'));
 	        	}
 			}
-	        $this->Session->setFlash('Der eingebene Benutzer oder das Passwort sind falsch!', 'flash_message', array('class' => 'alert-success'));
+	        $this->Session->setFlash('Der eingebene Benutzer oder das Passwort sind falsch!', 'flash_message', array('class' => 'alert-danger'));
 	    }
 	}
 	
@@ -54,6 +54,19 @@ class UsersController extends AppController {
             throw new NotFoundException(__('Invalid user'));
         }
         $this->set('user', $this->User->read(null, $id));
+    }
+	
+	 public function admin_view($id = null) {
+       $this->layout = 'admin';
+		if (!$id) {
+			$this->Session->setFlash(__('Unbekannter Benutzer', true), 'flash_message', array('class' => 'alert-warning'));
+			$this->redirect(array('action' => 'index'));
+		}
+		$this->request->data = $this->User->read(null, $id);
+		
+		$this->set('title_for_panel','Benutzer betrachten');
+		
+		$this->render('/Elements/backend/portlets/userDetailPortlet');
     }
 
     public function add() {
@@ -128,6 +141,7 @@ class UsersController extends AppController {
 	function admin_add($id = null) {
 		$this->layout = 'admin';
 		$this->add($id);
+		$this->set('title_for_panel','Benutzer anlegen');
 		$this->render('/Elements/backend/portlets/userDetailPortlet');
 	}
 	
