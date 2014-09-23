@@ -1,12 +1,12 @@
 <aside id="sidebar" class="column">
 		
-		<!--<h3>Angebote</h3>
+		<h3>Rechnung</h3>
 		<ul class="toggle">
-			<li class="icn_new_article"><a href="#">New Article</a></li>
-			<li class="icn_edit_article"><a href="#">Edit Articles</a></li>
-			<li class="icn_categories"><a href="#">Categories</a></li>
-			<li class="icn_tags"><a href="#">Tags</a></li>
-		</ul>-->
+			<li class="icn_add_user"><?php echo $this->Html->link('Rechnung aus Angebot erstellen', '/admin/offers/add', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Lieferschein aus Angebot erstellen', '/admin/offers/active', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Alle Rechnungen anzeigen', '/admin/offers/index', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Auswertung anzeigen', '/admin/offers/index', array('disabled' => 'disabled')); ?></li>
+		</ul>
 		<h3>Angebote</h3>
 		<ul class="toggle">
 			<li class="icn_add_user"><?php echo $this->Html->link('Neues Angebot erstellen', '/admin/offers/add'); ?></li>
@@ -19,22 +19,33 @@
 			<div class="miniCart">
 				<?php echo $this->element('backend/miniCart'); ?>
 			</div>
-			<li class="icn_view_users"><?php echo $this->Html->link('Warenkorb deaktivieren', '/admin/carts/disable_cart'); ?></li>
+			<!--<li class="icn_view_users"><?php echo $this->Html->link('Warenkorb deaktivieren', '/admin/carts/disable_cart'); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle Warenkörbe anzeigen', '/admin/carts/index'); ?></li>
-		</ul>
+		</ul>-->
 		
 		<h3>Produktdatenbank</h3>
 		<ul class="toggle">
 			<li class="icn_add_user"><?php echo $this->Html->link('Produkte hinzufügen', '/admin/products/add'); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle Produkte anzeigen', '/admin/products/index'); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Material hinzufügen', '/admin/materials/add', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Farben hinzufügen', '/admin/colors/add', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Maße hinzufügen', '/admin/sizes/add', array('disabled' => 'disabled')); ?></li>
 		</ul>
-		<!--<h3>Seiteninhalte</h3>
+		
+		<h3>Partnerdatenbank</h3>
 		<ul class="toggle">
-			<li class="icn_folder"><a href="#">File Manager</a></li>
-			<li class="icn_photo"><a href="#">Gallery</a></li>
-			<li class="icn_audio"><a href="#">Audio</a></li>
-			<li class="icn_video"><a href="#">Video</a></li>
-		</ul>-->
+			<li class="icn_add_user"><?php echo $this->Html->link('Partner hinzufügen', '/admin/products/add', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Alle Produkte anzeigen', '/admin/products/index', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Partnerkategorie hinzufügen', '/admin/materials/add', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Alle Partnerkategorien anzeigen', '/admin/colors/add', array('disabled' => 'disabled')); ?></li>
+		</ul>
+		
+		<h3>Katalogverwaltung</h3>
+		<ul class="toggle">
+			<li class="icn_add_user"><?php echo $this->Html->link('Kataloge verwalten', '/admin/products/add', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Kataloge generieren', '/admin/products/index', array('disabled' => 'disabled')); ?></li>
+		</ul>
+		
 		<h3>Kundendatenbank</h3>
 		<ul class="toggle">
 			<li class="icn_add_user"><?php echo $this->Html->link('Neuer Kunde', '/admin/customers/add'); ?></li>

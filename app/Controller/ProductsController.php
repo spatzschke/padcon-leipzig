@@ -135,6 +135,12 @@ class ProductsController extends AppController {
 		}
 		$this->set('product', $this->Product->read(null, $id));
 	}
+	
+	function admin_view($id = null) {
+		$this->view($id);
+		$this->layout = 'admin';
+		$this->set('title_for_panel', 'Produkt betrachten');
+	}
 
 	function add() {
 		if (!empty($this->data)) {
@@ -151,11 +157,19 @@ class ProductsController extends AppController {
 		$sizes = $this->Product->Size->find('list');
 		$carts = $this->Product->Cart->find('list');
 		$this->set(compact('categories', 'materials', 'sizes', 'carts'));
+		
+		// $this->request->data['Categories'] = $categories;
+		// $this->request->data['Materials'] = $materials;
+		// $this->request->data['Sizes'] = $sizes;
+		// $this->request->data['Carts'] = $carts;
+		
+		
 	}
 	
 	function admin_add($id = null) {
 		$this->add($id);
 		$this->layout = 'admin';
+		$this->set('title_for_panel', 'Produkt hinzufügen');
 	}
 	
 	function admin_loadProductAddPopup($id = null) {

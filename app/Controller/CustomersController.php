@@ -13,6 +13,7 @@ class CustomersController extends AppController {
 			
 
 		}
+
 	}
 
 
@@ -137,6 +138,7 @@ class CustomersController extends AppController {
 		$validateString = $this->request->data[$this->request->data['Model']][$this->request->data['Field']];
 		
 		
+		
 		$this->Customer->set( $this->request->data );
 		
 	    if ($this->Customer->validates()) {
@@ -230,32 +232,102 @@ class CustomersController extends AppController {
 			
 		$tempCustomer['CustomerInformation'] = array();	
 		
+		$view = new View($this);
+        $Number = $view->loadHelper('Number');
 		
-		// Anzahl der Angebote zu einem Kunden
+// Anzahl der Angebote zu einem Kunden
 		
 		$customerOfferCount = $this->Offer->find('count', array('conditions' => array('Offer.customer_id' => $id))); 
 		$allOfferCount = $this->Offer->find('count');
 		
 		$offerArray = array('title' => 'Angebot', 
-			'percent' => intval(($customerOfferCount * 100) / $allOfferCount),
+			'percent' => $Number->toPercentage($customerOfferCount / $allOfferCount, 0, array(
+			    'multiply' => true
+			)),
 			'ownCount' => $customerOfferCount,
-			'allCount' => $allOfferCount			
+			'allCount' => $allOfferCount,
+			'description' => ''		
 		);
+		if (strpos($offerArray['title'],' ') !== false) {
+		    $offerArray += array('data' => strtolower(str_replace(' ', '', $offerArray['title'])));
+		}
+		$offerArray += array('data' => strtolower($offerArray['title']));
 		
 		array_push($tempCustomer['CustomerInformation'], $offerArray);
 		
 		
-		// Gesamtumsatz eines Kunden
-				
-		$offerArray2 = array('title' => 'Angebot2', 
-			'percent' => intval(($customerOfferCount * 100) / $allOfferCount),
-			'ownCount' => $customerOfferCount,
-			'allCount' => $allOfferCount			
-		);
+// Gesamtumsatz eines Kunden
 		
-		array_push($tempCustomer['CustomerInformation'], $offerArray2);
+		$customerRevenue = $this->Offer->find('first', array(
+			'conditions' => array(
+			 	'Offer.customer_id' => $id,
+				),
+			'fields' => array('SUM(Offer.offer_price) AS summe')
+		));
+		
+		
+		$allRevenue = $this->Offer->find('first', array(
+			'fields' => array('SUM(Offer.offer_price) AS summe')
+		));
+
+		$revenueArray = array(
+			'title' => 'Umsatz', 
+			'percent' => $this->format_num(floatval($customerRevenue[0]['summe']),1),
+			'ownCount' => $Number->precision($customerRevenue[0]['summe'],2),
+			'allCount' => $Number->precision($allRevenue[0]['summe'],2),
+			'description' => ''			
+		);
+		if (strpos($revenueArray['title'],' ') !== false) {
+		    $revenueArray += array('data' => strtolower(str_replace(' ', '', $revenueArray['title'])));
+		}
+		$revenueArray += array('data' => strtolower($revenueArray['title']));
+			
+		array_push($tempCustomer['CustomerInformation'], $revenueArray);
+	
+// Offene Angebote
+		
+		$customerOfferStatus = $this->Offer->find('count', array(
+			'conditions' => array(
+			 	'Offer.customer_id' => $id,
+			 	'Offer.status' => 'open',
+				)
+		));
+				
+		$allOfferStatus = $this->Offer->find('count', array(
+			'conditions' => array(
+			 	'Offer.customer_id' => $id,
+				)
+		));
+
+		$offerStatusArray = array('title' => 'Offene Angebote', 
+			'percent' => $Number->toPercentage($customerOfferStatus / $allOfferStatus, 0, array(
+			    'multiply' => true
+			)),
+			'ownCount' => $customerOfferStatus,
+			'allCount' => $allOfferStatus,
+			'description' => ''			
+		);
+		if (strpos($offerStatusArray['title'],' ') !== false) {
+		    $offerStatusArray += array('data' => strtolower(str_replace(' ', '', $offerStatusArray['title'])));
+		}
+		$offerStatusArray += array('data' => strtolower($offerStatusArray['title']));
+			
+		array_push($tempCustomer['CustomerInformation'], $offerStatusArray);
 	
 		return $tempCustomer;
 	}
+
+	function format_num($num, $precision = 2) {
+		   if ($num >= 1000 && $num < 1000000) {
+		    $n_format = number_format($num/1000,$precision).'K';
+		    } else if ($num >= 1000000 && $num < 1000000000) {
+		    $n_format = number_format($num/1000000,$precision).'M';
+		   } else if ($num >= 1000000000) {
+		   $n_format=number_format($num/1000000000,$precision).'B';
+		   } else {
+		   $n_format = $num;
+		    }
+		  return $n_format;
+	  } 
 
 }

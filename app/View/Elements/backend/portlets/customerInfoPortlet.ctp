@@ -256,25 +256,28 @@ $(document).ready(function() {
 		                    <div class="chartEntry col-md-4">
 		                    	<div class="title"><?php echo $info['title'] ?></div>
 		                    	<div class="chart">
-		                    		<div class="data"><?php echo $info['percent'] ?>%</div>
+		                    		<div class="data"><?php echo $info['percent'] ?></div>
 		                    		<div id="canvas-holder">
-										<canvas id="chart-<?php echo $info['title'] ?>" width="<?php echo $chartSize ?>" height="<?php echo $chartSize ?>"/>
+										<canvas id="chart-<?php echo $info['data'] ?>" width="<?php echo $chartSize ?>" height="<?php echo $chartSize ?>"/>
 										<script>
-											var data<?php echo $info['title'] ?> = [
+											var data<?php echo $info['data'] ?> = [
 												{
 													value: <?php echo $info['ownCount'] ?>,
 													color:'<?php echo $defaultColor ?>',
 													highlight: '<?php echo $defaultHighlightColor ?>'
-												},
+												}
+												<?php if($info['percent'] != "100%" ) {?>
+												,
 												{
 													value: <?php echo $info['allCount'] ?>,
 													color: '<?php echo $defaultTransparentColor ?>',
 													highlight: '<?php echo $defaultTransparentColor ?>'
 													
 												}
+												<?php } ?>
 											];
-											var ctx<?php echo $info['title'] ?> = document.getElementById("chart-<?php echo $info['title'] ?>").getContext("2d");
-											window.myPie = new Chart(ctx<?php echo $info['title'] ?>).Doughnut(data<?php echo $info['title'] ?>, {});
+											var ctx<?php echo $info['data'] ?> = document.getElementById("chart-<?php echo $info['data'] ?>").getContext("2d");
+											window.myPie = new Chart(ctx<?php echo $info['data'] ?>).Doughnut(data<?php echo $info['data'] ?>, {});
 											
 											</script> 
 									</div>

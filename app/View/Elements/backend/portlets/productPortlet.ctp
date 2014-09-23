@@ -1,6 +1,7 @@
 <?php 
 	$products = $this->requestAction('Products/getProducts/');
 	echo $this->Html->script('jquery.dynamicSearch', false);
+	
 	echo $this->Html->script('jquery.bootstrap.modal', false);
 ?>
 
@@ -10,6 +11,7 @@ $(document).ready(function() {
 			$('#filter .search input').dynamicSearch({
 				url: "<?php echo FULL_BASE_URL.$this->base;?>\/Products\/search\/",
 				renderTemplate: '/Elements/backend/portlets/productPortletTableContent',
+				cancel: '.form-search .cancel'
 			});
 			
 			$('.addToCart').on('click', function(){
@@ -18,9 +20,9 @@ $(document).ready(function() {
 				
 				$('#product_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/loadProductAddPopup\/'+$(this).attr('pdid'));
 				$('#product_add').modal('show');
+				$('#product_add').css('zIndex','1000')
 			});
 		
-			$("body").on("hidden", "#product_add", function(){ $(this).removeData("modal");});
 							
 			
 });
@@ -33,22 +35,22 @@ $(document).ready(function() {
 
 <article class="module width_full productPortlet">
 		<div class="modal fade" id="product_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="display: none;">
-			<div class="modal-dialog">
-			    <div class="modal-content row-fluid">
-			     
-			    </div><!-- /.modal-content -->
-			  </div><!-- /.modal-dialog -->
-			
+			<div class="modal-dialog modal-sm">
+			 	<div class="modal-content">
+					<div class="modal-body"></div>
+				</div>
+			</div>
 		</div>
 		<header>
 			<h3 class=""><?php __('Produkte');?></h3>
 			
 		</header>
 		<section id="filter">
-			<div class="search form-search">
-				<div class="cancel"></div>
-				<input class="text search-query" type="text" placeholder="Suche"/>
-			</div>			
+			<div class="input-group search form-search">
+	            <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+	         	<input class="text form-control search-query" placeholder="Suche"/>   
+	         	<div class="cancel"><i class="glyphicon glyphicon-remove"></i></div>                                
+	        </div>	
 		</section>
 
 		<div class="module_content">

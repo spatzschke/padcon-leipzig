@@ -786,6 +786,8 @@ div.form, div.index, div.view {
 
 .row {
 	margin-bottom: 10px;
+	margin-left: 0px;
+	margin-right: 9px;
 }
 
 .alert { margin-bottom: 0;}

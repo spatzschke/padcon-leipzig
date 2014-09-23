@@ -1,5 +1,4 @@
 <?php 
-	echo $this->Html->script('jquery.bootstrap.modal', false);
 	//echo $this->Html->script('jquery.autosize-min', false);
 	//echo $this->Html->script('jquery.autoGrowInput', false);
 	//echo $this->Html->script('jquery.caret.1.02.min', false);
@@ -80,43 +79,56 @@ $(document).ready(function() {
 });
 </script>
 				
-
-
-
 <div class="modal" id="active_offer_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-	<div class="modal-header">
-		<h3 id="myModalLabel">Achtung! Aktives Angebot vorhanden.</h3>
-	</div>
-	<div class="modal-body">
-		<p>Es ist ein aktives Angebot vorhanden.</p>
-	</div>
-	<div class="modal-footer">
-		<button class="btn btn-success newOffer">Neues Angebot erstellen</button>
-		<button class="btn showActive">Aktives Angebot auswählen</button>
+	<div class="modal-dialog">
+	    <div class="modal-content">
+			<div class="modal-header">
+				<h3 id="myModalLabel">Achtung! Aktives Angebot vorhanden.</h3>
+			</div>
+			<div class="modal-body">
+				<p>Es ist ein aktives Angebot vorhanden.</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-success newOffer">Neues Angebot erstellen</button>
+				<button class="btn showActive">Aktives Angebot auswählen</button>
+			</div>
+		</div>
 	</div>
 </div>
 
-<div class="modal" id="add_to_offer_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none; width: 910px; left: 49%">
-	<div class="modal-body"></div>
+<div class="modal fade" id="add_to_offer_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" >
+	<div class="modal-dialog modal-lg">
+	 	<div class="modal-content">
+			<div class="modal-body"></div>
+		</div>
+	</div>
 </div>
 
 <div class="modal" id="add_to_customer_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none; width: 910px; left: 49%">
-	<div class="modal-body"></div>
+	<div class="modal-dialog modal-lg">
+	 	<div class="modal-content">
+			<div class="modal-body"></div>
+		</div>
+	</div>
 </div>
 
 <div class="modal" id="offerSettigs_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none; width: 910px; left: 49%">
-	<div class="modal-body"></div>
+	<div class="modal-dialog modal-lg">
+	 	<div class="modal-content">
+			<div class="modal-body"></div>
+		</div>
+	</div>
 </div>
 
 <div class="wood_bg">
 
 	<div class="buttons">
 		
-		<a id="addToOffer" href="#" class="btn">Produkt hinzufügen</a>
-		<a id="addToCustomer" href="#" class="btn">Kunde hinzufügen</a>
-		<a id="offerSettings" href="#" class="btn">Angebots-einstellungen</a>
+		<a id="addToOffer" href="#" class="btn btn-default">Produkt hinzufügen</a>
+		<a id="addToCustomer" href="#" class="btn btn-default">Kunde hinzufügen</a>
+		<a id="offerSettings" href="#" class="btn btn-default">Angebots-einstellungen</a>
 		
-		<?php echo $this->Html->link('Angebot drucken', '/admin/offers/createPdf', array('escape' => false, 'class' => 'btn', 'target' => '_blank')); ?>
+		<?php echo $this->Html->link('Angebot drucken', '/admin/offers/createPdf', array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
 		
 	</div>
 	<div class="pages">

@@ -44,6 +44,9 @@ class AppController extends Controller {
             )
         )
     );
+	public $helpers = array(
+		'Number'
+	);
 
     public function beforeFilter() {
         $this->Auth->allow('index', 'view', 'display');

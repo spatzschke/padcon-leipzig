@@ -1,10 +1,4 @@
-#<?php 
-	echo $this->Html->script('jquery.bootstrap.tooltip', false);
-	echo $this->Html->script('jquery.bootstrap.popover', false);
-	echo $this->Html->css('productItem');
-	
-	echo $this->Html->script('jquery.liveValidation', false);
-	echo $this->Html->script('jquery.lazyload.min', false);
+<?php 
 
 ?>
 
@@ -40,23 +34,23 @@ $(document).ready(function() {
 					 	$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/Offers/reloadOfferSheetProducts');
 					 	
 					 	prod.removeClass('loading');
-					 	$('#product_add').modal('hide');
+					 	$('#product_add').css('zIndex','-1')
 					 	
 					 }
 				}); 
 			}); 
 			
-			$('.productAddPortlet .close').on('click', function(){ $('#product_add').modal('hide');	});
-			$('.productAddPortlet .btn-default').on('click', function(){ $('#product_add').modal('hide');	});
+			$('.productAddPortlet .close').on('click', function(){ $('#product_add').css('zIndex','-1')	});
+			$('.productAddPortlet .modal-footer .btn-default').on('click', function(){ $('#product_add').css('zIndex','-1')	});
 });
 
 
 
 </script>
 
-<article class="module width_full productAddPortlet">
+
 		
-			      <div class="modal-body span12">
+			      <div class="modal-body productAddPortlet">
 			      	<button type="button" class="close"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
 			        <?php
 						echo $this->Form->create('Product', array(
@@ -68,29 +62,38 @@ $(document).ready(function() {
 					?>	
 						<div class="productInfo">
 							<div>pd-<?php echo $this->data['Product']['product_number'];?></div>
-							<div><?php echo $this->data['Product']['name'];?></div>
+							<div><b><?php echo $this->data['Product']['name'];?></b></div>
 						</div>
-					<?php	
-						echo $this->Form->input('amount', array(
+				
+			       <div class="input-group">
+	                    <span class="input-group-addon"><i>Anzahl</i></span>
+	                    <?php echo $this->Form->input('amount', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Product',
+							'placeholder' => 'Anzahl', 
+							'autoComplete' => true,
 							'type' => 'number',
 							'default' => 1,
-							'class' => 'span8',
-							'label' => array(
-								'class' => 'span4',
-								'text' => 'Anzahl'
-							)
 						));
-						
-						echo $this->Form->input('color', array(
-						    'options' => $this->data['Color'],
-						    'class' => 'span8',
-						    'label' => array(
-								'class' => 'span4',
-								'text' => 'Farbe'
-							)
-						));				
-						?>
+						?>                                      
+	                 </div>
+	                 <div class="input-group">
+	                    <span class="input-group-addon"><i>Farbe</i></span>
+	                    <?php echo $this->Form->input('color', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Product',
+							'placeholder' => 'Farbe',
+							'options' => $this->data['Color'], 
+							'autoComplete' => true
+						));
+						?>                                      
+	                 </div>
+			      
+			      
 			      </div>
+			      		      
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-default">Abbrechen</button>
 			        <button type="button" class="btn addToCartNow btn-primary">Hinzufügen</button>
@@ -99,7 +102,6 @@ $(document).ready(function() {
 					
 
 		</div><!-- end of .tab_container -->
-	</article><!-- end of stats article -->
 	<script>
 
 
