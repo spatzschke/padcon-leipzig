@@ -23,19 +23,19 @@
 
 	<article class="module width_full offer noInput<?php if((ceil($cart['Cart']['count'] / $productsPerPage)) == $page) { echo ' last';}?>">
 		
-		<div class="sheetHeader module_content row-fluid">	
-			<div class="title span8">	
+		<div class="sheetHeader module_content row">	
+			<div class="title col-md-8">	
 				padcon Leipzig-Ralf Patzschke <br />
 				<span class="small">Fachhandel und Service für medizinische Einrichtungen</span>
 			</div>
-			<div class="logo span4">	
+			<div class="logo col-md-2">	
 				<?php  echo $this->Html->image('backend/backend_logo.png', array('alt' => 'padcon Leipzig'))?>
 			</div>
 		</div>
 
 		<div class="customerData module_content row-fluid">
 
-			<div class="firstItem span6">	
+			<div class="firstItem col-md-6">	
 				<div class="addressHeader">padcon Leipzig • Holunderweg 4 • 04416 Markkleeberg</div>
 				<?php 
 				if(isset($this->data['Offer']['customer_id'])) 
@@ -49,7 +49,7 @@
 					
 				?>
 			</div>
-			<div class="span6">	
+			<div class="col-md-6">	
 				<?php 
 					 echo $this->element('backend/portlets/offerInfoPortlet', array('page' => $page, 'maxPage' => ceil($cart['Cart']['count'] / $productsPerPage)));
 					
@@ -91,14 +91,14 @@
 							<div class="pos">'.($j+1).'</div>
 							<div class="amount">'.$cartProduct['amount'].'</div>
 							<div class="number">
-								<input type="text" class="productNumber span12" value="pd-'.$product['Product']['product_number'].'-'.$color['Color']['code'].'" /> </br><input type="text" value="Fa. padcon" class="span12"/>
+								<input type="text" class="productNumber col-md-12" value="pd-'.$product['Product']['product_number'].'-'.$color['Color']['code'].'" /> </br><input type="text" value="Fa. padcon" class="col-md-12"/>
 							</div>
 							<div class="content">
-									<input class="productName text span12" type="text" value="'.$product['Product']['name'].'" /><br />';
+									<input class="productName text col-md-12" type="text" value="'.$product['Product']['name'].'" /><br />';
 									foreach($features as $fea)	{
-										echo '<input class="text span12" type="text" value="'.$fea.'" /><br />';
+										echo '<input class="text col-md-12" type="text" value="'.$fea.'" /><br />';
 									}
-									echo '<input class="text span12" type="text" value="Bezug: '.$material['Material']['name'].', Farbe: '.$color['Color']['name'].'" />
+									echo '<input class="text col-md-12" type="text" value="Bezug: '.$material['Material']['name'].', Farbe: '.$color['Color']['name'].'" />
 								<div class="size"><input type="text" value="Maße: '.$size['Size']['name'].'" /></div>
 								<div class="price"><input type="text" value="'.number_format($product['Product']['retail_price'], 2, ",", ".").'" /> €</div>
 								<div class="sum_price">'.number_format(floatVal($product['Product']['retail_price'])*intVal($cartProduct['amount']), 2, ",", ".").' €</div>
@@ -173,20 +173,20 @@
 		</div>
 		<div class="sheetFooter row-fluid">
 			
-			<div class="span3">
+			<div class="col-md-3">
 				padcon Leipzig<br />
 				Holunderweg 4 <br />
 				04416 Markkleeberg<br />
 				<br />
 			</div>
-			<div class="span3">
+			<div class="col-md-3">
 				Tel.: 03 41 – 3 58 18 02<br />
 				Fax: 03 41 – 3 58 18 95<br />
 				Mobil: 01 72 – 9 37 74 44<br />
 				e-mail: info@padcon-leipzig.de<br />
 				www.padcon-leipzig.de
 			</div>
-			<div class="span3">
+			<div class="col-md-3">
 				Sparkasse Leipzig<br />
 				BLZ 860 555 92<br />
 				Kto.-Nr.: 1100 518 130<br />
@@ -194,7 +194,7 @@
 				IBAN: DE40860555921100518130<br />
 				<br />
 			</div>
-			<div class="span3">
+			<div class="col-md-3">
 				St.-Nr. 235 255/01558<br />
 				USt-IdNr. DE227327400<br />
 				<br />

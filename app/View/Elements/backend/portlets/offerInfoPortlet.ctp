@@ -54,38 +54,38 @@ function saveAndReloadOfferHeader(id) {
 			<?php
 				echo $this->Form->input('id');
 				
-				echo '<div class="controls span12 offerNumber">';
+				echo '<div class="controls col-md-12 offerNumber">';
 				
-				echo '<label for="OfferOfferNumber" class="span4">Nummer:</label>';
-				echo $this->Form->input('offer_number', array('label' => false, 'data-model' => 'Offer', 'data-field' => 'offer_number', 'autoComplete' => false, 'div' => false, 'class' => 'noValid span8'));	
+				echo '<label for="OfferOfferNumber" class="col-md-4">Nummer:</label>';
+				echo $this->Form->input('offer_number', array('label' => false, 'data-model' => 'Offer', 'data-field' => 'offer_number', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));	
 				
 				echo '</div>';
-				echo '<div class="controls span12">';
+				echo '<div class="controls col-md-12">';
 				
-					echo '<label for="OfferModified" class="span4">Datum:</label>';
+					echo '<label for="OfferModified" class="col-md-4">Datum:</label>';
 					
 					if(isset($this->data['Offer'])) {		
 						$this->request->data['Offer']['modified'] = $this->Time->format($this->data['Offer']['modified'], '%d.%m.%Y');
 					}
 					
-					echo $this->Form->input('modified', array('type' => 'text', 'label' => false, 'data-model' => 'Offer', 'data-field' => 'modified', 'autoComplete' => false, 'div' => false, 'class' => 'noValid span8'));
+					echo $this->Form->input('modified', array('type' => 'text', 'label' => false, 'data-model' => 'Offer', 'data-field' => 'modified', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));
 				
 				echo '</div>';
-				echo '<div class="controls span12">';
+				echo '<div class="controls col-md-12">';
 				
-					echo '<label for="OfferCustomer" class="span4">Kunde:</label>';
-					echo $this->Form->input('customer_id', array('type' => 'text', 'label' => false, 'data-model' => 'Offer', 'data-field' => 'customer_id', 'autoComplete' => false, 'div' => false, 'class' => 'noValid span8'));
+					echo '<label for="OfferCustomer" class="col-md-4">Kunde:</label>';
+					echo $this->Form->input('customer_id', array('type' => 'text', 'label' => false, 'data-model' => 'Offer', 'data-field' => 'customer_id', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));
 				
 				echo '</div>';
-				echo '<div class="controls span12">';
+				echo '<div class="controls col-md-12">';
 							
-				echo '<label for="OfferAgent" class="span4">Bearbeiter:</label>';
-				echo $this->Form->input('agent', array('label' => false, 'data-model' => 'Offer', 'data-field' => 'agent', 'autoComplete' => false, 'div' => false, 'class' => 'noValid span8'));
+				echo '<label for="OfferAgent" class="col-md-4">Bearbeiter:</label>';
+				echo $this->Form->input('agent', array('label' => false, 'data-model' => 'Offer', 'data-field' => 'agent', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));
 				echo '</div>';
-				echo '<div class="controls span12">';
+				echo '<div class="controls col-md-12">';
 				
-					echo '<label class="span4"> Seite: </label>';
-					echo '<p class="span8 pageNumber">'.$page.' von '.$maxPage.'</p>';
+					echo '<label class="col-md-4"> Seite: </label>';
+					echo '<p class="col-md-8 pageNumber">'.$page.' von '.$maxPage.'</p>';
 				echo '</div>';
 			?>	
 

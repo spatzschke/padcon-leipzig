@@ -110,7 +110,7 @@
 
 article.offer {
     position: relative;
-    width: 692px;
+    width: 750px;
     height: 1100px;
 }
 
@@ -220,7 +220,7 @@ article.offer {
 	float: right;
     font-size: 15px;
     text-align: right;
-    width: 130px;	
+    width: 129px;	
 }
 
 .offerFooter p .double{ 
@@ -248,3 +248,7 @@ article.offer {
     position: absolute;
     width: 700px;
 }
+
+.pages .sheetFooter .col-md-4{ 
+	padding: 0 15;
+} 

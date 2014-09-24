@@ -50,47 +50,67 @@
 
 <div class="offer form">
 
-<article class="module width_full customerPortlet">
+<article class="module width_full settingsPortlet">
+		
+		<?php echo $this->Session->flash(); ?>
 		
 		<div class="module_content row-fluid">
 			
-			<?php echo $this->Session->flash(); ?>
+			
 			
 					<?php echo $this->Form->create('Offer');?>
 					
-					<div class="span7 productTable">
-						
+					<div class="col-md-7 productTable">
+						<div class="panel panel-info" >
+                    		<div class="panel-body" >
 						<?php echo $this->element('backend/portlets/settingsProductTable'); ?>
-					
+						</div>
+						</div>
 					</div>
-					<div class="span4">
-						
-					<?php
-						echo $this->Form->input('request_date', array(
-						    'label' => 'Angebotsdatum',
-						    'type' => 'date',
-							'dateFormat' => 'DMY',
-							'class'=> 'span4 date',
-							'separator' => '',
-							'minYear' => date('Y') - 3,
-    						'maxYear' => date('Y')));
-							
-						echo $this->Form->input('discount', array(
-						    'label' => 'Rabatt',
-						    'class'=> 'span3',
-						    'after' => ' %',
-							'min' => 0,
-    						'max' => 100,
-							'default' => 0));
-						if(isset($this->data['Customer']['last_discount'])) {	
-							echo "<div class='span12'>Letzter Rabatt bei diesem Kunden: ".$this->data['Customer']['last_discount']." %</div>";
-						}
-							
-						echo $this->Form->input('additional_text', array(
-						    'label' => 'Angebotstext'));
-						
-					?>
-					
+					<div class="col-md-5">
+						<div class="panel panel-info" >
+                    		<div class="panel-body" >
+								<div class="input-group">
+	                                 <?php echo $this->Form->input('request_date', array(
+									    'label' => array(
+									    	'text' => 'Angebotsdatum',
+									    	'class' => 'col-md-12'
+									    ),
+									    'div' => false,
+									    'type' => 'date',
+										'dateFormat' => 'DMY',
+										'class'=> 'col-md-4 date',
+										'separator' => '',
+										'minYear' => date('Y') - 3,
+			    						'maxYear' => date('Y')));
+									
+									?>                                     
+	                             </div>
+	                             <label class="col-md-12">Rabatt</label>
+	                             <div class="input-group">
+	                             	
+	                                <span class="input-group-addon"><b>%</b></span>
+	                                <?php echo $this->Form->input('discount', array(
+									    'label' => false,
+									    'div' => false,
+									    'class'=> 'span3',
+										'min' => 0,
+			    						'max' => 100,
+										'default' => 0));
+									?>                                     
+	                             </div>
+	                             <div class="input-group">
+	                                <?php echo $this->Form->input('additional_text', array(
+									    'label' => array(
+									    	'text' => 'Angebotstext',
+									    	'class' => 'col-md-12'
+									    ),
+										'cols' => '42'));
+									?>                                     
+	                             </div>
+								
+							</div>
+						</div>					
 					</div>
 					
 					<div class="modal-footer">

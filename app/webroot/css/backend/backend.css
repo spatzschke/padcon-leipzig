@@ -419,6 +419,8 @@ font-size: 13px;
 margin: 2px 20px;
 }
 
+#main > .panel-body {padding: 0;}
+
 /* Modules */
 
 .module {
@@ -487,10 +489,12 @@ float: left;
 
 /* Custom Modules */
 
-.modal .module.productPortlet {
+.modal .module.width_full {
 	margin: -14px -14px 0;
 	width: 103%;
 }
+
+.offer-dialog .modal-body { padding: 15px 13px 1px 15px }
 
 .modal .module.productPortlet .module_content {
 	height: 500px;
@@ -544,13 +548,14 @@ float: left;
 	width: 99%;
 }
 
-#offerSettigs_modal .productTable {
-	border-bottom: 1px solid #dddddd;
+#offerSettigs_modal .panel{
     height: 328px;
     overflow: auto;
 }
 
-#offerSettigs_modal .productTable th td{ font-weight: bold;}
+
+
+#offerSettigs_modal .productTable tr th{ font-weight: bold; border-top: none}
 
 #offerSettigs_modal .productTable .remove{
 		padding: 2px 5px 0px 4px;
@@ -563,6 +568,9 @@ float: left;
 	margin: 0 auto;
 	color: transparent;
 }
+
+#offerSettigs_modal .modal-footer {border: none}
+#offerSettigs_modal .productTable .panel-body { padding: 0}
 
 /* Stats Module */
 
@@ -1063,3 +1071,9 @@ article.offer {
 
 #product_add {position: absolute}
 #product_add .modal-open .modal {overflow: hidden}
+
+.panel-info {
+    border-color: lightgrey;
+}
+
+.modal .alert-row { padding: 10px 15px 0 15px};

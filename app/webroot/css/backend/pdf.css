@@ -21,3 +21,9 @@ article.offer .customerData .span12 {min-height: 21px;}
 	box-shadow: none;
 	
 }
+
+.row-fluid .offerInfo * {
+    padding-left: 4px;
+}
+
+.customerData > .col-md-6 {padding-right: 0}

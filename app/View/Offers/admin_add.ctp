@@ -97,23 +97,23 @@ $(document).ready(function() {
 </div>
 
 <div class="modal fade" id="add_to_offer_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" >
-	<div class="modal-dialog modal-lg">
+	<div class="modal-dialog modal-lg offer-dialog">
 	 	<div class="modal-content">
 			<div class="modal-body"></div>
 		</div>
 	</div>
 </div>
 
-<div class="modal" id="add_to_customer_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none; width: 910px; left: 49%">
-	<div class="modal-dialog modal-lg">
+<div class="modal" id="add_to_customer_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-lg offer-dialog">
 	 	<div class="modal-content">
 			<div class="modal-body"></div>
 		</div>
 	</div>
 </div>
 
-<div class="modal" id="offerSettigs_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none; width: 910px; left: 49%">
-	<div class="modal-dialog modal-lg">
+<div class="modal" id="offerSettigs_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-lg offer-dialog">
 	 	<div class="modal-content">
 			<div class="modal-body"></div>
 		</div>

@@ -79,8 +79,6 @@ class CartsController extends AppController {
 		$cartProduct = null;
 		$activeCart = null;
 		
-		debug($this->request->data);
-		
 		//Cookie setzen wenn Produkt in Warenkorb gelegt wird und noch kein Cookie vorhanden ist
 		if(!$this->Cookie->check('pd')) {
 			
@@ -149,8 +147,10 @@ class CartsController extends AppController {
 
 			if(($cartProducts['product_id'] == $id) && ($cartProducts['color_id'] == $this->request->data['Product']['color'])) {
 				$amount = $cartProducts['amount'];
-				$cartProducts['amount'] = intval($amount) + intval($this->request->data['Product']['amount']);
+				$cartProducts['amount'] = strval(intval($amount) + intval($this->request->data['Product']['amount']));
 				$this->CartProduct->save($cartProducts);
+
+				debug($cartProducts);
 
 				$isIn = true;
 				break;
