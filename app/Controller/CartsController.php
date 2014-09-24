@@ -140,6 +140,7 @@ class CartsController extends AppController {
 		$cartProduct['CartProduct']['cart_id'] = $activeCart['Cart']['id'];
 		$cartProduct['CartProduct']['product_id'] = $id;
 		$cartProduct['CartProduct']['color_id'] = $this->request->data['Product']['color'];
+		$cartProduct['CartProduct']['amount'] = $this->request->data['Product']['amount'];
 				
 		$isIn = false;
 				
@@ -159,6 +160,7 @@ class CartsController extends AppController {
 		}
 		
 		if(!$isIn) {
+			
 			$this->CartProduct->create();
 			$this->CartProduct->save($cartProduct);
 			
