@@ -73,7 +73,7 @@
 								<div class="input-group">
 	                                 <?php echo $this->Form->input('request_date', array(
 									    'label' => array(
-									    	'text' => 'Angebotsdatum',
+									    	'text' => 'Anfragedatum',
 									    	'class' => 'col-md-12'
 									    ),
 									    'div' => false,

@@ -41,7 +41,7 @@ $(document).ready(function() {
 			}); 
 			
 			$('.productAddPortlet .close').on('click', function(){ $('#product_add').css('zIndex','-1')	});
-			$('.productAddPortlet .modal-footer .btn-default').on('click', function(){ $('#product_add').css('zIndex','-1')	});
+			$('.btn-close').on('click', function(){ $('#product_add').css('zIndex','-1')});
 });
 
 
@@ -95,7 +95,7 @@ $(document).ready(function() {
 			      </div>
 			      		      
 			      <div class="modal-footer">
-			        <button type="button" class="btn btn-default">Abbrechen</button>
+			        <button type="button" class="btn btn-default btn-close">Abbrechen</button>
 			        <button type="button" class="btn addToCartNow btn-primary">Hinzufügen</button>
 
 			      </div>

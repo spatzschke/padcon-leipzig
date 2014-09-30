@@ -42,7 +42,11 @@ $(document).ready(function() {
 			</div>
 		</div>
 		<header>
-			<h3 class=""><?php __('Produkte');?></h3>
+			<?php
+				if($this->request->is('ajax')) {
+					echo '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>';
+				}
+			?>
 			
 		</header>
 		<section id="filter">

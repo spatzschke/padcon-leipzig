@@ -9,18 +9,18 @@
 	
 	if(!empty($this->data['Customer']['organisation'])) {
 		for ($i = 0; $i <= $this->data['Customer']['organisation_count']-1; $i++) {
-			echo $this->Html->div('span12', $this->data['Customer']['organisation_'.$i]);
+			echo $this->Html->div('col-md-12', $this->data['Customer']['organisation_'.$i]);
 		}
 	}
 	if(!empty($this->data['Customer']['department'])) {
 		for ($i = 0; $i <= $this->data['Customer']['department_count']-1; $i++) {
-			echo $this->Html->div('span12', $this->data['Customer']['department_'.$i]);
+			echo $this->Html->div('col-md-12', $this->data['Customer']['department_'.$i]);
 		}
 	}
 					
-	echo $this->Html->div('span12', $name);
-	echo $this->Html->div('span12', $this->data['Customer']['street']);
-	echo $this->Html->div('span12', $city);				
+	echo $this->Html->div('col-md-12', $name);
+	echo $this->Html->div('col-md-12', $this->data['Customer']['street']);
+	echo $this->Html->div('col-md-12', $city);				
 						
 						
 ?>	

@@ -447,6 +447,7 @@ background: #F1F1F4 url(../../img/backend/secondary_bar.png) repeat-x;
 -webkit-border-top-left-radius: 5px; -webkit-border-top-right-radius: 5px;
 -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px;
 border-top-left-radius: 5px; border-top-right-radius: 5px;
+padding: 5px 10px 5px 0;
 }
 
 .module footer {

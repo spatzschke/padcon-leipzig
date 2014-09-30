@@ -71,8 +71,8 @@ $(document).ready(function() {
 		$('#offerSettigs_modal').modal('show')
 	});
 
-	$("body").on("hidden", "#add_to_offer_modal", function(){ $(this).removeData("modal");});
 	$("body").on("hidden", "#add_to_customer_modal", function(){ $(this).removeData("modal");});
+	$("body").on("hidden", "#add_to_offer_modal", function(){ $(this).removeData("modal");});
 	$("body").on("hidden", "#print_modal", function(){ $(this).removeData("modal");});
 	$("body").on("hidden", "#offerSettings_modal", function(){ $(this).removeData("modal");});
  
@@ -124,8 +124,8 @@ $(document).ready(function() {
 
 	<div class="buttons">
 		
-		<a id="addToOffer" href="#" class="btn btn-default">Produkt hinzufügen</a>
 		<a id="addToCustomer" href="#" class="btn btn-default">Kunde hinzufügen</a>
+		<a id="addToOffer" href="#" class="btn btn-default">Produkt hinzufügen</a>
 		<a id="offerSettings" href="#" class="btn btn-default">Angebots-einstellungen</a>
 		
 		<?php echo $this->Html->link('Angebot drucken', '/admin/offers/createPdf', array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>

@@ -246,9 +246,14 @@ article.offer {
     line-height: 12px;
     padding-top: 10px;
     position: absolute;
-    width: 700px;
+    width: 650px;
+}
+
+.pages .sheetFooter .col-md-3 {
+	width: 27%;
 }
 
 .pages .sheetFooter .col-md-4{ 
 	padding: 0 15;
 } 
+

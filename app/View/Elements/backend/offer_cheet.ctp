@@ -51,7 +51,10 @@
 			</div>
 			<div class="col-md-6">	
 				<?php 
-					 echo $this->element('backend/portlets/offerInfoPortlet', array('page' => $page, 'maxPage' => ceil($cart['Cart']['count'] / $productsPerPage)));
+					$maxPage = round(ceil($cart['Cart']['count'] / $productsPerPage),0,PHP_ROUND_HALF_UP);
+					if($maxPage < 1) {$maxPage = 1;}
+				
+					 echo $this->element('backend/portlets/offerInfoPortlet', array('page' => $page, 'maxPage' => $maxPage));
 					
 				?>
 			</div>
@@ -157,7 +160,7 @@
 
 			<?php } ?>
 		
-		<?php if(isset($this->data['Offer']['additional_text'])) { ?>
+		<?php if(!empty($this->data['Offer']['additional_text'])) { ?>
 			<div class="additionalContent">
 				<?php echo $this->data['Offer']['additional_text']; ?>
 				<br \>
@@ -173,7 +176,7 @@
 		</div>
 		<div class="sheetFooter row-fluid">
 			
-			<div class="col-md-3">
+			<div class="col-md-2">
 				padcon Leipzig<br />
 				Holunderweg 4 <br />
 				04416 Markkleeberg<br />
