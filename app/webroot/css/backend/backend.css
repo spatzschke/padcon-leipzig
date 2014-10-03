@@ -495,6 +495,7 @@ float: left;
 	width: 103%;
 }
 
+
 .offer-dialog .modal-body { padding: 15px 13px 1px 15px }
 
 .modal .module.productPortlet .module_content {
@@ -550,7 +551,7 @@ float: left;
 }
 
 #offerSettigs_modal .panel{
-    height: 328px;
+    height: 500px;
     overflow: auto;
 }
 
@@ -572,6 +573,9 @@ float: left;
 
 #offerSettigs_modal .modal-footer {border: none}
 #offerSettigs_modal .productTable .panel-body { padding: 0}
+
+.offersIndex .tablesorter td, .offersIndex .tablesorter th { text-align: center}  
+
 
 /* Stats Module */
 
@@ -997,12 +1001,6 @@ input::-webkit-selection {
 	cursor: pointer
 }
 
-.addToCart.loading {
-	background: url(../../img/ajax.gif) no-repeat;
-	height: 20px;
-	width: 20px;
-}
-
 .wood_bg {
 	background: url("../../img/backend/wood-bg.jpg") repeat scroll 0 0 transparent;
     margin-top: -3px;
@@ -1014,10 +1012,13 @@ input::-webkit-selection {
 .wood_bg .buttons { 
 	position: fixed;
 	width: 130px;
+	margin-left: 5px;
 }
 
+.wood_bg .buttons .input-group-addon { min-width: 39px;}
+
 .wood_bg .buttons .btn{
-	margin: 5px 0 0 10px;
+	margin: 0px 0 0 -2px;
     white-space: inherit;
     width: 120px
 } 
@@ -1077,4 +1078,52 @@ article.offer {
     border-color: lightgrey;
 }
 
-.modal .alert-row { padding: 10px 15px 0 15px};
+.modal .alert-row { padding: 10px 15px 0 15px}
+
+.loadingSpinner {
+  -webkit-animation: spin 1s infinite linear;
+  -moz-animation: spin 1s infinite linear;
+  -o-animation: spin 1s infinite linear;
+  animation: spin 1s infinite linear;
+}
+.loadingSpinner:before {
+  content: "\e031";
+}
+
+@-moz-keyframes spin {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingHelper {
+	position: relative;
+	text-align: center;
+	width: 300px;
+	margin: 100px auto
+}
+.loadingHelper.small{ font-size:12px }
+.loadingHelper.medium{ font-size:22px }
+.loadingHelper.large{ font-size:30px }
+

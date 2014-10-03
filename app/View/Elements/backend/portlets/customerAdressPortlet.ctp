@@ -1,5 +1,5 @@
 <?php
-
+ debug($data)
 ?>
 
 <?php

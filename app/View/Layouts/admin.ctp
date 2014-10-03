@@ -17,7 +17,7 @@
 			echo $this->Html->script('http://html5shim.googlecode.com/svn/trunk/html5.js');	
 		echo '<![endif]-->';
 		
-		echo $this->Html->script('https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js');
+		echo $this->Html->script('jquery-2.1.1.min');
 		echo $this->Html->script('jquery.lazyload.min');
 		echo $this->Html->script('backend/jquery.iphone-style-checkboxes');
 		

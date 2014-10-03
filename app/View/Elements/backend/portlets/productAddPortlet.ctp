@@ -18,7 +18,7 @@ $(document).ready(function() {
 					obj = $(this),
 					prod = $("div").find("[pdid='" + prodID + "']");
 			
-					prod.addClass('loading');
+					prod.find('i').addClass('loadingSpinner');
 					
 
 				xhr = $.ajax({
@@ -33,15 +33,25 @@ $(document).ready(function() {
 					 
 					 	$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/Offers/reloadOfferSheetProducts');
 					 	
-					 	prod.removeClass('loading');
+					 	
 					 	$('#product_add').css('zIndex','-1')
+					 	$('#product_add').css('display','none')
+					 	
+					 	prod.find('i').removeClass('loadingSpinner');
+					 	
 					 	
 					 }
 				}); 
 			}); 
 			
-			$('.productAddPortlet .close').on('click', function(){ $('#product_add').css('zIndex','-1')	});
-			$('.btn-close').on('click', function(){ $('#product_add').css('zIndex','-1')});
+			$('.productAddPortlet .close').on('click', function(){ 
+					$('#product_add').css('zIndex','-1')	
+					$('#product_add').css('display','none')
+			});
+			$('.btn-close').on('click', function(){ 
+				$('#product_add').css('zIndex','-1')
+				$('#product_add').css('display','none')
+			});
 });
 
 

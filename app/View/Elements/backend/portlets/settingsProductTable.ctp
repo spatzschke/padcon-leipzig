@@ -15,6 +15,8 @@
 			}); 			
 			return false;
 		})
+	
+		$('.color').popover()
 	});
 
 </script>
@@ -43,7 +45,7 @@
 					echo '<td>'.$products['Product']['amount'].'</td>';
 					echo '<td>pd-'.$products['Product']['product_number'].'</td>';
 					echo '<td>'.$products['Product']['name'].'</td>';
-					echo '<td><div class="color" style="background-color: #'.$products['Color']['rgb'].'"></div></td>';
+					echo '<td><div class="color" style="background-color: #'.$products['Color']['rgb'].'"data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="'.$products['Color']['name'].'"></div></td>';
 				echo '</tr>';
 			}
 

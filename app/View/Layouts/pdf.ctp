@@ -5,7 +5,7 @@
 		echo $this->Html->css('backend/page');
 		echo $this->Html->css('backend/pdf');
 		 
-		
+		echo $this->Html->script('jquery-2.1.1.min');
 		?>
 </head> 
 

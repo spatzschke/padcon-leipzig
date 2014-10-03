@@ -105,10 +105,10 @@
 									    	'text' => 'Angebotstext',
 									    	'class' => 'col-md-12'
 									    ),
-										'cols' => '42'));
+										));
 									?>                                     
 	                             </div>
-								
+
 							</div>
 						</div>					
 					</div>

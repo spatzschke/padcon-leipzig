@@ -1,4 +1,7 @@
 <?php
+App::import('Controller', 'Carts');
+App::import('Controller', 'Products');
+
 class OffersController extends AppController {
 
 	var $name = 'Offers';
@@ -16,15 +19,22 @@ class OffersController extends AppController {
 		$this->layout = 'admin';
 	
 		$this->Offer->recursive = 0;
-		$this->set('offers', $this->paginate());
+		$offers = $this->Offer->find('all', array('order' => array('Offer.created DESC', 'Offer.id DESC')));
+		
+		$this->set('offers', $this->fillIndexOfferData($offers));
 	}
 
 	function admin_view($id = null) {
+		$this->layout = 'admin';
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid offer', true));
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->set('offer', $this->Offer->read(null, $id));
+		$offer = $this->Offer->read(null, $id);
+		
+		$this->set('offer', $offer);
+		//$this->request->data = $offer;
+		$this->generateDataByOffer($offer);
 	}
 
 	function admin_add($isActive = null, $layout = "admin") {
@@ -103,14 +113,20 @@ class OffersController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 
-	function admin_createPdf ($offer = null){
+	function admin_createPdf ($offerID = null){
 
 		$this->layout = 'pdf';
 		
-		$pdf = true;
-		$offer = $this->getActiveOffer();
 		
-		$this->generateDataByOffer($this->Offer->findById($this->Offer->id));
+		
+		$pdf = true;
+		if(!$offerID) {
+			$offer = $this->getActiveOffer();
+		} else {
+			$offer = $this->Offer->findById($offerID);
+		}
+		
+		$this->generateDataByOffer($this->Offer->findById($offerID));
 		
 		$title = "Angebot_".str_replace('/', '-', $offer['Offer']['offer_number']);
 		$this->set('title_for_layout', $title);
@@ -189,6 +205,32 @@ Lieferzeit: ca. 2-3 Wochen
 		$this->request->data = $offer;
 		
 		$this->render('/Elements/backend/portlets/settingsProductTable');
+	}
+	
+	function search($searchString = null) {
+	
+		if($this->Auth) {
+			echo $this->admin_search($searchString);
+		} 		
+	}
+	
+	function admin_search($searchString = null) {
+		
+		$this->layout = 'ajax';
+		
+		$offers = $this->Offer->find('all',array('conditions' => array("OR" => 
+			array (	'Offer.offer_number LIKE' 			=> '%'.$this->data['str'].'%' ,
+					'Offer.customer_id LIKE' 	=> '%'.$this->data['str'].'%' ,
+					'Billing.billing_number LIKE' 	=> '%'.$this->data['str'].'%', 
+					'Delivery.delivery_number LIKE' 	=> '%'.$this->data['str'].'%')),
+					'order' => array('Offer.created DESC', 'Offer.id DESC')));	
+		
+		
+		$this->set('offers', $this->fillIndexOfferData($offers));
+		
+		if(isset($this->data['template'])) {
+			$this->render($this->data['template']);
+		}
 	}
 
 	function getSettingCartProducts() {
@@ -302,9 +344,8 @@ Lieferzeit: ca. 2-3 Wochen
 		$this->render('/Elements/backend/offer_cheet');
 	}
 	
-	function splitCustomerData()
+	function splitCustomerData($offer = null)
 	{
-		$offer = $this->getActiveOffer();
 		$arr_customer = null;
 		
 		//split department and company
@@ -339,9 +380,8 @@ Lieferzeit: ca. 2-3 Wochen
 		return $arr_customer['Customer'];
 	}
 	
-	function calcOfferPrice() {
+	function calcOfferPrice($offer = null) {
 		
-		$offer = $this->getActiveOffer();
 		$arr_offer = null;
 		
 		$discount_price = $offer['Offer']['discount'] * $offer['Cart']['sum_retail_price'] / 100;
@@ -359,7 +399,12 @@ Lieferzeit: ca. 2-3 Wochen
 		$arr_offer['Offer']['vat_price'] = $vat_price;
 		$arr_offer['Offer']['discount_price'] = $discount_price;
 		$arr_offer['Offer']['part_price'] = $part_price;
-		$arr_offer['Offer']['offer_price'] = $offer_price;
+		if($offer['Cart']['sum_retail_price'] == 0) {
+			$arr_offer['Offer']['offer_price'] = 0;
+		} else {
+			$arr_offer['Offer']['offer_price'] = $offer_price;
+		}
+		
 		
 		$arr_offer['Offer']['id'] = $offer['Offer']['id'];
 
@@ -404,15 +449,64 @@ Lieferzeit: ca. 2-3 Wochen
 	
 		if(!$offer) {
 			$offer = $this->getActiveOffer();		
+		} 
+		if(empty($offer)) {
+			debug($this->getActiveOffer());
 		}
 	
 	    $this->request->data = $offer;
 		
-		$this->request->data['Customer'] = $this->request->data['Customer'] + $this->splitCustomerData();
-		$this->request->data['Offer'] = $this->request->data['Offer'] + $this->calcOfferPrice();	
+		if(!empty($offer)) {
+			$Carts = new CartsController();
+	    	$cart = $Carts->get_cart_by_id($offer['Cart']['id']);
+			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
+		}
+		
+		
+		
+		
+		$this->request->data['Customer'] = $this->request->data['Customer'] + $this->splitCustomerData($offer);
+		$this->request->data['Offer'] = $this->request->data['Offer'] + $this->calcOfferPrice($offer);	
+// 	
+		//$offerPrice = $this->calcOfferPrice();	
+		//$$this->request->data['Offer']['offer_price'] = $offerPrice['offer_price'];
+		
+		//debug($offer);
 	
-		$offerPrice = $this->calcOfferPrice();	
-		$this->request->data['Offer']['offer_price'] = $offerPrice['offer_price'];
+	}
 	
+	function fillIndexOfferData($offers = null) {
+	
+		$offers2 = array();
+		$Carts = new CartsController();
+		$Products = new ProductsController();
+		
+		// for($i=0; $i<=10;$i++) {
+		foreach ($offers as $offer) {
+			
+			//$offer = $offers[$i];
+			
+			$offer['Customer'] = $offer['Customer'] + $this->splitCustomerData($offer);
+			$cart = $Carts->get_cart_by_id($offer['Cart']['id']);
+			$offer['Cart']['CartProduct'] = $cart['CartProduct'];
+			if(!empty($cart['CartProduct'])) {
+				$j = 0;
+				foreach ($cart['CartProduct'] as $cartProd) {
+					$product = $Products->getProduct($cartProd['product_id']);
+					unset($product['Cart']);
+					unset($product['Category']);
+					unset($product['Material']);
+					unset($product['Size']);
+					$offer['Cart']['CartProduct'][$j]['Information'] = $product;
+					$j++;
+				}
+			}
+			$offer['Offer'] = $offer['Offer'] + $this->calcOfferPrice($offer);
+						
+			array_push($offers2, $offer);
+			
+		}	
+			
+		return $offers2;
 	}
 }

@@ -14,7 +14,9 @@
 			ajaxLoader: '.searchContent .headLoader',
 			originContent: '#content',
 			cancel: '#topNavigation .search .cancel',
-			showAnimation: false
+			showAnimation: false,
+			loadingClass: 'loadingSpinner',
+			loadingElement: '#filter .search .input-group-addon i'
 		});
 	});
 	

@@ -8,26 +8,26 @@
 <script>
 $(document).ready(function() {
 	
-			$('#filter .search input').dynamicSearch({
-				url: "<?php echo FULL_BASE_URL.$this->base;?>\/Products\/search\/",
-				renderTemplate: '/Elements/backend/portlets/productPortletTableContent',
-				cancel: '.form-search .cancel'
-			});
-			
-			$('.addToCart').on('click', function(){
+		$('#filter .search input').dynamicSearch({
+			url: "<?php echo FULL_BASE_URL.$this->base;?>\/Products\/search\/",
+			renderTemplate: '/Elements/backend/portlets/productPortletTableContent',
+			cancel: '.form-search .cancel',
+			addToCartUrl: '<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/loadProductAddPopup\/',
+			loadingClass: 'loadingSpinner',
+			loadingElement: '#filter .search .input-group-addon i',
+			admin: true
+		});	
+
+		$('.addToCart').on('click', function(){
 				
-				//$(this).addClass('loading');
-				
-				$('#product_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/loadProductAddPopup\/'+$(this).attr('pdid'));
-				$('#product_add').modal('show');
-				$('#product_add').css('zIndex','1000')
-			});
-		
-							
+			$('#product_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/loadProductAddPopup\/'+$(this).attr('pdid'));
+			$('#product_add').modal('show');
+			$('#product_add').css('zIndex','1000')
+			$('#product_add').css('display','block')
 			
+			return false;
+		});
 });
-
-
 
 </script>
 

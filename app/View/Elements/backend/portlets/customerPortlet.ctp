@@ -2,7 +2,7 @@
 $(document).ready(function() {
 	
 			
-			$('.addCustomer').live('click', function(){
+			$('.addCustomer').on('click', function(){
 				
 				var xhr = null,
 				obj = $(this);
@@ -24,6 +24,16 @@ $(document).ready(function() {
 				
 				return false;
 			});
+			
+			$('#filter .search input').dynamicSearch({
+				url: "<?php echo FULL_BASE_URL.$this->base;?>\/Customers\/search\/",
+				renderTemplate: '/Elements/backend/portlets/customerPortletTableContent',
+				cancel: '.form-search .cancel',
+				content: '#add_to_customer_modal tbody',
+				loadingClass: 'loadingSpinner',
+				loadingElement: '#filter .search .input-group-addon i',
+				admin: true
+			});	
 });
 
 
@@ -32,19 +42,22 @@ $(document).ready(function() {
 
 <article class="module width_full">
 		<header>
-			<h3><?php __('Kunden');?></h3>
-			
+			<h3><?php __('Kunden');?></h3>	
 		</header>
-
-		
-
+		<section id="filter">
+			<div class="input-group search form-search">
+	            <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+	         	<input class="text form-control search-query" placeholder="Suche"/>   
+	         	<div class="cancel"><i class="glyphicon glyphicon-remove"></i></div>                                
+	        </div>	
+		</section>
 		<div class="module_content">
 			
 			<table class="tablesorter" cellspacing="0"> 
 			<thead> 
 				<tr> 
    					<th></th> 
-    			<!--<th><?php echo('ID');?></th>-->
+    				<th><?php echo('#');?></th>
 					<th><?php echo('Anrede');?></th>
 					<th><?php echo('Vorname');?></th>
 					<th><?php echo('Nachname');?></th>
@@ -63,37 +76,7 @@ $(document).ready(function() {
 				</tr> 
 			</thead> 
 			<tbody> 
-				<?php
-				$i = 0;
-				foreach ($customers as $user):
-					$class = null;
-					
-				?>
-				<tr<?php echo $class;?>>
-					<td><?php echo $this->Html->link('<i class="glyphicon glyphicon-open"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'updateOffer', $user['Customer']['id']), array('escape' => false, 'class' => 'addToCart addCustomer')); ?></td>
-				<!--<td><?php echo $user['Customer']['id']; ?>&nbsp;</td>-->
-					<td><?php echo $user['Customer']['salutation']; ?>&nbsp;</td>
-					<td><?php echo $user['Customer']['first_name']; ?>&nbsp;</td>
-					<td><?php echo $user['Customer']['last_name']; ?>&nbsp;</td>
-					<td><?php echo $user['Customer']['organisation']; ?>&nbsp;</td>
-					<td><?php echo $user['Customer']['department']; ?>&nbsp;</td>
-				<!--<td><?php echo $user['Customer']['street']; ?>&nbsp;</td>
-					<td><?php echo $user['Customer']['postal_code']; ?>&nbsp;</td>
-					<td><?php echo $user['Customer']['city']; ?>&nbsp;</td>
-					<td><?php echo $user['Customer']['email']; ?>&nbsp;</td>
-				<td><?php echo $user['Customer']['phone']; ?>&nbsp;</td>
-					<td><?php echo $user['Customer']['fax']; ?>&nbsp;</td>
-					<td><?php echo $user['Customer']['created']; ?>&nbsp;</td>
-					<td><?php echo $user['Customer']['modified']; ?>&nbsp;</td>-->
-					<td class="actions">
-						
-					
-						<?php echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('action' => 'view', $user['Customer']['id']), array('escape' => false)); ?>
-						<?php echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('action' => 'edit', $user['Customer']['id']), array('escape' => false)); ?>
-						<?php echo $this->Html->link('<i class="glyphicon glyphicon-trash"></i>', array('action' => 'delete', $user['Customer']['id']), array('escape' => false), sprintf(__('Are you sure you want to delete # %s?', true), $user['User']['id'])); ?>
-					</td>
-				</tr> 
-				<?php endforeach; ?>
+				<?php echo $this->element('backend/portlets/customerPortletTableContent', array('customers' => $customers)); ?>
 			</tbody>
 			 
 			</table>

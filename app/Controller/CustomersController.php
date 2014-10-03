@@ -133,6 +133,32 @@ class CustomersController extends AppController {
 		$this->delete($id);
 	}
 	
+	function search($searchString = null) {
+	
+		if($this->Auth) {
+			echo $this->admin_search($searchString);
+		} 		
+	}
+	
+	function admin_search($searchString = null) {
+		
+		$this->layout = 'ajax';
+		
+		$customers = $this->Customer->find('all',array('conditions' => array("OR" => 
+			array (	'Customer.id LIKE' 			=> '%'.$this->data['str'].'%' ,
+					'Customer.first_name LIKE' 	=> '%'.$this->data['str'].'%' ,
+					'Customer.last_name LIKE' 	=> '%'.$this->data['str'].'%', 
+					'Customer.organisation LIKE' 	=> '%'.$this->data['str'].'%',
+					'Customer.department LIKE' 	=> '%'.$this->data['str'].'%'))));	
+		
+		
+		$this->set('customers', $customers);
+		
+		if(isset($this->data['template'])) {
+			$this->render($this->data['template']);
+		}
+	}
+	
 	function liveValidate($string = null) {
 	
 		$validateString = $this->request->data[$this->request->data['Model']][$this->request->data['Field']];

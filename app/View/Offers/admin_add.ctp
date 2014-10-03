@@ -45,14 +45,14 @@ $(document).ready(function() {
 		// }
 	// });
 
-	$('#addToOffer').click(function() {
+	$('#addToOffer').find('a').click(function() {
 
 		$('#add_to_offer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/index\/ajax');
 		$('#add_to_offer_modal').modal('show')
 
 	})
 	
-	$('#addToCustomer').click(function() {
+	$('#addToCustomer').find('a').click(function() {
 
 		$('#add_to_customer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Customers\/index\/ajax');
 		$('#add_to_customer_modal').modal('show')
@@ -66,7 +66,7 @@ $(document).ready(function() {
 
 	})	
 
-	$('#offerSettings').click(function() {
+	$('#offerSettings').find('a').click(function() {
 		$('#offerSettigs_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Offers\/settings');
 		$('#offerSettigs_modal').modal('show')
 	});
@@ -99,7 +99,9 @@ $(document).ready(function() {
 <div class="modal fade" id="add_to_offer_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" >
 	<div class="modal-dialog modal-lg offer-dialog">
 	 	<div class="modal-content">
-			<div class="modal-body"></div>
+			<div class="modal-body">
+				<?php echo $this->element('backend/helper/loadingHelper', array("size" => "large")); ?>		
+			</div>
 		</div>
 	</div>
 </div>
@@ -107,7 +109,9 @@ $(document).ready(function() {
 <div class="modal" id="add_to_customer_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
 	<div class="modal-dialog modal-lg offer-dialog">
 	 	<div class="modal-content">
-			<div class="modal-body"></div>
+			<div class="modal-body">
+				<?php echo $this->element('backend/helper/loadingHelper', array("size" => "large")); ?>	
+			</div>
 		</div>
 	</div>
 </div>
@@ -115,7 +119,9 @@ $(document).ready(function() {
 <div class="modal" id="offerSettigs_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
 	<div class="modal-dialog modal-lg offer-dialog">
 	 	<div class="modal-content">
-			<div class="modal-body"></div>
+			<div class="modal-body">
+				<?php echo $this->element('backend/helper/loadingHelper', array("size" => "large")); ?>	
+			</div>
 		</div>
 	</div>
 </div>
@@ -123,13 +129,23 @@ $(document).ready(function() {
 <div class="wood_bg">
 
 	<div class="buttons">
-		
-		<a id="addToCustomer" href="#" class="btn btn-default">Kunde hinzufügen</a>
-		<a id="addToOffer" href="#" class="btn btn-default">Produkt hinzufügen</a>
-		<a id="offerSettings" href="#" class="btn btn-default">Angebots-einstellungen</a>
-		
-		<?php echo $this->Html->link('Angebot drucken', '/admin/offers/createPdf', array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
-		
+		     
+	    <div id="addToCustomer" class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
+			<a href="#" class="btn btn-default">Kunde hinzufügen</a>
+		</div>
+		<div id="addToOffer" class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
+			<a  href="#" class="btn btn-default">Produkt hinzufügen</a>
+		 </div>
+		<div id="offerSettings" class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-cog"></i></span>
+			<a href="#" class="btn btn-default">Angebots-einstellungen</a>
+		 </div>
+		 <div id="printOffer" class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
+			<?php echo $this->Html->link('Angebot drucken', '/admin/offers/createPdf', array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
+		</div>
 	</div>
 	<div class="pages">
 		<?php  

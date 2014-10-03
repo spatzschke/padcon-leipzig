@@ -1,6 +1,6 @@
-<?php 
-	$cart = $this->requestAction('Carts/get_active_cart/');
-
+<?php
+	$cart = $this->data['Cart'];
+	
 	$page = 0;
 	$productsPerPage = 2;
 	$i = 0;
@@ -20,8 +20,36 @@
 				$page++;
 ?>
 
+<script>
+	
+	<?php if(!is_null($this->data['Customer']['id'])) { ?>
+		$('#addToOffer a').removeClass('disabled');
+		$('#offerSettings a').removeClass('disabled');
+		$('#printOffer a').removeClass('disabled');
+		
+		$('#addToCustomer .input-group-addon').css('backgroundColor','lightgreen');
+		
+	<?php } else { ?>
+		$('#addToOffer a').addClass('disabled');
+		$('#offerSettings a').addClass('disabled');
+		$('#printOffer a').addClass('disabled');
+	<?php } ?>
+	
+	<?php if(!empty($this->data['Cart']['CartProduct'])) { ?>	
+		$('#addToOffer .input-group-addon').css('backgroundColor','lightgreen');	
+	<?php } ?>
+	<?php if(!empty($this->data['Offer']['additional_text'])) { ?>	
+		$('#offerSettings .input-group-addon').css('backgroundColor','lightgreen');	
+	<?php } ?>
+		
+	
+	
+	
+	
+</script>
 
-	<article class="module width_full offer noInput<?php if((ceil($cart['Cart']['count'] / $productsPerPage)) == $page) { echo ' last';}?>">
+
+	<article class="module width_full offer noInput<?php if((ceil($cart['count'] / $productsPerPage)) == $page) { echo ' last';}?>">
 		
 		<div class="sheetHeader module_content row">	
 			<div class="title col-md-8">	
@@ -51,7 +79,7 @@
 			</div>
 			<div class="col-md-6">	
 				<?php 
-					$maxPage = round(ceil($cart['Cart']['count'] / $productsPerPage),0,PHP_ROUND_HALF_UP);
+					$maxPage = round(ceil($cart['count'] / $productsPerPage),0,PHP_ROUND_HALF_UP);
 					if($maxPage < 1) {$maxPage = 1;}
 				
 					 echo $this->element('backend/portlets/offerInfoPortlet', array('page' => $page, 'maxPage' => $maxPage));
