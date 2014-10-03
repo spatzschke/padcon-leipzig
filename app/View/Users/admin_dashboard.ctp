@@ -1,3 +1,6 @@
 
-<?php echo $this->element('backend/portlets/userPortlet'); ?>
+<div>
+	analytics
+	
+</div>
 

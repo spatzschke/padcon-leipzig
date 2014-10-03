@@ -104,7 +104,7 @@
 						
 						<?php 
 						$priceInfo = 'Gesamtpreis: '.$this->Number->currency($product['Cart']['sum_retail_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
-									 'Rabatt: '.$this->Number->currency($product['Offer']['discount'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
+									 $product['Offer']['discount'].'% Rabatt: '.$this->Number->currency($product['Offer']['discount_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 									 'Versandkostenvorteil: '.$this->Number->currency($product['Offer']['offer_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 									 'Zwischensumme: '.$this->Number->currency($product['Offer']['part_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 									 '+'.$product['Offer']['vat'].'% Mehrwertsteuer: '.$this->Number->currency($product['Offer']['vat_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.

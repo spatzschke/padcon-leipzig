@@ -1,5 +1,7 @@
 <aside id="sidebar" class="column">
-		
+		<ul class="toggle">
+			<li class="icn_add_user"><?php echo $this->Html->link('Dashboard', '/admin/Users/dashboard'); ?></li>
+		</ul>
 		<h3>Rechnung</h3>
 		<ul class="toggle">
 			<li class="icn_add_user"><?php echo $this->Html->link('Rechnung aus Angebot erstellen', '/admin/offers/add', array('disabled' => 'disabled')); ?></li>
