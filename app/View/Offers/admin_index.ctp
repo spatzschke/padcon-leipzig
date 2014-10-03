@@ -1,11 +1,14 @@
+<?php 
+	echo $this->Html->script('jquery.dynamicSearch', false);
+?>
+
 <script>
 $(document).ready(function() {
-	
-		$('#filter .search input').dynamicSearch({
+		
+			$('#filter .search input').dynamicSearch({
 			url: "<?php echo FULL_BASE_URL.$this->base;?>\/Offers\/search\/",
 			renderTemplate: '/Elements/backend/portlets/offerPortletTableContent',
 			cancel: '.form-search .cancel',
-			content: '.offersIndex tbody',
 			loadingClass: 'loadingSpinner',
 			loadingElement: '#filter .search .input-group-addon i',
 			admin: true

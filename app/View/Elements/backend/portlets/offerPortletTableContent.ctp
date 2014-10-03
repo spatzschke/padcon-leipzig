@@ -1,6 +1,4 @@
 <?php	foreach ($offers as $product):?>
-									
-				
 				<tr>
 					<td>
 					<?php 
