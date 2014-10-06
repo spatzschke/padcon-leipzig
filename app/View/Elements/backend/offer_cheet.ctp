@@ -49,7 +49,7 @@
 </script>
 
 
-	<article class="module width_full offer noInput<?php if((ceil($cart['count'] / $productsPerPage)) == $page) { echo ' last';}?>">
+	<article class="module width_full sheet noInput<?php if((ceil($cart['count'] / $productsPerPage)) == $page) { echo ' last';}?>">
 		
 		<div class="sheetHeader module_content row">	
 			<div class="title col-md-8">	

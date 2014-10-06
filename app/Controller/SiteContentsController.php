@@ -1,5 +1,4 @@
 <?php
-App::import('Core', 'File');
 
 class SiteContentsController extends AppController {
 
@@ -9,7 +8,7 @@ class SiteContentsController extends AppController {
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			$this->Auth->fields = array('username' => 'email', 'password' => 'password');
-			$this->Auth->allow('loadCMSContent', 'contact');
+			$this->Auth->allow('loadCMSContent', 'contact', 'add');
 			
 		}
 	}
@@ -34,6 +33,15 @@ class SiteContentsController extends AppController {
 		if(count($content) != 0) {
 
 			echo $content['SiteContent']['content_paragraph'];
+
+		}
+	}
+
+	function loadCatalogInformation($controller = null, $action = null, $param = null, $field = null) {
+		$content = $this->SiteContent->find('first',array('conditions' => array('controller' => $controller, 'action' => $action, 'param' => $param, 'active' => 1), 'fields' => array($field)));
+		if(count($content) != 0) {
+
+			return $content['SiteContent'][$field];
 
 		}
 	}

@@ -60,16 +60,16 @@
     min-height: 10px !important;
 }
 
-.row-fluid.offer select {
+.row-fluid.sheet select {
 	margin-top: 5px;
 	border: 0 none;
 }
 
-.row-fluid.offer input {
+.row-fluid.sheet input {
 	min-height: 17px;
 }
 
-.row-fluid.offer select {
+.row-fluid.sheet select {
 	min-height: 20px;
 }
 
@@ -108,9 +108,9 @@
 	border-top: 1px solid #ddd;
 }
 
-article.offer {
+article.sheet {
     position: relative;
-    width: 750px;
+    width: 779px;
     height: 1100px;
 }
 
@@ -156,7 +156,13 @@ article.offer {
 
 .pages .offerMiddle input, 
 .pages .row-fluid input,
-.pages .row-fluid select { min-height: auto }
+.pages .row-fluid select { 
+	min-height: auto;
+	border: 0 none; 
+	background: 0 none;
+	box-shadow: 0 none;
+	padding: 0;
+}
 
 
 .offerMiddle .sum_price .double{

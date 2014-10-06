@@ -8,7 +8,7 @@
 	bottom: 0px;
 }
 
-article.offer.last {
+article.sheet.last {
 	height: 1080px;
 }
 
@@ -27,3 +27,72 @@ article.offer .customerData .span12 {min-height: 21px;}
 }
 
 .customerData > .col-md-6 {padding-right: 0}
+
+article.sheet { 
+	border: 1px solid white;
+	 height: 24mm;
+	width: 160mm;
+    position: relative;
+
+    page-break-after: always;
+}
+
+.sheet.deckblatt {
+	position: relative !important;
+}
+
+.sheet.deckblatt img { 
+	left: 6px !important;
+    position: absolute !important;
+    top: 10px !important;
+    width: 100% !important;
+}
+
+.sheetHeader .bandage {
+	border: 9px solid #346aa6;
+}
+.sheetFooter .bandage {
+    border-top: 40px solid #346aa6;
+    color: white !important;
+    padding: 0px !important;
+    height: 0px;
+}
+
+.sheetFooter .bandage span{
+	position: absolute;
+	right: 40px;
+	bottom : 15px;
+	color: #fff !important;
+}
+
+.catalogListItem {width: 100%; float: left;}
+.catalogListItem .col-md-3 { width: 40mm; min-height: 10px; float: left;}
+.catalogListItem .col-md-6 { width: 100mm; float: left;}
+.catalogListItem .catalogItemImage.col-md-3 {width: 50mm}
+
+.catalogListItem .catalogItemNumber { left: -95px !important}
+
+.sheetHeader .bandage, .sheetFooter .bandage { width: 105% !important}
+
+.pages .ruckseite .sheetContent .more{
+	border-right: 817px solid #346aa6;
+    left: -383px;
+    position: relative;
+}
+
+.pages .ruckseite .sheetContent .more p{
+	color: #fff !important;
+    left: 574px;
+    position: absolute;
+    top: 237px;
+    width: 300px;
+}
+.pages .ruckseite .sheetContent .more ul{
+    left: 574px;
+    position: absolute;
+    top: 300px;
+    width: 300px;
+}
+.pages .ruckseite .sheetContent .more ul li{ color: #fff !important; }
+.pages .sheetFooter {margin-bottom: 0px !important}
+

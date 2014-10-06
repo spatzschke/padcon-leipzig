@@ -134,10 +134,32 @@ class ProductsController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('product', $this->Product->read(null, $id));
+		$this->request->data = $this->Product->read(null, $id);
 	}
 	
 	function admin_view($id = null) {
-		$this->view($id);
+		if (!$id) {
+			$this->Session->setFlash(__('Invalid product', true));
+			$this->redirect(array('action' => 'index'));
+		}
+
+		$view = new View($this);
+        $Number = $view->loadHelper('Number');
+
+		$product = $this->Product->read(null, $id);
+		$product['Product']['product_number'] = 'pd-'.$product['Product']['product_number'];
+		$product['Product']['retail_price_string'] = $Number->currency($product['Product']['retail_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));
+		$product['Product']['featurelist'] = str_replace('<li>', '', $product['Product']['featurelist']);
+		$product['Product']['featurelist'] = str_replace('</li>', '', $product['Product']['featurelist']);
+		
+		$this->request->data = $product;
+		
+		$categories = $this->Product->Category->find('list');
+		$materials = $this->Product->Material->find('list');
+		$sizes = $this->Product->Size->find('list');
+		$carts = $this->Product->Cart->find('list');
+		$this->set(compact('categories', 'materials', 'sizes', 'carts'));
+		
 		$this->layout = 'admin';
 		$this->set('title_for_panel', 'Produkt betrachten');
 	}

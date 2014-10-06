@@ -15,6 +15,7 @@
 				'bottom' => 'Bottom'
 			)
 		));
+		echo $this->Form->input('headline');
 		echo $this->Form->input('content_paragraph');
 		echo '	<div class="input textarea required">
 					<label for="StyleContent">Style</label>

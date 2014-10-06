@@ -5,5 +5,98 @@
  */
  
  body {
-	baclground-color: black; 
  }
+ 
+ .sheet.deckblatt img {
+ 	position: absolute;
+ 	left: 0;
+ 	top: 0;
+ 	width: 100%
+ }
+
+.sheetHeader {
+	left: 0;
+    margin-bottom: 110px;
+    position: absolute;
+    top: 80px;
+    width: 100%;
+}
+
+.sheetHeader .logo img {
+	float: right;
+    height: 50px;
+    margin: -73px 55px 0 0;
+    opacity: 0.5;
+}
+ 
+.sheetHeader .bandage{
+	height: 15px;
+	width: 100%;
+	background-color: #346aa6;
+}
+
+.sheetContent {
+	margin-top: 150px
+}
+
+.pages .sheetFooter {
+	left: 0;
+    margin-bottom: 20px;
+    position: absolute;
+    bottom: -80px;
+    width: 100%;
+    border-top: 0 none;
+    bottom: 0px;
+    font-size: auto;
+    line-height: auto;
+    
+}
+
+.sheetFooter .bandage{
+	background-color: #346aa6;
+    color: #fff;
+    font-size: 18px;
+    height: 40px;
+    padding: 13px 30px;
+    text-align: right;
+    width: 100%;
+}
+
+.sheet.sonderseite .sheetHeader .content{
+	font-size: 24px;
+    margin-left: 45px;
+    margin-top: -20px;
+}
+.sheet.sonderseite .agb p{
+	font-size: 13px;
+	margin-bottom: 6px;
+}
+
+.sheet.ruckseite .sheetContent {
+	margin-top: 70px;
+}
+
+.sheet.ruckseite .sheetHeader {
+	top: 480px;
+    z-index: 1000;	
+}
+
+.sheet.ruckseite .stemp {
+	border: 1px solid black;
+	width: 400px;
+	height: 200px;
+	padding: 5px;
+	margin: 0 auto
+}
+
+.sheet.ruckseite .more {
+	background-color: #346aa6;
+    color: #fff;
+    font-size: 18px;
+    height: 715px;
+    left: 0;
+    margin-top: 30px;
+    padding: 235px 191px;
+    position: absolute;
+    width: 100%;
+}

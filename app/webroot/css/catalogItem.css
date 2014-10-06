@@ -1,0 +1,29 @@
+.catalogListItem {
+	position: relative;
+	margin-bottom: 30px;
+}
+.catalogListItem .catalogItemName { font-weight: bold}
+
+.catalogListItem .catalogItemNumber {
+	position: absolute;
+	bottom: 2px;
+	left: -150px;
+	font-size: 90%;
+}
+
+.catalogListItem .catalogItemImage img{	
+	left: 50%;
+    margin-left: -80px;
+    position: relative;
+    width: 160px;
+	height: 123px;
+	border: 4px solid #fff;
+	border-radius: 20px;
+}
+
+
+ul {
+	list-style: none;
+	padding-left: 0px;
+	margin-bottom: 0px;
+}
