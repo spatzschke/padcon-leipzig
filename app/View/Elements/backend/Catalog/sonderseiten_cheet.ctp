@@ -43,14 +43,55 @@
 					</div>		
 			</article>
 <?php		
-	}} else {
+		}
+	} elseif($type == 'color'){ 
  ?>
-			<article class="module width_full sheet sonderseite">
+			<article class="module width_full sheet sonderseite <?php echo $type; ?>">
 				<div class="sheetHeader <?php if($type == "waschanleitung") { ?>style="top: 60px;<?php } ?>">	
 						<div class="content"><?php echo $this->data['SiteContent'][$type]['headline']; ?></div>
 						<div class="bandage"></div>
 					</div>
-					<div class="sheetContent agb">
+					<div class="sheetContent" style="position: relative">
+						Beispiel: Halbrolle, viskoelastischer Schaum, Hypro-Elastic, grün<br />
+						<br />
+						<?php echo '<img src="'.$this->webroot.'img/color_example.png" alt="Beispiel" />'; ?>
+						<br />
+						Setzen Sie hinter die Bestellnummer für das xx die Farbe Ihrer Wahl (materialbezogen) ein.<br />
+						<br />
+						<span style="font-size: 20px; font-weight: bold;">Farben</span>
+						<br />
+						<?php
+							foreach($this->data['Material'] as $input) {
+								echo '<div class="materialBox mat'.$input['Material']['id'].'">';
+									echo '<div class="header">'.$input['Material']['name'].'</div>';
+									
+									foreach($input['Color'] as $color) {
+									echo '<div class="entry">';
+										echo '<div class="punkt col'.$color['code'].'" style="background-color: #'.$color['rgb'].'; border-color: #'.$color['rgb'].'" ><span>'.$color['code'].'</span></div><div class="name">'.$color['name'].'</div><br />';	
+									echo '</div>';
+									}
+									
+								echo '</div>';
+							}
+						?>
+						
+						
+					</div>
+					<div class="sheetFooter">	
+						<div class="bandage">
+							<span><?php echo $page; ?></span>
+						</div>
+					</div>		
+			</article>
+<?php		
+	} else  {
+ ?>
+			<article class="module width_full sheet sonderseite <?php echo $type; ?>">
+				<div class="sheetHeader <?php if($type == "waschanleitung") { ?>style="top: 60px;<?php } ?>">	
+						<div class="content"><?php echo $this->data['SiteContent'][$type]['headline']; ?></div>
+						<div class="bandage"></div>
+					</div>
+					<div class="sheetContent" style="position: relative">
 						<?php echo $this->data['SiteContent'][$type]['content_paragraph']; ?>
 					</div>
 					<div class="sheetFooter">	
@@ -60,6 +101,5 @@
 					</div>		
 			</article>
 <?php		
-	
 
 } ?>

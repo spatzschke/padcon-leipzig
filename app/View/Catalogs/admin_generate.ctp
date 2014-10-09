@@ -3,7 +3,6 @@
 	echo $this->Html->css('backend/page');
 	echo $this->Html->css('catalog');
 	echo $this->Html->css('catalogItem');
-
 ?>	
 
 <script>
@@ -36,7 +35,7 @@ if(empty($this->data['Catalog'])) {
 				
 					<div class="col-md-12">
                     	<div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
                             <?php echo $this->Form->input('id', array(
                             	'options' => $this->data['Categories'],
 								'label' => false,
@@ -60,7 +59,7 @@ if(empty($this->data['Catalog'])) {
                       
                             	<?php 
                             			
-                            			echo '<input type="submit" value="´Anzeigen" class="btn btn-success form-control">';	
+                            			echo '<input type="submit" value="Anzeigen" class="btn btn-success form-control">';	
                             		
                             	
                             	?>

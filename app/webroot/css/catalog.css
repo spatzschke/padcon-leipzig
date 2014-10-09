@@ -72,6 +72,76 @@
 	margin-bottom: 6px;
 }
 
+.sheet.sonderseite.color .punkt{
+	border: 1px solid grey;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    height: 35px;
+    padding: 5px 7px;
+    width: 35px;
+    float: left;
+    color: #FFF;
+}
+
+.sheet.sonderseite.color img {
+	margin: 0 0 20px 100px;
+}
+
+.sheet.sonderseite.color .punkt.col01,
+.sheet.sonderseite.color .punkt.col11,
+.sheet.sonderseite.color .punkt.col12,
+.sheet.sonderseite.color .punkt.col13,
+.sheet.sonderseite.color .punkt.col15,
+.sheet.sonderseite.color .punkt.col17,
+.sheet.sonderseite.color .punkt.col22,
+.sheet.sonderseite.color .punkt.col23,
+.sheet.sonderseite.color .punkt.col24,
+.sheet.sonderseite.color .punkt.col26,
+.sheet.sonderseite.color .punkt.col28,
+.sheet.sonderseite.color .punkt.col30,
+.sheet.sonderseite.color .punkt.col32 {
+	color: black !important;	
+}
+
+.sheet.sonderseite.color .materialBox{
+ 	width: 300px;
+ 	float: left;	
+ 	position: absolute;
+}
+
+
+.sheet.sonderseite.color .materialBox.mat1{top: 455px; right:0}
+.sheet.sonderseite.color .materialBox.mat2{top: 360px; right:0}
+.sheet.sonderseite.color .materialBox.mat3{top: 590px; left:0}
+.sheet.sonderseite.color .materialBox.mat4{top: 225px; left:0}
+.sheet.sonderseite.color .materialBox.mat5{top: 730px; left:0}
+.sheet.sonderseite.color .materialBox.mat6{top: 225px; right:0}
+.sheet.sonderseite.color .materialBox.mat7{top: 225px; right:0}
+.sheet.sonderseite.color .materialBox.mat8{top: 685px; right:0}
+
+.sheet.sonderseite.color .materialBox .header{
+	font-weight: bold;
+	margin-top: 27px;	
+}
+
+.sheet.sonderseite.color .materialBox .entry{
+	float: left;
+	width: 47%;
+	margin-top: 10px;
+}
+
+.sheet.sonderseite.color .materialBox.mat1 .entry {
+	width: 100%;	
+}
+
+
+.sheet.sonderseite.color .materialBox .name{
+	float: left;
+	padding: 7px 10px;
+}
+
+
 .sheet.ruckseite .sheetContent {
 	margin-top: 70px;
 }

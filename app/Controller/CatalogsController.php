@@ -120,6 +120,15 @@ class CatalogsController extends AppController {
 			$this->request->data['SiteContent'] = $content;
 			$this->request->data['Categories'] = $this->Catalog->Category->find('list');
 			
+			$material = $this->Material->find('all', array('fields' => 'Material.name'));
+			$materials = array();
+			foreach ($material as $m) {
+				unset($m['Product']);
+				array_push($materials, $m);
+			}
+			
+			$this->request->data['Material'] = $materials;
+			
 		} else {
 			$this->request->data['Categories'] = $this->Catalog->Category->find('list');
 			$this->request->data['Catalog'] = array();
@@ -153,8 +162,9 @@ class CatalogsController extends AppController {
 			}
 			
 		}
-		//$this->request->data['SiteContent'] = $content;
+		$this->request->data['SiteContent'] = $content;
 		$this->request->data['Categories'] = $this->Catalog->Category->find('list');
+		$this->request->data['Material'] = $this->Material->find('all');
 		
 		
 		$title = $this->data['Catalog']['name'].'-Katalog-'.date('y');

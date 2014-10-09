@@ -8,7 +8,7 @@ class SiteContentsController extends AppController {
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			$this->Auth->fields = array('username' => 'email', 'password' => 'password');
-			$this->Auth->allow('loadCMSContent', 'contact', 'add');
+			$this->Auth->allow('loadCMSContent', 'contact', 'add', 'edit');
 			
 		}
 	}

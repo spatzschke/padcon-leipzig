@@ -65,7 +65,7 @@ article.sheet {
 	color: #fff !important;
 }
 
-.catalogListItem {width: 100%; float: left;}
+.catalogListItem {width: 115%; float: left; margin-left: -30px}
 .catalogListItem .col-md-3 { width: 40mm; min-height: 10px; float: left;}
 .catalogListItem .col-md-6 { width: 100mm; float: left;}
 .catalogListItem .catalogItemImage.col-md-3 {width: 50mm}
@@ -76,7 +76,7 @@ article.sheet {
 
 .pages .ruckseite .sheetContent .more{
 	border-right: 817px solid #346aa6;
-    left: -383px;
+    left: -422px;
     position: relative;
 }
 
@@ -96,3 +96,49 @@ article.sheet {
 .pages .ruckseite .sheetContent .more ul li{ color: #fff !important; }
 .pages .sheetFooter {margin-bottom: 0px !important}
 
+.sheetContent { padding: 0 40px !important}
+.waschanleitung  .sheetHeader {top: 50px}
+
+.sheet.sonderseite.color .materialBox.mat3,
+.sheet.sonderseite.color .materialBox.mat4,
+.sheet.sonderseite.color .materialBox.mat5{ left: 40px !important }
+
+.sheet.sonderseite.color .punkt{
+    border-color: black;
+    border-style: solid !important;
+    border-width: 29px 0 8px !important;
+    padding: 0 !important;	
+    position: relative !important;
+}
+.sheet.sonderseite.color .punkt span {
+	left: 8px;
+    position: absolute;
+    top: -21px;
+    color: white !important;
+}
+
+.sheet.sonderseite.color .punkt.col01,
+.sheet.sonderseite.color .punkt.col26 {
+	border: 1px solid grey !important;
+}
+
+.sheet.sonderseite.color .punkt.col01 span,
+.sheet.sonderseite.color .punkt.col26 span {
+	top: 5px !important;
+}
+
+.sheet.sonderseite.color .punkt.col01 span,
+.sheet.sonderseite.color .punkt.col11 span,
+.sheet.sonderseite.color .punkt.col12 span,
+.sheet.sonderseite.color .punkt.col13 span,
+.sheet.sonderseite.color .punkt.col15 span,
+.sheet.sonderseite.color .punkt.col17 span,
+.sheet.sonderseite.color .punkt.col22 span,
+.sheet.sonderseite.color .punkt.col23 span,
+.sheet.sonderseite.color .punkt.col24 span,
+.sheet.sonderseite.color .punkt.col26 span,
+.sheet.sonderseite.color .punkt.col28 span,
+.sheet.sonderseite.color .punkt.col30 span,
+.sheet.sonderseite.color .punkt.col32 span {
+	color: black !important;	
+}
