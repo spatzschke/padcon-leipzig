@@ -58,7 +58,7 @@
 		</div>
 		<div class="sheetFooter">	
 			<div class="bandage">
-				<span><?php echo $page; ?></span>
+				<span><?php echo $page + $Anzahl_Sonderseiten - 1; ?></span>
 			</div>
 		</div>
 	</article>
@@ -68,6 +68,7 @@
 		$i++;
 	}
 }
+	$page += $Anzahl_Sonderseiten;
 	echo $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page, 'type' => 'color'));
 	$page++;
 	echo $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page, 'type' => 'material'));

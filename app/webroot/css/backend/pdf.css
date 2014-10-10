@@ -64,6 +64,11 @@ article.sheet {
 	bottom : 15px;
 	color: #fff !important;
 }
+.sheetFooter .bandage div {
+	position: absolute;
+	bottom : 15px;
+	color: #fff !important;
+}
 
 .catalogListItem {width: 115%; float: left; margin-left: -30px}
 .catalogListItem .col-md-3 { width: 40mm; min-height: 10px; float: left;}
@@ -115,11 +120,6 @@ article.sheet {
     position: absolute;
     top: -21px;
     color: white !important;
-}
-
-.sheet.sonderseite.color .punkt.col01,
-.sheet.sonderseite.color .punkt.col26 {
-	border: 1px solid grey !important;
 }
 
 .sheet.sonderseite.color .punkt.col01 span,

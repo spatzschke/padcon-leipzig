@@ -22,7 +22,7 @@
 	</div>
 		<div class="sheetFooter">	
 			<div class="bandage">
-				<span>padcon Leipzig - Ralf Patzschke - Holunderweg 4 - 04416 Markkleeberg</span>
+				<div>padcon Leipzig - Ralf Patzschke - Holunderweg 4 - 04416 Markkleeberg</div>
 			</div>
 		</div>		
 </article>
