@@ -52,14 +52,7 @@
 						<div class="bandage"></div>
 					</div>
 					<div class="sheetContent" style="position: relative">
-						Beispiel: Halbrolle, viskoelastischer Schaum, Hypro-Elastic, grün<br />
-						<br />
-						<?php echo '<img src="'.$this->webroot.'img/color_example.png" alt="Beispiel" />'; ?>
-						<br />
-						Setzen Sie hinter die Bestellnummer für das xx die Farbe Ihrer Wahl (materialbezogen) ein.<br />
-						<br />
-						<span style="font-size: 20px; font-weight: bold;">Farben</span>
-						<br />
+						<?php echo $this->data['SiteContent'][$type]['content_paragraph']; ?>
 						<?php
 							foreach($this->data['Material'] as $input) {
 								echo '<div class="materialBox mat'.$input['Material']['id'].'">';
