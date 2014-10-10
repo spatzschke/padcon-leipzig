@@ -165,6 +165,9 @@ class ProductsController extends AppController {
 	}
 
 	function add() {
+		$this->layout = 'admin';
+		
+		
 		if (!empty($this->data)) {
 			$this->Product->create();
 			if ($this->Product->save($this->data)) {
@@ -179,6 +182,9 @@ class ProductsController extends AppController {
 		$sizes = $this->Product->Size->find('list');
 		$carts = $this->Product->Cart->find('list');
 		$this->set(compact('categories', 'materials', 'sizes', 'carts'));
+		$this->set('primary_button', 'Anlegen');
+		$this->set('title_for_panel', 'Produkt anlegen');
+		$this->render('/Elements/backend/portlets/productDetailPortlet');
 		
 		// $this->request->data['Categories'] = $categories;
 		// $this->request->data['Materials'] = $materials;
@@ -191,7 +197,7 @@ class ProductsController extends AppController {
 	function admin_add($id = null) {
 		$this->add($id);
 		$this->layout = 'admin';
-		$this->set('title_for_panel', 'Produkt hinzufügen');
+		
 	}
 	
 	function admin_loadProductAddPopup($id = null) {
@@ -246,6 +252,8 @@ class ProductsController extends AppController {
 	function admin_edit($id = null) {
 		$this->edit($id);
 		$this->layout = 'admin';
+		$this->set('title_for_panel', 'Produkt bearbeiten');
+		$this->set('primary_button', 'Speichern');
 	}
 
 	function delete($id = null) {
@@ -369,7 +377,11 @@ class ProductsController extends AppController {
 		
 		$custom =  $this->Product->find('all',array('conditions' => array('Product.custom' => 1) ,'order' => array('Product.created' => 'desc')));
 		
-		$number = str_split($custom['0']['Product']['product_number'], 3);
+		if(empty($custom)) {
+			$number = 1;
+		} else {	
+			$number = str_split($custom['0']['Product']['product_number'], 3);
+		}
 		$number = 'Z'.date("y").str_pad(intVal($number[1])+1, 3, "0", STR_PAD_LEFT);
 		
 		return $number;

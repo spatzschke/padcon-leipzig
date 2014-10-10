@@ -2,7 +2,6 @@
 	echo $this->Html->script('jquery.caret.1.02.min', false);
 	echo $this->Html->script('jquery.liveValidation', false);
 	echo $this->Html->script('jquery.lazyload.min', false);
-
 ?>
 
 <script>

@@ -16,12 +16,12 @@
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle Angebote anzeigen', '/admin/offers/index'); ?></li>
 		</ul>
 		
-		<h3>Warenkorb</h3>
+		<!--<h3>Warenkorb</h3>
 		<ul class="toggle">
 			<div class="miniCart">
 				<?php echo $this->element('backend/miniCart'); ?>
 			</div>
-			<!--<li class="icn_view_users"><?php echo $this->Html->link('Warenkorb deaktivieren', '/admin/carts/disable_cart'); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Warenkorb deaktivieren', '/admin/carts/disable_cart'); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle Warenkörbe anzeigen', '/admin/carts/index'); ?></li>
 		</ul>-->
 		

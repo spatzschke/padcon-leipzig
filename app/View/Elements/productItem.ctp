@@ -12,17 +12,9 @@
     	<div class="loader"><img src="<?php echo $this->webroot.'img/ajax.gif'; ?>" alt="Ladevorgang"/></div>
     	<div class="productItemImage">	
         	<?php if(count($product['Image']) == 0) {
-					if(isset($auth)) {
-						echo '<a class="mediaURL"  href="'.FULL_BASE_URL.'/media/index.php?p='.$product['Product']['product_number'].'&c=99"><img src="'.$this->webroot.'img/no_pic.png" alt="'.$product['Product']['name'].'" /></a>';
-					} else {
-						echo '<img src="'.$this->webroot.'img/no_pic.png" alt="'.$product['Product']['name'].'" />';
-					}
+						echo '<img class="lazy" src="'.$this->webroot.'img/no_pic.png" alt="'.$product['Product']['name'].'" />';
 				} else {
-					if(isset($auth)) {
-						echo '<a class="mediaURL"  href="'.FULL_BASE_URL.'/media/index.php?p='.$product['Product']['product_number'].'&c=99"><img class="lazy" src="'.$product['Image'][0]['path'].'t.'.$product['Image'][0]['ext'].'" alt="'.$product['Product']['name'].'" image-rel="'.$product['Image'][0]['path'].'.'.$product['Image'][0]['ext'].'" /></a>';
-					} else {
-						echo'<a class="mediaURL"><img class="lazy" src="'.$this->webroot.'img/lazyload.gif" data-original="'.$product['Image'][0]['path'].'t.'.$product['Image'][0]['ext'].'" alt="'.$product['Product']['name'].'" image-rel="'.$product['Image'][0]['path'].'.'.$product['Image'][0]['ext'].'" /></a>';
-					}
+						echo'<img class="lazy" src="'.$this->webroot.'img/lazyload.gif" data-original="'.$product['Image'][0]['path'].'t.'.$product['Image'][0]['ext'].'" alt="'.$product['Product']['name'].'" image-rel="'.$product['Image'][0]['path'].'.'.$product['Image'][0]['ext'].'" />';
 				}
 			?>
         </div>
@@ -35,14 +27,7 @@
 					<?php echo $product['Material']['name'];?></div>
 	            <div class="productItemColor">
 					<label class="color"><?php echo $präfix_color;?>:</label>
-						<div class="colorSliderShadow"></div>
-						<ul id="colorCarousel<?php echo $product['Product']['product_number'];?>" >
-							<?php echo $this->element('productItemColorSlider', array('material_id' => $product['Material']['id'])); ?>
-						</ul>
-					
-					<script type="text/javascript">
-						$('#colorCarousel<?php echo $product['Product']['product_number'];?>').jcarousel({});
-					</script>
+					<?php echo $this->element('productItemColorSlider', array('product' => $product)); ?>	
 				</div>
 			<?php }?>
             <div class="productItemSize">

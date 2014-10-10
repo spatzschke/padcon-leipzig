@@ -42,6 +42,7 @@ class OffersController extends AppController {
 		$this->layout = $layout;
 		
 		$active = null;
+		$this->set('pdf', null);
 		
 		if(!$isActive) {
 			$active = $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));
@@ -50,6 +51,7 @@ class OffersController extends AppController {
 		$offer = null;
 		if($active || $isActive) {
 			
+			$this->request->data['Cart'] = array();
 			$this->set(compact('offer', 'active'));
 			
 		} else {
@@ -117,8 +119,6 @@ class OffersController extends AppController {
 
 		$this->layout = 'pdf';
 		
-		
-		
 		$pdf = true;
 		if(!$offerID) {
 			$offer = $this->getActiveOffer();
@@ -131,6 +131,7 @@ class OffersController extends AppController {
 		$title = "Angebot_".str_replace('/', '-', $offer['Offer']['offer_number']);
 		$this->set('title_for_layout', $title);
 		
+		$this->set('pdf', $pdf);
 		$this->set(compact('offer','pdf'));
       	$this->render('admin_add'); 
 	    
@@ -338,6 +339,7 @@ Lieferzeit: ca. 2-3 Wochen
 	
 	function reloadOfferSheetProducts() {
 		$this->layout = 'ajax';
+		$this->set('pdf', null);
 		
 		$this->generateDataByOffer();
 		
@@ -429,6 +431,7 @@ Lieferzeit: ca. 2-3 Wochen
 		
 		$this->generateDataByOffer();
 		
+		$this->set('pdf', null);
 	    $this->set('offer', $this->data['Offer']);
 		$this->render('admin_add');
 	}

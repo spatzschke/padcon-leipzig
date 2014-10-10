@@ -1,1 +1,1 @@
-<?php e($this->element('backend/portlets/productDetailPortlet')); ?>
+<?php echo $this->element('backend/portlets/productDetailPortlet'); ?>

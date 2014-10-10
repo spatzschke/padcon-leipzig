@@ -36,7 +36,7 @@ $(document).ready(function() {
 							'class' => 'form-horizontal'
 						)); ?> 
 						<!-- Links -->
-					
+						<?php echo $this->Form->input('id');?> 
 						<div class="col-md-6">
 							<div class="row">
 								<div class="col-md-6">
@@ -209,17 +209,9 @@ $(document).ready(function() {
 						</div>
                         <div style="margin-top:10px" class="form-group">
                             <!-- Button -->
-                            <div class="col-sm-12 controls">
-                          
-                                	<?php 
-                                		if($this->request->params['action'] == 'admin_view') {
-                                			
-                                			echo '<input type="submit" value="Spechern" class="btn btn-success form-control">';
-                                		} else {
-                                			
-                                			echo '<input type="submit" value="Anlegen" class="btn btn-success form-control">';	
-                                		}
-                                	
+                            <div class="col-sm-12 controls">                         
+                                	<?php                    			
+                                			echo '<input type="submit" value="'.$primary_button.'" class="btn btn-success form-control">';
                                 	?>
                             	</div>
                             </div>

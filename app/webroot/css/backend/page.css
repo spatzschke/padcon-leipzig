@@ -112,6 +112,7 @@ article.sheet {
     position: relative;
     width: 779px;
     height: 1100px;
+    padding-top: 50px;
 }
 
 .offerSheet {

@@ -106,18 +106,20 @@ class CustomersController extends AppController {
 		$this->layout = 'admin';
 		$this->add($id = null);
 		$this->set('title_for_panel','Kunde anlegen');
+		$this->set('primary_button','Anlegen');
 		$this->render('/Elements/backend/portlets/customerDetailPortlet');
 	}
 
 	function admin_edit($id = null) {
+		$this->layout = 'admin';
 		if (!$id && empty($this->request->data)) {
 			$this->Session->setFlash(__('Invalid customer', true));
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->request->data)) {
+			
 			if ($this->Customer->save($this->request->data)) {
 				$this->Session->setFlash(__('Kunde wurde erfolgreich bearbeitet!', true), 'flash_message', array('class' => 'alert-success'));
-				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('Kunde konnte nicht bearbeitet werden!. Bitte versuchen Sie es erneut.', true), 'flash_message', array('class' => 'alert-danger'));
 			}
@@ -125,8 +127,9 @@ class CustomersController extends AppController {
 		if (empty($this->request->data)) {
 			$this->request->data = $this->Customer->read(null, $id);
 		}
-		$users = $this->Customer->User->find('list');
-		$this->set(compact('users'));
+		$this->set('title_for_panel','Kunde bearbeiten');
+		$this->set('primary_button','Speichern');
+		$this->render('/Elements/backend/portlets/customerDetailPortlet');
 	}
 
 	function admin_delete($id = null) {
@@ -344,7 +347,9 @@ class CustomersController extends AppController {
 	}
 
 	function format_num($num, $precision = 2) {
-		   if ($num >= 1000 && $num < 1000000) {
+		   if ($num < 1000) {
+		    $n_format = number_format($num,$precision);
+		   } else if ($num >= 1000 && $num < 1000000) {
 		    $n_format = number_format($num/1000,$precision).'K';
 		    } else if ($num >= 1000000 && $num < 1000000000) {
 		    $n_format = number_format($num/1000000,$precision).'M';

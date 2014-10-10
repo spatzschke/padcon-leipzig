@@ -16,7 +16,7 @@ $(document).ready(function() {
 	
 	$('#ProductCustom').bind('click', function() {
 		
-		if($(this).val() == 1) {
+		if($(this).is(':checked')) {
 			loadCustomProductNumber();
 		} else {
 			$('#ProductProductNumber').val('');
@@ -252,14 +252,9 @@ function loadCustomProductNumber() {
                             <div class="col-sm-12 controls">
                           
                                 	<?php 
-                                		if($this->request->params['action'] == 'admin_view') {
                                 			
-                                			echo '<input type="submit" value="Spechern" class="btn btn-success form-control">';
-                                		} else {
-                                			
-                                			echo '<input type="submit" value="Anlegen" class="btn btn-success form-control">';	
-                                		}
-                                	
+                                			echo '<input type="submit" value="'.$primary_button.'" class="btn btn-success form-control">';
+                                		
                                 	?>
                             	</div>
                             </div>

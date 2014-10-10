@@ -1013,6 +1013,7 @@ input::-webkit-selection {
 	position: fixed;
 	width: 130px;
 	margin-left: 5px;
+	z-index: 1000;
 }
 
 .wood_bg .buttons .input-group-addon { min-width: 39px;}

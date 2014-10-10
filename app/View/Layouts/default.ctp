@@ -41,9 +41,11 @@
 		
 		echo $this->Html->script('jquery.dynamicSearch');
 		echo $this->Html->script('jquery.jcarousel.min');
-		echo $this->Html->script('jquery.lazyload.min');
 		
 		echo $this->Html->script('bootstrap.min');
+		
+		
+		echo $this->Html->script('jquery.lazyload.min');
 
 		
 		echo $scripts_for_layout;		
