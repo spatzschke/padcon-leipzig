@@ -1,4 +1,8 @@
-<?php	foreach ($offers as $product):?>
+<?php	
+	foreach ($offers as $product):
+	
+		if($product['Offer']['cart_id'] != 0) {	
+?>
 				<tr>
 					<td>
 					<?php 
@@ -48,27 +52,35 @@
 						?>
 					</td>
 					<td>
-						<?php 
+						<?php 						
+						if(!is_null($product['Customer']['id'])) {
 							
-							$name = $product['Customer']['salutation'].' '.$product['Customer']['title'].' '.$product['Customer']['first_name'].' '.$product['Customer']['last_name']; 
-							$city = $product['Customer']['postal_code']. ' '.$product['Customer']['city'];
-						
-						if(empty($product['Offer']['customer_id'])) { echo '-'; } else {
-							echo $product['Offer']['customer_id'];	
-							echo '&nbsp;';
-							echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
-								 data-toggle="popover"
-								 data-content="'.
-								 	$product['Customer']['organisation'].'<br>'.
-								 	$product['Customer']['department'].'<br>'.
-								 	$name.'<br>'.
-									$product['Customer']['street'].'<br>'.
-									$city.
-								 '"
-								 data-trigger="hover"
-							
-							></i>';
-						} ?>
+							if(empty($product['Offer']['customer_id'])) { echo '-'; } else {
+								echo $product['Offer']['customer_id'];	
+								echo '&nbsp;';
+								echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
+									 data-toggle="popover"
+									 data-content="';
+									 	if(!empty($product['Customer']['organisation_count'])) {
+											for ($i = 0; $i < $product['Customer']['organisation_count']; $i++) {
+												echo $product['Customer']['organisation_'.$i].'<br>';
+											}
+										}
+										if(!empty($product['Customer']['department_count'])) {
+											for ($i = 0; $i < $product['Customer']['department_count']; $i++) {
+												echo $product['Customer']['department_'.$i].'<br>';
+											}
+										}
+									 	echo 		 $product['Customer']['name'].'<br>'.
+													 $product['Customer']['phone'].'<br>'.
+													 $product['Customer']['email'].
+									 '"
+									 data-trigger="hover"
+								
+								></i>';
+							}
+						} else { echo '-'; } 
+						 ?>
 					</td>
 					<td>
 						<?php 
@@ -145,4 +157,4 @@
 					?>
 									
 				</tr> 
-				<?php endforeach; ?>
+				<?php } endforeach; ?>

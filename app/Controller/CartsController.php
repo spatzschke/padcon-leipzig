@@ -167,7 +167,7 @@ class CartsController extends AppController {
 		}
 		
 		$this->calcSumPriceByActiveCart();
-		$this->updateCartCount($activeCart);
+		$this->updateCartCount($this->get_active_cart());
 		
 	}
 	
@@ -192,6 +192,10 @@ class CartsController extends AppController {
 		} 
 		
 		$cart['Cart']['count'] = count($cart['CartProduct']);
+		
+		debug($cart);
+		debug(count($cart['CartProduct']));
+		
 		$this->Cart->save($cart);
 		
 	}

@@ -1,4 +1,3 @@
-<?php header('Content-type: text/html; charset=utf-8'); ?> 
 <!doctype html>
 <html lang="en">
 
@@ -7,7 +6,7 @@
 	<title>padcon Leipzig | Adminbereich</title>
 	<?php
 		echo $this->Html->meta('icon');
-		
+		echo $this->Html->css('cake.generic');
 		echo $this->Html->css('backend/bootstrap_new');
 		echo $this->Html->css('backend/backend');
 		
@@ -22,6 +21,8 @@
 		echo $this->Html->script('backend/jquery.iphone-style-checkboxes');
 		
 		echo $this->Html->css('backend/jquery.iphone-style-checkboxes');
+		
+		
 		
 		echo $scripts_for_layout;		
 		
@@ -40,7 +41,7 @@
 		$(document).ready(function () {
 		 
 		window.setTimeout(function() {
-		    $(".alert").fadeTo(1500, 0).slideUp(500, function(){
+		    $(".alert.alert-dismissible").fadeTo(1500, 0).slideUp(500, function(){
 		        $(this).remove(); 
 		    });
 		}, 5000);

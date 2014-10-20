@@ -5,7 +5,7 @@ App::import('Controller', 'Products');
 class OffersController extends AppController {
 
 	var $name = 'Offers';
-	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'Customer', 'Color');
+	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color');
 	public $components = array('Auth', 'Session');
 	
 	public function beforeFilter() {
@@ -20,8 +20,8 @@ class OffersController extends AppController {
 	
 		$this->Offer->recursive = 0;
 		$offers = $this->Offer->find('all', array('order' => array('Offer.created DESC', 'Offer.id DESC')));
-		
-		$this->set('offers', $this->fillIndexOfferData($offers));
+			
+		$this->set('offers', $this->fillIndexOfferData($this->paginate()));
 	}
 
 	function admin_view($id = null) {
@@ -346,40 +346,101 @@ Lieferzeit: ca. 2-3 Wochen
 		$this->render('/Elements/backend/offer_cheet');
 	}
 	
+	function splitAddressData($offer = null)
+	{
+		$arr_customer = null;
+		
+
+		$customerAddress = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $offer['Customer']['id'])));
+		
+		if(empty($customerAddress)) {
+			return null;
+		}
+		
+		for($j=0; $j < count($customerAddress); $j++) {
+			//split department and company
+			$split_arr = array('department','organisation');
+			
+			foreach($split_arr as $split_str) {
+				$arr = explode("\n", $customerAddress[$j]['Address'][$split_str]);
+				$count = 0;
+				for ($i = 0; $i <= count($arr)-1; $i++) {
+					if($arr[$i] != '') {
+						$arr_customer['Address'][$j][$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
+						$count++;			
+					}
+				}
+				
+				$arr_customer['Address'][$j][$split_str.'_count'] = $count;
+			}
+			
+			$str_title = '';
+			$str_first_name = '';
+			
+			if(!empty($customerAddress[$j]['Address']['title'])){
+				$str_title = $customerAddress[$j]['Address']['title'].' ';
+			};
+			if(!empty($customerAddress[$j]['Address']['first_name'])){
+				$str_first_name = $customerAddress[$j]['Address']['first_name'].' ';
+			};
+			$arr_customer['Address'][$j]['name'] = $customerAddress[$j]['Address']['salutation'].' '.$str_title.$str_first_name.$customerAddress[$j]['Address']['last_name'];
+			$arr_customer['Address'][$j]['street'] = $customerAddress[$j]['Address']['street'];
+			$arr_customer['Address'][$j]['city_combination'] = $customerAddress[$j]['Address']['postal_code'].' '.$customerAddress[$j]['Address']['city'];
+			$arr_customer['Address'][$j]['type'] = $customerAddress[$j]['Address']['type'];
+		}		
+		return $arr_customer;
+	}
+
 	function splitCustomerData($offer = null)
 	{
 		$arr_customer = null;
 		
-		//split department and company
-		$split_arr = array('department','organisation');
-		
-		foreach($split_arr as $split_str) {
-			$arr = explode("\n", $offer['Customer'][$split_str]);
-			$count = 0;
-			for ($i = 0; $i <= count($arr)-1; $i++) {
-				if($arr[$i] != '') {
-					$arr_customer['Customer'][$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
-					$count++;			
+		$customerAddress = $offer['Customer'];	
+
+			//split department and company
+			$split_arr = array('department','organisation');
+			
+			foreach($split_arr as $split_str) {
+				$arr = explode("\n", $customerAddress[$split_str]);
+				$count = 0;
+				for ($i = 0; $i <= count($arr)-1; $i++) {
+					if($arr[$i] != '') {
+						$arr_customer[$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
+						$count++;			
+					}
 				}
+				
+				$arr_customer[$split_str.'_count'] = $count;
 			}
 			
-			$arr_customer['Customer'][$split_str.'_count'] = $count;
-		}
-		
-		$str_title = '';
-		$str_first_name = '';
-		if(!empty($offer['Customer']['title'])){
-			$str_title =$offer['Customer']['title'].' ';
-		};
-		if(!empty($offer['Customer']['first_name'])){
-			$str_first_name =$offer['Customer']['first_name'].' ';
-		};
-		$arr_customer['Customer']['name'] = $offer['Customer']['salutation'].' '.$str_title.$str_first_name.$offer['Customer']['last_name'];
-		
-		$arr_customer['Customer']['city_combination'] = $offer['Customer']['postal_code'].' '.$offer['Customer']['city'];	
+			$str_title = '';
+			$str_first_name = '';
 			
+			if(!empty($customerAddress['title'])){
+				$str_title = $customerAddress['title'].' ';
+			};
+			if(!empty($customerAddress['first_name'])){
+				$str_first_name = $customerAddress['first_name'].' ';
+			};
+			$arr_customer['name'] = $customerAddress['salutation'].' '.$str_title.$str_first_name.$customerAddress['last_name'];
 		
-		return $arr_customer['Customer'];
+		return $arr_customer;
+	}
+
+	function getAddressByType($offer = null , $type = null)
+	{
+		
+		if(!empty($offer['Customer']['Address'])) {
+			$addresses = $offer['Customer']['Address'];
+			foreach ($addresses as $address) {
+				if($address['type'] == $type) {					
+					$offer['Address'] = $address;
+					return $offer;
+				}
+			}
+		} else {
+			return $offer;
+		}
 	}
 	
 	function calcOfferPrice($offer = null) {
@@ -465,17 +526,19 @@ Lieferzeit: ca. 2-3 Wochen
 			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
 		}
 		
+		if(!is_null($this->request->data['Customer']['id']) && !empty($this->splitAddressData($offer))) {
+			
+			$this->request->data['Customer'] = $this->request->data['Customer'] + array();
+			$this->request->data['Customer'] += $this->splitAddressData($offer);
+		}
+				
+		$this->request->data = $this->getAddressByType($this->request->data, 1);
 		
-		
-		
-		$this->request->data['Customer'] = $this->request->data['Customer'] + $this->splitCustomerData($offer);
-		$this->request->data['Offer'] = $this->request->data['Offer'] + $this->calcOfferPrice($offer);	
-// 	
-		//$offerPrice = $this->calcOfferPrice();	
-		//$$this->request->data['Offer']['offer_price'] = $offerPrice['offer_price'];
-		
-		//debug($offer);
 	
+		$this->request->data['Offer'] = $this->request->data['Offer'] + $this->calcOfferPrice($offer);	
+ 	
+		$offerPrice = $this->calcOfferPrice();	
+		$this->request->data['Offer']['offer_price'] = $offerPrice['offer_price'];
 	}
 	
 	function fillIndexOfferData($offers = null) {
@@ -488,8 +551,13 @@ Lieferzeit: ca. 2-3 Wochen
 		foreach ($offers as $offer) {
 			
 			//$offer = $offers[$i];
+	
+			if($this->splitCustomerData($offer)) {
+				
+				$offer['Customer'] += $this->splitCustomerData($offer);
+				//$offer = $this->getAddressByType($offer,'1');	
+			}			
 			
-			$offer['Customer'] = $offer['Customer'] + $this->splitCustomerData($offer);
 			$cart = $Carts->get_cart_by_id($offer['Cart']['id']);
 			$offer['Cart']['CartProduct'] = $cart['CartProduct'];
 			if(!empty($cart['CartProduct'])) {

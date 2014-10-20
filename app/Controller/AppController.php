@@ -51,5 +51,14 @@ class AppController extends Controller {
     public function beforeFilter() {
         $this->Auth->allow('index', 'view', 'display');
     }
+	
+	public function beforeRender(){
+	  if($this->name == 'CakeError'){
+	  		if(isset($this->request->params['admin'])) {
+	  			$this->layout = 'admin';
+	  		}
+	      
+	   }        
+	}
 
 }

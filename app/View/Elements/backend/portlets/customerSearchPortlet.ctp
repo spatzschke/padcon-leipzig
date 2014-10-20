@@ -6,26 +6,77 @@
 ?>
 
 <script>
-
+	$(document).ready(function() {
+		// $('#addAddress').find('a').click(function() {
+			// $('#addAddress_modal .modal-body').load("<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/add\/0\/1\/<?php echo $this->data['Customer']['id'];?>");
+			// $('#addAddress_modal').modal('show');
+			// return false;
+		// });
+	
+		$("body").on("hidden", "#add_to_customer_modal", function(){ $(this).removeData("modal");});
+	});
 
 </script>
 
-					<?php echo $this->Form->create('Customer', array('div'=>false, 'data-model' => 'Customer'));?>
+<div class="modal" id="addAddress_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog offer-dialog">
+	 	<div class="modal-content">
+			<div class="modal-body">
+				<?php echo $this->element('backend/helper/loadingHelper', array("size" => "large")); ?>	
+			</div>
+		</div>
+	</div>
+</div>
+			<?php 
+				if(!isset($this->data['Address'])) {
+					
+					echo'<div class="alert alert-danger" role="alert">';
+						echo 'Es exisitert keine Angebotsadresse für den Kunden: </br>';
+						echo '</br>';
+						echo '<b>'.$this->data['Customer']['salutation'].' '.$this->data['Customer']['title'].' '.$this->data['Customer']['first_name'].' '.$this->data['Customer']['last_name'].' '.'</b></br>';
+						if(!empty($this->data['Customer']['organisation'])) {
+							echo '<b>'.$this->data['Customer']['organisation'].'</b></br>';
+						}
+						if(!empty($this->data['Customer']['department'])) {
+							echo '<b>'.$this->data['Customer']['department'].'</b></br>';
+						}
+						echo '<b>'.$this->data['Customer']['email'].'</b></br></br>';
+						echo '<div id="addAddress" class="input-group">';
+						echo $this->Html->link(
+								    'Adresse hinzufügen',
+								    array(
+								        'controller' => 'Customers',
+								        'action' => 'edit',
+								        $this->data['Customer']['id'],
+								        'admin' => true	
+								    ),
+								    array(
+								        'class' => 'btn btn-default',
+								        'id' => 'addAddress'
+								    )
+								);
+						echo '</div>';
+					echo '</div>';
+				} else {
+				
+			?>
+
+					<?php echo $this->Form->create('Address', array('div'=>false, 'data-model' => 'Address'));?>
 					
 					<?php
 						echo $this->Form->input('id', array('disabled'=> 'disabled', 'label' => false, 'placeholder' => 'id', 'data-model' => 'Customer', 'data-field' => 'id', 'autoComplete' => true, 'div' => false, 'class' => 'noValid col-md-12'));
 						
-						for ($i = 0; $i <= $this->data['Customer']['organisation_count']-1; $i++) {
+						for ($i = 0; $i <= $this->data['Address']['organisation_count']-1; $i++) {
 							echo $this->Form->input('organisation_'.$i, array('disabled'=> 'disabled', 'label' => false, 'placeholder' => 'department_1', 'data-model' => 'Customer', 'data-field' => 'department_1', 'autoComplete' => true, 'div' => false, 'class' => 'noValid col-md-12'));
 						
 						}
 						
-						for ($i = 0; $i <= $this->data['Customer']['department_count']-1; $i++) {
+						for ($i = 0; $i <= $this->data['Address']['department_count']-1; $i++) {
 							echo $this->Form->input('department_'.$i, array('disabled'=> 'disabled', 'label' => false, 'placeholder' => 'department_1', 'data-model' => 'Customer', 'data-field' => 'department_1', 'autoComplete' => true, 'div' => false, 'class' => 'noValid col-md-12'));
 						
 						}
 						
-						if(!empty($this->data['Customer']['name'])){													
+						if(!empty($this->data['Address']['name'])){													
 							echo '<div class="controls controls-row">';
 							
 								/*$options = array('Herr' => 'Herr', 'Frau' => 'Frau');
@@ -51,7 +102,9 @@
 							
 						echo '</div>';
 					?>	
-
+			<?php 					
+				} 		
+			?>
 	<script>
 
 

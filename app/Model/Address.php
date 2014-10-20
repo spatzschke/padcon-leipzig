@@ -1,12 +1,11 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * Customer Model
+ * Address Model
  *
  * @property CustomerAddress $CustomerAddress
- * @property Offer $Offer
  */
-class Customer extends AppModel {
+class Address extends AppModel {
 
 /**
  * Display field
@@ -14,10 +13,16 @@ class Customer extends AppModel {
  * @var string
  */
 	public $displayField = 'id';
-
+	
+	public function getAddressTypes() {
+        return array(
+            1 => 'Angebotsadresse',
+            2 => 'Lierferadresse',
+            3 => 'Rechnungsadresse',
+        );
+	}
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
-
 /**
  * hasMany associations
  *
@@ -26,20 +31,7 @@ class Customer extends AppModel {
 	public $hasMany = array(
 		'CustomerAddress' => array(
 			'className' => 'CustomerAddress',
-			'foreignKey' => 'customer_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'Offer' => array(
-			'className' => 'Offer',
-			'foreignKey' => 'customer_id',
+			'foreignKey' => 'address_id',
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',

@@ -576,6 +576,17 @@ float: left;
 
 .offersIndex .tablesorter td, .offersIndex .tablesorter th { text-align: center}  
 
+#addAddress_modal .modal-content {
+	background: 0 none; 
+	box-shadow: none;
+	border: 0 none;
+}
+
+#addAddress_modal input,
+#addAddress_modal select {
+	padding: 6px 12px;
+}
+
 
 /* Stats Module */
 

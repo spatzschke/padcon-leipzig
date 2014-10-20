@@ -31,7 +31,7 @@
     margin-top: 20px;
 }
 
-.row-fluid .offerInfo * { line-height: 15px; min-height: 15px; color: black }
+.row-fluid .offerInfo * { line-height: 15px; min-height: 15px; color: #666 }
 
 .row-fluid .offerInfo label {
     font-size: 14px;
@@ -253,7 +253,7 @@ article.sheet {
     line-height: 12px;
     padding-top: 10px;
     position: absolute;
-    width: 650px;
+    width: 678px;
 }
 
 .pages .sheetFooter .col-md-3 {

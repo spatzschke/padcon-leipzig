@@ -34,8 +34,9 @@ $(document).ready(function() {
 							'class' => 'form-horizontal'
 						)); ?> 
 						<!-- Links -->
-					
+						<?php echo $this->Form->input('id');?> 
 						<div class="col-md-6">
+							<h5>Direkter Ansprechpartner</h2>
 							<div class="row">
 								<div class="col-md-6">
 									<div class="input-group">
@@ -46,13 +47,13 @@ $(document).ready(function() {
 											'div' => FALSE,
 											'data-model' => 'Customer', 
 											'data-field' => 'salutation', 
-											'autoComplete' => true,
+											'autoComplete' => true, 
 											'readonly' => 'readonly'
 										));
 										?>   
 									</div>                          
-                            	</div>
-                            	<div class="col-md-6">
+	                        	</div>
+	                        	<div class="col-md-6">
 		                            <div class="input-group">
 		                                <span class="input-group-addon"><i class="glyphicon glyphicon-minus"></i></span>
 		                                <?php echo $this->Form->input('title', array(
@@ -61,104 +62,43 @@ $(document).ready(function() {
 											'data-model' => 'Customer',
 											'placeholder' => 'Titel',
 											'data-field' => 'title', 
-											'autoComplete' => true,
+											'autoComplete' => true, 
 											'readonly' => 'readonly'
 										));
 										?>                                      
 		                             </div>
 		                         </div>
-                             </div>
-                             <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                <?php echo $this->Form->input('first_name', array(
+	                         </div>
+	                         <div class="input-group">
+	                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+	                            <?php echo $this->Form->input('first_name', array(
 									'label' => false,
 									'class' => 'form-control',
 									'data-model' => 'Customer',
 									'placeholder' => 'Vorname',
 									'data-field' => 'first_name', 
-									'autoComplete' => true,
+									'autoComplete' => true, 
 									'readonly' => 'readonly'
 								));
 								?>                                      
-                             </div>
-                             <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                <?php echo $this->Form->input('last_name', array(
+	                         </div>
+	                         <div class="input-group">
+	                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+	                            <?php echo $this->Form->input('last_name', array(
 									'label' => false,
 									'class' => 'form-control',
 									'data-model' => 'Customer',
 									'placeholder' => 'Nachname',
 									'data-field' => 'last_name', 
-									'autoComplete' => true,
+									'autoComplete' => true, 
 									'readonly' => 'readonly'
 								));
 								?>                                      
-                             </div>
-                             
-                             <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
-                                <?php echo $this->Form->input('department', array(
-									'label' => false,
-									'class' => 'form-control',
-									'data-model' => 'Customer',
-									'placeholder' => 'Abteilung',
-									'data-field' => 'department', 
-									'autoComplete' => true,
-									'type' => 'textarea',
-									'rows' => '3',
-									'readonly' => 'readonly'
-								));
-								?> 
-							</div>
-                             
-                             <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                                <?php echo $this->Form->input('email', array(
-									'label' => false,
-									'class' => 'form-control',
-									'data-model' => 'Customer',
-									'placeholder' => 'Email',
-									'data-field' => 'email', 
-									'autoComplete' => true,
-									'readonly' => 'readonly'
-								));
-								?>                                      
-                             </div>
-                             <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                                <?php echo $this->Form->input('phone', array(
-									'label' => false,
-									'class' => 'form-control',
-									'data-model' => 'Customer',
-									'placeholder' => 'Telefon',
-									'data-field' => 'phone', 
-									'autoComplete' => true,
-									'readonly' => 'readonly'
-								));
-								?>                                      
-                             </div>
-                             <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-                                <?php echo $this->Form->input('fax', array(
-									'label' => false,
-									'class' => 'form-control',
-									'data-model' => 'Customer',
-									'placeholder' => 'Fax',
-									'data-field' => 'fax', 
-									'autoComplete' => true,
-									'readonly' => 'readonly'
-								));
-								?>                                      
-                             </div>
-                             
-                             
-						</div>
-						
-						 <!-- Rechts -->
-						<div class="col-md-6">
-							<div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-                                <?php echo $this->Form->input('organisation', array(
+	                         </div>
+	                         
+	                         <div class="input-group">
+	                            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+	                            <?php echo $this->Form->input('organisation', array(
 									'label' => false,
 									'class' => 'form-control',
 									'data-model' => 'Customer',
@@ -170,64 +110,73 @@ $(document).ready(function() {
 								));
 								?> 
 							</div>
-							
-							<div class="input-group">
-	                                <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
-	                                <?php echo $this->Form->input('street', array(
-										'label' => false,
-										'class' => 'form-control',
-										'data-model' => 'Customer',
-										'placeholder' => 'Straße',
-										'data-field' => 'street', 
-										'autoComplete' => true, 
-										'readonly' => 'readonly'
-									));
-									?>                                      
-	                        </div>
-                        
-	                        <div class="row">
-								<div class="col-md-4">
-		                            <div class="input-group">
-		                                <span class="input-group-addon"><i class="glyphicon glyphicon-minus"></i></span>
-		                                <?php echo $this->Form->input('postal_code', array(
-											'label' => false,
-											'class' => 'form-control',
-											'data-model' => 'Customer',
-											'placeholder' => 'PLZ',
-											'data-field' => 'postal_code', 
-											'autoComplete' => true, 
-											'readonly' => 'readonly'
-										));
-										?>                                      
-		                             </div>
-		                         </div>
-	                        	<div class="col-md-8">
-		                            <div class="input-group">
-		                                <span class="input-group-addon"><i class="glyphicon glyphicon-tree-deciduous"></i></span>
-		                                <?php echo $this->Form->input('city', array(
-											'label' => false,
-											'class' => 'form-control',
-											'data-model' => 'Customer',
-											'placeholder' => 'Stadt',
-											'data-field' => 'city', 
-											'autoComplete' => true, 
-											'readonly' => 'readonly'
-										));
-										?>                                      
-		                             </div>
-		                         </div>
+	                         
+	                         <div class="input-group">
+	                            <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+	                            <?php echo $this->Form->input('department', array(
+									'label' => false,
+									'class' => 'form-control',
+									'data-model' => 'Customer',
+									'placeholder' => 'Abteilung',
+									'data-field' => 'department', 
+									'autoComplete' => true,
+									'type' => 'textarea',
+									'rows' => '3', 
+									'readonly' => 'readonly'
+								));
+								?> 
 							</div>
-                    </div>
-                    
-                           <div style="margin-top:10px" class="form-group">
-                                    <!-- Button -->
-                                    <div class="col-sm-12 controls">
-                                  
-	                                    	
-                                    	</div>
-                                    </div>
-                                </div>
- 
+	                         
+	                         <div class="input-group">
+	                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+	                            <?php echo $this->Form->input('email', array(
+									'label' => false,
+									'class' => 'form-control',
+									'data-model' => 'Customer',
+									'placeholder' => 'Email',
+									'data-field' => 'email', 
+									'autoComplete' => true, 
+									'readonly' => 'readonly'
+								));
+								?>                                      
+	                         </div>
+	                         <div class="input-group">
+	                            <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
+	                            <?php echo $this->Form->input('phone', array(
+									'label' => false,
+									'class' => 'form-control',
+									'data-model' => 'Customer',
+									'placeholder' => 'Telefon',
+									'data-field' => 'phone', 
+									'autoComplete' => true, 
+									'readonly' => 'readonly'
+								));
+								?>                                      
+	                         </div>
+	                         <div class="input-group">
+	                            <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
+	                            <?php echo $this->Form->input('fax', array(
+									'label' => false,
+									'class' => 'form-control',
+									'data-model' => 'Customer',
+									'placeholder' => 'Fax',
+									'data-field' => 'fax', 
+									'autoComplete' => true,
+									'type' => 'text', 
+									'readonly' => 'readonly'
+								));
+								?>                                      
+	                         </div>
+						</div>
+						
+						<!-- Rechts -->
+						<div class="col-md-6">
+							<h5>Adressen</h5>
+							<?php
+							foreach ($this->data['Customer']['Addresses'] as $address) {
+								echo $this->element('backend/portlets/addressMiniViewPortlet', array('address' => $address['Address'],)); 
+							}?>						
+						</div> 
                      </form>
                     
 				</div>                     

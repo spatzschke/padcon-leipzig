@@ -11,7 +11,8 @@ $(document).ready(function() {
 			cancel: '.form-search .cancel',
 			loadingClass: 'loadingSpinner',
 			loadingElement: '#filter .search .input-group-addon i',
-			admin: true
+			admin: true,
+			content: '.offersIndex tbody'
 		});	
 		
 		$('.glyphicon').popover({
