@@ -144,6 +144,7 @@ class AddressesController extends AppController {
 				$this->request->data = $this->splitAddressData($this->request->data);
 				$this->request->data['Address'][$count]['id'] = $this->Address->getLastInsertID();
 				$this->set('count', $count);
+				$this->set('addressTypes', $this->Address->getAddressTypes());
 				$this->render('/Elements/backend/portlets/addressMiniViewPortlet');
 				$this->autoRender = false;
 			} else {

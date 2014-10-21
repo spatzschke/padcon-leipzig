@@ -24,6 +24,10 @@ $(document).ready(function() {
 			
 			return false;
 		});
+		
+	$('.glyphicon').popover({
+            html:true
+        });
 									
 });
 

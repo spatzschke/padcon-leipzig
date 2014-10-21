@@ -157,6 +157,19 @@ class CustomersController extends AppController {
 				if ($this->CustomerAddress->saveMany($customerAddresses)) {
 					$this->Session->setFlash(__('Kunde wurde erfolgreich erstellt', true), 'flash_message', array('class' => 'alert-success'));
 					//	$this->redirect(array('action' => 'index'));
+					$customer = $this->Customer->read(null, $id);
+					unset($customer['Offer']);
+					
+					$customerAddresses = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $id)));
+					$customer['Customer']['Addresses'] = array();
+					
+					$Addresses = new AddressesController();
+					
+					foreach ($customerAddresses as $address) {
+						array_push($customer['Customer']['Addresses'], $Addresses->splitAddressData($address));
+					}
+					
+					$this->request->data = $customer;
 				}
 			
 			} else {
@@ -164,7 +177,7 @@ class CustomersController extends AppController {
 			}
 		}
 		if (empty($this->request->data)) {
-			$this->request->data = $this->Customer->read(null, $id);
+			//$this->request->data = $this->Customer->read(null, $id);
 			$customer = $this->Customer->read(null, $id);
 			unset($customer['Offer']);
 			
@@ -176,9 +189,11 @@ class CustomersController extends AppController {
 			foreach ($customerAddresses as $address) {
 				array_push($customer['Customer']['Addresses'], $Addresses->splitAddressData($address));
 			}
+			
 			$this->request->data = $customer;
 			
 		}
+		$this->set('addressTypes', $this->Address->getAddressTypes());
 		$this->set('title_for_panel','Kunde bearbeiten');
 		$this->set('primary_button','Speichern');
 		$this->render('/Elements/backend/portlets/customerDetailPortlet');

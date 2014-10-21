@@ -450,7 +450,7 @@ Lieferzeit: ca. 2-3 Wochen
 		$discount_price = $offer['Offer']['discount'] * $offer['Cart']['sum_retail_price'] / 100;
 		$part_price = $offer['Cart']['sum_retail_price'] - $discount_price + $offer['Offer']['delivery_cost'];
 		$vat_price = $offer['Offer']['vat'] * $part_price / 100;
-		$offer_price = $part_price + $vat_price;
+		$offer_price = floatval($part_price + $vat_price);
 		
 		if($offer['Cart']['sum_retail_price'] > 500) {
 			$delivery_cost = 0;
@@ -514,10 +514,7 @@ Lieferzeit: ca. 2-3 Wochen
 		if(!$offer) {
 			$offer = $this->getActiveOffer();		
 		} 
-		if(empty($offer)) {
-			debug($this->getActiveOffer());
-		}
-	
+			
 	    $this->request->data = $offer;
 		
 		if(!empty($offer)) {
@@ -525,6 +522,8 @@ Lieferzeit: ca. 2-3 Wochen
 	    	$cart = $Carts->get_cart_by_id($offer['Cart']['id']);
 			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
 		}
+
+		
 		
 		if(!is_null($this->request->data['Customer']['id']) && !empty($this->splitAddressData($offer))) {
 			
@@ -533,12 +532,9 @@ Lieferzeit: ca. 2-3 Wochen
 		}
 				
 		$this->request->data = $this->getAddressByType($this->request->data, 1);
-		
 	
-		$this->request->data['Offer'] = $this->request->data['Offer'] + $this->calcOfferPrice($offer);	
- 	
-		$offerPrice = $this->calcOfferPrice();	
-		$this->request->data['Offer']['offer_price'] = $offerPrice['offer_price'];
+		$this->request->data['Offer'] += $this->calcOfferPrice($this->request->data);	
+
 	}
 	
 	function fillIndexOfferData($offers = null) {

@@ -21,6 +21,11 @@ class Address extends AppModel {
             3 => 'Rechnungsadresse',
         );
 	}
+	
+	public function getAddressTypesReverse() {
+        
+        return array_flip($this->getAddressTypes());
+	}
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 /**

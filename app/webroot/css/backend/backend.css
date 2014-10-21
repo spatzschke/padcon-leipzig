@@ -588,6 +588,10 @@ float: left;
 }
 
 
+.address_dummy textarea{
+	padding: 5px;
+}
+
 /* Stats Module */
 
 .stats_graph {
