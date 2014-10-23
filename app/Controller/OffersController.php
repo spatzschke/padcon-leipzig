@@ -525,10 +525,12 @@ Lieferzeit: ca. 2-3 Wochen
 
 		
 		
-		if(!is_null($this->request->data['Customer']['id']) && !empty($this->splitAddressData($offer))) {
-			
-			$this->request->data['Customer'] = $this->request->data['Customer'] + array();
-			$this->request->data['Customer'] += $this->splitAddressData($offer);
+		if(!is_null($this->request->data['Customer']['id'])) {
+			$split_str = $this->splitAddressData($offer);
+			if(!is_null($split_str)) {	
+				$this->request->data['Customer'] = $this->request->data['Customer'] + array();
+				$this->request->data['Customer'] += $split_str;
+			}
 		}
 				
 		$this->request->data = $this->getAddressByType($this->request->data, 1);
