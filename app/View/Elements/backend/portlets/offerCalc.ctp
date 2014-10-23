@@ -36,7 +36,7 @@
 					
 					<!-- Zwischensumme -->
 					<div>
-						<label><?php echo 'Angebotswert';?></label>
+						<label><?php echo 'Angebotswert:';?></label>
 						<p class="sum_price"><span class="double"><?php echo $this->Number->currency(floatval($this->data['Offer']['offer_price']),'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));?></span></p>
 					</div>
 					

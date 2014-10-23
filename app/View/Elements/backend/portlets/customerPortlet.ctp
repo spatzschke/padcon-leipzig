@@ -1,3 +1,7 @@
+<?php 
+	echo $this->Html->script('jquery.dynamicSearch', false);
+?>
+
 <script>
 $(document).ready(function() {
 	
@@ -29,7 +33,7 @@ $(document).ready(function() {
 				url: "<?php echo FULL_BASE_URL.$this->base;?>\/Customers\/search\/",
 				renderTemplate: '/Elements/backend/portlets/customerPortletTableContent',
 				cancel: '.form-search .cancel',
-				content: '#add_to_customer_modal tbody',
+				content: '.customerPortlet tbody',
 				loadingClass: 'loadingSpinner',
 				loadingElement: '#filter .search .input-group-addon i',
 				admin: true
@@ -40,7 +44,7 @@ $(document).ready(function() {
 
 </script>
 
-<article class="module width_full">
+<article class="module width_full customerPortlet">
 		<header>
 			<h3><?php __('Kunden');?></h3>	
 		</header>
@@ -56,7 +60,11 @@ $(document).ready(function() {
 			<table class="tablesorter" cellspacing="0"> 
 			<thead> 
 				<tr> 
-   					<th></th> 
+   					<?php
+						if($this->request->is('ajax')) {
+							echo '<th></th> ';
+						}
+					?> 
     				<th><?php echo('#');?></th>
 					<th><?php echo('Anrede');?></th>
 					<th><?php echo('Vorname');?></th>

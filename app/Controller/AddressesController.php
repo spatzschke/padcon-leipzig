@@ -211,8 +211,6 @@ class AddressesController extends AppController {
 	{
 		$arr_customer = null;
 		
-		
-		
 			//split department and company
 			$split_arr = array('department','organisation');
 			
@@ -231,16 +229,20 @@ class AddressesController extends AppController {
 			
 			$str_title = '';
 			$str_first_name = '';
+			$str_last_name = '';
+			$str_name = '';
 			
-			if(!empty($address['Address']['title'])){
-				$str_title = $address['Address']['title'].' ';
-			};
-			if(!empty($address['Address']['first_name'])){
-				$str_first_name = $address['Address']['first_name'].' ';
-			};
-			$arr_customer['Address']['name'] = $address['Address']['salutation'].' '.$str_title.$str_first_name.$address['Address']['last_name'];
+			if(!empty($address['Address']['title'])){ $str_title = $address['Address']['title'].' ';}
+			if(!empty($address['Address']['first_name'])){ $str_first_name = $address['Address']['first_name'].' ';	}
+			if(!empty($address['Address']['last_name'])){ $str_first_name = $address['Address']['last_name'];	}
+
+			if(!empty($str_first_name) || !empty($str_last_name)){
+				 $str_name = $address['Address']['salutation'].' '.$str_title.$str_first_name.$str_last_name;
+			}
+			
+			$arr_customer['Address']['name'] = $str_name;
 			$arr_customer['Address']['street'] = $address['Address']['street'];
-			$arr_customer['Address']['city_combination'] = $address['Address']['postal_code'].' '.$address['Address']['city'];
+			$arr_customer['Address']['city_combination'] = str_pad($address['Address']['postal_code'], 5, "0", STR_PAD_LEFT).' '.$address['Address']['city'];
 			$arr_customer['Address']['type'] = $address['Address']['type'];
 			$arr_customer['Address']['id'] = $address['Address']['id'];
 				

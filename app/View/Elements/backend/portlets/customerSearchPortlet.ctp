@@ -33,7 +33,9 @@
 					echo'<div class="alert alert-danger" role="alert">';
 						echo 'Es exisitert keine Angebotsadresse für den Kunden: </br>';
 						echo '</br>';
-						echo '<b>'.$this->data['Customer']['salutation'].' '.$this->data['Customer']['title'].' '.$this->data['Customer']['first_name'].' '.$this->data['Customer']['last_name'].' '.'</b></br>';
+						if(!empty($this->data['Customer']['last_name'])) {
+							echo '<b>'.$this->data['Customer']['salutation'].' '.$this->data['Customer']['title'].' '.$this->data['Customer']['first_name'].' '.$this->data['Customer']['last_name'].' '.'</b></br>';
+						}
 						if(!empty($this->data['Customer']['organisation'])) {
 							echo '<b>'.$this->data['Customer']['organisation'].'</b></br>';
 						}
@@ -75,8 +77,7 @@
 							echo $this->Form->input('department_'.$i, array('disabled'=> 'disabled', 'label' => false, 'placeholder' => 'department_1', 'data-model' => 'Customer', 'data-field' => 'department_1', 'autoComplete' => true, 'div' => false, 'class' => 'noValid col-md-12'));
 						
 						}
-						
-						if(!empty($this->data['Address']['name'])){													
+						if($this->data['Address']['name'] != ' '){													
 							echo '<div class="controls controls-row">';
 							
 								/*$options = array('Herr' => 'Herr', 'Frau' => 'Frau');

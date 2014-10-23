@@ -42,6 +42,7 @@ $(document).ready(function() {
 					 	
 					 }
 				}); 
+				return false;
 			}); 
 			
 			$('.productAddPortlet .close').on('click', function(){ 

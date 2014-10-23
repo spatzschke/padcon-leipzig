@@ -167,10 +167,13 @@ class OffersController extends AppController {
 				}
 				
 				
-				$offer['Offer']['additional_text'] = 'Zahlungsbedingung: 10 Tage 2% Skonto oder 30 Tage netto
-Die Lieferung erfolgt zuzüglich anteiliger Versandkosten in Höhe von 8,00 Euro (Lieferung frei Haus ab einem Nettobestellwert von 500,00 Euro).
+				$offer['Offer']['additional_text'] = '
+				
+Zahlungsbedingung: 10 Tage 2% Skonto oder 30 Tage netto <br />
+Die Lieferung erfolgt zuzüglich anteiliger Versandkosten in Höhe von 8,00 Euro (Lieferung frei Haus ab einem Nettobestellwert von 500,00 Euro). <br />
 Lieferzeit: ca. 2-3 Wochen
 				';
+				
 				
 				$offer['CartProducts'] = $this->getSettingCartProducts();
 				
@@ -313,6 +316,8 @@ Lieferzeit: ca. 2-3 Wochen
 		
 		$offer = $this->Offer->findById($offer);
 		
+		
+		
 		if($offer) {
 			$offer['Offer']['offer_number'] = $this->generateOfferNumber($id, $offer);
 			$offer['Offer']['customer_id'] = $id;
@@ -342,6 +347,8 @@ Lieferzeit: ca. 2-3 Wochen
 		$this->set('pdf', null);
 		
 		$this->generateDataByOffer();
+		
+		$this->request->data['Offer'] += $this->generateDataByOffer();
 		
 		$this->render('/Elements/backend/offer_cheet');
 	}
@@ -462,6 +469,9 @@ Lieferzeit: ca. 2-3 Wochen
 		$arr_offer['Offer']['vat_price'] = $vat_price;
 		$arr_offer['Offer']['discount_price'] = $discount_price;
 		$arr_offer['Offer']['part_price'] = $part_price;
+		
+		
+		
 		if($offer['Cart']['sum_retail_price'] == 0) {
 			$arr_offer['Offer']['offer_price'] = 0;
 		} else {
@@ -535,7 +545,9 @@ Lieferzeit: ca. 2-3 Wochen
 				
 		$this->request->data = $this->getAddressByType($this->request->data, 1);
 	
-		$this->request->data['Offer'] += $this->calcOfferPrice($this->request->data);	
+		$this->request->data['Offer'] += $this->calcOfferPrice($this->request->data);
+		
+		return 	$this->calcOfferPrice($this->request->data);
 
 	}
 	

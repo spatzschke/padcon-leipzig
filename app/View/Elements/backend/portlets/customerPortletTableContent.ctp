@@ -1,5 +1,6 @@
 <?php
 
+
 				$i = 0;
 				foreach ($customers as $user):
 					$class = null;

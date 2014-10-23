@@ -12,17 +12,22 @@
 						$material = $this->requestAction('Materials/getMaterial/'.$product['Product']['material_id']);
 						$size = $this->requestAction('Sizes/getSize/'.$product['Product']['size_id']);
 						$features = $this->requestAction('Products/seperatFeatureList/'.$cartProduct['product_id']);
+						
+						$product_number_präfix = 'PD-';
+						if($product['Product']['custom']) {$product_number_präfix = '';}
 
 						echo '
 						<div class="sheetItem">
 							<div class="pos">'.($j+1).'</div>
 							<div class="amount">'.$cartProduct['amount'].'</div>
 							<div class="number">
-								<input type="text" class="productNumber col-md-12" value="pd-'.$product['Product']['product_number'].'-'.$color['Color']['code'].'" /> </br><input type="text" value="Fa. padcon" class="col-md-12"/>
+								<input type="text" class="productNumber col-md-12" value="'.$product_number_präfix.$product['Product']['product_number'].'-'.$color['Color']['code'].'" /> </br><input type="text" value="Fa. padcon" class="col-md-12"/>
 							</div>
 							<div class="content">
 									<input class="productName text col-md-12" type="text" value="'.$product['Product']['name'].'" /><br />';
 									foreach($features as $fea)	{
+										$fea = str_replace("<u>", "", $fea);
+										$fea = str_replace("</u>", "", $fea);
 										echo '<input class="text col-md-12" type="text" value="'.$fea.'" /><br />';
 									}
 									echo '<input class="text col-md-12" type="text" value="Bezug: '.$material['Material']['name'].', Farbe: '.$color['Color']['name'].'" />

@@ -38,6 +38,9 @@ class CustomersController extends AppController {
 			if ($this->Customer->save($this->request->data)) {
 				
 				if(isset($this->data['Address'])) {
+					
+					$this->Session->setFlash(__('Kunde ohne Adresse wurde erfolgreich erstellt', true), 'flash_message', array('class' => 'alert-success'));
+					
 					$lastCustomerId = $this->Customer->getLastInsertID();
 				
 					$customerAddresses = array();
@@ -52,9 +55,23 @@ class CustomersController extends AppController {
 					if ($this->CustomerAddress->saveMany($customerAddresses)) {
 						$this->Session->setFlash(__('Kunde mit Adresse wurde erfolgreich erstellt', true), 'flash_message', array('class' => 'alert-success'));
 						//	$this->redirect(array('action' => 'index'));
+						
+						$customer = $this->Customer->read(null, $lastCustomerId);
+						unset($customer['Offer']);
+						
+						$customerAddresses = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $lastCustomerId)));
+						$customer['Customer']['Addresses'] = array();
+						
+						$Addresses = new AddressesController();
+						
+						foreach ($customerAddresses as $address) {
+							array_push($customer['Customer']['Addresses'], $Addresses->splitAddressData($address));
+						}
+						$this->set('addressTypes', $this->Address->getAddressTypes());
+						$this->request->data = $customer;
 					}	
 				}
-				$this->Session->setFlash(__('Kunde ohen Adresse wurde erfolgreich erstellt', true), 'flash_message', array('class' => 'alert-success'));
+				
 			
 			} else {
 				$this->Session->setFlash(__('Kunde konnte nicht erstellt werden!. Bitte versuchen Sie es erneut.', true), 'flash_message', array('class' => 'alert-danger'));
@@ -123,7 +140,8 @@ class CustomersController extends AppController {
 		$customer += $this->getCustomerChartInformation($id);
 		
 		$this->request->data = $customer;
-				
+		
+		$this->set('addressTypes', $this->Address->getAddressTypes());
 		$this->set('title_for_panel','Kundeninformationen');
 		$this->render('/Elements/backend/portlets/customerInfoPortlet');
 	}
@@ -223,6 +241,7 @@ class CustomersController extends AppController {
 		
 		
 		$this->set('customers', $customers);
+		
 		
 		if(isset($this->data['template'])) {
 			$this->render($this->data['template']);

@@ -92,7 +92,9 @@
 				if($cartModulo == 0) {
 					echo $this->element('backend/portlets/offerCalc', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
 				}
-				echo $this->element('backend/portlets/offerAdditionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
+				if(!empty($this->data['Offer']['additional_text'])) { 
+					echo $this->element('backend/portlets/offerAdditionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
+				}
 		
 				echo $this->element('backend/portlets/offerFooter', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
 			?>

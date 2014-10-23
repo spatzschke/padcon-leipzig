@@ -201,7 +201,7 @@ $(document).ready(function() {
 							</div>
 							<div class="col-md-6">
 								<div class="input-group">
-									<button class="btn btn-success form-control search_address">Adresse suchen</button>
+									
 								</div>
 							</div>
 						</div>

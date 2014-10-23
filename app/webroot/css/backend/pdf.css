@@ -160,6 +160,9 @@ article.sheet {
 
 .sheet.business .row-fluid .offerInfo label { width: 110px !important}
 
+.sheet.business .offerMiddle .content {width: 470px !important}
+.sheet.business .offerMiddle .content {margin-left: 158px !important}
+
 .sheet.business .sheetFooter  {width: 720px !important; bottom: -20px !important}
 .sheet.business .sheetFooter .col-md-2 {width: 150px !important; float: left !important;}
 .sheet.business .sheetFooter .col-md-3 {width: 190px !important; float: left !important;}
