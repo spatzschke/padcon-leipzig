@@ -33,6 +33,7 @@ class OffersController extends AppController {
 		$offer = $this->Offer->read(null, $id);
 		
 		$this->set('offer', $offer);
+		$this->set('pdf', null);
 		//$this->request->data = $offer;
 		$this->generateDataByOffer($offer);
 	}

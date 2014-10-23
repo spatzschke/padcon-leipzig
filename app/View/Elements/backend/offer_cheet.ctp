@@ -30,6 +30,7 @@
 				
 			if(($i % $productsPerPage) == 0 ) {	
 				$page++;
+				
 ?>
 
 <script>
@@ -50,7 +51,8 @@
 	<?php if(!empty($this->data['Offer']['additional_text'])) { ?>	
 		$('#offerSettings .input-group-addon').css('backgroundColor','lightgreen');
 	<?php } ?>
-	<?php if((!empty($this->data['Offer']['additional_text'])) && (!empty($this->data['Cart']['CartProduct']))) { ?>	
+	<?php 
+	if(((!empty($this->data['Offer']['additional_text'])) && (!empty($this->data['Cart']['CartProduct']))) || $this->request->params['action'] == 'admin_view') { ?>	
 		$('#printOffer a').removeClass('disabled');
 	<?php } ?>
 	
