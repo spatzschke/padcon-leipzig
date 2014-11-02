@@ -17,7 +17,9 @@
 			<div class="firstItem col-md-6">	
 				<div class="addressHeader">padcon Leipzig • Holunderweg 4 • 04416 Markkleeberg</div>
 				<?php 
-				if(isset($this->data['Offer']['customer_id'])) 
+				
+				
+				if(isset($this->data['Customer']['id'])) 
 				{
 						if($pdf) {
 							echo $this->element('backend/portlets/Customer/customerAdressPortlet', array('pdf' => $pdf));
@@ -32,7 +34,7 @@
 				<?php 
 					if($maxPage < 1) {$maxPage = 1;}
 				
-					 echo $this->element('backend/portlets/Offer/offerInfoPortlet', array('page' => $page, 'maxPage' => $maxPage));
+					 echo $this->element('backend/portlets/'.$this->request->params['controller'].'/info', array('page' => $page, 'maxPage' => $maxPage));
 					
 				?>
 			</div>

@@ -21,7 +21,7 @@ class OffersController extends AppController {
 		$this->Offer->recursive = 0;
 		$offers = $this->Offer->find('all', array('order' => array('Offer.created DESC', 'Offer.id DESC')));
 			
-		$this->set('offers', $this->fillIndexOfferData($this->paginate()));
+		$this->set('offers', $this->fillIndexOfferData($offers));
 	}
 
 	function admin_view($id = null) {
@@ -38,7 +38,9 @@ class OffersController extends AppController {
 		$this->generateDataByOffer($offer);
 	}
 
-	function admin_add($isActive = null) {
+	function admin_add($isActive = null, $layout = "admin") {
+		
+		$this->layout = $layout;
 		
 		$active = null;
 		$this->set('pdf', null);
@@ -349,7 +351,7 @@ Lieferzeit: ca. 2-3 Wochen
 		
 		$this->request->data['Offer'] += $this->generateDataByOffer();
 		
-		$this->render('/Elements/backend/paper_cheet');
+		$this->render('/Elements/backend/offer_cheet');
 	}
 	
 	function splitAddressData($offer = null)

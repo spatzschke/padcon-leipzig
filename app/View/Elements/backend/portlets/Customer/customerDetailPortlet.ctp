@@ -190,7 +190,7 @@ $(document).ready(function() {
 						<?php
 						if(isset($this->data['Customer']['Addresses'])){
 							foreach ($this->data['Customer']['Addresses'] as $address) {
-								echo $this->element('backend/portlets/Address/addressMiniViewPortlet', array('address' => $address['Address'],)); 
+								echo $this->element('backend/portlets/Address/addressMiniViewPortlet', array('address' => $address,)); 
 							}
 						}?>
 						<div class="row">

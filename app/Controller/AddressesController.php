@@ -139,10 +139,10 @@ class AddressesController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Address->create();
 			if ($this->Address->save($this->request->data)) {
-				$this->Session->setFlash(__('The address has been saved.'));
+				//$this->Session->setFlash(__('Adresse gespeichert.'));
 						
-				$this->request->data = $this->splitAddressData($this->request->data);
-				$this->request->data['Address'][$count]['id'] = $this->Address->getLastInsertID();
+				$this->request->data['Address'] = $this->splitAddressData($this->request->data['Address']);
+				$this->request->data['Address']['id'] = $this->Address->getLastInsertID();
 				$this->set('count', $count);
 				$this->set('addressTypes', $this->Address->getAddressTypes());
 				$this->render('/Elements/backend/portlets/Address/addressMiniViewPortlet');
@@ -210,52 +210,47 @@ class AddressesController extends AppController {
 	function splitAddressData($data = null)
 	{
 		$arr_customer = null;
+	
+		$split_arr = array('department','organisation');
 		
-
-		$customerAddress = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $data['Customer']['id'])));
-		
-		if(empty($customerAddress)) {
-			return null;
-		}
-		
-		for($j=0; $j < count($customerAddress); $j++) {
-			//split department and company
-			$split_arr = array('department','organisation');
-			
-			foreach($split_arr as $split_str) {
-				$arr = explode("\n", $customerAddress[$j]['Address'][$split_str]);
-				$count = 0;
-				for ($i = 0; $i <= count($arr)-1; $i++) {
-					if($arr[$i] != '') {
-						$arr_customer['Address'][$j][$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
-						$count++;			
-					}
+		foreach($split_arr as $split_str) {
+			$arr = explode("\n", $data[$split_str]);
+			$count = 0;
+			for ($i = 0; $i <= count($arr)-1; $i++) {
+				if($arr[$i] != '') {
+					$arr_customer[$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
+					$count++;			
 				}
-				
-				$arr_customer['Address'][$j][$split_str.'_count'] = $count;
 			}
 			
-			$str_title = '';
-			$str_first_name = '';
+			$arr_customer[$split_str.'_count'] = $count;
+		}
+		
+		
+		
+		$str_title = '';
+		$str_first_name = '';
+		
+		if(!empty($data['title'])){
+			$str_title = $data['title'].' ';
+		};
+		if(!empty($data['first_name'])){
+			$str_first_name = $data['first_name'].' ';
+		};
+		
+		
+		$arr_customer['name'] = $data['salutation'].' '.$str_title.$str_first_name.$data['last_name'];
+		$arr_customer['street'] = $data['street'];
+		$arr_customer['city_combination'] = $data['postal_code'].' '.$data['city'];
+		$arr_customer['type'] = $data['type'];
 			
-			if(!empty($customerAddress[$j]['Address']['title'])){
-				$str_title = $customerAddress[$j]['Address']['title'].' ';
-			};
-			if(!empty($customerAddress[$j]['Address']['first_name'])){
-				$str_first_name = $customerAddress[$j]['Address']['first_name'].' ';
-			};
-			$arr_customer['Address'][$j]['name'] = $customerAddress[$j]['Address']['salutation'].' '.$str_title.$str_first_name.$customerAddress[$j]['Address']['last_name'];
-			$arr_customer['Address'][$j]['street'] = $customerAddress[$j]['Address']['street'];
-			$arr_customer['Address'][$j]['city_combination'] = $customerAddress[$j]['Address']['postal_code'].' '.$customerAddress[$j]['Address']['city'];
-			$arr_customer['Address'][$j]['type'] = $customerAddress[$j]['Address']['type'];
-		}	
 		return $arr_customer;
 	}
 
 	function getAddressByType($data = null , $type = null)
 	{		
-		if(!empty($data['Customer']['Address'])) {
-			$addresses = $data['Customer']['Address'];
+		if(!empty($data['Customer']['Addresses'])) {
+			$addresses = $data['Customer']['Addresses'];
 			foreach ($addresses as $address) {
 				if($address['type'] == $type) {					
 					$data['Address'] = $address;

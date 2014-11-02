@@ -3,8 +3,6 @@
 	echo $this->Html->script('jquery.dynamicSearch', false);
 		
 	echo $this->Html->css('backend/page');
-	
-	debug($this->data);
 ?>	
 
 <script>

@@ -58,10 +58,7 @@ class AppController extends Controller {
 	  			$this->layout = 'admin';
 	  		}
 	      
-	   }     
-	  if(isset($this->request->params['admin'])) {
-  			$this->layout = 'admin';
-  		}   
+	   }        
 	}
 
 }

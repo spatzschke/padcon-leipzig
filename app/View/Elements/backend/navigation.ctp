@@ -11,8 +11,8 @@
 		</ul>
 		<h3>Auftragsbestätigung</h3>
 		<ul class="toggle">
-			<li class="icn_add_user"><?php echo $this->Html->link('Neue Auftragsbestätigung erstellen', '/admin/confirmations/add'); ?></li>
-			<li class="icn_view_users"><?php echo $this->Html->link('Alle Auftragsbestätigungen anzeigen', '/admin/confirmations/index'); ?></li>
+			<li class="icn_add_user"><?php echo $this->Html->link('Neue AB erstellen', '/admin/confirmations/add'); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Alle ABs anzeigen', '/admin/confirmations/index'); ?></li>
 		</ul>
 		<h3>Angebote</h3>
 		<ul class="toggle">

@@ -53,23 +53,22 @@ $(document).ready(function() {
 			<thead> 
 				<tr> 
    					<th></th>					
-					<th><?php echo('AngebotsNr');?></th>
-					<th><?php echo('KundenNr');?></th>
-					<th><?php echo('Anfragedatum');?></th>
-					<th><?php echo('Artikelanzahl');?></th>
+					<th><?php echo('Nr');?></th>
+					<th><?php echo('Kunde');?></th>
+					<th><?php echo('Anfrage');?></th>
+					<th><?php echo('Produkt');?></th>
 					<!-- <th><?php echo('Rabatt');?></th>
 					<th><?php echo('Lieferkosten');?></th> -->
-					<th><?php echo('Gesamtpreis');?></th>
-					<th><?php echo('RechnungsNr');?></th>
-					<th><?php echo('LieferscheinNr');?></th>
-					<th><?php echo('Erstellungsdatum');?></th>
+					<th><?php echo('Preis');?></th>
+					<th><?php echo('AB-Nr');?></th>
+					<th><?php echo('Erstellt am');?></th>
 					<!-- <th><?php echo('Bearbeitungsdatum');?></th> -->
 					<th class="actions"><?php __('');?></th>
 				</tr> 
 			</thead> 
 			<tbody> 
 							
-				<?php echo $this->element('backend/portlets/Offer/offerPortletTableContent', array('offers' => $offers)); ?>
+				<?php echo $this->element('backend/portlets/Offers/offerPortletTableContent', array('offers' => $offers)); ?>
 
 
 				

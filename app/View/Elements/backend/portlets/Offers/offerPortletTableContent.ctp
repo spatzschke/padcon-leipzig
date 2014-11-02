@@ -140,8 +140,15 @@
 							if(empty($offerItem['Cart']['count']) || $offerItem['Offer']['request_date'] == '0000-00-00' || empty($offerItem['Offer']['customer_id']) || empty($offerItem['Offer']['offer_number']) || empty($offerItem['Offer']['offer_price'])) {
 								echo '-';
 							} else {
-								echo $this->Html->link('Auftragsbestätigung hinzufügen', array('controller' => 'Confirmations', 'action' => 'convertOffer', 'admin' =>'true', $offerItem['Offer']['id']),
-																	array('class' => 'btn btn-default')); 
+								if(empty($offerItem['Offer']['confirmation_id'])) {
+									echo $this->Html->link('AB hinzufügen', array('controller' => 'Confirmations', 'action' => 'convertOffer', 'admin' =>'true', $offerItem['Offer']['id']),
+																	array('class' => 'btn btn-default')); 	
+								} else {
+									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $offerItem['Offer']['confirmation_id']), array('escape' => false));
+									echo $offerItem['Confirmation']['confirmation_number'];
+								}
+									
+								
 							}
 							  
 						 ?>

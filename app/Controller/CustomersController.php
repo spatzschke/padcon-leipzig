@@ -161,7 +161,7 @@ class CustomersController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->request->data)) {
-			
+
 			if ($this->Customer->save($this->request->data)) {
 				$customerAddresses = array();
 				$i = 0;
@@ -183,8 +183,8 @@ class CustomersController extends AppController {
 					
 					$Addresses = new AddressesController();
 					
-					foreach ($customerAddresses as $address) {
-						array_push($customer['Customer']['Addresses'], $Addresses->splitAddressData($address));
+					foreach ($customerAddresses as $address) {						
+						array_push($customer['Customer']['Addresses'], $Addresses->splitAddressData($address['Address']));
 					}
 					
 					$this->request->data = $customer;
@@ -205,9 +205,9 @@ class CustomersController extends AppController {
 			$Addresses = new AddressesController();
 			
 			foreach ($customerAddresses as $address) {
-				array_push($customer['Customer']['Addresses'], $Addresses->splitAddressData($address));
+				array_push($customer['Customer']['Addresses'], $Addresses->splitAddressData($address['Address']));
 			}
-			
+
 			$this->request->data = $customer;
 			
 		}
