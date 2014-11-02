@@ -15,9 +15,9 @@
 	<div class="pages">
 		<?php  
 			if(isset($pdf)) {
-				echo $this->element('backend/confirmation_cheet', array("pdf" => $pdf));
+				echo $this->element('backend/SheetConfirmation', array("pdf" => $pdf));
 			} else {
-				echo $this->element('backend/confirmation_cheet');
+				echo $this->element('backend/SheetConfirmation');
 			}
 			 ?>
 	</div>

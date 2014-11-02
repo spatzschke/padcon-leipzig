@@ -1,6 +1,7 @@
 <?php
 App::import('Controller', 'Carts');
 App::import('Controller', 'Products');
+App::import('Controller', 'Customers');
 
 class OffersController extends AppController {
 
@@ -70,6 +71,8 @@ class OffersController extends AppController {
 	
 			$this->generateDataByOffer($this->Offer->findById($this->Offer->id));
 			
+			$offer['Offer']['id'] = $this->Offer->id;
+			
 			$this->set(compact('offer', 'active'));
 			
 		}
@@ -138,14 +141,17 @@ class OffersController extends AppController {
 	    
 	}
 	
-	function admin_settings() {
+	function admin_settings($id = null) {
 		
 		$this->layout = 'ajax';
 		
-		$offer = $this->getActiveOffer();
+		
+		
 		
 		if ($this->request->is('ajax')) {
 			if(!empty($this->request->data)) {
+				
+				$offer = $this->Offer->findById($this->request->data['Offer']['id']);
 				
 				$offer['Offer']['discount'] = $this->request->data['Offer']['discount'];
 				$offer['Offer']['additional_text'] = $this->request->data['Offer']['additional_text'];
@@ -160,14 +166,29 @@ class OffersController extends AppController {
 				$offer = $this->getActiveOffer();
 				$offer['CartProducts'] = $this->getSettingCartProducts();
 				
+				$cart = $this->Cart->findById($offer['Offer']['cart_id']);
+				$controller_id = 0;
+				$controller_name = '';
+				if(isset($cart['Offer']['id'])) {
+					$controller_name = 'Offers';
+					$controller_id = $cart['Offer']['id'];
+				}
+				if(isset($cart['Confirmation']['id'])) {
+					$controller_name = 'Confirmations'; 
+					$controller_id = $cart['Confirmation']['id'];
+				}
+				$this->set(compact('controller_id', 'controller_name'));
+				
 				$this->request->data = $offer;
 							
 			} else {
+				$offer = $this->Offer->findById($id);
+				
 				if($offer['Offer']['request_date'] == '0000-00-00') {
 					$offer['Offer']['request_date'] = date('Y-m-d');
 				}
 				
-				
+				$offer['Offer']['cart_id'] = $offer['Offer']['cart_id'];
 				$offer['Offer']['additional_text'] = '
 				
 Zahlungsbedingung: 10 Tage 2% Skonto oder 30 Tage netto <br />
@@ -177,6 +198,19 @@ Lieferzeit: ca. 2-3 Wochen
 				
 				
 				$offer['CartProducts'] = $this->getSettingCartProducts();
+				
+				$cart = $this->Cart->findById($offer['Offer']['cart_id']);
+				$controller_id = 0;
+				$controller_name = '';
+				if(isset($cart['Offer']['id'])) {
+					$controller_name = 'Offers';
+					$controller_id = $cart['Offer']['id'];
+				}
+				if(isset($cart['Confirmation']['id'])) {
+					$controller_name = 'Confirmations'; 
+					$controller_id = $cart['Confirmation']['id'];
+				}
+				$this->set(compact('controller_id', 'controller_name'));
 				
 				$this->request->data = $offer;
 				
@@ -204,7 +238,8 @@ Lieferzeit: ca. 2-3 Wochen
 		if ($id) {
 			$this->CartProduct->delete($id);
 		}
-		
+		$Carts = new CartsController();
+		$Carts->updateCartCount($offer['Cart']['id']);
 		
 		$offer['CartProducts'] = $this->getSettingCartProducts();
 		$this->request->data = $offer;
@@ -242,8 +277,7 @@ Lieferzeit: ca. 2-3 Wochen
 		$offer = $this->getActiveOffer();	
 		$cart = $this->Cart->find('first', array(
 			'conditions' => array(
-			 	'Cart.id' => $offer['Cart']['id'],
-				'Cart.active' => 'true'
+			 	'Cart.id' => $offer['Cart']['id']
 				)
 			)
 		);
@@ -297,9 +331,7 @@ Lieferzeit: ca. 2-3 Wochen
 	*/
 	
 	function getActiveOffer() {
-		
-		return $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));
-		
+		return $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));	
 	}
 	
 	function admin_updateOffer($id = null, $offer = null) {
@@ -343,7 +375,7 @@ Lieferzeit: ca. 2-3 Wochen
 		
 	}
 	
-	function reloadOfferSheetProducts() {
+	function reloadSheet() {
 		$this->layout = 'ajax';
 		$this->set('pdf', null);
 		
@@ -351,7 +383,7 @@ Lieferzeit: ca. 2-3 Wochen
 		
 		$this->request->data['Offer'] += $this->generateDataByOffer();
 		
-		$this->render('/Elements/backend/offer_cheet');
+		$this->render('/Elements/backend/SheetOffer');
 	}
 	
 	function splitAddressData($offer = null)
@@ -396,42 +428,6 @@ Lieferzeit: ca. 2-3 Wochen
 			$arr_customer['Address'][$j]['city_combination'] = $customerAddress[$j]['Address']['postal_code'].' '.$customerAddress[$j]['Address']['city'];
 			$arr_customer['Address'][$j]['type'] = $customerAddress[$j]['Address']['type'];
 		}		
-		return $arr_customer;
-	}
-
-	function splitCustomerData($offer = null)
-	{
-		$arr_customer = null;
-		
-		$customerAddress = $offer['Customer'];	
-
-			//split department and company
-			$split_arr = array('department','organisation');
-			
-			foreach($split_arr as $split_str) {
-				$arr = explode("\n", $customerAddress[$split_str]);
-				$count = 0;
-				for ($i = 0; $i <= count($arr)-1; $i++) {
-					if($arr[$i] != '') {
-						$arr_customer[$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
-						$count++;			
-					}
-				}
-				
-				$arr_customer[$split_str.'_count'] = $count;
-			}
-			
-			$str_title = '';
-			$str_first_name = '';
-			
-			if(!empty($customerAddress['title'])){
-				$str_title = $customerAddress['title'].' ';
-			};
-			if(!empty($customerAddress['first_name'])){
-				$str_first_name = $customerAddress['first_name'].' ';
-			};
-			$arr_customer['name'] = $customerAddress['salutation'].' '.$str_title.$str_first_name.$customerAddress['last_name'];
-		
 		return $arr_customer;
 	}
 
@@ -504,7 +500,8 @@ Lieferzeit: ca. 2-3 Wochen
 		$this->generateDataByOffer();
 		
 		$this->set('pdf', null);
-	    $this->set('offer', $this->data['Offer']);
+		
+	    $this->set('offer', $this->request->data);
 		$this->render('admin_add');
 	}
 	
@@ -557,15 +554,16 @@ Lieferzeit: ca. 2-3 Wochen
 		$offers2 = array();
 		$Carts = new CartsController();
 		$Products = new ProductsController();
+		$Customers = new CustomersController();
 		
 		// for($i=0; $i<=10;$i++) {
 		foreach ($offers as $offer) {
 			
 			//$offer = $offers[$i];
 	
-			if($this->splitCustomerData($offer)) {
+			if($Customers->splitCustomerData($offer)) {
 				
-				$offer['Customer'] += $this->splitCustomerData($offer);
+				$offer['Customer'] += $Customers->splitCustomerData($offer);
 				//$offer = $this->getAddressByType($offer,'1');	
 			}			
 			

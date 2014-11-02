@@ -52,8 +52,8 @@
 		
 		foreach ($cart['CartProduct'] as $carti) {				
 			if(($i % $productsPerPage) == 0 ) {	
-				$page++;
-				
+				$page++;				
+
 ?>
 
 <article class="module width_full sheet business noInput<?php if((ceil($cart['count'] / $productsPerPage)) == $page) { echo ' last';}?>">		

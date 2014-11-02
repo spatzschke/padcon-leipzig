@@ -20,7 +20,7 @@
 					 	obj.removeClass('loading');
 					 	
 						$("#offerSettigs_modal .modal-body").html(data);
-						$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/Offers/reloadOfferSheetProducts');
+						$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/<?php echo $controller_name;?>/reloadSheet/<?php echo $controller_id;?>');
 					 } 
 				 }); 
 				
@@ -39,7 +39,7 @@
 				 data: obj.attr('pdid'),
 				 success:function (data, textStatus) {				 	
 					$("#offerSettigs_modal .productTable").html(data);
-					$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/Offers/reloadOfferSheetProducts');
+					$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/Offers/reloadSheet');
 				 } 
 			}); 			
 			return false;
@@ -68,6 +68,7 @@
 						</div>
 					</div>
 					<div class="col-md-5">
+						<?php echo $this->Form->input('id');?>
 						<div class="panel panel-info" >
                     		<div class="panel-body" >
 								<div class="input-group">

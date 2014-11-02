@@ -15,9 +15,9 @@
 	<div class="pages">
 		<?php  
 			if(isset($pdf)) {
-				echo $this->element('backend/offer_cheet', array("pdf" => $pdf));
+				echo $this->element('backend/SheetOffer', array("pdf" => $pdf));
 			} else {
-				echo $this->element('backend/offer_cheet');
+				echo $this->element('backend/SheetOffer');
 			}
 			 ?>
 	</div>

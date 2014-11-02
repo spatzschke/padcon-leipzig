@@ -21,7 +21,8 @@ $(document).ready(function() {
 					 	
 					 	obj.removeClass('loading');
 					 	
-					 	$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/Offers/reloadOfferSheetProducts');
+					 	$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/<?php echo $controller_name;?>/reloadSheet/<?php echo $controller_id;?>');
+					 	
 					 	
 					} 
 				}); 

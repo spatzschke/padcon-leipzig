@@ -6,6 +6,8 @@
 	echo $this->Html->script('jquery.dynamicSearch', false);
 		
 	echo $this->Html->css('backend/page');
+
+
 ?>	
 
 <script>
@@ -46,14 +48,14 @@ $(document).ready(function() {
 
 	$('#addToOffer').find('a').click(function() {
 
-		$('#add_to_offer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/index\/ajax');
+		$('#add_to_offer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/index\/ajax\/<?php echo $offer['Offer']['cart_id'];?>');
 		$('#add_to_offer_modal').modal('show')
 
 	})
 	
 	$('#addToCustomer').find('a').click(function() {
 
-		$('#add_to_customer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Customers\/index\/ajax');
+		$('#add_to_customer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Customers\/index\/ajax\/<?php echo $offer['Offer']['cart_id'];?>');
 		$('#add_to_customer_modal').modal('show')
 
 	})
@@ -66,7 +68,7 @@ $(document).ready(function() {
 	})	
 
 	$('#offerSettings').find('a').click(function() {
-		$('#offerSettigs_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Offers\/settings');
+		$('#offerSettigs_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Offers\/settings\/<?php echo $offer['Offer']['id'];?>');
 		$('#offerSettigs_modal').modal('show')
 	});
 
@@ -149,9 +151,9 @@ $(document).ready(function() {
 	<div class="pages">
 		<?php  
 			if(isset($pdf)) {
-				echo $this->element('backend/offer_cheet', array("pdf" => $pdf));
+				echo $this->element('backend/SheetOffer', array("pdf" => $pdf));
 			} else {
-				echo $this->element('backend/offer_cheet');
+				echo $this->element('backend/SheetOffer');
 			}
 			 ?>
 	</div>

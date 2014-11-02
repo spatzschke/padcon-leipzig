@@ -5,15 +5,13 @@ class CustomersController extends AppController {
 
 	var $name = 'Customers';
 	public $components = array('Auth', 'Session');
-	public $uses = array('Customer', 'Offer', 'User', 'Address', 'CustomerAddress');
+	public $uses = array('Customer', 'Offer', 'User', 'Address', 'CustomerAddress', 'Cart');
 	
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			$this->Auth->fields = array('username' => 'email', 'password' => 'password');
 			$this->Auth->deny('*');
 			$this->Auth->loginRedirect = '/admin';
-			
-
 		}
 
 	}
@@ -112,11 +110,25 @@ class CustomersController extends AppController {
 		$this->Session->setFlash(__('Kunde konnte nicht gelöscht werden!. Bitte versuchen Sie es erneut.', true), 'flash_message', array('class' => 'alert-danger'));
 		$this->redirect(array('action' => 'index'));
 	}
-	function admin_index($layout = null) {
+	function admin_index($layout = null, $cart_id = null) {
 		if($layout) {$this->layout = $layout; } else { $this->layout = 'admin'; }
 	
 		$this->Customer->recursive = 0;
 		$this->set('customers', $this->paginate());
+		$cart = $this->Cart->findById($cart_id);
+		$controller_id = 0;
+		$controller_name = '';
+		if(isset($cart['Offer']['id'])) {
+			$controller_name = 'Offers';
+			$controller_id = $cart['Offer']['id'];
+		}
+		if(isset($cart['Confirmation']['id'])) {
+			$controller_name = 'Confirmations'; 
+			$controller_id = $cart['Confirmation']['id'];
+		}
+		
+		
+		$this->set(compact('cart_id', 'controller_id', 'controller_name'));
 	}
 
 	function admin_view($id = null) {
@@ -446,5 +458,41 @@ class CustomersController extends AppController {
 		    }
 		  return $n_format;
 	  } 
+	
+	function splitCustomerData($data = null)
+	{
+		$arr_customer = null;
+		
+		$customerAddress = $data['Customer'];	
+
+			//split department and company
+			$split_arr = array('department','organisation');
+			
+			foreach($split_arr as $split_str) {
+				$arr = explode("\n", $customerAddress[$split_str]);
+				$count = 0;
+				for ($i = 0; $i <= count($arr)-1; $i++) {
+					if($arr[$i] != '') {
+						$arr_customer[$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
+						$count++;			
+					}
+				}
+				
+				$arr_customer[$split_str.'_count'] = $count;
+			}
+			
+			$str_title = '';
+			$str_first_name = '';
+			
+			if(!empty($customerAddress['title'])){
+				$str_title = $customerAddress['title'].' ';
+			};
+			if(!empty($customerAddress['first_name'])){
+				$str_first_name = $customerAddress['first_name'].' ';
+			};
+			$arr_customer['name'] = $customerAddress['salutation'].' '.$str_title.$str_first_name.$customerAddress['last_name'];
+		
+		return $arr_customer;
+	}
 
 }

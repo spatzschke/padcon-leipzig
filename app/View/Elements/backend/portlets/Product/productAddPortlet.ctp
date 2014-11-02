@@ -1,5 +1,4 @@
-<?php 
-
+<?php
 ?>
 
 <script>
@@ -23,7 +22,7 @@ $(document).ready(function() {
 
 				xhr = $.ajax({
 					 type: 'POST',
-					 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/Carts/addToCart',
+					 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/Carts/addToCart/<?php echo $cart_id;?>',
 					 data: <?php echo $data ?>,
 					 success:function (data, textStatus) {
 					 	
@@ -31,7 +30,7 @@ $(document).ready(function() {
 					 	
 					 	$('#sidebar .miniCart').load('<?php echo FULL_BASE_URL.$this->base;?>/carts/reloadMiniCart');
 					 
-					 	$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/Offers/reloadOfferSheetProducts');
+					 	$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/<?php echo $controller_name;?>/reloadSheet/<?php echo $controller_id;?>');
 					 	
 					 	
 					 	$('#product_add').css('zIndex','-1')

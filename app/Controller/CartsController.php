@@ -65,14 +65,14 @@ class CartsController extends AppController {
 		
 	}
 	
-	function admin_addToCart($id = null) {
+	function admin_addToCart($cart_id = null) {
 		
 		$id = $this->request->data['Product']['id'];
 		
-		$this->addToCart($id);
+		$this->addToCart($id, $cart_id);
 	}
 	
-	function addToCart($id = null) {
+	function addToCart($id = null, $cart_id = null) {
 		$this->layout = 'ajax';
 		$this->autoRender = false;
 		$cart = null;
@@ -127,15 +127,14 @@ class CartsController extends AppController {
 			}
 			
 		}
-		
-			
-		if($this->get_active_cart() == null) {
+	
+		if(!$cart_id) {
 			$activeCart = $this->admin_add();
 		} else {
-			$activeCart = $this->get_active_cart();
+			$options = array('conditions' => array('Cart.id' => $cart_id));
+			$activeCart = $this->Cart->find("first", array("conditions" => array("Cart.id" => $cart_id)));
 		}
-		
-		 
+
 		
 		$cartProduct['CartProduct']['cart_id'] = $activeCart['Cart']['id'];
 		$cartProduct['CartProduct']['product_id'] = $id;
@@ -151,8 +150,6 @@ class CartsController extends AppController {
 				$cartProducts['amount'] = strval(intval($amount) + intval($this->request->data['Product']['amount']));
 				$this->CartProduct->save($cartProducts);
 
-				debug($cartProducts);
-
 				$isIn = true;
 				break;
 			}
@@ -166,8 +163,11 @@ class CartsController extends AppController {
 			
 		}
 		
-		$this->calcSumPriceByActiveCart();
-		$this->updateCartCount($this->get_active_cart());
+		$activeCart = $this->calcSumPriceByActiveCart($activeCart['Cart']['id']);
+		
+		debug($activeCart);
+		
+		$this->updateCartCount($activeCart);
 		
 	}
 	
@@ -192,13 +192,10 @@ class CartsController extends AppController {
 			$cart = $this->get_cart_by_id($this->Cookie->read('pd.cart'));
 			
 		} 
-		
+			
 		$cart['Cart']['count'] = count($cart['CartProduct']);
 		
-		debug($cart);
-		debug(count($cart['CartProduct']));
-		
-		$this->Cart->save($cart);
+		$this->Cart->save($cart['Cart']);
 		
 	}
 	
@@ -210,10 +207,10 @@ class CartsController extends AppController {
 
 	}
 	
-	function reloadMiniCart() {
+	function reloadMiniCart($id = null) {
 		$this->layout = 'ajax';
-		$this->calcSumPriceByActiveCart();
-		$this->updateCartCount($this->get_active_cart());
+		$this->calcSumPriceByActiveCart($id);
+		$this->updateCartCount($this->Cart->findById($id));
 		$this->render('/Elements/backend/miniCart');
 
 	}
@@ -244,10 +241,14 @@ class CartsController extends AppController {
 	
 			$sumBasePrice += (floatVal($product['Product']['price']) * intVal($cartProduct['amount']));
 			$sumRetailPrice += (floatVal($product['Product']['retail_price']) * intVal($cartProduct['amount']));
+			
+			debug($sumRetailPrice);
 		}
 		
 		$cart['Cart']['sum_base_price'] = $sumBasePrice;
 		$cart['Cart']['sum_retail_price'] = $sumRetailPrice;
+		
+		debug($cart);
 				
 		$this->Cart->save($cart);
 				
@@ -255,9 +256,10 @@ class CartsController extends AppController {
 		
 	}
 
-	function calcSumPriceByActiveCart() {
-		$cart = $this->get_active_cart();
-		$this->calcSumPrice($cart);
+	function calcSumPriceByActiveCart($id = null) {
+		$cart = $this->Cart->findById($id);
+		
+		return $this->calcSumPrice($cart);
 	}
 	
 	function calcSumPriceByCartId($id = null) {

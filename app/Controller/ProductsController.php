@@ -2,7 +2,7 @@
 class ProductsController extends AppController {
 
 	var $name = 'Products';
-	public $uses = array('Product', 'Material', 'Size', 'Color', 'Image');
+	public $uses = array('Cart', 'Product', 'Material', 'Size', 'Color', 'Image');
 	var $components = array('RequestHandler', 'Auth', 'Session');
 	var $helpers = array('Html', 'Js');
 	
@@ -21,12 +21,12 @@ class ProductsController extends AppController {
 		$this->set('products', $this->paginate());
 	}
 	
-	function admin_index($layout = null) {
+	function admin_index($layout = null, $cart_id = null) {
 		if($layout) {$this->layout = $layout; } else { $this->layout = 'admin'; }
 	
 		$products = $this->getProducts(null);
 		
-		$this->set(compact('products'));
+		$this->set(compact('products', 'cart_id'));
 	}
 	
 	function listing($id = null) {
@@ -200,7 +200,7 @@ class ProductsController extends AppController {
 		
 	}
 	
-	function admin_loadProductAddPopup($id = null) {
+	function admin_loadProductAddPopup($id = null, $cart_id = null) {
 		$this->autoRender = false;
 		if ($this->request->is('ajax')) {
 			
@@ -216,6 +216,24 @@ class ProductsController extends AppController {
 			$product['Color'] = array_filter($colors);
 			
 			$this->request->data = $product;
+			
+			if($cart_id) {
+				$cart = $this->Cart->findById($cart_id);
+				$controller_id = 0;
+				$controller_name = '';
+				if(isset($cart['Offer']['id'])) {
+					$controller_name = 'Offers';
+					$controller_id = $cart['Offer']['id'];
+				}
+				if(isset($cart['Confirmation']['id'])) {
+					$controller_name = 'Confirmations'; 
+					$controller_id = $cart['Confirmation']['id'];
+				}
+				
+				
+				$this->set(compact('cart_id', 'controller_id', 'controller_name'));
+			}
+			
 			$this->render('/Elements/backend/portlets/Product/productAddPortlet');
 		}
 		

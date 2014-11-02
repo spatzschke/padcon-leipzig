@@ -20,7 +20,7 @@ $(document).ready(function() {
 
 		$('.addToCart').on('click', function(){
 				
-			$('#product_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/loadProductAddPopup\/'+$(this).attr('pdid'));
+			$('#product_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/loadProductAddPopup\/'+$(this).attr('pdid')+'\/<?php echo $cart_id;?>');
 			$('#product_add').modal('show');
 			$('#product_add').css('zIndex','1000')
 			$('#product_add').css('display','block')

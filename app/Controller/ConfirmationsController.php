@@ -2,6 +2,8 @@
 App::uses('AppController', 'Controller');
 App::import('Controller', 'Addresses');
 App::import('Controller', 'Carts ');
+App::import('Controller', 'Customers');
+App::import('Controller', 'Products');
 /**
  * Confirmations Controller
  *
@@ -34,10 +36,10 @@ class ConfirmationsController extends AppController {
 	function admin_index() {
 		$this->layout = 'admin';
 	
-		$this->Offer->recursive = 0;
-		$offers = $this->Offer->find('all', array('order' => array('Offer.created DESC', 'Offer.id DESC')));
+		$this->Confirmation->recursive = 0;
+		$data = $this->Confirmation->find('all', array('order' => array('Confirmation.created DESC', 'Confirmation.id DESC')));
 			
-		$this->set('offers', $this->fillIndexOfferData($this->paginate()));
+		$this->set('data', $this->fillIndexData($this->paginate()));
 	}
 
 /**
@@ -107,6 +109,9 @@ class ConfirmationsController extends AppController {
  * @return void
  */
 	public function admin_edit($id = null) {
+		
+		$this->layout = "admin";
+		
 		if (!$this->Confirmation->exists($id)) {
 			throw new NotFoundException(__('Invalid confirmation'));
 		}
@@ -121,10 +126,8 @@ class ConfirmationsController extends AppController {
 			$options = array('conditions' => array('Confirmation.' . $this->Confirmation->primaryKey => $id));
 			$this->request->data = $this->Confirmation->find('first', $options);
 		}
-		$customers = $this->Confirmation->Customer->find('list');
-		$billings = $this->Confirmation->Billing->find('list');
-		$deliveries = $this->Confirmation->Delivery->find('list');
-		$this->set(compact('customers', 'billings', 'deliveries'));
+		$this->set('pdf', null);
+		
 	}
 
 /**
@@ -205,7 +208,7 @@ class ConfirmationsController extends AppController {
 			
 		} else {
 			$this->Session->setFlash(__('Auftragsbestätigung bereits vorhanden'));
-			return $this->redirect(array('action' => 'view', $offer['Offer']['confirmation_id']));
+			return $this->redirect(array('action' => 'edit', $offer['Offer']['confirmation_id']));
 		}
 		
 	}
@@ -223,9 +226,11 @@ class ConfirmationsController extends AppController {
 			
 	    $this->request->data = $confirmation;
 		
+		
 		if(!empty($confirmation)) {
 			
 	    	$cart = $Carts->get_cart_by_id($confirmation['Cart']['id']);
+			
 			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
 		}
 	
@@ -289,5 +294,87 @@ class ConfirmationsController extends AppController {
 		// Anzahl aller Auftragsbestätigungen im Monat / Aktueller Monat / Aktuelles Jahr		
 		$countMonth = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))));
 		return str_pad($countMonth, 3, "0", STR_PAD_LEFT).'/'.date('m').'/'.date('y');
+	}
+	
+	function fillIndexData($data = null) {
+	
+		$data_temp = array();
+		$Carts = new CartsController();
+		$Products = new ProductsController();
+		$Customers = new CustomersController();
+		
+		// for($i=0; $i<=10;$i++) {
+		foreach ($data as $item) {
+			
+			//$item = $items[$i];
+	
+			if($Customers->splitCustomerData($item)) {
+				
+				$item['Customer'] += $Customers->splitCustomerData($item);
+			}			
+			
+			$cart = $Carts->get_cart_by_id($item['Cart']['id']);
+			$item['Cart']['CartProduct'] = $cart['CartProduct'];
+			if(!empty($cart['CartProduct'])) {
+				$j = 0;
+				foreach ($cart['CartProduct'] as $cartProd) {
+					$product = $Products->getProduct($cartProd['product_id']);
+					unset($product['Cart']);
+					unset($product['Category']);
+					unset($product['Material']);
+					unset($product['Size']);
+					$item['Cart']['CartProduct'][$j]['Information'] = $product;
+					$j++;
+				}
+			}
+
+			$item['Confirmation'] += $this->calcPrice($item);
+						
+			array_push($data_temp, $item);
+			
+		}	
+			
+		return $data_temp;
+	}
+
+	function reloadSheet($id = null) {
+		$this->layout = 'ajax';
+		$this->set('pdf', null);
+		
+		$this->generateData($this->Confirmation->findById($id));
+		
+		$this->render('/Elements/backend/SheetConfirmation');
+	}
+	
+	function generateSheetData($data= null) {
+	
+		if(!$data) {
+			return null;	
+		} 
+			
+	    $this->request->data = $data;
+		
+		if(!empty($data)) {
+			$Carts = new CartsController();
+	    	$cart = $Carts->get_cart_by_id($data['Cart']['id']);
+			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
+		}
+
+		
+		
+		if(!is_null($this->request->data['Customer']['id'])) {
+			$split_str = $this->splitAddressData($data);
+			if(!is_null($split_str)) {	
+				$this->request->data['Customer'] = $this->request->data['Customer'] + array();
+				$this->request->data['Customer'] += $split_str;
+			}
+		}
+				
+		$this->request->data = $this->getAddressByType($this->request->data, 1);
+	
+		$this->request->data['Offer'] += $this->calcOfferPrice($this->request->data);
+		
+		return 	$this->calcOfferPrice($this->request->data);
+
 	}
 }
