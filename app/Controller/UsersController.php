@@ -66,7 +66,7 @@ class UsersController extends AppController {
 		
 		$this->set('title_for_panel','Benutzer betrachten');
 		
-		$this->render('/Elements/backend/portlets/userDetailPortlet');
+		$this->render('/Elements/backend/portlets/User/userDetailPortlet');
     }
 
     public function add() {
@@ -135,14 +135,14 @@ class UsersController extends AppController {
 		$this->layout = 'admin';
 		$this->User->recursive = 0;
 		$this->set('users', $this->paginate());
-		$this->render('/Elements/backend/portlets/userPortlet');
+		$this->render('/Elements/backend/portlets/User/userPortlet');
 	}
 	
 	function admin_add($id = null) {
 		$this->layout = 'admin';
 		$this->add($id);
 		$this->set('title_for_panel','Benutzer anlegen');
-		$this->render('/Elements/backend/portlets/userDetailPortlet');
+		$this->render('/Elements/backend/portlets/User/userDetailPortlet');
 	}
 	
 	function admin_delete($id = null) {

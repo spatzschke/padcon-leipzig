@@ -19,16 +19,9 @@ class Offer extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Billing' => array(
-			'className' => 'Billing',
-			'foreignKey' => 'billing_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
-		'Delivery' => array(
-			'className' => 'Delivery',
-			'foreignKey' => 'delivery_id',
+		'Confirmation' => array(
+			'className' => 'Confirmation',
+			'foreignKey' => 'confirmation_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

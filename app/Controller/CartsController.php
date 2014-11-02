@@ -172,7 +172,9 @@ class CartsController extends AppController {
 	}
 	
 	public function get_cart_by_id($id = null) {
-		return $this->Cart->read(null, $id);
+		$cart = $this->Cart->read(null, $id);
+		//$cart['CartProduct'] = $this->CartProduct->find('all', array('CartProduct.cart_id' => $id));	
+		return $cart;
 	}
 	
 	public function get_cart_by_cookie() {
@@ -220,11 +222,11 @@ class CartsController extends AppController {
 		$this->layout = 'ajax';
 		$offer = $active = $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));
 		$this->set('offer', $offer);
-		$this->render('/Elements/backend/offer_cheet');
+		$this->render('/Elements/backend/paper_cheet');
 	}
 
 	function reloadCartResult() {
-		$this->render('/Elements/backend/portlets/offerCartFooterPortlet');
+		$this->render('/Elements/backend/portlets/Offer/offerCartFooterPortlet');
 	}
 	
 	function calcSumPrice($cart = null) {

@@ -1,2 +1,2 @@
 <?php 
-echo $this->element('backend/portlets/productDetailPortlet'); ?>
+echo $this->element('backend/portlets/Product/productDetailPortlet'); ?>

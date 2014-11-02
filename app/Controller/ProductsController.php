@@ -184,7 +184,7 @@ class ProductsController extends AppController {
 		$this->set(compact('categories', 'materials', 'sizes', 'carts'));
 		$this->set('primary_button', 'Anlegen');
 		$this->set('title_for_panel', 'Produkt anlegen');
-		$this->render('/Elements/backend/portlets/productDetailPortlet');
+		$this->render('/Elements/backend/portlets/Product/productDetailPortlet');
 		
 		// $this->request->data['Categories'] = $categories;
 		// $this->request->data['Materials'] = $materials;
@@ -216,7 +216,7 @@ class ProductsController extends AppController {
 			$product['Color'] = array_filter($colors);
 			
 			$this->request->data = $product;
-			$this->render('/Elements/backend/portlets/productAddPortlet');
+			$this->render('/Elements/backend/portlets/Product/productAddPortlet');
 		}
 		
 	}

@@ -244,7 +244,7 @@ function loadCustomProductNumber() {
                         
                          <!-- Rechts -->
                         <div class="col-md-4">
-				         	<?php echo $this->element('backend/portlets/productImagePortlet'); ?>
+				         	<?php echo $this->element('backend/portlets/Product/productImagePortlet'); ?>
                         </div>
                         </div>
                         <div style="margin-top:10px" class="form-group">

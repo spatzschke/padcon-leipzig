@@ -1,4 +1,4 @@
-<?php if(!empty($this->data['Cart'])) { ?>
+t<?php if(!empty($this->data['Cart'])) { ?>
 					
 				<div class="offerFooter"> 
 	

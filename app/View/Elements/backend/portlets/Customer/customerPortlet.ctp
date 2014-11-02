@@ -31,7 +31,7 @@ $(document).ready(function() {
 			
 			$('#filter .search input').dynamicSearch({
 				url: "<?php echo FULL_BASE_URL.$this->base;?>\/Customers\/search\/",
-				renderTemplate: '/Elements/backend/portlets/customerPortletTableContent',
+				renderTemplate: '/Elements/backend/portlets/Customer/customerPortletTableContent',
 				cancel: '.form-search .cancel',
 				content: '.customerPortlet tbody',
 				loadingClass: 'loadingSpinner',
@@ -84,7 +84,7 @@ $(document).ready(function() {
 				</tr> 
 			</thead> 
 			<tbody> 
-				<?php echo $this->element('backend/portlets/customerPortletTableContent', array('customers' => $customers)); ?>
+				<?php echo $this->element('backend/portlets/Customer/customerPortletTableContent', array('customers' => $customers)); ?>
 			</tbody>
 			 
 			</table>

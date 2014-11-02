@@ -38,9 +38,7 @@ class OffersController extends AppController {
 		$this->generateDataByOffer($offer);
 	}
 
-	function admin_add($isActive = null, $layout = "admin") {
-		
-		$this->layout = $layout;
+	function admin_add($isActive = null) {
 		
 		$active = null;
 		$this->set('pdf', null);
@@ -209,7 +207,7 @@ Lieferzeit: ca. 2-3 Wochen
 		$offer['CartProducts'] = $this->getSettingCartProducts();
 		$this->request->data = $offer;
 		
-		$this->render('/Elements/backend/portlets/settingsProductTable');
+		$this->render('/Elements/backend/portlets/Offer/settingsProductTable');
 	}
 	
 	function search($searchString = null) {
@@ -351,7 +349,7 @@ Lieferzeit: ca. 2-3 Wochen
 		
 		$this->request->data['Offer'] += $this->generateDataByOffer();
 		
-		$this->render('/Elements/backend/offer_cheet');
+		$this->render('/Elements/backend/paper_cheet');
 	}
 	
 	function splitAddressData($offer = null)

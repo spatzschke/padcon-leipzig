@@ -17,8 +17,9 @@ class Address extends AppModel {
 	public function getAddressTypes() {
         return array(
             1 => 'Angebotsadresse',
-            2 => 'Lierferadresse',
-            3 => 'Rechnungsadresse',
+            2 => 'Auftragsbestätigungsadresse',
+            3 => 'Lierferadresse',
+            4 => 'Rechnungsadresse',
         );
 	}
 	

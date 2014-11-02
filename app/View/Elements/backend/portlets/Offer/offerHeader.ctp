@@ -20,9 +20,9 @@
 				if(isset($this->data['Offer']['customer_id'])) 
 				{
 						if($pdf) {
-							echo $this->element('backend/portlets/customerAdressPortlet', array('pdf' => $pdf));
+							echo $this->element('backend/portlets/Customer/customerAdressPortlet', array('pdf' => $pdf));
 						}else {
-							echo $this->element('backend/portlets/customerSearchPortlet');
+							echo $this->element('backend/portlets/Customer/customerSearchPortlet');
 						}
 				} 
 					
@@ -32,7 +32,7 @@
 				<?php 
 					if($maxPage < 1) {$maxPage = 1;}
 				
-					 echo $this->element('backend/portlets/offerInfoPortlet', array('page' => $page, 'maxPage' => $maxPage));
+					 echo $this->element('backend/portlets/Offer/offerInfoPortlet', array('page' => $page, 'maxPage' => $maxPage));
 					
 				?>
 			</div>

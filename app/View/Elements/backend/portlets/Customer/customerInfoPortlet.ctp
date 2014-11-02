@@ -174,7 +174,7 @@ $(document).ready(function() {
 							<h5>Adressen</h5>
 							<?php
 							foreach ($this->data['Customer']['Addresses'] as $address) {
-								echo $this->element('backend/portlets/addressMiniViewPortlet', array('address' => $address['Address'],)); 
+								echo $this->element('backend/portlets/Address/addressMiniViewPortlet', array('address' => $address['Address'],)); 
 							}?>						
 						</div> 
                      </form>

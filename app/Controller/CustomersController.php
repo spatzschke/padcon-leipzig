@@ -143,7 +143,7 @@ class CustomersController extends AppController {
 		
 		$this->set('addressTypes', $this->Address->getAddressTypes());
 		$this->set('title_for_panel','Kundeninformationen');
-		$this->render('/Elements/backend/portlets/customerInfoPortlet');
+		$this->render('/Elements/backend/portlets/Customer/customerInfoPortlet');
 	}
 
 	function admin_add($id = null) {
@@ -151,7 +151,7 @@ class CustomersController extends AppController {
 		$this->add($id = null);
 		$this->set('title_for_panel','Kunde anlegen');
 		$this->set('primary_button','Anlegen');
-		$this->render('/Elements/backend/portlets/customerDetailPortlet');
+		$this->render('/Elements/backend/portlets/Customer/customerDetailPortlet');
 	}
 
 	function admin_edit($id = null) {
@@ -214,7 +214,7 @@ class CustomersController extends AppController {
 		$this->set('addressTypes', $this->Address->getAddressTypes());
 		$this->set('title_for_panel','Kunde bearbeiten');
 		$this->set('primary_button','Speichern');
-		$this->render('/Elements/backend/portlets/customerDetailPortlet');
+		$this->render('/Elements/backend/portlets/Customer/customerDetailPortlet');
 	}
 
 	function admin_delete($id = null) {

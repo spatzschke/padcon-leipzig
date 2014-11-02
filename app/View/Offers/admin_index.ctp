@@ -7,7 +7,7 @@ $(document).ready(function() {
 		
 			$('#filter .search input').dynamicSearch({
 			url: "<?php echo FULL_BASE_URL.$this->base;?>\/Offers\/search\/",
-			renderTemplate: '/Elements/backend/portlets/offerPortletTableContent',
+			renderTemplate: '/Elements/backend/portlets/Offer/offerPortletTableContent',
 			cancel: '.form-search .cancel',
 			loadingClass: 'loadingSpinner',
 			loadingElement: '#filter .search .input-group-addon i',
@@ -69,7 +69,7 @@ $(document).ready(function() {
 			</thead> 
 			<tbody> 
 							
-				<?php echo $this->element('backend/portlets/offerPortletTableContent', array('offers' => $offers)); ?>
+				<?php echo $this->element('backend/portlets/Offer/offerPortletTableContent', array('offers' => $offers)); ?>
 
 
 				

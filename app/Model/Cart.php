@@ -11,6 +11,13 @@ class Cart extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Confirmation' => array(
+			'className' => 'Confirmation',
+			'foreignKey' => 'cart_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 	

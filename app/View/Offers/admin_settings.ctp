@@ -63,7 +63,7 @@
 					<div class="col-md-7 productTable">
 						<div class="panel panel-info" >
                     		<div class="panel-body" >
-						<?php echo $this->element('backend/portlets/settingsProductTable'); ?>
+						<?php echo $this->element('backend/portlets/Product/settingsProductTable'); ?>
 						</div>
 						</div>
 					</div>

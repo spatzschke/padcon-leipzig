@@ -1,48 +1,14 @@
  <?php 
-	//echo $this->Html->script('jquery.autosize-min', false);
-	//echo $this->Html->script('jquery.autoGrowInput', false);
-	//echo $this->Html->script('jquery.caret.1.02.min', false);
 	echo $this->Html->script('jquery.liveValidation', false);
 	echo $this->Html->script('jquery.dynamicSearch', false);
 		
 	echo $this->Html->css('backend/page');
+	
+	debug($this->data);
 ?>	
 
 <script>
 $(document).ready(function() {
-	<?php
-			
-		if(empty($offer)) {
-	    	echo "$('#active_offer_modal').modal('show');";
-		}
-		
-		
-	?>
-	
-	$('.newOffer').click(function() {
-	
-		$('#active_offer_modal').modal('hide');
-		$('#main').load('<?php echo FULL_BASE_URL.$this->base;?>\/Offers\/archiveActiveOffer\/');
-		$('#sidebar .miniCart').load('<?php echo FULL_BASE_URL.$this->base;?>/carts/reloadMiniCart');
-	});
-	
-	$('.showActive').click(function() {
-	
-		$('#active_offer_modal').modal('hide');
-		$('#main').load('<?php echo FULL_BASE_URL.$this->base;?>\/Offers\/viewActiveOffer\/ajax');
-		
-	});
-	
-	
-	
-	// $('.module form').liveValidation({
-		// url: '<?php echo FULL_BASE_URL.$this->base;?>\/Customers\/liveValidate\/',
-		// urlBase: '<?php echo FULL_BASE_URL.$this->base;?>',
-		// autoSave: false,
-		// autoCompleteSuccess: function(id){
-			// saveAndReloadOfferHeader(id);
-		// }
-	// });
 
 	$('#addToOffer').find('a').click(function() {
 
@@ -149,9 +115,9 @@ $(document).ready(function() {
 	<div class="pages">
 		<?php  
 			if(isset($pdf)) {
-				echo $this->element('backend/offer_cheet', array("pdf" => $pdf));
+				echo $this->element('backend/confirmation_cheet', array("pdf" => $pdf));
 			} else {
-				echo $this->element('backend/offer_cheet');
+				echo $this->element('backend/confirmation_cheet');
 			}
 			 ?>
 	</div>

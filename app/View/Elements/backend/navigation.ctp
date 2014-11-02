@@ -9,6 +9,11 @@
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle Rechnungen anzeigen', '/admin/offers/index', array('disabled' => 'disabled')); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Auswertung anzeigen', '/admin/offers/index', array('disabled' => 'disabled')); ?></li>
 		</ul>
+		<h3>Auftragsbestätigung</h3>
+		<ul class="toggle">
+			<li class="icn_add_user"><?php echo $this->Html->link('Neue Auftragsbestätigung erstellen', '/admin/confirmations/add'); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Alle Auftragsbestätigungen anzeigen', '/admin/confirmations/index'); ?></li>
+		</ul>
 		<h3>Angebote</h3>
 		<ul class="toggle">
 			<li class="icn_add_user"><?php echo $this->Html->link('Neues Angebot erstellen', '/admin/offers/add'); ?></li>

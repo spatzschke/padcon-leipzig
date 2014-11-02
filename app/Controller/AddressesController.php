@@ -145,7 +145,7 @@ class AddressesController extends AppController {
 				$this->request->data['Address'][$count]['id'] = $this->Address->getLastInsertID();
 				$this->set('count', $count);
 				$this->set('addressTypes', $this->Address->getAddressTypes());
-				$this->render('/Elements/backend/portlets/addressMiniViewPortlet');
+				$this->render('/Elements/backend/portlets/Address/addressMiniViewPortlet');
 				$this->autoRender = false;
 			} else {
 				$this->Session->setFlash(__('The address could not be saved. Please, try again.'));
@@ -156,7 +156,7 @@ class AddressesController extends AppController {
 			$this->set('count', $count);
 			
 			$this->set('addressTypes', $this->Address->getAddressTypes());
-			$this->render('/Elements/backend/portlets/addressDetailPortlet');	
+			$this->render('/Elements/backend/portlets/Address/addressDetailPortlet');	
 		}
 		
 	}
@@ -207,45 +207,64 @@ class AddressesController extends AppController {
 	}
 
 	
-	function splitAddressData($address = null)
+	function splitAddressData($data = null)
 	{
 		$arr_customer = null;
 		
+
+		$customerAddress = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $data['Customer']['id'])));
+		
+		if(empty($customerAddress)) {
+			return null;
+		}
+		
+		for($j=0; $j < count($customerAddress); $j++) {
 			//split department and company
 			$split_arr = array('department','organisation');
 			
 			foreach($split_arr as $split_str) {
-				$arr = explode("\n", $address['Address'][$split_str]);
+				$arr = explode("\n", $customerAddress[$j]['Address'][$split_str]);
 				$count = 0;
 				for ($i = 0; $i <= count($arr)-1; $i++) {
 					if($arr[$i] != '') {
-						$arr_customer['Address'][$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
+						$arr_customer['Address'][$j][$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
 						$count++;			
 					}
 				}
 				
-				$arr_customer['Address'][$split_str.'_count'] = $count;
+				$arr_customer['Address'][$j][$split_str.'_count'] = $count;
 			}
 			
 			$str_title = '';
 			$str_first_name = '';
-			$str_last_name = '';
-			$str_name = '';
 			
-			if(!empty($address['Address']['title'])){ $str_title = $address['Address']['title'].' ';}
-			if(!empty($address['Address']['first_name'])){ $str_first_name = $address['Address']['first_name'].' ';	}
-			if(!empty($address['Address']['last_name'])){ $str_first_name = $address['Address']['last_name'];	}
-
-			if(!empty($str_first_name) || !empty($str_last_name)){
-				 $str_name = $address['Address']['salutation'].' '.$str_title.$str_first_name.$str_last_name;
-			}
-			
-			$arr_customer['Address']['name'] = $str_name;
-			$arr_customer['Address']['street'] = $address['Address']['street'];
-			$arr_customer['Address']['city_combination'] = str_pad($address['Address']['postal_code'], 5, "0", STR_PAD_LEFT).' '.$address['Address']['city'];
-			$arr_customer['Address']['type'] = $address['Address']['type'];
-			$arr_customer['Address']['id'] = $address['Address']['id'];
-				
+			if(!empty($customerAddress[$j]['Address']['title'])){
+				$str_title = $customerAddress[$j]['Address']['title'].' ';
+			};
+			if(!empty($customerAddress[$j]['Address']['first_name'])){
+				$str_first_name = $customerAddress[$j]['Address']['first_name'].' ';
+			};
+			$arr_customer['Address'][$j]['name'] = $customerAddress[$j]['Address']['salutation'].' '.$str_title.$str_first_name.$customerAddress[$j]['Address']['last_name'];
+			$arr_customer['Address'][$j]['street'] = $customerAddress[$j]['Address']['street'];
+			$arr_customer['Address'][$j]['city_combination'] = $customerAddress[$j]['Address']['postal_code'].' '.$customerAddress[$j]['Address']['city'];
+			$arr_customer['Address'][$j]['type'] = $customerAddress[$j]['Address']['type'];
+		}	
 		return $arr_customer;
+	}
+
+	function getAddressByType($data = null , $type = null)
+	{		
+		if(!empty($data['Customer']['Address'])) {
+			$addresses = $data['Customer']['Address'];
+			foreach ($addresses as $address) {
+				if($address['type'] == $type) {					
+					$data['Address'] = $address;
+					return $data;
+				}
+			}
+		} else {			
+			return $data;
+		}
+		return $data;
 	}
 }
