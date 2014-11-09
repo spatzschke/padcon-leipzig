@@ -51,6 +51,7 @@
 		<ul class="toggle">
 			<li class="icn_add_user"><?php echo $this->Html->link('Kataloge verwalten', '/admin/products/add', array('disabled' => 'disabled')); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Kataloge generieren', '/admin/catalogs/generate'); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Preisliste generieren', '/admin/catalogs/generate_pl'); ?></li>
 		</ul>
 		
 		<h3>Kundendatenbank</h3>

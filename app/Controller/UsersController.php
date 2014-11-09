@@ -145,6 +145,13 @@ class UsersController extends AppController {
 		$this->render('/Elements/backend/portlets/User/userDetailPortlet');
 	}
 	
+	public function admin_edit($id = null) {
+        $this->layout = 'admin';
+		$this->edit($id);
+		$this->set('title_for_panel','Benutzer bearbeiten');
+		$this->render('/Elements/backend/portlets/User/userDetailPortlet');
+    }
+	
 	function admin_delete($id = null) {
         $this->User->id = $id;
         if (!$this->User->exists()) {

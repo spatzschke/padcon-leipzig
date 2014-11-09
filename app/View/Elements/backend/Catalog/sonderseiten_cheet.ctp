@@ -1,7 +1,4 @@
 <?php
-	//debug($this->data);
-	
-	$catalog = $this->data['Catalog'];
 	
 	if($type == 'agb') {
 		

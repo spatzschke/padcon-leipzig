@@ -186,14 +186,18 @@ class CartsController extends AppController {
 	}
 	
 	function updateCartCount($cart = null) {
-		
+				
 		if($cart == NULL) {
 		
 			$cart = $this->get_cart_by_id($this->Cookie->read('pd.cart'));
 			
 		} 
-			
-		$cart['Cart']['count'] = count($cart['CartProduct']);
+		
+		if(isset($cart['CartProduct'])) {
+			$cart['Cart']['count'] = count($cart['CartProduct']);
+		} else {
+			$cart['Cart']['count'] = 0;
+		}			
 		
 		$this->Cart->save($cart['Cart']);
 		

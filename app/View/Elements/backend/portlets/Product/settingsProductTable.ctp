@@ -6,11 +6,11 @@
 			obj = $(this);					
 			xhr = $.ajax({
 				 type: 'POST',
-				 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/offers/removeProductFromOffer/'+obj.attr('pdid'),
+				 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller;?>/removeProductFrom<?php echo $controller;?>/'+obj.attr('pdid')+'/<?php echo $controller_id;?>',
 				 data: obj.attr('pdid'),
 				 success:function (data, textStatus) {				 	
-					$("#offerSettigs_modal .productTable").html(data);
-					$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/Offers/reloadSheet');
+					$("#settigs_modal .productTable").html(data);
+					$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/<?php echo $controller;?>/reloadSheet/<?php echo $controller_id;?>');
 				 } 
 			}); 			
 			return false;

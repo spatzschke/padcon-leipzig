@@ -90,14 +90,47 @@ class CatalogsController extends AppController {
 	function admin_generate($id = null) {
 		$this->layout = 'admin';
 		$this->set('title_for_panel', 'Katalog generieren');
-		$id = $this->request->data['Categories']['id'];
+		
+		if(isset($this->request->data['Categories'])) {
+				$id = $this->request->data['Categories']['id'];
+		}
 		
 		if($id) {
+			if($id != '99') {
+				$this->request->data['Catalogs'] = $this->Catalog->find('all', array('conditions' => array('Catalog.category_id' => $id)));
+				$this->request->data['Catalogs'][0]['Catalog']['count'] = $this->Product->find('count', array('conditions' => array('Product.category_id' => $id)));
+				
+				$this->Product->unbindModel(array('hasAndBelongsToMany' => array('Cart')));			
+				$this->request->data['Catalogs'][0]['Products'] = $this->Product->find('all', array(
+					'conditions' => array('Product.category_id' => $this->request->data['Catalogs'][0]['Category']['id']),
+					'fields' => array('Product.*', 'Size.*', 'Material.*'), 
+					'order' => array('Product.product_number' => 'ASC')));
+			} else {
+				$catalogs = $this->Catalog->find('all');
 					
-			$this->request->data = $this->Catalog->find('first', array('conditions' => array('Catalog.category_id' => $id)));
-			$this->request->data['Catalog']['count'] = $this->Product->find('count', array('conditions' => array('Product.category_id' => $id)));
-			$this->request->data['Catalog']['Products'] = $this->Product->find('all', array('conditions' => array('Product.category_id' => $id),
-			'fields' => array('Product.*', 'Size.*', 'Material.*')));
+				$data = array();
+				
+				foreach ($catalogs as $catalog) {
+					$catalog['Catalog']['count'] = $this->Product->find('count', array('conditions' => array('Product.category_id' => $catalog['Category']['id'])));
+					
+					$this->Product->unbindModel(array('hasAndBelongsToMany' => array('Cart')));
+					$this->Product->unbindModel(array('hasMany' => array('Image')));
+						
+					$catalog['Products'] = $this->Product->find('all', array(
+						'conditions' => array('Product.category_id' => $catalog['Category']['id']),
+						'fields' => array(
+							'Product.*', 
+							'Size.*', 
+							'Material.*'
+						), 
+						'order' => array('Product.product_number' => 'ASC')));			
+					array_push($data, $catalog);				
+				}
+
+				$this->request->data['Catalogs'] = $data;
+
+			}		
+			
 			
 			$Sites = new SiteContentsController;
 			
@@ -131,8 +164,18 @@ class CatalogsController extends AppController {
 			
 		} else {
 			$this->request->data['Categories'] = $this->Catalog->Category->find('list');
-			$this->request->data['Catalog'] = array();
+			$this->request->data['Categories'][99] = 'Gesamt';
+			ksort($this->request->data['Categories']);
+			$this->request->data['Catalogs'] = array();
 		}
+	}
+
+	function admin_generate_pl($id = null, $layout ='admin') {
+
+		$this->admin_generate($id);
+		$this->layout = $layout;
+		$this->set('title_for_panel', 'Preisliste generieren');
+		$this->render('admin_generate_pl'); 
 	}
 
 	function admin_createPdf($id = null){
@@ -141,8 +184,10 @@ class CatalogsController extends AppController {
 		
 		$this->request->data = $this->Catalog->find('first', array('conditions' => array('Catalog.category_id' => $id)));
 		$this->request->data['Catalog']['count'] = $this->Product->find('count', array('conditions' => array('Product.category_id' => $id)));
-		$this->request->data['Catalog']['Products'] = $this->Product->find('all', array('conditions' => array('Product.category_id' => $id),
-		'fields' => array('Product.*', 'Size.*', 'Material.*')));
+		$this->request->data['Catalog']['Products'] = $this->Product->find('all', array(
+			'conditions' => array('Product.category_id' => $id),
+			'fields' => array('Product.*', 'Size.*', 'Material.*'), 
+			'order' => array('Product.product_number' => 'DESC')));
 		
 		$Sites = new SiteContentsController;
 		
@@ -171,6 +216,12 @@ class CatalogsController extends AppController {
 		
 		$this->set('title_for_layout', $title);
       	$this->render('admin_generate'); 
+	    
+	}
+
+	function admin_createPdf_pl($id = null){
+
+		$this->admin_generate_pl($id, 'pdf');
 	    
 	}
 

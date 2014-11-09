@@ -229,22 +229,24 @@ Lieferzeit: ca. 2-3 Wochen
 		
 	}
 
-	function admin_removeProductFromOffer($id = null) {
+	function admin_removeProductFromOffers($id = null) {
 		
 		$this->layout = 'ajax';
 		$this->autoRender = false;
+		
+		$offer = $this->getActiveOffer();
 		
 		//Lösche Eintrag
 		if ($id) {
 			$this->CartProduct->delete($id);
 		}
-		$Carts = new CartsController();
-		$Carts->updateCartCount($offer['Cart']['id']);
+		$Carts = new CartsController();		
+		$Carts->updateCartCount($offer['Cart']);
 		
 		$offer['CartProducts'] = $this->getSettingCartProducts();
 		$this->request->data = $offer;
 		
-		$this->render('/Elements/backend/portlets/Offer/settingsProductTable');
+		$this->render('/Elements/backend/portlets/Product/settingsProductTable');
 	}
 	
 	function search($searchString = null) {

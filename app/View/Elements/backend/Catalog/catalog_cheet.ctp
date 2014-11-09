@@ -1,6 +1,6 @@
 <?php
 	
-	$catalog = $this->data['Catalog'];
+	$catalog = $this->data['Catalogs'][0]['Catalog'];
 	
 	$Anzahl_Sonderseiten = 4;
 	$page = 0 - $Anzahl_Sonderseiten;
@@ -24,7 +24,7 @@
 		echo $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page + $Anzahl_Sonderseiten, 'type' => 'waschanleitung'));
 		$page++;
 		
-		foreach ($catalog['Products'] as $catalogi) {
+		foreach($this->data['Catalogs'][0]['Products'] as $catalogi) {
 				
 			if(($i % $productsPerPage) == 0 ) {	
 				$page++;
@@ -34,7 +34,7 @@
 		
 		<div class="sheetHeader">	
 			<div class="logo"><?php echo $this->Html->image('backend/backend_logo.png', array('alt' => 'Adminbereich'))?></div>
-			<div class="bandage" style="background-color: #<?php echo $this->data['Category']['color'];?>; border-color: #<?php echo $this->data['Category']['color'];?>"></div>
+			<div class="bandage" style="background-color: #<?php echo $this->data['Catalogs'][0]['Category']['color'];?>; border-color: #<?php echo $this->data['Catalogs'][0]['Category']['color'];?>"></div>
 		</div>
 
 		
@@ -44,10 +44,10 @@
 			if($catalogi != 'empty') {
 				for($j = ($page - 1 ) * $productsPerPage; $j < $page * $productsPerPage; $j++) {
 
-				if(!empty($catalog['Products'][$j])) {
+				if(!empty($this->data['Catalogs'][0]['Products'][$j])) {
 				
-						$catalogProduct = $catalog['Products'][$j];
-						$catalogProduct['Category'] = $this->data['Category'];
+						$catalogProduct = $this->data['Catalogs'][0]['Products'][$j];
+						$catalogProduct['Category'] = $this->data['Catalogs'][0]['Category'];
 
 						echo $this->element('backend/Catalog/catalogItem', array('product' => $catalogProduct));;
 					}
@@ -74,6 +74,6 @@
 	echo $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page, 'type' => 'material'));
 	$page++;
 
-	echo $this->element('backend/Catalog/ruckseite_cheet', array('page' => $page, 'color' => $this->data['Category']['color'], 'categories' => $this->data['Categories'], 'category_id' => $this->data['Category']['id']));
+	echo $this->element('backend/Catalog/ruckseite_cheet', array('page' => $page, 'color' => $this->data['Catalogs'][0]['Category']['color'], 'categories' => $this->data['Categories'], 'category_id' => $this->data['Catalogs'][0]['Category']['id']));
 		
 ?>

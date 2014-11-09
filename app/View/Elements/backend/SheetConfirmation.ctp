@@ -30,7 +30,7 @@
 	<?php } ?>
 	
 	<?php if(!empty($this->data['Cart']['CartProduct'])) { ?>	
-		$('#addToOffer .input-group-addon').css('backgroundColor','lightgreen');	
+		$('#addProduct .input-group-addon').css('backgroundColor','lightgreen');	
 	<?php } ?>
 	<?php if(!empty($this->data['Confirmation']['additional_text'])) { ?>	
 		$('#offerSettings .input-group-addon').css('backgroundColor','lightgreen');

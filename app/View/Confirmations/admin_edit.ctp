@@ -3,7 +3,10 @@
 	echo $this->Html->script('jquery.dynamicSearch', false);
 		
 	echo $this->Html->css('backend/page');
-
+	
+		echo $this->Html->script('backend/bootstrap-datepicker', false);
+	echo $this->Html->css('backend/datepicker3');
+	
 ?>	
 
 <script>
@@ -19,14 +22,14 @@ $(document).ready(function() {
 	
 	$('#print').click(function() {
 
-		$('#print_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Offers\/createPdf');
+		$('#print_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Confirmations\/createPdf');
 		$('#print_modal').modal('show')
 
 	})	
 
 	$('#offerSettings').find('a').click(function() {
-		$('#offerSettigs_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Offers\/settings');
-		$('#offerSettigs_modal').modal('show')
+		$('#settigs_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Confirmations\/settings\/<?php echo $this->data['Confirmation']['id'];?>');
+		$('#settigs_modal').modal('show')
 	});
 
 	$("body").on("hidden", "#add_to_customer_modal", function(){ $(this).removeData("modal");});
@@ -74,7 +77,7 @@ $(document).ready(function() {
 	</div>
 </div>
 
-<div class="modal" id="offerSettigs_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+<div class="modal" id="settigs_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
 	<div class="modal-dialog modal-lg offer-dialog">
 	 	<div class="modal-content">
 			<div class="modal-body">

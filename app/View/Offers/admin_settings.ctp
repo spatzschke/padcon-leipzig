@@ -30,20 +30,6 @@
 			return false;
 		});
 		
-		$('.remove').on('click', function() {
-			var xhr = null,
-			obj = $(this);					
-			xhr = $.ajax({
-				 type: 'POST',
-				 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/offers/removeProductFromOffer/'+obj.attr('pdid'),
-				 data: obj.attr('pdid'),
-				 success:function (data, textStatus) {				 	
-					$("#offerSettigs_modal .productTable").html(data);
-					$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/Offers/reloadSheet');
-				 } 
-			}); 			
-			return false;
-		})
 	});
 
 </script>
@@ -63,7 +49,7 @@
 					<div class="col-md-7 productTable">
 						<div class="panel panel-info" >
                     		<div class="panel-body" >
-						<?php echo $this->element('backend/portlets/Product/settingsProductTable'); ?>
+						<?php echo $this->element('backend/portlets/Product/settingsProductTable', array('controller' => $controller_name, 'controller_id' => $controller_id)); ?>
 						</div>
 						</div>
 					</div>
