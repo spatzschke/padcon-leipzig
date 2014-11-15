@@ -37,7 +37,7 @@ class ConfirmationsController extends AppController {
 		$this->layout = 'admin';
 	
 		$this->Confirmation->recursive = 0;
-		$data = $this->Confirmation->find('all', array('order' => array('Confirmation.created DESC', 'Confirmation.id DESC')));
+		$data = $this->Confirmation->find('all', array('order' => array('Confirmation.created DESC', 'Confirmation.id DESC'), 'limit' => 100));
 			
 		$this->set('data', $this->fillIndexData($data));
 	}
@@ -71,34 +71,35 @@ class ConfirmationsController extends AppController {
  *
  * @return void
  */
-	public function admin_add() {
-		if ($this->request->is('post')) {
-			$this->Confirmation->create();
-			if ($this->Confirmation->save($this->request->data)) {
-				$this->Session->setFlash(__('The confirmation has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The confirmation could not be saved. Please, try again.'));
-			}
-		}
-
+	public function admin_add($id = null) {
 		
+		$this->layout = "admin";
 		$this->set('pdf', null);
 		
-		$confirmation = null;	
-		
-		$this->Confirmation->create();
-		
-		$confirmation['Confirmation']['status'] = 'active';
-		$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
-		$confirmation['Confirmation']['customer_id'] = '';
-		$confirmation['Confirmation']['cart_id'] = $cart['Cart']['id'];
-		
-		$this->Confirmation->save($confirmation);
+		if(!$id) {
+			$confirmation = null;	
+			$cart = $this->requestAction('/admin/carts/add/');
+			
+			$this->Confirmation->create();
+			
+			$confirmation['Confirmation']['status'] = 'active';
+			$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
+			$confirmation['Confirmation']['customer_id'] = '';
+			$confirmation['Confirmation']['cart_id'] = $cart['Cart']['id'];
+			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
+			
+			$this->Confirmation->save($confirmation);
+			$id = $this->Confirmation->id;
+			
+			$this->redirect(array('action'=>'add', $id));
+		}
 
-		$this->generateData($this->Confirmation->findById($this->Confirmation->id));
+		$this->generateData($this->Confirmation->findById($id));
 		
-		$this->set(compact('confirmation'));
+		$controller_name = 'Confirmations'; 
+		$controller_id = $id;
+
+		$this->set(compact('controller_id', 'controller_name','confirmation'));
 	}
 
 /**
@@ -128,6 +129,9 @@ class ConfirmationsController extends AppController {
 			
 			$this->generateData($confirmation);
 		}
+		$controller_name = 'Confirmations'; 
+		$controller_id = $id;
+		$this->set(compact('controller_id', 'controller_name'));
 		$this->set('pdf', null);
 		
 	}
@@ -222,11 +226,21 @@ class ConfirmationsController extends AppController {
 		if ($this->request->is('ajax')) {
 			if(!empty($this->request->data)) {
 				
-				$confirmation = $this->Confirmation->findById($this->request->data['Confirmation']['id']);
+				$id = $this->request->data['Confirmation']['id'];
+				
+				$confirmation = $this->Confirmation->findById($id);
 				
 				$confirmation['Confirmation']['discount'] = $this->request->data['Confirmation']['discount'];
 				$confirmation['Confirmation']['additional_text'] = $this->request->data['Confirmation']['additional_text'];
-				$confirmation['Confirmation']['request_date'] = $this->request->data['Confirmation']['request_date']['year']."-".$this->request->data['Confirmation']['request_date']['month']."-".$this->request->data['Confirmation']['request_date']['day'];
+					
+				if(!empty($this->request->data['Confirmation']['order_date'])) {
+					$date = date_create_from_format('d.m.Y', $this->request->data['Confirmation']['order_date']);
+					$confirmation['Confirmation']['order_date'] = date_format($date, 'Y-m-d');
+				}	
+				
+				
+				$confirmation['Confirmation']['order_number'] = $this->request->data['Confirmation']['order_number'];
+				
 				
 				if($this->Confirmation->save($confirmation)){
 					$this->Session->setFlash(__('Speicherung erfolgreich', true));
@@ -255,8 +269,11 @@ class ConfirmationsController extends AppController {
 			} else {
 				$confirmation = $this->Confirmation->findById($id);
 				
-				if($confirmation['Confirmation']['order_date'] == '0000-00-00') {
-					$confirmation['Confirmation']['order_date'] = date('Y-m-d');
+				if($confirmation['Confirmation']['order_date'] == '0000-00-00' || $confirmation['Confirmation']['order_date'] == null) {
+					$confirmation['Confirmation']['order_date'] = date('d.m.Y');
+				} else {
+					$date = date_create_from_format('Y-m-d', $confirmation['Confirmation']['order_date']);
+					$confirmation['Confirmation']['order_date'] = date_format($date, 'd.m.Y');
 				}
 				
 				$confirmation['Confirmation']['cart_id'] = $confirmation['Confirmation']['cart_id'];
@@ -313,6 +330,54 @@ Lieferzeit: ca. 40. KW 2014
 		
 		$this->render('/Elements/backend/portlets/Product/settingsProductTable');
 	}
+	
+	function admin_update($id = null, $confirmation = null) {
+		$this->layout="ajax";
+
+		$confirmation = $this->Confirmation->findById($confirmation);				
+		
+		if($confirmation) {
+			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber($id, $confirmation);
+			$confirmation['Confirmation']['customer_id'] = $id;
+			
+			
+			if($this->Confirmation->save($confirmation)){
+				$confirmation['Confirmation']['stat'] = 'saved';
+			} else {
+				$confirmation['Confirmation']['stat'] = 'not saved';
+			}
+		} else {
+			$confirmation['Confirmation']['stat'] = 'error';
+		}	
+		
+		
+		$this->request->data = $confirmation;
+		$this->autoRender = false;
+		$this->layout = 'admin';
+	}
+	
+	function admin_createPdf ($id= null){
+
+		$this->layout = 'pdf';
+		$pdf = true;
+		
+		$confirmation = $this->Confirmation->findById($id);
+		
+		
+		$this->generateSheetData($confirmation);
+		
+				
+		$title = "Auftragsbestätigung_".str_replace('/', '-', $confirmation['Confirmation']['confirmation_number']);
+		$this->set('title_for_layout', $title);
+		
+		
+		
+		$this->set('pdf', $pdf);
+		$this->set(compact('confirmation','pdf'));
+      	$this->render('admin_add'); 
+	    
+	}
+
 		
 	function getSettingCartProducts($confirmation = null) {
 		$cart = $this->Cart->find('first', array(
@@ -470,6 +535,12 @@ Lieferzeit: ca. 40. KW 2014
 			}
 
 			$item['Confirmation'] += $this->calcPrice($item);
+			
+			//Finde Offernumber
+			if($item['Confirmation']['offer_id'] != 0) {
+				$offer = $this->Offer->findById($item['Confirmation']['offer_id']);
+				$item['Confirmation']['offer_number'] = $offer['Offer']['offer_number'];
+			}
 						
 			array_push($data_temp, $item);
 			
@@ -516,11 +587,72 @@ Lieferzeit: ca. 40. KW 2014
 			}
 		}
 				
-		$this->request->data = $this->getAddressByType($this->request->data, 1);
+		$this->request->data = $this->getAddressByType($this->request->data, 2);
 	
-		$this->request->data['Offer'] += $this->calcOfferPrice($this->request->data);
+		$this->request->data['Confirmation'] += $this->calcPrice($this->request->data);
 		
-		return 	$this->calcOfferPrice($this->request->data);
+		return 	$this->calcPrice($this->request->data);
 
+	}
+	
+	function getAddressByType($data = null , $type = null)
+	{
+		
+		if(!empty($data['Customer']['Address'])) {
+			$addresses = $data['Customer']['Address'];
+			foreach ($addresses as $address) {
+				if($address['type'] == $type) {					
+					$data['Address'] = $address;
+					return $data;
+				}
+			}
+		} else {
+			return $data;
+		}
+	}
+	
+	function splitAddressData($data = null)
+	{
+		$arr_customer = null;
+		
+
+		$customerAddress = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $data['Customer']['id'])));
+		
+		if(empty($customerAddress)) {
+			return null;
+		}
+		
+		for($j=0; $j < count($customerAddress); $j++) {
+			//split department and company
+			$split_arr = array('department','organisation');
+			
+			foreach($split_arr as $split_str) {
+				$arr = explode("\n", $customerAddress[$j]['Address'][$split_str]);
+				$count = 0;
+				for ($i = 0; $i <= count($arr)-1; $i++) {
+					if($arr[$i] != '') {
+						$arr_customer['Address'][$j][$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
+						$count++;			
+					}
+				}
+				
+				$arr_customer['Address'][$j][$split_str.'_count'] = $count;
+			}
+			
+			$str_title = '';
+			$str_first_name = '';
+			
+			if(!empty($customerAddress[$j]['Address']['title'])){
+				$str_title = $customerAddress[$j]['Address']['title'].' ';
+			};
+			if(!empty($customerAddress[$j]['Address']['first_name'])){
+				$str_first_name = $customerAddress[$j]['Address']['first_name'].' ';
+			};
+			$arr_customer['Address'][$j]['name'] = $customerAddress[$j]['Address']['salutation'].' '.$str_title.$str_first_name.$customerAddress[$j]['Address']['last_name'];
+			$arr_customer['Address'][$j]['street'] = $customerAddress[$j]['Address']['street'];
+			$arr_customer['Address'][$j]['city_combination'] = $customerAddress[$j]['Address']['postal_code'].' '.$customerAddress[$j]['Address']['city'];
+			$arr_customer['Address'][$j]['type'] = $customerAddress[$j]['Address']['type'];
+		}		
+		return $arr_customer;
 	}
 }

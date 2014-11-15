@@ -85,7 +85,7 @@ $(document).ready(function() {
 				</tr> 
 			</thead> 
 			<tbody> 
-				<?php echo $this->element('backend/portlets/Customer/customerPortletTableContent', array('customers' => $customers)); ?>
+				<?php echo $this->element('backend/portlets/Customer/customerPortletTableContent', array('customers' => $customers, 'id' => $controller_id)); ?>
 			</tbody>
 			 
 			</table>

@@ -336,11 +336,11 @@ Lieferzeit: ca. 2-3 Wochen
 		return $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));	
 	}
 	
-	function admin_updateOffer($id = null, $offer = null) {
-		$this->updateOffer($id, $offer);
+	function admin_update($id = null, $offer = null) {
+		$this->update($id, $offer);
 	}
 	
-	function updateOffer($id = null, $offer = null) {
+	function update($id = null, $offer = null) {
 		
 		$this->layout="ajax";
 		

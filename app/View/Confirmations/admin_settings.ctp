@@ -24,7 +24,7 @@
 					 	
 					 	obj.removeClass('loading');
 					 	
-						$("#settigs_modal .modal-body").html(data);
+						$("#settings_modal .modal-body").html(data);
 						$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/<?php echo $controller_name;?>/reloadSheet/<?php echo $controller_id;?>');
 					 } 
 				 }); 
@@ -48,9 +48,7 @@
 		<?php echo $this->Session->flash(); ?>
 		
 		<div class="module_content row-fluid">
-			
-			
-			
+					
 					<?php echo $this->Form->create('Confirmation');?>
 					
 					<div class="col-md-7 productTable">
@@ -64,42 +62,49 @@
 						<?php echo $this->Form->input('id');?>
 						<div class="panel panel-info" >
                     		<div class="panel-body" >
-								
-	                                      <div class="input-group date">
-	                                      	
-	                                      <?php echo $this->Form->input('order_date', array(
+								<label class="col-md-12">Auftragsdatum</label>
+                               	<div class="input-group date">     	
+	                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+	                                <?php echo $this->Form->input('order_date', array(
 									    'label' => false,
 									    'div' => false,
 									    'type' => 'text',
-										'dateFormat' => 'D.M.Y',
 										'class' => 'form-control span12'));
 									
-									?>   
-	                                      	
-	                                      	
-									   <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-									    </div>
-									   
-									 <script type="text/javascript">
-										    $('.date').datepicker({
-										    startDate: 'd',
-										    format: "dd.mm.yyyy",
-										    language: "de",
-										    calendarWeeks: true,
-										    autoclose: true,
-										    todayHighlight: true
-										    });
-									 </script>                                
+									?> 	
+								 	
+								</div>
+								   
+								<script type="text/javascript">
+									    $('.date').datepicker({
+									    startDate: 'd',
+									    format: "dd.mm.yyyy",
+									    language: "de",
+									    calendarWeeks: true,
+									    autoclose: true,
+									    todayHighlight: true
+									    });
+								</script>                                
 							
+								<label class="col-md-12">Auftragsnummer</label>
+	                            <div class="input-group">
+	                             	
+	                                <span class="input-group-addon"><b>#</b></span>
+	                                <?php echo $this->Form->input('order_number', array(
+									    'label' => false,
+									    'div' => false,
+									    'class'=> 'form-control span12'));
+									?>                                     
+	                            </div>
 	                             
-	                             <label class="col-md-12">Rabatt</label>
-	                             <div class="input-group">
+	                            <label class="col-md-12">Rabatt</label>
+	                            <div class="input-group">
 	                             	
 	                                <span class="input-group-addon"><b>%</b></span>
 	                                <?php echo $this->Form->input('discount', array(
 									    'label' => false,
 									    'div' => false,
-									    'class'=> 'span3',
+									    'class'=> 'form-control span12',
 										'min' => 0,
 			    						'max' => 100,
 										'default' => 0));

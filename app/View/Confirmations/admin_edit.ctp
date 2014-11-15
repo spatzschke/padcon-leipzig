@@ -27,7 +27,7 @@ $(document).ready(function() {
 
 	})	
 
-	$('#offerSettings').find('a').click(function() {
+	$('#settings').find('a').click(function() {
 		$('#settigs_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Confirmations\/settings\/<?php echo $this->data['Confirmation']['id'];?>');
 		$('#settigs_modal').modal('show')
 	});
@@ -95,13 +95,13 @@ $(document).ready(function() {
             <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
 			<a  href="#" class="btn btn-default">Produkt hinzufügen</a>
 		 </div>
-		<div id="offerSettings" class="input-group">
+		<div id="settings" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-cog"></i></span>
 			<a href="#" class="btn btn-default">Einstellungen</a>
 		 </div>
 		 <div id="printOffer" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-			<?php echo $this->Html->link('Angebot drucken', '/admin/offers/createPdf', array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
+			<?php echo $this->Html->link('Angebot drucken', '/admin/Confirmations/createPdf/'.$controller_id, array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
 		</div>
 	</div>
 	<div class="pages">

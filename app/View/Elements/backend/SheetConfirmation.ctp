@@ -59,8 +59,13 @@
 <article class="module width_full sheet business noInput<?php if((ceil($cart['count'] / $productsPerPage)) == $page) { echo ' last';}?>">		
 		<?php 
 			echo $this->element('backend/portlets/Cheet/header', array('cart' => $cart, 'pdf' => $pdf, 'productsPerPage' => $productsPerPage, 'page' => $page, 'maxPage' => $maxPage)); 			
-			if($this->data['Confirmation']['order_date'] != '0000-00-00') {
-				echo '<p class="offerText"><input type="text" class="text" value="Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format($this->data['Confirmation']['request_date'], '%d.%m.%Y').' unterbreiten wir Ihnen folgendes Angebot:" /> </p>';
+			
+			if($this->data['Confirmation']['order_date']) {
+				echo '<p class="offerText"><input type="text" class="text" value="Ihre Bestellung vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' bestätige ich wie folgt:" /> </p>';
+				
+				if($this->data['Confirmation']['order_number'] != '' || $this->data['Confirmation']['order_number'] != null) {
+					echo '<p class="offerText"><input type="text" class="text" value="Ihre Bestellung Nr.: '.$this->data['Confirmation']['order_number'].' vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' bestätige ich wie folgt:" /> </p>';
+				}
 			}
 			
 			echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
@@ -69,7 +74,7 @@
 				echo $this->element('backend/portlets/'.$this->request->params['controller'].'/calc', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
 				
 				if(!empty($this->data['Confirmation']['additional_text']) && $cartModulo < $productsPerPage-1) { 
-					echo $this->element('backend/portlets/Cheet/additionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
+					echo $this->element('backend/portlets/Confirmations/additionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
 				}
 			}
 			
@@ -94,7 +99,7 @@
 					echo $this->element('backend/portlets/'.$this->request->params['controller'].'/calc', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
 				}
 				if(!empty($this->data['Confirmation']['additional_text'])) { 
-					echo $this->element('backend/portlets/Cheet/additionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
+					echo $this->element('backend/portlets/Confirmations/additionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
 				}
 		
 				echo $this->element('backend/portlets/Cheet/footer', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 

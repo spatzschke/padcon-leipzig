@@ -1,7 +1,7 @@
 <?php	
 	foreach ($data as $item):
 	
-		if($item['Confirmation']['cart_id'] != 0) {	
+		if($item['Confirmation']['cart_id'] != 0) {				
 ?>
 				<tr>
 					<td>
@@ -21,7 +21,7 @@
 							></i>';
 						}
 						elseif($item['Confirmation']['status'] == "active") {
-							echo '<i class="glyphicon glyphicon-asterisk" style="color: green; font-size: 20px; margin-left: -3px; cursor: pointer"
+							echo '<i class="glyphicon glyphicon-open"  style="color: grey; cursor: pointer"
 								 data-toggle="popover"
 								 data-content="Aktiv"
 								 data-trigger="hover"
@@ -82,7 +82,7 @@
 					</td>
 					<td>
 						<?php 
-						if($item['Confirmation']['order_date'] == '0000-00-00') {
+						if($item['Confirmation']['order_date'] == null) {
 							echo '-';
 						} else {
 							echo $this->Time->format($item['Confirmation']['order_date'], '%d.%m.%Y'); 
@@ -132,15 +132,15 @@
 							></i>';
 						} ?>	
 					</td>
-					<td>
-						<?php if(empty($offer['confirmation_id'])) {
+					<td> 
+						<?php if(!isset($item['Confirmation']['offer_number'])) {
 							 echo '-'; 
 							} else {
 								
-								echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'view', $offer['id']), array('escape' => false));
+								echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'view', $item['Confirmation']['offer_id']), array('escape' => false));
 								
 								echo '&nbsp;&nbsp;&nbsp;';
-								echo $offer['offer_number'];	
+								echo $item['Confirmation']['offer_number'];	
 							
 							}
 						?>
@@ -152,7 +152,7 @@
 								echo '-';
 							} else {
 								if(empty($item['Confirmation']['confirmation_id'])) {
-									echo $this->Html->link('Rechnung hinzufügen', array('controller' => 'Confirmations', 'action' => 'convertOffer', 'admin' =>'true', $item['Confirmation']['id']),
+									echo $this->Html->link('Rechnung', array('controller' => 'Confirmations', 'action' => 'convertOffer', 'admin' =>'true', $item['Confirmation']['id']),
 																	array('class' => 'btn btn-default')); 	
 								} else {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['confirmation_id']), array('escape' => false));
@@ -171,7 +171,7 @@
 								echo '-';
 							} else {
 								if(empty($item['Confirmation']['confirmation_id'])) {
-									echo $this->Html->link('Lieferschein hinzufügen', array('controller' => 'Confirmations', 'action' => 'convertOffer', 'admin' =>'true', $item['Confirmation']['id']),
+									echo $this->Html->link('Lieferschein', array('controller' => 'Confirmations', 'action' => 'convertOffer', 'admin' =>'true', $item['Confirmation']['id']),
 																	array('class' => 'btn btn-default')); 	
 								} else {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['confirmation_id']), array('escape' => false));
