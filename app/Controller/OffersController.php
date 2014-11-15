@@ -427,7 +427,7 @@ Lieferzeit: ca. 2-3 Wochen
 			};
 			$arr_customer['Address'][$j]['name'] = $customerAddress[$j]['Address']['salutation'].' '.$str_title.$str_first_name.$customerAddress[$j]['Address']['last_name'];
 			$arr_customer['Address'][$j]['street'] = $customerAddress[$j]['Address']['street'];
-			$arr_customer['Address'][$j]['city_combination'] = $customerAddress[$j]['Address']['postal_code'].' '.$customerAddress[$j]['Address']['city'];
+			$arr_customer['Address'][$j]['city_combination'] = str_pad($customerAddress[$j]['Address']['postal_code'],5,'0', STR_PAD_LEFT).' '.$customerAddress[$j]['Address']['city'];
 			$arr_customer['Address'][$j]['type'] = $customerAddress[$j]['Address']['type'];
 		}		
 		return $arr_customer;
