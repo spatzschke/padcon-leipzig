@@ -165,8 +165,6 @@ class CartsController extends AppController {
 		
 		$activeCart = $this->calcSumPriceByActiveCart($activeCart['Cart']['id']);
 		
-		debug($activeCart);
-		
 		$this->updateCartCount($activeCart);
 		
 	}
@@ -245,14 +243,11 @@ class CartsController extends AppController {
 	
 			$sumBasePrice += (floatVal($product['Product']['price']) * intVal($cartProduct['amount']));
 			$sumRetailPrice += (floatVal($product['Product']['retail_price']) * intVal($cartProduct['amount']));
-			
-			debug($sumRetailPrice);
+
 		}
 		
 		$cart['Cart']['sum_base_price'] = $sumBasePrice;
 		$cart['Cart']['sum_retail_price'] = $sumRetailPrice;
-		
-		debug($cart);
 				
 		$this->Cart->save($cart);
 				

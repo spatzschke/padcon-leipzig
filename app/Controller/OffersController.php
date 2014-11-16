@@ -6,7 +6,7 @@ App::import('Controller', 'Customers');
 class OffersController extends AppController {
 
 	var $name = 'Offers';
-	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color');
+	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation');
 	public $components = array('Auth', 'Session');
 	
 	public function beforeFilter() {
@@ -268,12 +268,10 @@ Lieferzeit: ca. 2-3 Wochen
 		$offers = $this->Offer->find('all',array('conditions' => array("OR" => 
 			array (	'Offer.offer_number LIKE' 			=> '%'.$this->data['str'].'%' ,
 					'Offer.customer_id LIKE' 	=> '%'.$this->data['str'].'%' ,
-					'Billing.billing_number LIKE' 	=> '%'.$this->data['str'].'%', 
-					'Delivery.delivery_number LIKE' 	=> '%'.$this->data['str'].'%')),
+					'Offer.confirmation_id LIKE' 	=> '%'.$this->data['str'].'%')),
 					'order' => array('Offer.created DESC', 'Offer.id DESC')));	
 		
-		
-		$this->set('offers', $this->fillIndexOfferData($offers));
+		$this->set('data', $this->fillIndexOfferData($offers));
 		
 		if(isset($this->data['template'])) {
 			$this->render($this->data['template']);

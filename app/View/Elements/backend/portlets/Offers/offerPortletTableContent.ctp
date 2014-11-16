@@ -141,7 +141,7 @@
 								echo '-';
 							} else {
 								if(empty($offerItem['Offer']['confirmation_id'])) {
-									echo $this->Html->link('AB hinzufügen', array('controller' => 'Confirmations', 'action' => 'convertOffer', 'admin' =>'true', $offerItem['Offer']['id']),
+									echo $this->Html->link('AB hinzufügen', array('controller' => 'Confirmations', 'action' => 'convert', 'admin' =>'true', $offerItem['Offer']['id']),
 																	array('class' => 'btn btn-default')); 	
 								} else {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $offerItem['Offer']['confirmation_id']), array('escape' => false));

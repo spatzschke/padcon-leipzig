@@ -152,10 +152,10 @@
 								echo '-';
 							} else {
 								if(empty($item['Confirmation']['confirmation_id'])) {
-									echo $this->Html->link('Rechnung', array('controller' => 'Confirmations', 'action' => 'convertOffer', 'admin' =>'true', $item['Confirmation']['id']),
+									echo $this->Html->link('Rechnung', array('controller' => 'Billings', 'action' => 'convert', 'admin' =>'true', $item['Confirmation']['id']),
 																	array('class' => 'btn btn-default')); 	
 								} else {
-									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['confirmation_id']), array('escape' => false));
+									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'view', $item['Confirmation']['confirmation_id']), array('escape' => false));
 									echo $item['Billing']['billing_number'];
 								}
 									
@@ -171,10 +171,10 @@
 								echo '-';
 							} else {
 								if(empty($item['Confirmation']['confirmation_id'])) {
-									echo $this->Html->link('Lieferschein', array('controller' => 'Confirmations', 'action' => 'convertOffer', 'admin' =>'true', $item['Confirmation']['id']),
+									echo $this->Html->link('Lieferschein', array('controller' => 'Deliveries', 'action' => 'convert', 'admin' =>'true', $item['Confirmation']['id']),
 																	array('class' => 'btn btn-default')); 	
 								} else {
-									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['confirmation_id']), array('escape' => false));
+									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Confirmation']['confirmation_id']), array('escape' => false));
 									echo $item['Delivery']['delivery_number'];
 								}
 									
