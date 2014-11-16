@@ -98,7 +98,6 @@ class ConfirmationsController extends AppController {
 		
 		$controller_name = 'Confirmations'; 
 		$controller_id = $id;
-
 		$this->set(compact('controller_id', 'controller_name','confirmation'));
 	}
 
@@ -209,6 +208,10 @@ class ConfirmationsController extends AppController {
 			$this->generateData($this->Confirmation->findById($currConfirmationId));
 			
 			$this->set('pdf', null);
+			
+			$controller_name = 'Confirmations'; 
+			$controller_id = $confirmation_id;
+			$this->set(compact('controller_id', 'controller_name'));
 			
 			$this->render('admin_add');
 			

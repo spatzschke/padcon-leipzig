@@ -144,18 +144,21 @@ class OffersController extends AppController {
 	function admin_settings($id = null) {
 		
 		$this->layout = 'ajax';
-		
-		
-		
-		
+				
 		if ($this->request->is('ajax')) {
 			if(!empty($this->request->data)) {
-				
+								
 				$offer = $this->Offer->findById($this->request->data['Offer']['id']);
 				
 				$offer['Offer']['discount'] = $this->request->data['Offer']['discount'];
 				$offer['Offer']['additional_text'] = $this->request->data['Offer']['additional_text'];
-				$offer['Offer']['request_date'] = $this->request->data['Offer']['request_date']['year']."-".$this->request->data['Offer']['request_date']['month']."-".$this->request->data['Offer']['request_date']['day'];
+				
+				$de_Date = $this->request->data['Offer']['request_date'];
+				
+				if(!empty($this->request->data['Offer']['request_date'])) {					
+					$date = date_create_from_format('d.m.Y', $this->request->data['Offer']['request_date']);
+					$offer['Offer']['request_date'] = date_format($date, 'Y-m-d');
+				}	
 				
 				if($this->Offer->save($offer)){
 					$this->Session->setFlash(__('Speicherung erfolgreich', true));
@@ -169,24 +172,26 @@ class OffersController extends AppController {
 				$cart = $this->Cart->findById($offer['Offer']['cart_id']);
 				$controller_id = 0;
 				$controller_name = '';
-				if(isset($cart['Offer']['id'])) {
-					$controller_name = 'Offers';
-					$controller_id = $cart['Offer']['id'];
-				}
-				if(isset($cart['Confirmation']['id'])) {
-					$controller_name = 'Confirmations'; 
-					$controller_id = $cart['Confirmation']['id'];
-				}
+				
+				$controller_name = 'Offers';
+				$controller_id = $cart['Offer']['id'];
 				$this->set(compact('controller_id', 'controller_name'));
+				
+				$offer['Offer']['request_date'] = $de_Date;
 				
 				$this->request->data = $offer;
 							
 			} else {
 				$offer = $this->Offer->findById($id);
 				
-				if($offer['Offer']['request_date'] == '0000-00-00') {
-					$offer['Offer']['request_date'] = date('Y-m-d');
+				if($offer['Offer']['request_date'] == null || $offer['Offer']['request_date'] == '0000-00-00') {
+					$offer['Offer']['request_date'] = date('d.m.Y');
+				} else {
+					$date = date_create_from_format('Y-m-d', $offer['Offer']['request_date']);
+					$offer['Offer']['request_date'] = date_format($date, 'd.m.Y');
 				}
+				
+				debug($offer['Offer']['request_date']);
 				
 				$offer['Offer']['cart_id'] = $offer['Offer']['cart_id'];
 				$offer['Offer']['additional_text'] = '

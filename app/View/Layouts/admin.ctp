@@ -30,6 +30,8 @@
 		echo $this->Html->script('backend/jquery.tablesorter.min');
 		echo $this->Html->script('bootstrap.min');
 		echo $this->Html->script('backend/Chart.min');
+		echo $this->Html->script('backend/bootstrap-datepicker');
+		echo $this->Html->css('backend/datepicker3');
 		
 		echo $this->Html->script('backend/admin_main');
 

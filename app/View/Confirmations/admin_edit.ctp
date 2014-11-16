@@ -2,11 +2,7 @@
 	echo $this->Html->script('jquery.liveValidation', false);
 	echo $this->Html->script('jquery.dynamicSearch', false);
 		
-	echo $this->Html->css('backend/page');
-	
-		echo $this->Html->script('backend/bootstrap-datepicker', false);
-	echo $this->Html->css('backend/datepicker3');
-	
+	echo $this->Html->css('backend/page');	
 ?>	
 
 <script>

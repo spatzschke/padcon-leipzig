@@ -57,30 +57,38 @@
 						<?php echo $this->Form->input('id');?>
 						<div class="panel panel-info" >
                     		<div class="panel-body" >
-								<div class="input-group">
-	                                 <?php echo $this->Form->input('request_date', array(
-									    'label' => array(
-									    	'text' => 'Anfragedatum',
-									    	'class' => 'col-md-12'
-									    ),
+								<label class="col-md-12">Auftragsdatum</label>
+                               	<div class="input-group date">     	
+	                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+	                                <?php echo $this->Form->input('request_date', array(
+									    'label' => false,
 									    'div' => false,
-									    'type' => 'date',
-										'dateFormat' => 'DMY',
-										'class'=> 'col-md-4 date',
-										'separator' => '',
-										'minYear' => date('Y') - 3,
-			    						'maxYear' => date('Y')));
+									    'type' => 'text',
+										'class' => 'form-control span12'));
 									
-									?>                                     
-	                             </div>
-	                             <label class="col-md-12">Rabatt</label>
-	                             <div class="input-group">
+									?> 	
+								 	
+								</div>
+								   
+								<script type="text/javascript">
+									    $('.date').datepicker({
+									    startDate: 'd',
+									    format: "dd.mm.yyyy",
+									    language: "de",
+									    calendarWeeks: true,
+									    autoclose: true,
+									    todayHighlight: true
+									    });
+								</script>
+								
+	                            <label class="col-md-12">Rabatt</label>
+	                            <div class="input-group">
 	                             	
 	                                <span class="input-group-addon"><b>%</b></span>
 	                                <?php echo $this->Form->input('discount', array(
 									    'label' => false,
 									    'div' => false,
-									    'class'=> 'span3',
+									    'class'=> 'form-control span12',
 										'min' => 0,
 			    						'max' => 100,
 										'default' => 0));
@@ -101,7 +109,7 @@
 					</div>
 					
 					<div class="modal-footer">
-				        <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
 				        <button type="button" id="saveSettings" class="btn btn-primary">Speichern</button>
 				      </div>
 					
