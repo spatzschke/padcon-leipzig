@@ -34,7 +34,7 @@
 				<?php 
 					if($maxPage < 1) {$maxPage = 1;}
 				
-					 echo $this->element('backend/portlets/'.$this->request->params['controller'].'/info', array('page' => $page, 'maxPage' => $maxPage));
+					 echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/info', array('page' => $page, 'maxPage' => $maxPage));
 					
 				?>
 			</div>

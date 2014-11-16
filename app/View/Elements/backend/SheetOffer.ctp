@@ -66,10 +66,10 @@
 			echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
 								
 			if((ceil($cart['count'] / $productsPerPage)) == $page && $cartModulo != 0) { 
-				echo $this->element('backend/portlets/'.$this->request->params['controller'].'/calc', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
+				echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/calc', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
 		
 				if(!empty($this->data['Offer']['additional_text']) && $cartModulo < $productsPerPage-1) { 
-					echo $this->element('backend/portlets/'.$this->request->params['controller'].'/additionalText', array('offer' => $this->data, 'cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
+					echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/additionalText', array('offer' => $this->data, 'cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
 				}
 			}
 			
@@ -91,13 +91,13 @@
 				echo $this->element('backend/portlets/Cheet/header', array('cart' => $cart, 'pdf' => $pdf, 'productsPerPage' => $productsPerPage, 'page' => $page+1, 'maxPage' => $maxPage)); 
 				
 				if($cartModulo == 0) {
-					echo $this->element('backend/portlets/'.$this->request->params['controller'].'/calc', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
+					echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/calc', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
 				}
 
 	
 
 				if(!empty($this->data['Offer']['additional_text'])) { 
-					echo $this->element('backend/portlets/'.$this->request->params['controller'].'/additionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
+					echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/additionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
 				}
 		
 				echo $this->element('backend/portlets/Cheet/footer', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
