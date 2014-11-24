@@ -5,25 +5,9 @@
 		<h3>Dokumente erstellen</h3>
 		<ul class="toggle">
 			<li class="icn_add_user"><?php echo $this->Html->link('AB aus Angebot erstellen', '/admin/confirmations/convert'); ?></li>
-			<li class="icn_add_user"><?php echo $this->Html->link('Rechnung aus AB erstellen', '/admin/billings/convert'); ?></li>
-			<li class="icn_view_users"><?php echo $this->Html->link('Lieferschein aus AB erstellen', '/admin/deliveries/convert', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_add_user"><?php echo $this->Html->link('Lieferschein aus AB erstellen', '/admin/deliveries/convert'); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Rechnung aus Lieferschein erstellen', '/admin/billings/convert', array('disabled' => 'disabled')); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Auswertung anzeigen', '/admin/offers/index', array('disabled' => 'disabled')); ?></li>
-		</ul>
-		<h3>Lieferschein</h3>
-		<ul class="toggle">
-			<li class="icn_add_user"><?php echo $this->Html->link('Lieferschein aus AB erstellen', '/admin/deliveries/convert', array('disabled' => 'disabled')); ?></li>
-			<li class="icn_view_users"><?php echo $this->Html->link('Alle Lieferscheine anzeigen', '/admin/deliveries/index', array('disabled' => 'disabled')); ?></li>
-		</ul>
-		<h3>Rechnung</h3>
-		<ul class="toggle">
-			<li class="icn_add_user"><?php echo $this->Html->link('Rechnung aus AB erstellen', '/admin/billings/convert'); ?></li>
-			<li class="icn_view_users"><?php echo $this->Html->link('Alle Rechnungen anzeigen', '/admin/billings/index', array('disabled' => 'disabled')); ?></li>
-		</ul>
-		<h3>Auftragsbestätigung</h3>
-		<ul class="toggle">
-			<li class="icn_add_user"><?php echo $this->Html->link('Neue AB erstellen', '/admin/confirmations/add'); ?></li>
-			<li class="icn_add_user"><?php echo $this->Html->link('AB aus Angebot erstellen', '/admin/confirmations/convert'); ?></li>
-			<li class="icn_view_users"><?php echo $this->Html->link('Alle ABs anzeigen', '/admin/confirmations/index'); ?></li>
 		</ul>
 		<h3>Angebote</h3>
 		<ul class="toggle">
@@ -31,6 +15,24 @@
 			<li class="icn_view_users"><?php echo $this->Html->link('Aktives Angebot anzeigen', '/admin/offers/active'); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle Angebote anzeigen', '/admin/offers/index'); ?></li>
 		</ul>
+		<h3>Auftragsbestätigung</h3>
+		<ul class="toggle">
+			<li class="icn_add_user"><?php echo $this->Html->link('Neue AB erstellen', '/admin/confirmations/add'); ?></li>
+			<li class="icn_add_user"><?php echo $this->Html->link('AB aus Angebot erstellen', '/admin/confirmations/convert'); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Alle ABs anzeigen', '/admin/confirmations/index'); ?></li>
+		</ul>
+		<h3>Lieferschein</h3>
+		<ul class="toggle">
+			<li class="icn_add_user"><?php echo $this->Html->link('Lieferschein aus AB erstellen', '/admin/deliveries/convert', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Alle Lieferscheine anzeigen', '/admin/deliveries/index'); ?></li>
+		</ul>
+		<h3>Rechnung</h3>
+		<ul class="toggle">
+			<li class="icn_add_user"><?php echo $this->Html->link('Rechnung aus AB erstellen', '/admin/billings/convert', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Alle Rechnungen anzeigen', '/admin/billings/index', array('disabled' => 'disabled')); ?></li>
+		</ul>
+		
+		
 		
 		<!--<h3>Warenkorb</h3>
 		<ul class="toggle">

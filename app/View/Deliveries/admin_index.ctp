@@ -53,14 +53,13 @@ $(document).ready(function() {
 			<thead> 
 				<tr> 
    					<th></th>					
-					<th><?php echo('AB-Nr');?></th>
-					<th><?php echo('Kunde');?></th>
-					<th><?php echo('Bestellung vom');?></th>
-					<th><?php echo('Produkt');?></th>
-					<th><?php echo('Preis');?></th>
-					<th><?php echo('AN-Nr');?></th>
-					<!-- <th><?php echo('RE-Nr');?></th> -->
 					<th><?php echo('LI-Nr');?></th>
+					<th><?php echo('Kunde');?></th>
+					<th><?php echo('Lieferschein vom');?></th>
+					<th><?php echo('Produkt');?></th>
+					<th><?php echo('AB-Nr');?></th>
+					<!-- <th><?php echo('RE-Nr');?></th> -->
+					<th><?php echo('RE-Nr');?></th>
 					<th><?php echo('Erstellt');?></th>
 					<!-- <th><?php echo('Bearbeitungsdatum');?></th> -->
 					<th class="actions"><?php __('');?></th>
@@ -68,7 +67,7 @@ $(document).ready(function() {
 			</thead> 
 			<tbody> 
 							
-				<?php echo $this->element('backend/portlets/Confirmations/tableContent', array('data' => $data)); ?>
+				<?php echo $this->element('backend/portlets/Deliveries/tableContent', array('data' => $data)); ?>
 
 
 				

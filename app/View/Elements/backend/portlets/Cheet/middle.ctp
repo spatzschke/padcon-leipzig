@@ -32,9 +32,12 @@
 									}
 									echo '<input class="text col-md-12" type="text" value="Bezug: '.$material['Material']['name'].', Farbe: '.$color['Color']['name'].'" />
 								<div class="size"><input type="text" value="Maße: '.$size['Size']['name'].'" /></div>
-								<div class="price"><input type="text" value="'.number_format($product['Product']['retail_price'], 2, ",", ".").'" /> €</div>
-								<div class="sum_price">'.number_format(floatVal($product['Product']['retail_price'])*intVal($cartProduct['amount']), 2, ",", ".").' €</div>
-							</div>
+								';
+								if($this->request->params['controller'] != "Deliveries") {
+								echo '<div class="price"><input type="text" value="'.number_format($product['Product']['retail_price'], 2, ",", ".").'" /> €</div>
+									<div class="sum_price">'.number_format(floatVal($product['Product']['retail_price'])*intVal($cartProduct['amount']), 2, ",", ".").' €</div>';							
+								}
+								echo '</div>
 						</div>
 
 						';

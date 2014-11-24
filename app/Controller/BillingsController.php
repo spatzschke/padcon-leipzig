@@ -50,23 +50,7 @@ class BillingsController extends AppController {
 		$options = array('conditions' => array('Billing.' . $this->Billing->primaryKey => $id));
 		$billing = $this->Billing->find('first', $options);
 		
-		$offer = $this->Offer->find('first', array('conditions' => array('Offer.billing_id' => $billing['Billing']['id'])));
-		
-		$Offers = new OffersController();
-		$cart = $this->Cart->find('first', array('conditions' => array('Cart.' . $this->Billing->primaryKey => $offer['Offer']['cart_id'])));
-		
-		$offer['Cart']['CartProduct'] = $cart['CartProduct'];
-		
-		if(!is_null($offer['Customer']['id'])) {
-			$split_str = $Offers->splitAddressData($offer);
-			if(!is_null($split_str)) {	
-				$offer['Customer'] = $offer['Customer'] + array();
-				$offer['Customer'] += $split_str;
-			}
-		}
-		
-		$this->request->data = $billing;
-		$this->request->data += $offer;
+		$this->generateData($billing);
 		
 		$this->set('pdf', null);
 	}
@@ -83,7 +67,7 @@ class BillingsController extends AppController {
 			$confirmation = $this->Confirmation->findById($confirmation_id);
 			$billing = array();
 			
-			if(empty($billing['Offer']['confirmation_id'])) {
+			if(empty($confirmation['Confirmation']['billing_id'])) {
 				
 				$this->Billing->create();
 				
@@ -112,7 +96,7 @@ class BillingsController extends AppController {
 				
 			} else {
 				$this->Session->setFlash(__('Rechnung bereits vorhanden'));
-				return $this->redirect(array('action' => 'view', $billing['Billing']['id']));
+				return $this->redirect(array('action' => 'view', $confirmation['Confirmation']['billing_id']));
 			}
 		} else {
 			
@@ -124,7 +108,7 @@ class BillingsController extends AppController {
 				if(!empty($confirmation)) {
 					return $this->redirect(array('action' => 'convert', $confirmation['Confirmation']['id']));
 				} else {
-					$this->Session->setFlash(__('Rechnung mit Rechnugnsnummer nicht vorhanden.'));
+					$this->Session->setFlash(__('Rechnung mit Rechnungsnummer nicht vorhanden.'));
 				}
 			}
 			$this->set('title_for_panel', 'Rechnung aus Auftragsbestätigung erstellen');
@@ -135,60 +119,40 @@ class BillingsController extends AppController {
 		
 		$this->layout = 'ajax';
 
+		debug($this->request->data);
+
 		if ($this->request->is('ajax')) {
 			if(!empty($this->request->data)) {
 				
 				$id = $this->request->data['Billing']['id'];
 				
-				$data = $this->Confirmation->findById($id);
+				$data = $this->Billing->findById($id);
 				
-				$data['Confirmation']['discount'] = $this->request->data['Confirmation']['discount'];
-				$data['Confirmation']['additional_text'] = $this->request->data['Confirmation']['additional_text'];
+				$data['Billing']['additional_text'] = $this->request->data['Billing']['additional_text'];
 					
-				if(!empty($this->request->data['Confirmation']['order_date'])) {
-					$date = date_create_from_format('d.m.Y', $this->request->data['Confirmation']['order_date']);
-					$data['Confirmation']['order_date'] = date_format($date, 'Y-m-d');
-				}	
-				
-				
-				$data['Confirmation']['order_number'] = $this->request->data['Confirmation']['order_number'];
-				
-				
-				if($this->Confirmation->save($data)){
+				if($this->Billing->save($data)){
 					$this->Session->setFlash(__('Speicherung erfolgreich', true));
 				} else {
 					$this->Session->setFlash(__('Es kam zu Fehlern beim Speichern', true));
 				}
 				
-				$data = $this->Confirmation->findById($id);
-				$data['CartProducts'] = $this->getSettingCartProducts($data);
+				$data = $this->Billing->findById($id);
 				
-				$cart = $this->Cart->findById($data['Confirmation']['cart_id']);
-				$controller_id = 0;
-				$controller_name = '';
-				if(isset($cart['Confirmation']['id'])) {
-					$controller_name = 'Offers';
-					$controller_id = $cart['Confirmation']['id'];
-				}
-				if(isset($cart['Confirmation']['id'])) {
-					$controller_name = 'Confirmations'; 
-					$controller_id = $cart['Confirmation']['id'];
-				}
+				$controller_id = $id;
+				$controller_name = 'Billings'; 
 				$this->set(compact('controller_id', 'controller_name'));
 				
 				$this->request->data = $data;
 							
 			} else {
 				$data = $this->Billing->findById($id);
-				
-				
-				$confirmation['Confirmation']['additional_text'] = '
+
+				$data['Billing']['additional_text'] = '
 Zahlungsbedingung: 10 Tage 2% Skonto oder 30 Tage netto<br />
 Lieferung frei Haus<br />
-Lieferzeit: ca. 40. KW 2014
+Lieferzeit: ca. 3-4 Wochen
 				';
-
-
+				
 				$controller_name = 'Billings'; 
 				$controller_id = $data['Billing']['id'];
 
@@ -283,10 +247,10 @@ Lieferzeit: ca. 40. KW 2014
 		$data = $this->Billing->findById($id);
 		
 		$this->generateData($data);
-		$calc = $Confirmations->calcPrice($data);
 		
-		$this->request->data['Confirmation']['confirmation_price'] = $calc['confirmation_price'];
+		$calc = $Confirmations->calcPrice($this->request->data);
 		
+		$this->request->data['Confirmation']['confirmation_price'] = $calc['confirmation_price'];		
 		$this->render('/Elements/backend/SheetBilling');
 	}
 }
