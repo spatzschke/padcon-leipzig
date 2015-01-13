@@ -110,28 +110,6 @@
 					</td>
 					<!--<td><?php echo $item['Confirmation']['discount']; ?>&nbsp;</td>
 					<td><?php echo $item['Confirmation']['delivery_cost']; ?>&nbsp;</td>-->
-					<td style="text-align: right; width: 130px">
-						
-						<?php 
-						$priceInfo = 'Gesamtpreis: '.$this->Number->currency($item['Cart']['sum_retail_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
-									 $item['Confirmation']['discount'].'% Rabatt: '.$this->Number->currency($item['Confirmation']['discount_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
-									 'Versandkostenvorteil: '.$this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
-									 'Zwischensumme: '.$this->Number->currency($item['Confirmation']['part_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
-									 '+'.$item['Confirmation']['vat'].'% Mehrwertsteuer: '.$this->Number->currency($item['Confirmation']['vat_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
-									 'Auftragswert: '.$this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));					
-						if(empty($item['Cart']['count'])) { echo '-'; } else {
-							echo $this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
-							echo '&nbsp;';
-							echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
-								 data-toggle="popover" 
-								 data-content="'.
-								 	$priceInfo.
-								 '"
-								 data-trigger="hover"
-							
-							></i>';
-						} ?>	
-					</td>
 					<td> 
 						<?php if(!isset($item['Confirmation']['offer_number'])) {
 							 echo '-'; 
@@ -145,7 +123,7 @@
 							}
 						?>
 					</td>
-					<!-- <td>
+					<td>
 						<?php 
 							
 							if(empty($item['Cart']['count']) || $item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
@@ -163,26 +141,8 @@
 							}
 							  
 						 ?>
-					</td> -->
-					<td>
-						<?php 
-							
-							if(empty($item['Cart']['count']) || $item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
-								echo '-';
-							} else {
-								if(empty($item['Confirmation']['confirmation_id'])) {
-									echo $this->Html->link('Lieferschein', array('controller' => 'Deliveries', 'action' => 'convert', 'admin' =>'true', $item['Confirmation']['id']),
-																	array('class' => 'btn btn-default')); 	
-								} else {
-									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Confirmation']['confirmation_id']), array('escape' => false));
-									echo $item['Delivery']['delivery_number'];
-								}
-									
-								
-							}
-							  
-						 ?>
 					</td>
+					
 					<td><?php echo $this->Time->format($item['Confirmation']['created'], '%d.%m.%Y'); ?></td>
 					<!-- <td><?php echo $item['Confirmation']['modified']; ?>&nbsp;</td> -->
 					

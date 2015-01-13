@@ -2,7 +2,7 @@
 
 ?>
 
-<div class="sheetHeader module_content row">	
+<div class="sheetHeader module_content row" <?php if(!$logo) {echo 'style="visibility: hidden"';} ?>>	
 			<div class="title col-md-8">	
 				padcon Leipzig-Ralf Patzschke <br />
 				<span class="small">Fachhandel und Service für medizinische Einrichtungen</span>
@@ -19,7 +19,7 @@
 				<?php 
 				
 				
-				if(isset($this->data['Customer']['id'])) 
+				if(isset($this->data['Customer'])) 
 				{
 						if($pdf) {
 							echo $this->element('backend/portlets/Customer/customerAdressPortlet', array('pdf' => $pdf));
@@ -46,7 +46,7 @@
 				<div class="amount"><?php echo 'STÜCK';?></div>	
 				<div class="number"><?php echo 'BEST.NR.';?></div>	
 				<div class="content"><?php echo 'ARTIKEL';?></div>	
-				<div class="price"><?php echo 'PREIS';?></div>	
-				<div class="sum_price"><?php echo 'GESAMTPREIS';?></div>	
+				<div class="price"><?php if($this->request->params['controller'] != "Deliveries") {echo 'PREIS';}?></div>	
+				<div class="sum_price"><?php if($this->request->params['controller'] != "Deliveries") {echo 'GESAMTPREIS';}?></div>	
 			</div>
 			

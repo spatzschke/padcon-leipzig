@@ -4,6 +4,7 @@ App::import('Controller', 'Addresses');
 App::import('Controller', 'Carts ');
 App::import('Controller', 'Customers');
 App::import('Controller', 'Products');
+
 /**
  * Confirmations Controller
  *
@@ -156,68 +157,84 @@ class ConfirmationsController extends AppController {
 		return $this->redirect(array('action' => 'index'));
 	}
 
-	public function admin_convertOffer($confirmation_id = null) {
+	public function admin_convert($confirmation_id = null) {
 		
-		$this->layout = 'admin';
-		
-		$confirmation = $this->Offer->findById($confirmation_id);
-		
-		if(empty($confirmation['Offer']['confirmation_id'])) {
+		$this->layout = 'admin';		
+		if($confirmation_id) {
+				
+			$confirmation = $this->Offer->findById($confirmation_id);
 			
-			$this->Confirmation->create();
-			
-			$confirmation['Confirmation']['status'] = 'active';
-			$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
-			$confirmation['Confirmation']['customer_id'] = $confirmation['Offer']['customer_id'];
-			$confirmation['Confirmation']['offer_id'] = $confirmation['Offer']['id'];
-			$confirmation['Confirmation']['discount'] = $confirmation['Offer']['discount'];
-			$confirmation['Confirmation']['delivery_cost'] = $confirmation['Offer']['delivery_cost'];
-			$confirmation['Confirmation']['vat'] = $confirmation['Offer']['vat'];
-			$confirmation['Confirmation']['confirmation_price'] = $confirmation['Offer']['offer_price'];
-			
-			//Gernerierung der Auftragsbestätigungsnummer
-			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
-			
-			//Warenkorb des Angebots kopieren
-			$confirmationCart = $this->Cart->findById($confirmation['Cart']['id']);
-			$confirmationCart['Cart']['id'] = NULL;
-			$this->Cart->save($confirmationCart);
-					
-			$lastCartId = $this->Cart->getLastInsertId();
-			$confirmation['Confirmation']['cart_id'] = $lastCartId;
-			
-			$cartProducts = $this->CartProduct->find('all',array('conditions' => array('CartProduct.cart_id' => $confirmation['Cart']['id'])));
-			foreach ($cartProducts as $cartProduct) {
-				$this->CartProduct->create();
-				$cartItem['CartProduct'] = $cartProduct['CartProduct'];
-				$cartItem['CartProduct']['cart_id'] = $lastCartId;
-				unset($cartItem['CartProduct']['created']);
-				unset($cartItem['CartProduct']['id']);
-				unset($cartItem['CartProduct']['modified']);			
-				$this->CartProduct->save($cartItem);
+			if(empty($confirmation['Offer']['confirmation_id'])) {
+				
+				$this->Confirmation->create();
+				
+				$confirmation['Confirmation']['status'] = 'active';
+				$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
+				$confirmation['Confirmation']['customer_id'] = $confirmation['Offer']['customer_id'];
+				$confirmation['Confirmation']['offer_id'] = $confirmation['Offer']['id'];
+				$confirmation['Confirmation']['discount'] = $confirmation['Offer']['discount'];
+				$confirmation['Confirmation']['delivery_cost'] = $confirmation['Offer']['delivery_cost'];
+				$confirmation['Confirmation']['vat'] = $confirmation['Offer']['vat'];
+				$confirmation['Confirmation']['confirmation_price'] = $confirmation['Offer']['offer_price'];
+				
+				//Gernerierung der Auftragsbestätigungsnummer
+				$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
+				
+				//Warenkorb des Angebots kopieren
+				$confirmationCart = $this->Cart->findById($confirmation['Cart']['id']);
+				$confirmationCart['Cart']['id'] = NULL;
+				$this->Cart->save($confirmationCart);
+						
+				$lastCartId = $this->Cart->getLastInsertId();
+				$confirmation['Confirmation']['cart_id'] = $lastCartId;
+				
+				$cartProducts = $this->CartProduct->find('all',array('conditions' => array('CartProduct.cart_id' => $confirmation['Cart']['id'])));
+				foreach ($cartProducts as $cartProduct) {
+					$this->CartProduct->create();
+					$cartItem['CartProduct'] = $cartProduct['CartProduct'];
+					$cartItem['CartProduct']['cart_id'] = $lastCartId;
+					unset($cartItem['CartProduct']['created']);
+					unset($cartItem['CartProduct']['id']);
+					unset($cartItem['CartProduct']['modified']);			
+					$this->CartProduct->save($cartItem);
+				}
+				
+				$this->Confirmation->save($confirmation);
+				
+				$currConfirmationId = $this->Confirmation->getLastInsertId();
+				
+				//Neue Auftragsbestätigungs-ID in Angebot speichern 
+				$confirmation['Offer']['confirmation_id'] = $currConfirmationId;
+				$this->Offer->save($confirmation);
+				
+				$this->generateData($this->Confirmation->findById($currConfirmationId));
+				
+				$this->set('pdf', null);
+				
+				$controller_name = 'Confirmations'; 
+				$controller_id = $confirmation_id;
+				$this->set(compact('controller_id', 'controller_name'));
+				
+				$this->render('admin_add');
+				
+			} else {
+				$this->Session->setFlash(__('Auftragsbestätigung bereits vorhanden'));
+				return $this->redirect(array('action' => 'edit', $confirmation['Offer']['confirmation_id']));
 			}
-			
-			$this->Confirmation->save($confirmation);
-			
-			$currConfirmationId = $this->Confirmation->getLastInsertId();
-			
-			//Neue Auftragsbestätigungs-ID in Angebot speichern 
-			$confirmation['Offer']['confirmation_id'] = $currConfirmationId;
-			$this->Offer->save($confirmation);
-			
-			$this->generateData($this->Confirmation->findById($currConfirmationId));
-			
-			$this->set('pdf', null);
-			
-			$controller_name = 'Confirmations'; 
-			$controller_id = $confirmation_id;
-			$this->set(compact('controller_id', 'controller_name'));
-			
-			$this->render('admin_add');
-			
 		} else {
-			$this->Session->setFlash(__('Auftragsbestätigung bereits vorhanden'));
-			return $this->redirect(array('action' => 'edit', $confirmation['Offer']['confirmation_id']));
+			
+			if(!empty($this->request->data)) {
+				
+				$number = $this->data['Offer']['offer_number'];
+								
+				$offer = $this->Offer->findByOfferNumber($number);
+				if(!empty($offer)) {
+					return $this->redirect(array('action' => 'convert', $offer['Offer']['id']));
+				} else {
+					$this->Session->setFlash(__('Angebot mit Angebotsnummer nicht vorhanden.'));
+				}
+			}
+			$this->set('title_for_panel', 'Auftragsbestätigung aus Angebot erstellen');
 		}
 		
 	}
@@ -379,6 +396,30 @@ Lieferzeit: ca. 40. KW 2014
 		$this->set(compact('confirmation','pdf'));
       	$this->render('admin_add'); 
 	    
+	}
+
+	function search($searchString = null) {
+	
+		if($this->Auth) {
+			echo $this->admin_search($searchString);
+		} 		
+	}
+	
+	function admin_search($searchString = null) {
+		
+		$this->layout = 'ajax';
+		
+		$data = $this->Confirmation->find('all',array('conditions' => array("OR" => 
+			array (	'Confirmation.confirmation_number LIKE' => '%'.$this->data['str'].'%' ,
+					'Confirmation.customer_id LIKE' 	=> '%'.$this->data['str'].'%' ,
+					'Confirmation.id LIKE' 	=> '%'.$this->data['str'].'%')),
+					'order' => array('Confirmation.created DESC', 'Confirmation.id DESC')));	
+		
+		$this->set('data', $this->fillIndexData($data));
+		
+		if(isset($this->data['template'])) {
+			$this->render($this->data['template']);
+		}
 	}
 
 		
@@ -658,4 +699,6 @@ Lieferzeit: ca. 40. KW 2014
 		}		
 		return $arr_customer;
 	}
+
+	
 }

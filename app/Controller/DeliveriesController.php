@@ -1,4 +1,8 @@
 <?php
+App::import('Controller', 'Offers');
+App::import('Controller', 'Carts');
+App::import('Controller', 'Confirmations');
+
 App::uses('AppController', 'Controller');
 /**
  * Deliveries Controller
@@ -8,6 +12,8 @@ App::uses('AppController', 'Controller');
  */
 class DeliveriesController extends AppController {
 
+	public $uses = array('Delivery', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation');
+	
 /**
  * Components
  *
@@ -20,9 +26,13 @@ class DeliveriesController extends AppController {
  *
  * @return void
  */
-	public function admin_index() {
-		$this->Delivery->recursive = 0;
-		$this->set('deliveries', $this->Paginator->paginate());
+	function admin_index() {
+		$this->layout = 'admin';
+	
+		$this->Confirmation->recursive = 0;
+		$data = $this->Confirmation->find('all', array('order' => array('Confirmation.created DESC', 'Confirmation.id DESC'), 'limit' => 100));
+			
+		$this->set('data', $this->fillIndexData($data));
 	}
 
 /**
@@ -40,65 +50,244 @@ class DeliveriesController extends AppController {
 		$this->set('delivery', $this->Delivery->find('first', $options));
 	}
 
-/**
- * admin_add method
- *
- * @return void
- */
-	public function admin_add() {
-		if ($this->request->is('post')) {
-			$this->Delivery->create();
-			if ($this->Delivery->save($this->request->data)) {
-				$this->Session->setFlash(__('The delivery has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+	public function admin_convert($confirmation_id = null) {
+		$this->layout = 'admin';		
+		if($confirmation_id) {
+				
+			$confirmation = $this->Confirmation->findById($confirmation_id);
+			$delivery = array();
+			
+			//if(empty($confirmation['Confirmation']['billing_id'])) {
+				
+				$this->Delivery->create();
+				
+				$delivery['Delivery']['status'] = 'open';
+				$delivery['Delivery']['confirmation_id'] = $confirmation['Confirmation']['id'];
+				
+				//Gernerierung der Auftragsbestätigungsnummer
+				$delivery['Delivery']['delivery_number'] = $this->generateDeliveryNumber();
+				$this->Delivery->save($delivery);
+				
+				$currBillingId = $this->Delivery->getLastInsertId();
+				
+				//Neue Auftragsbestätigungs-ID in Angebot speichern 
+				$confirmation['Confirmation']['delivery_id'] = $currBillingId;
+				$this->Confirmation->save($confirmation);
+				
+				$this->generateData($this->Delivery->findById($currBillingId));
+				
+				$this->set('pdf', null);
+				
+				$controller_name = 'Deliveries'; 
+				$controller_id = $currBillingId;
+				$this->set(compact('controller_id', 'controller_name'));
+				
+				$this->render('admin_view');
+				
+			// } else {
+				// $this->Session->setFlash(__('Rechnung bereits vorhanden'));
+				// return $this->redirect(array('action' => 'view', $confirmation['Confirmation']['billing_id']));
+			// }
+		} else {
+			
+			if(!empty($this->request->data)) {
+				
+				$number = $this->data['Confirmation']['confirmation_number'];
+								
+				$confirmation = $this->Confirmation->findByConfirmationNumber($number);
+				if(!empty($confirmation)) {
+					return $this->redirect(array('action' => 'convert', $confirmation['Confirmation']['id']));
+				} else {
+					$this->Session->setFlash(__('Rechnung mit Rechnungsnummer nicht vorhanden.'));
+				}
+			}
+			$this->set('title_for_panel', 'Rechnung aus Auftragsbestätigung erstellen');
+		}
+	}
+
+	function admin_settings($id = null) {
+		
+		$this->layout = 'ajax';
+
+
+		if ($this->request->is('ajax')) {
+			if(!empty($this->request->data)) {
+				
+				$id = $this->request->data['Delivery']['id'];
+				
+				$data = $this->Billing->findById($id);
+				
+				$data['Delivery']['additional_text'] = $this->request->data['Delivery']['additional_text'];
+					
+				if($this->Billing->save($data)){
+					$this->Session->setFlash(__('Speicherung erfolgreich', true));
+				} else {
+					$this->Session->setFlash(__('Es kam zu Fehlern beim Speichern', true));
+				}
+				
+				$data = $this->Billing->findById($id);
+				
+				$controller_id = $id;
+				$controller_name = 'Billings'; 
+				$this->set(compact('controller_id', 'controller_name'));
+				
+				$this->request->data = $data;
+							
 			} else {
-				$this->Session->setFlash(__('The delivery could not be saved. Please, try again.'));
+				$data = $this->Billing->findById($id);
+
+				$data['Delivery']['additional_text'] = '
+Zahlungsbedingung: 10 Tage 2% Skonto oder 30 Tage netto<br />
+Lieferung frei Haus<br />
+Lieferzeit: ca. 3-4 Wochen
+				';
+				
+				$controller_name = 'Billings'; 
+				$controller_id = $data['Delivery']['id'];
+
+				$this->set(compact('controller_id', 'controller_name'));
+				
+				$this->request->data = $data;
+			
+			    $this->render('admin_settings', 'ajax'); 
 			}
 		}
 	}
 
-/**
- * admin_edit method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function admin_edit($id = null) {
-		if (!$this->Delivery->exists($id)) {
-			throw new NotFoundException(__('Invalid delivery'));
-		}
-		if ($this->request->is(array('post', 'put'))) {
-			if ($this->Delivery->save($this->request->data)) {
-				$this->Session->setFlash(__('The delivery has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The delivery could not be saved. Please, try again.'));
-			}
-		} else {
-			$options = array('conditions' => array('Delivery.' . $this->Delivery->primaryKey => $id));
-			$this->request->data = $this->Delivery->find('first', $options);
-		}
+	function admin_createPdf ($id= null){
+
+		$this->layout = 'pdf';
+		$pdf = true;
+		
+		$data = $this->Billing->findById($id);
+		
+		
+		$this->generateData($data);
+		
+				
+		$title = "Rechnung_".str_replace('/', '-', $data['Delivery']['billing_number']);
+		$this->set('title_for_layout', $title);
+		
+		$this->set('pdf', $pdf);
+		$this->set(compact('data','pdf'));
+      	$this->render('admin_view'); 
+	    
 	}
 
-/**
- * admin_delete method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function admin_delete($id = null) {
-		$this->Delivery->id = $id;
-		if (!$this->Delivery->exists()) {
-			throw new NotFoundException(__('Invalid delivery'));
+	function generateDeliveryNumber() {
+	
+		// Anzahl aller Auftragsbestätigungen im Monat / Aktueller Monat / Aktuelles Jahr		
+		$countMonth = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))));
+		return str_pad($countMonth, 3, "0", STR_PAD_LEFT).'/'.date('m').'/'.date('y');
+	}
+	
+	function generateData($data = null) {
+	
+		$Addresses = new AddressesController();	
+		$Carts = new CartsController();
+		$Confirmations = new ConfirmationsController();
+	
+		if(!$data) {
+			$confirmation_id = $data['Delivery']['confirmation_id'];
+			$data = $this->Confirmation->findById($confirmation_id);		
+		} 
+			
+	    $this->request->data = $data;
+		
+		if(!empty($data)) {
+			
+	    	$cart = $Carts->get_cart_by_id($data['Confirmation']['cart_id']);
+	
+			$cart = $Carts->calcSumPrice($cart);
+			
+			$this->request->data['Cart'] = $cart['Cart'];
+		
+			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
+			$this->request->data['Cart']['count'] = count($cart['CartProduct']);
 		}
-		$this->request->onlyAllow('post', 'delete');
-		if ($this->Delivery->delete()) {
-			$this->Session->setFlash(__('The delivery has been deleted.'));
-		} else {
-			$this->Session->setFlash(__('The delivery could not be deleted. Please, try again.'));
+		
+	
+		if(!is_null($this->request->data['Confirmation']['customer_id'])) {
+			
+			$customerAddresses = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $this->request->data['Confirmation']['customer_id'])));
+			$this->request->data['Customer']['Addresses'] = array();
+						
+			foreach ($customerAddresses as $address) {						
+				array_push($this->request->data['Customer']['Addresses'], $Addresses->splitAddressData($address['Address']));
+			}
+			
 		}
-		return $this->redirect(array('action' => 'index'));
+		
+		$this->request->data = $Addresses->getAddressByType($this->request->data, 3);
+		
+		$confirmation = $Confirmations->calcPrice($this->request->data);		
+		$this->request->data['Confirmation'] += $confirmation;		
+
+		return $Confirmations->calcPrice($this->request->data);
+
+	}	
+
+	function reloadSheet($id = null) {
+		$this->layout = 'ajax';
+		$this->set('pdf', null);
+		
+		$Confirmations = new ConfirmationsController();
+		
+		$data = $this->Billing->findById($id);
+		
+		$this->generateData($data);
+		
+		$calc = $Confirmations->calcPrice($this->request->data);
+		
+		$this->request->data['Confirmation']['confirmation_price'] = $calc['confirmation_price'];		
+		$this->render('/Elements/backend/SheetBilling');
+	}
+
+	function fillIndexData($data = null) {
+	
+		$data_temp = array();
+		$Carts = new CartsController();
+		$Products = new ProductsController();
+		$Customers = new CustomersController();
+		$Confirmations = new ConfirmationsController();
+		
+		// for($i=0; $i<=10;$i++) {
+		foreach ($data as $item) {
+			
+			//$item = $items[$i];
+	
+			if($Customers->splitCustomerData($item)) {
+				
+				$item['Customer'] += $Customers->splitCustomerData($item);
+			}			
+			
+			$cart = $Carts->get_cart_by_id($item['Cart']['id']);
+			$item['Cart']['CartProduct'] = $cart['CartProduct'];
+			if(!empty($cart['CartProduct'])) {
+				$j = 0;
+				foreach ($cart['CartProduct'] as $cartProd) {
+					$product = $Products->getProduct($cartProd['product_id']);
+					unset($product['Cart']);
+					unset($product['Category']);
+					unset($product['Material']);
+					unset($product['Size']);
+					$item['Cart']['CartProduct'][$j]['Information'] = $product;
+					$j++;
+				}
+			}
+
+			$item['Billing'] += $Confirmations->calcPrice($item);
+			
+			//Finde Offernumber
+			if($item['Billing']['confirmation_id'] != 0) {
+				$confirmation = $this->Confirmation->findById($item['Billing']['confirmation_id']);
+				$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
+			}
+						
+			array_push($data_temp, $item);
+			
+		}	
+			
+		return $data_temp;
 	}
 }

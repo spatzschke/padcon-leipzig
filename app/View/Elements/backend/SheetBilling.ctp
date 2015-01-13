@@ -1,5 +1,5 @@
 <?php
-	
+
 	if(!empty($this->data['Cart'])) {
 		$cart = $this->data['Cart'];
 	
@@ -15,9 +15,13 @@
 		}
 	}
 	
-	
-	
 ?>
+
+<script>
+
+	
+</script>
+
 <?php 
 
 	if(!empty($cart)) {
@@ -26,38 +30,37 @@
 			$cart['CartProduct'] = array('empty');	
 		}
 		
-		foreach ($cart['CartProduct'] as $carti) {
-				
-			if(($i % $productsPerPage) == 0 || ($i % $productsPerPage) == 3 ) {	
-				$page++;
-				
-		debug($cart['CartProduct']);
+		foreach ($cart['CartProduct'] as $carti) {				
+			if(($i % $productsPerPage) == 0 ) {	
+				$page++;				
+
 ?>
 
-<script>
-
-	
-</script>
-
-
-	<article class="module width_full sheet business noInput<?php if((ceil($cart['count'] / $productsPerPage)) == $page) { echo ' last';}?>">		
+<article class="module width_full sheet business noInput<?php if((ceil($cart['count'] / $productsPerPage)) == $page) { echo ' last';}?>">		
 		<?php 
-			echo $this->element('backend/portlets/Billing/billingHeader', array('cart' => $cart, 'pdf' => $pdf, 'productsPerPage' => $productsPerPage, 'page' => $page, 'maxPage' => $maxPage)); 			
-			if($this->data['Offer']['request_date'] != '0000-00-00') {
-				echo '<p class="offerText"><input type="text" class="text" value="Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format($this->data['Offer']['request_date'], '%d.%m.%Y').' unterbreiten wir Ihnen folgendes Angebot:" /> </p>';
-			}
+			echo $this->element('backend/portlets/Cheet/header', array('cart' => $cart, 'pdf' => $pdf, 'productsPerPage' => $productsPerPage, 'page' => $page, 'maxPage' => $maxPage, 'logo' => true)); 			
 			
-			echo $this->element('backend/portlets/Offer/offerMiddle', array('carti' => $carti, 'cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
-			
-			if((ceil($cart['count'] / $productsPerPage)) == $page && $cartModulo != 0) { 
-				echo $this->element('backend/portlets/Offer/offerCalc', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
+			if($this->data['Confirmation']['order_date']) {
 				
-				if(!empty($this->data['Offer']['additional_text']) && $cartModulo < $productsPerPage-1) { 
-					echo $this->element('backend/portlets/Offer/offerAdditionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
+				if($this->data['Confirmation']['order_number'] != '' || $this->data['Confirmation']['order_number'] != null) {
+					echo '<p class="offerText">Ihre Bestellung Nr.: '.$this->data['Confirmation']['order_number'].' vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' lieferten wir mit dem Lieferschein Nr.: '.$this->data['Delivery']['delivery_number'].' vom '.$this->Time->format($this->data['Delivery']['delivery_date'], '%d.%m.%Y').'. Wir berechnen wie folgt:</p>';
+				} else {
+					echo '<p class="offerText">Ihre Bestellung vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' lieferten wir mit dem Lieferschein Nr.: '.$this->data['Delivery']['delivery_number'].' vom '.$this->Time->format($this->data['Delivery']['delivery_date'], '%d.%m.%Y').'. Wir berechnen wie folgt:</p>';
 				}
 			}
 			
-			//echo $this->element('backend/portlets/Offer/offerFooter', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
+			
+			echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page, 'pagePrice' => true)); 
+			
+			if((ceil($cart['count'] / $productsPerPage)) == $page && $cartModulo != 0) { 
+				echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/calc', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
+				
+				if(!empty($this->data['Confirmation']['additional_text']) && $cartModulo < $productsPerPage-1) { 
+					echo $this->element('backend/portlets/Billings/additionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
+				}
+			}
+			
+			echo $this->element('backend/portlets/Cheet/footer', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
 		?>
 	</article>
 
@@ -66,20 +69,22 @@
 		$i++;
 	}
 ?>
+
+
 <?php if(($cart['count'] % $productsPerPage == 0 && $cart['count'] > ($productsPerPage-1)) || $cart['count'] % $productsPerPage == $productsPerPage-1) {?>
 	<article class="module width_full sheet business noInput<?php if((ceil($cart['count'] / $productsPerPage)) == $page) { echo ' last';}?>">
 			
 			<?php 
-				echo $this->element('backend/portlets/Offer/offerHeader', array('cart' => $cart, 'pdf' => $pdf, 'productsPerPage' => $productsPerPage, 'page' => $page+1, 'maxPage' => $maxPage)); 
+				echo $this->element('backend/portlets/Cheet/header', array('cart' => $cart, 'pdf' => $pdf, 'productsPerPage' => $productsPerPage, 'page' => $page+1, 'maxPage' => $maxPage, 'logo' => true)); 
 				
 				if($cartModulo == 0) {
-					echo $this->element('backend/portlets/Offer/offerCalc', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
+					echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/calc', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
 				}
-				if(!empty($this->data['Offer']['additional_text'])) { 
-					echo $this->element('backend/portlets/Offer/offerAdditionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
+				if(!empty($this->data['Confirmation']['additional_text'])) { 
+					echo $this->element('backend/portlets/Billings/additionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
 				}
 		
-				//echo $this->element('backend/portlets/Offer/offerFooter', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
+				echo $this->element('backend/portlets/Cheet/footer', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
 			?>
 		
 	</article>
