@@ -27,6 +27,12 @@
 			<?php }?>
 	        <div class="catalogItemSize">
 	        	<?php echo $präfix_size;?><?php $this->requestAction('Products/sizeBuilder/'.$product['Size']['id']); ?>
+	        
+	        <div class="catalogItemPrice">
+	        	<?php if($this->data['Price']) {
+	        		echo $this->Number->currency($product['Product']['retail_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));
+	        	} ?>
+	        </div>
 	        </div>
 	        <div class="catalogItemNumber">
 	    		<b><?php echo $präfix_number;?><?php echo $product['Product']['product_number'];?></b>-xx

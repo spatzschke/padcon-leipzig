@@ -11,6 +11,13 @@
 	font-size: 90%;
 }
 
+.catalogListItem .catalogItemPrice {
+	bottom: 0;
+    font-weight: bold;
+    position: absolute;
+    right: 35px;
+}
+
 .catalogListItem .catalogItemFeatures {
 	margin-left: -24px
 }

@@ -50,9 +50,23 @@ if(empty($this->data['Catalogs'])) {
 							?> 
 						</div>	
 					</div> 
-					
-					
-					
+					<div class="col-md-12">
+		                             <div class="input-group">
+		                                <span class="input-group-addon">
+											<?php echo $this->Form->input('price', array(
+												'label' => false,
+												'data-model' => 'Product',
+												'placeholder' => 'Preise anzeigen',
+												'data-field' => 'custom', 
+												'autoComplete' => true,
+												'div' => false,
+												'type' => 'checkbox'
+											));
+											?>  
+										</span>
+		                                <input type="text" class="form-control" value="Preise im Katalog anzeigen" readonly="readonly">                                    
+		                             </div>
+								</div>
                     
                     <div style="margin-top:10px" class="form-group">
                         <!-- Button -->
