@@ -18,9 +18,11 @@
 		echo $this->element('backend/Catalog/deckblatt_priceList', array('page' => $page + $Anzahl_Sonderseiten));
 		$page++;
 		
+		setlocale(LC_ALL, 'de_DE', 'German_Germany.1252');
+ 
 		$sonderseite = $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page + $Anzahl_Sonderseiten, 'type' => 'information'));
 		$sonderseite = split("Stand:", $sonderseite);		
-		echo $sonderseite[0]."Stand: ".date("F Y").$sonderseite[1];
+		echo $sonderseite[0]."Stand: ".utf8_encode(strftime("%B %Y")).$sonderseite[1];
 		
 		$page++;
 		// echo $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page + $Anzahl_Sonderseiten, 'type' => 'lagerung'));
