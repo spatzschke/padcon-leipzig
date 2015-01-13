@@ -95,7 +95,7 @@ class CatalogsController extends AppController {
 				$id = $this->request->data['Categories']['id'];
 		}
 		
-		if($id) {
+		if($id) {		
 			if($id != '99') {
 				$this->request->data['Catalogs'] = $this->Catalog->find('all', array('conditions' => array('Catalog.category_id' => $id)));
 				$this->request->data['Catalogs'][0]['Catalog']['count'] = $this->Product->find('count', array('conditions' => array('Product.category_id' => $id)));
@@ -104,7 +104,7 @@ class CatalogsController extends AppController {
 				$this->request->data['Catalogs'][0]['Products'] = $this->Product->find('all', array(
 					'conditions' => array('Product.category_id' => $this->request->data['Catalogs'][0]['Category']['id']),
 					'fields' => array('Product.*', 'Size.*', 'Material.*'), 
-					'order' => array('Product.product_number' => 'ASC')));
+					'order' => array('Product.product_number' => 'ASC')));					
 			} else {
 				$catalogs = $this->Catalog->find('all');
 					
@@ -124,6 +124,7 @@ class CatalogsController extends AppController {
 							'Material.*'
 						), 
 						'order' => array('Product.product_number' => 'ASC')));			
+					
 					array_push($data, $catalog);				
 				}
 
@@ -162,9 +163,12 @@ class CatalogsController extends AppController {
 			
 			$this->request->data['Material'] = $materials;
 			
+			$this->set('catalog_id', $id);
+			
 		} else {
 			$this->request->data['Categories'] = $this->Catalog->Category->find('list');
-			$this->request->data['Categories'][99] = 'Gesamt';
+			$this->request->data['Categories'][99] = 'Gesamt';
+
 			ksort($this->request->data['Categories']);
 			$this->request->data['Catalogs'] = array();
 		}
@@ -220,8 +224,20 @@ class CatalogsController extends AppController {
 	}
 
 	function admin_createPdf_pl($id = null){
+	
+		$catalog = $this->Catalog->find('first', array('conditions' => array('Catalog.category_id' => $id)));
+		$name = "";
+		if(!empty($catalog['Catalog'])) {
+			$name = $catalog['Catalog']['name'];
+		} else {
+			$name = "Gesamt";
+		}
+		
+		$title = 'Preisliste-'.$name.'-'.date('m/Y');
+		$this->set('title_for_layout', $title);
 
 		$this->admin_generate_pl($id, 'pdf');
+		
 	    
 	}
 

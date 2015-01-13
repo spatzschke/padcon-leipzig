@@ -7,8 +7,8 @@
 	$productsPerPage = 31;
 	$i = 0;
 	
-	
-			
+	$empty_Field_String = 'siehe Katalog';
+		
 ?>
 <?php 
 
@@ -17,7 +17,11 @@
 		//Sonderseiten
 		echo $this->element('backend/Catalog/deckblatt_priceList', array('page' => $page + $Anzahl_Sonderseiten));
 		$page++;
-		echo $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page + $Anzahl_Sonderseiten, 'type' => 'information'));
+		
+		$sonderseite = $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page + $Anzahl_Sonderseiten, 'type' => 'information'));
+		$sonderseite = split("Stand:", $sonderseite);		
+		echo $sonderseite[0]."Stand: ".date("F Y").$sonderseite[1];
+		
 		$page++;
 		// echo $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page + $Anzahl_Sonderseiten, 'type' => 'lagerung'));
 		// $page++;
@@ -56,7 +60,7 @@
 					<!--<th><?php __('Beschreibung');?></th>
 						<th><?php __('Featurelist');?></th>-->
 						<div class="material"><?php echo('Material');?></div>
-						<div class="size"><?php echo('Größe');?></div>
+						<div class="size"><?php echo('Größe im cm');?></div>
 						<div class="price"><?php echo('Preis');?></div>
 					<!--<th><?php __('Neu');?></th>
 						<th><?php __('Aktiv');?></th>
@@ -83,8 +87,31 @@
 						<!--<td><?php echo $product['Product']['description']; ?>&nbsp;</td>
 							<td><?php echo $product['Product']['featurelist']; ?>&nbsp;</td>-->
 						<!--<td><?php echo $product['Category']['name']; ?>&nbsp;</td> -->
-							<div class="material"><?php echo $product['Material']['name']; ?>&nbsp;</div>
-							<div class="size"><?php echo $product['Size']['name']; ?>&nbsp;</div>
+						
+							<?php
+								$material = $product['Material']['name'];							
+								if(empty($material)) {
+									$material = $empty_Field_String;
+								}
+							
+							?>
+
+						
+							<div class="material"><?php echo $material; ?>&nbsp;</div>
+							
+							<?php
+							
+								$size = $product['Size']['name'];
+								$size = str_replace('cm', '', $size);
+								$size = str_replace('Höhe', 'H', $size);
+								
+								if(empty($size)) {
+									$size = $empty_Field_String;
+								}
+							
+							?>
+							
+							<div class="size"><?php echo $size; ?>&nbsp;</div>
 							<div class="price"><?php echo $this->Number->currency($product['Product']['retail_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));?></div>
 						<!--	<td><?php echo $product['Product']['new']; ?>&nbsp;</td>
 							<td><?php echo $product['Product']['active']; ?>&nbsp;</td>

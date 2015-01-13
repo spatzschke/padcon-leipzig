@@ -15,7 +15,11 @@
 		//Sonderseiten
 		echo $this->element('backend/Catalog/deckblatt_cheet', array('page' => $page + $Anzahl_Sonderseiten));
 		$page++;
-		echo $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page + $Anzahl_Sonderseiten, 'type' => 'information'));
+		
+		$sonderseite = $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page + $Anzahl_Sonderseiten, 'type' => 'information'));
+		$sonderseite = split("Stand:", $sonderseite);		
+		echo $sonderseite[0]."Stand: ".date("F Y").$sonderseite[1];
+		
 		$page++;
 		echo $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page + $Anzahl_Sonderseiten, 'type' => 'lagerung'));
 		$page++;
