@@ -97,7 +97,12 @@ class CatalogsController extends AppController {
 		
 		if($id) {
 			
-			$price = $this->request->data['Categories']['price'];
+			if(isset($this->request->data['Categories']['price'])) {
+				$price = $this->request->data['Categories']['price'];
+			} else {
+				$price = 0;
+			}
+			
 					
 			if($id != '99') {
 				$this->request->data['Catalogs'] = $this->Catalog->find('all', array('conditions' => array('Catalog.category_id' => $id)));
