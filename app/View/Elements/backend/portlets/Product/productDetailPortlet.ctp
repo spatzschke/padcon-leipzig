@@ -61,6 +61,16 @@ function loadCustomProductNumber() {
                         <?php echo $this->Form->create('Product', array(
 							'class' => 'form-horizontal'
 						)); ?> 
+						
+						<?php 
+						echo $this->Form->input('id');
+						
+						if($this->request->params['action'] == "admin_edit") {
+							$readonly = "readonly";
+						} else {
+							$readonly = "";
+						}
+						?>   
 						<!-- Links -->
 					
 						<div class="col-md-4">
@@ -72,12 +82,13 @@ function loadCustomProductNumber() {
 									'data-model' => 'Product',
 									'placeholder' => 'Produktnummer',
 									'data-field' => 'product_number', 
-									'autoComplete' => true
+									'autoComplete' => true,
+									$readonly
 								));
 								?>                                     
                              </div>
                              <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                                 <?php echo $this->Form->input('name', array(
 									'label' => false,
 									'class' => 'form-control',
@@ -89,7 +100,7 @@ function loadCustomProductNumber() {
 								?>                                      
                              </div>
                              <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
                                 <?php echo $this->Form->input('category_id', array(
 									'label' => false,
 									'class' => 'form-control',
@@ -103,7 +114,7 @@ function loadCustomProductNumber() {
                              </div>
                              
                              <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
                                 <?php echo $this->Form->input('material_id', array(
 									'label' => false,
 									'class' => 'form-control',
@@ -116,14 +127,15 @@ function loadCustomProductNumber() {
 								?> 
 							</div>
 							<div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                                <?php echo $this->Form->input('size_id', array(
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-resize-vertical"></i></span>
+                                <?php echo $this->Form->input('size', array(
 									'label' => false,
 									'class' => 'form-control',
 									'data-model' => 'Product',
 									'placeholder' => 'Größe',
-									'data-field' => 'size_id', 
-									'autoComplete' => true
+									'data-field' => 'size', 
+									'autoComplete' => true, 
+									'type' => 'text'
 								));
 								?>                                      
                              </div>
@@ -214,7 +226,7 @@ function loadCustomProductNumber() {
 						 <!-- Mitte -->
 						<div class="col-md-4">
 							<div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-align-justify"></i></span>
                                 <?php echo $this->Form->input('description', array(
 									'label' => false,
 									'class' => 'form-control',
@@ -228,7 +240,7 @@ function loadCustomProductNumber() {
 							</div>
 							
 							<div class="input-group">
-	                                <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
+	                                <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
 	                                <?php echo $this->Form->input('featurelist', array(
 										'label' => false,
 										'class' => 'form-control',

@@ -1,9 +1,12 @@
-<?php	foreach ($products as $product):?>
+<?php 
+if(!isset($ajax)) {$ajax = 1;}
+
+foreach ($products as $product):?>
 									
 				
 				<tr>
 					<?php					
-						if($this->request->params['isAjax']) {
+						if($ajax) {
 							echo '<td>';
 							echo $this->Html->link('', array('admin' => true, 'controller' => 'Carts', 'action' => 'addToCart', $product['Product']['id']), array('escape' => false, 'class' => 'addToCart'));
 							echo $this->Html->div('addToCart', '<i class="glyphicon glyphicon-open"></i>', array(
@@ -27,7 +30,7 @@
 					<td><?php echo $product['Product']['modified']; ?>&nbsp;</td>-->
 					
 					<?php
-						if(!$this->request->is('ajax')) {
+						if(!$ajax) {
 							echo '<td class="actions">';
 							echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Products', 'action' => 'view', $product['Product']['id']), array('escape' => false));
 							echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Products', 'action' => 'edit', $product['Product']['id']), array('escape' => false));

@@ -18,7 +18,6 @@ $(document).ready(function() {
 </script>
 
 <div class="imagePanel panel panel-info" >
-		<div class="disable "></div>
         <div class="panel-body" >
 		
 		<div class="input-group">
@@ -29,7 +28,7 @@ $(document).ready(function() {
 		</div>
 		<div class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-            <?php echo $this->Form->input('size_id', array(
+            <?php echo $this->Form->input('Color', array(
 				'label' => false,
 				'class' => 'form-control',
 				'data-model' => 'Product',

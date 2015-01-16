@@ -29,11 +29,7 @@ class Product extends AppModel {
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-			'isUnique' => array(
-			 	'rule' => array('isUnique'),
-			 	'message' => 'Der Produktname ist bereits vorhanden!'
-			 ),
+			)
 		),
 		'product_number' => array(
 			'notempty' => array(

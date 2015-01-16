@@ -1,15 +1,20 @@
 <?php 
 	$products = $this->requestAction('Products/getProducts/');
-	echo $this->Html->script('jquery.dynamicSearch', false);
-	
+	echo $this->Html->script('jquery.dynamicSearch', false);	
 	echo $this->Html->script('jquery.bootstrap.modal', false);
+	
+	if($this->request->params['isAjax']) {
+		$ajax = 1;
+	} else {
+		$ajax = 0;
+	}
 ?>
 
 <script>
 $(document).ready(function() {
 	
 		$('#filter .search input').dynamicSearch({
-			url: "<?php echo FULL_BASE_URL.$this->base;?>\/Products\/search\/",
+			url: "<?php echo FULL_BASE_URL.$this->base;?>\/Products\/search\/<?php echo $ajax;?>\/",
 			renderTemplate: '/Elements/backend/portlets/Product/productPortletTableContent',
 			cancel: '.form-search .cancel',
 			addToCartUrl: '<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/loadProductAddPopup\/',
@@ -43,7 +48,7 @@ $(document).ready(function() {
 		</div>
 		<header>
 			<?php
-				if($this->request->is('ajax')) {
+				if($this->request->params['isAjax']) {
 					echo '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>';
 				}
 			?>

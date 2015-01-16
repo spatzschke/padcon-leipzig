@@ -27,6 +27,7 @@ class ProductsController extends AppController {
 		$products = $this->getProducts(null);
 		
 		$this->set(compact('products', 'cart_id'));
+		$this->set('ajax', 0);
 	}
 	
 	function listing($id = null) {
@@ -245,12 +246,16 @@ class ProductsController extends AppController {
 			$this->Session->setFlash(__('Invalid product', true));
 			$this->redirect(array('action' => 'index'));
 		}
-		if (!empty($this->data)) {
-			if ($this->Product->save($this->data)) {
-				$this->Session->setFlash(__('The product has been saved', true));
+		
+		$data = $this->data;
+		unset($data['Product']['product_number']);
+
+		if (!empty($data)) {
+			if ($this->Product->save($data)) {
+				$this->Session->setFlash(__('Das Produkt wurde gespeichert', true));
 				
 			} else {
-				$this->Session->setFlash(__('The product could not be saved. Please, try again.', true));
+				$this->Session->setFlash(__('Das Produkt konnte nicht gespeichert werden. Bitte prüfen Sie die Meldungen.', true));
 			}
 			
 		}
@@ -316,7 +321,7 @@ class ProductsController extends AppController {
 		
 	}
 	
-	function admin_search($searchString = null) {
+	function admin_search($ajax = null, $searchString = null) {
 		
 		$products = $this->Product->find('all',array('conditions' => array("OR" => 
 			array (	'Product.name LIKE' 			=> '%'.$this->data['str'].'%' ,
@@ -326,6 +331,7 @@ class ProductsController extends AppController {
 					'Size.name LIKE' 	=> '%'.$this->data['str'].'%'))));	
 		
 		$this->set('products', $products);
+		$this->set('ajax', $ajax);
 		
 		if(isset($this->data['template'])) {
 			$this->render($this->data['template']);
