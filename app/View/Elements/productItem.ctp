@@ -44,6 +44,6 @@
     </div>
     <div class="message"></div>
     <div class="productItemFooter"></div>
-	<?php echo $this->Html->link('Zum Warenkorb hinzufügen', array('controller' => 'Carts', 'action' => 'addToCart', $product['Product']['id']), array('escape' => false, 'class' => 'addToCart')); ?>
+	<?php //echo $this->Html->link('Zum Warenkorb hinzufügen', array('controller' => 'Carts', 'action' => 'addToCart', $product['Product']['id']), array('escape' => false, 'class' => 'addToCart')); ?>
 	
 </div>
