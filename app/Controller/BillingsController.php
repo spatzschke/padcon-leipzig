@@ -13,7 +13,7 @@ App::uses('AppController', 'Controller');
 class BillingsController extends AppController {
 
 	
-	public $uses = array('Billing', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation');
+	public $uses = array('Billing', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Delivery');
 	
 /**
  * Components
@@ -28,8 +28,11 @@ class BillingsController extends AppController {
  * @return void
  */
 	public function admin_index() {
-		$this->Billing->recursive = 0;
-		$this->set('billings', $this->Paginator->paginate());
+		
+		$this->layout = "admin";
+		$data = $this->Billing->find('all', array('order' => array('Billing.created DESC', 'Billing.id DESC'), 'limit' => 100));
+			
+		$this->set('data', $this->fillIndexData($data));
 	}
 
 /**
@@ -48,10 +51,12 @@ class BillingsController extends AppController {
 			throw new NotFoundException(__('Invalid billing'));
 		}
 		$options = array('conditions' => array('Billing.' . $this->Billing->primaryKey => $id));
-		$billing = $this->Billing->find('first', $options);
+		$data = $this->Billing->find('first', $options);
 		
-		$this->generateData($billing);
-		
+		$this->generateData($data);
+		$controller_name = 'Deliveries'; 
+		$controller_id = $id;
+		$this->set(compact('controller_id', 'controller_name'));
 		$this->set('pdf', null);
 	}
 
@@ -187,9 +192,18 @@ Lieferzeit: ca. 3-4 Wochen
 
 	function generateBillingNumber() {
 	
-		// Anzahl aller Auftragsbestätigungen im Monat / Aktueller Monat / Aktuelles Jahr		
-		$countMonth = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))));
-		return str_pad($countMonth, 3, "0", STR_PAD_LEFT).'/'.date('m').'/'.date('y');
+		// Rechnung Nr.: 427/14
+		// 427 = laufende Rechnung im Jahr
+		// 14 = laufendes Jahr
+	
+		// 427 = laufende Rechnung im Jahr
+		$countYearBillings = count($this->Billing->find('all',array('conditions' => array('Billing.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))))+1;
+		$countYearBillings = str_pad($countYearBillings, 3, "0", STR_PAD_LEFT);
+		// 14 = aktuelles Jahr
+		$year = date('y');
+		
+		// Rechnung Nr.: 427/14
+		return $countYearBillings.'/'.$year;
 	}
 	
 	function generateData($data = null) {
@@ -252,5 +266,63 @@ Lieferzeit: ca. 3-4 Wochen
 		
 		$this->request->data['Confirmation']['confirmation_price'] = $calc['confirmation_price'];		
 		$this->render('/Elements/backend/SheetBilling');
+	}
+
+	function fillIndexData($data = null) {
+	
+		$data_temp = array();
+		$Carts = new CartsController();
+		$Products = new ProductsController();
+		$Customers = new CustomersController();
+		$Confirmations = new ConfirmationsController();
+		
+		
+		// for($i=0; $i<=10;$i++) {
+		foreach ($data as $item) {
+			
+			//$item = $items[$i];
+			
+			//Load Customer for the Billing
+			$customer = $this->Customer->findById($item['Confirmation']['customer_id']);
+			if($Customers->splitCustomerData($customer)) {
+				$item['Customer'] = $Customers->splitCustomerData($customer);
+			}			
+			
+			$cart = $Carts->get_cart_by_id($item['Confirmation']['cart_id']);
+			$item['Cart'] = $cart['Cart'];
+			$item['Cart']['CartProduct'] = $cart['CartProduct'];
+			if(!empty($cart['CartProduct'])) {
+				$j = 0;
+				foreach ($cart['CartProduct'] as $cartProd) {
+					$product = $Products->getProduct($cartProd['product_id']);
+					unset($product['Cart']);
+					unset($product['Category']);
+					unset($product['Material']);
+					unset($product['Size']);
+					$item['Cart']['CartProduct'][$j]['Information'] = $product;
+					$j++;
+				}
+			}
+
+			$item['Billing'] += $Confirmations->calcPrice($item);
+			
+			//Finde Nummer der Auftragsbestätigung und des Lieferscheins
+			if($item['Billing']['confirmation_id'] != 0) {
+				
+				//Auftragsbestätigung
+				$confirmation = $this->Confirmation->findById($item['Billing']['confirmation_id']);
+				$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
+				
+				//Lieferschein
+				$delivery = $this->Delivery->findById($item['Confirmation']['delivery_id']);
+				$item['Billing']['delivery_number'] = $delivery['Delivery']['delivery_number'];
+			}
+			
+						
+			array_push($data_temp, $item);
+			
+		}	
+			
+		return $data_temp;
 	}
 }

@@ -170,11 +170,11 @@
 							if(empty($item['Cart']['count']) || $item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
 								echo '-';
 							} else {
-								if(empty($item['Confirmation']['confirmation_id'])) {
+								if(empty($item['Confirmation']['delivery_id'])) {
 									echo $this->Html->link('Lieferschein', array('controller' => 'Deliveries', 'action' => 'convert', 'admin' =>'true', $item['Confirmation']['id']),
 																	array('class' => 'btn btn-default')); 	
 								} else {
-									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Confirmation']['confirmation_id']), array('escape' => false));
+									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Confirmation']['delivery_id']), array('escape' => false));
 									echo $item['Delivery']['delivery_number'];
 								}
 									

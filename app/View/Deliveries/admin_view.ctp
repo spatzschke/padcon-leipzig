@@ -35,7 +35,7 @@ $(document).ready(function() {
 		$(document).ready(function() {
 		
 			$('#settings').find('a').click(function() {
-				$('#settings_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Billings\/settings\/<?php echo $this->data['Delivery']['id'];?>');
+				$('#settings_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Deliveries\/settings\/<?php echo $this->data['Delivery']['id'];?>');
 				$('#settings_modal').modal('show')
 			});
 		
@@ -56,7 +56,7 @@ $(document).ready(function() {
 		
 		<div id="printOffer" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-			<?php echo $this->Html->link('Angebot drucken', '/admin/billings/createPdf/'.$this->data['Delivery']['id'], array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
+			<?php echo $this->Html->link('Drucken', '/admin/Deliveries/createPdf/'.$this->data['Delivery']['id'], array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
 		</div>
 	</div>
 	<div class="pages">

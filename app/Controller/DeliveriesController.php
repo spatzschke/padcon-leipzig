@@ -43,11 +43,18 @@ class DeliveriesController extends AppController {
  * @return void
  */
 	public function admin_view($id = null) {
+		$this->layout = 'admin';
 		if (!$this->Delivery->exists($id)) {
 			throw new NotFoundException(__('Invalid delivery'));
 		}
 		$options = array('conditions' => array('Delivery.' . $this->Delivery->primaryKey => $id));
-		$this->set('delivery', $this->Delivery->find('first', $options));
+		$data = $this->Delivery->find('first', $options);		
+		
+		$this->generateData($data);
+		$controller_name = 'Deliveries'; 
+		$controller_id = $id;
+		$this->set(compact('controller_id', 'controller_name'));
+		$this->set('pdf', null);
 	}
 
 	public function admin_convert($confirmation_id = null) {
@@ -57,7 +64,7 @@ class DeliveriesController extends AppController {
 			$confirmation = $this->Confirmation->findById($confirmation_id);
 			$delivery = array();
 			
-			//if(empty($confirmation['Confirmation']['billing_id'])) {
+			if(empty($confirmation['Confirmation']['delivery_id'])) {
 				
 				$this->Delivery->create();
 				
@@ -68,26 +75,26 @@ class DeliveriesController extends AppController {
 				$delivery['Delivery']['delivery_number'] = $this->generateDeliveryNumber();
 				$this->Delivery->save($delivery);
 				
-				$currBillingId = $this->Delivery->getLastInsertId();
+				$currDeliveryId = $this->Delivery->getLastInsertId();
 				
-				//Neue Auftragsbestätigungs-ID in Angebot speichern 
-				$confirmation['Confirmation']['delivery_id'] = $currBillingId;
+				//Neue Liverschein-ID in AUftragsbestäätigung speichern 
+				$confirmation['Confirmation']['delivery_id'] = $currDeliveryId;
 				$this->Confirmation->save($confirmation);
 				
-				$this->generateData($this->Delivery->findById($currBillingId));
+				$this->generateData($this->Delivery->findById($currDeliveryId));
 				
 				$this->set('pdf', null);
 				
 				$controller_name = 'Deliveries'; 
-				$controller_id = $currBillingId;
+				$controller_id = $currDeliveryId;
 				$this->set(compact('controller_id', 'controller_name'));
 				
 				$this->render('admin_view');
 				
-			// } else {
-				// $this->Session->setFlash(__('Rechnung bereits vorhanden'));
-				// return $this->redirect(array('action' => 'view', $confirmation['Confirmation']['billing_id']));
-			// }
+			} else {
+				$this->Session->setFlash(__('Lieferschein bereits vorhanden'));
+				return $this->redirect(array('action' => 'view', $confirmation['Confirmation']['delivery_id']));
+			}
 		} else {
 			
 			if(!empty($this->request->data)) {
@@ -176,9 +183,22 @@ Lieferzeit: ca. 3-4 Wochen
 
 	function generateDeliveryNumber() {
 	
-		// Anzahl aller Auftragsbestätigungen im Monat / Aktueller Monat / Aktuelles Jahr		
-		$countMonth = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))));
-		return str_pad($countMonth, 3, "0", STR_PAD_LEFT).'/'.date('m').'/'.date('y');
+		// Lieferschein Nr.: 01711/478
+		// 017 = laufende Anzahl im Monat
+		// 11 = aktueller Monat
+		// 478 = laufende Anzahl im Jahr
+		
+		// 017 = laufende Anzahl im Monat
+		$countMonthDeliveries = count($this->Delivery->find('all',array('conditions' => array('Delivery.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))))+1;
+		$countMonthDeliveries = str_pad($countMonthDeliveries, 3, "0", STR_PAD_LEFT);
+		// 11 = aktueller Monat
+		$month = date('m');
+		// 017 = laufende Anzahl im Jahr
+		$countYearDeliveries = count($this->Delivery->find('all',array('conditions' => array('Delivery.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))))+1;
+		$countYearDeliveries = str_pad($countYearDeliveries, 3, "0", STR_PAD_LEFT);
+		
+		// Lieferschein Nr.: 01711/478
+		return $countMonthDeliveries.$month.'/'.$countYearDeliveries;
 	}
 	
 	function generateData($data = null) {
@@ -208,6 +228,9 @@ Lieferzeit: ca. 3-4 Wochen
 		
 	
 		if(!is_null($this->request->data['Confirmation']['customer_id'])) {
+			
+			$customer = $this->Customer->find('first', array('conditions' => array('Customer.id' => $this->request->data['Confirmation']['customer_id'])));
+			$this->request->data['Customer'] = $customer['Customer'];
 			
 			$customerAddresses = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $this->request->data['Confirmation']['customer_id'])));
 			$this->request->data['Customer']['Addresses'] = array();

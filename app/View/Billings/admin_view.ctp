@@ -56,7 +56,7 @@ $(document).ready(function() {
 		
 		<div id="printOffer" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-			<?php echo $this->Html->link('Angebot drucken', '/admin/billings/createPdf/'.$this->data['Billing']['id'], array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
+			<?php echo $this->Html->link('Drucken', '/admin/billings/createPdf/'.$this->data['Billing']['id'], array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
 		</div>
 	</div>
 	<div class="pages">

@@ -37,14 +37,14 @@
 						
 					</td>
 					<td>
-						<?php if(empty($item['Confirmation']['confirmation_number'])) {
+						<?php if(empty($item['Delivery']['delivery_number'])) {
 							 echo '-'; 
 							} else {
 								
-								echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['id']), array('escape' => false));
+								echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Confirmation']['id']), array('escape' => false));
 								
 								echo '&nbsp;&nbsp;&nbsp;';
-								echo $item['Confirmation']['confirmation_number'];	
+								echo $item['Delivery']['delivery_number'];	
 							
 							}
 						?>

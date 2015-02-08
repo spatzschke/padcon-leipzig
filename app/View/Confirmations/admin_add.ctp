@@ -90,7 +90,7 @@ $(document).ready(function() {
 		 </div>
 		 <div id="printOffer" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-			<?php echo $this->Html->link('Angebot drucken', '/admin/Confirmations/createPdf/'.$controller_id, array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
+			<?php echo $this->Html->link('Drucken', '/admin/Confirmations/createPdf/'.$controller_id, array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
 		</div>
 	</div>
 	<div class="pages">
