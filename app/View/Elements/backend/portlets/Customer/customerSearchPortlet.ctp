@@ -31,7 +31,11 @@
 	</div>
 </div>
 			<?php
-			 			
+			 	if(is_null($this->data['Customer']['id'])) {
+			 		
+			 	}	else {
+			 		
+			 	
 				if(!isset($this->data['Address'])) {
 					
 					echo'<div class="alert alert-danger" role="alert">';
@@ -108,7 +112,8 @@
 						echo '</div>';
 					?>	
 			<?php 					
-				} 		
+				} 
+			}		
 			?>
 	<script>
 

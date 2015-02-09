@@ -68,7 +68,7 @@ $(document).ready(function() {
 			</thead> 
 			<tbody> 
 							
-				<?php echo $this->element('backend/portlets/Offers/offerPortletTableContent', array('offers' => $offers)); ?>
+				<?php echo $this->element('backend/portlets/Offers/tableContent', array('offers' => $offers)); ?>
 
 
 				

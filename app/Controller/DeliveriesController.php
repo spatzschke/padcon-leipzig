@@ -12,7 +12,7 @@ App::uses('AppController', 'Controller');
  */
 class DeliveriesController extends AppController {
 
-	public $uses = array('Delivery', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation');
+	public $uses = array('Delivery', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Billing');
 	
 /**
  * Components
@@ -29,8 +29,8 @@ class DeliveriesController extends AppController {
 	function admin_index() {
 		$this->layout = 'admin';
 	
-		$this->Confirmation->recursive = 0;
-		$data = $this->Confirmation->find('all', array('order' => array('Confirmation.created DESC', 'Confirmation.id DESC'), 'limit' => 100));
+		$this->Delivery->recursive = 0;
+		$data = $this->Delivery->find('all', array('order' => array('Delivery.created DESC', 'Delivery.id DESC'), 'limit' => 100));
 			
 		$this->set('data', $this->fillIndexData($data));
 	}
@@ -190,12 +190,12 @@ Lieferzeit: ca. 3-4 Wochen
 		
 		// 017 = laufende Anzahl im Monat
 		$countMonthDeliveries = count($this->Delivery->find('all',array('conditions' => array('Delivery.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))))+1;
-		$countMonthDeliveries = str_pad($countMonthDeliveries, 3, "0", STR_PAD_LEFT);
+		$countMonthDeliveries = str_pad($countMonthDeliveries, 2, "0", STR_PAD_LEFT);
 		// 11 = aktueller Monat
 		$month = date('m');
 		// 017 = laufende Anzahl im Jahr
 		$countYearDeliveries = count($this->Delivery->find('all',array('conditions' => array('Delivery.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))))+1;
-		$countYearDeliveries = str_pad($countYearDeliveries, 3, "0", STR_PAD_LEFT);
+		$countYearDeliveries = str_pad($countYearDeliveries, 2, "0", STR_PAD_LEFT);
 		
 		// Lieferschein Nr.: 01711/478
 		return $countMonthDeliveries.$month.'/'.$countYearDeliveries;
@@ -274,20 +274,24 @@ Lieferzeit: ca. 3-4 Wochen
 		$Customers = new CustomersController();
 		$Confirmations = new ConfirmationsController();
 		
+		
+		
 		// for($i=0; $i<=10;$i++) {
 		foreach ($data as $item) {
 			
-			//$item = $items[$i];
-	
-			if($Customers->splitCustomerData($item)) {
-				
-				$item['Customer'] += $Customers->splitCustomerData($item);
+			//Load Customer for the Delivery
+			$customer = $this->Customer->findById($item['Confirmation']['customer_id']);
+			if($Customers->splitCustomerData($customer)) {
+				$item['Customer'] = $Customers->splitCustomerData($customer);
 			}			
 			
-			$cart = $Carts->get_cart_by_id($item['Cart']['id']);
-			$item['Cart']['CartProduct'] = $cart['CartProduct'];
+			$cart = $Carts->get_cart_by_id($item['Confirmation']['cart_id']);
+			
+			$item += $cart;
+			
 			if(!empty($cart['CartProduct'])) {
 				$j = 0;
+				$item['Cart']['CartProduct'] = $item['CartProduct'];
 				foreach ($cart['CartProduct'] as $cartProd) {
 					$product = $Products->getProduct($cartProd['product_id']);
 					unset($product['Cart']);
@@ -299,12 +303,17 @@ Lieferzeit: ca. 3-4 Wochen
 				}
 			}
 
-			$item['Billing'] += $Confirmations->calcPrice($item);
+			$item['Delivery'] += $Confirmations->calcPrice($item);
 			
 			//Finde Offernumber
-			if($item['Billing']['confirmation_id'] != 0) {
-				$confirmation = $this->Confirmation->findById($item['Billing']['confirmation_id']);
-				$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
+			if(!isset($item['Delivery']['confirmation_id'])) {
+				$item['Delivery']['confirmation_number'] = $item['Confirmation']['confirmation_number'];
+				
+				//Rechnung
+				$billing = $this->Billing->findById($item['Confirmation']['billing_id']);
+				if(!is_null($item['Confirmation']['billing_id'])) {
+					$item['Delivery']['billing_number'] = $billing['Billing']['billing_number'];
+				}
 			}
 						
 			array_push($data_temp, $item);

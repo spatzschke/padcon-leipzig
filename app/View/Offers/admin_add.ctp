@@ -21,7 +21,7 @@ $(document).ready(function() {
 		
 	?>
 	
-	$('.newOffer').click(function() {
+	$('.showNew').click(function() {
 	
 		$('#active_offer_modal').modal('hide');
 		$('#main').load('<?php echo FULL_BASE_URL.$this->base;?>\/Offers\/archiveActiveOffer\/');
@@ -90,7 +90,7 @@ $(document).ready(function() {
 				<p>Es ist ein aktives Angebot vorhanden.</p>
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-success newOffer">Neues Angebot erstellen</button>
+				<button class="btn btn-success showNew">Neues Angebot erstellen</button>
 				<button class="btn showActive">Aktives Angebot auswählen</button>
 			</div>
 		</div>

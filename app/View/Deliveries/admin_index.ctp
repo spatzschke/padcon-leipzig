@@ -55,7 +55,7 @@ $(document).ready(function() {
    					<th></th>					
 					<th><?php echo('LI-Nr');?></th>
 					<th><?php echo('Kunde');?></th>
-					<th><?php echo('Lieferschein vom');?></th>
+					<!-- <th><?php echo('Lieferschein vom');?></th> -->
 					<th><?php echo('Produkt');?></th>
 					<th><?php echo('AB-Nr');?></th>
 					<!-- <th><?php echo('RE-Nr');?></th> -->

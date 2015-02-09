@@ -520,7 +520,7 @@ Lieferzeit: ca. 2-3 Wochen
 		
 		// 204 = Fortlaufende Nummer im Jahr
 		$countYearOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))))+1;
-		$countYearOffers = str_pad($countYearOffers, 3, "0", STR_PAD_LEFT);
+		$countYearOffers = str_pad($countYearOffers, 2, "0", STR_PAD_LEFT);
 		// 09 = laufende Nummer im Monat
 		$countMonthOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))))+1;
 		$countMonthOffers = str_pad($countMonthOffers, 2, "0", STR_PAD_LEFT);

@@ -80,18 +80,18 @@ class ConfirmationsController extends AppController {
 		if(!$id) {
 			$confirmation = null;	
 			$cart = $this->requestAction('/admin/carts/add/');
-			
+					
 			$this->Confirmation->create();
 			
 			$confirmation['Confirmation']['status'] = 'active';
 			$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
 			$confirmation['Confirmation']['customer_id'] = '';
 			$confirmation['Confirmation']['cart_id'] = $cart['Cart']['id'];
-			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
+			//$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
 			
 			$this->Confirmation->save($confirmation);
 			$id = $this->Confirmation->id;
-			
+
 			$this->redirect(array('action'=>'add', $id));
 		}
 
@@ -485,8 +485,6 @@ Lieferzeit: ca. 40. KW 2014
 			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
 		}
 	
-		
-	
 		if(!is_null($this->request->data['Customer']['id'])) {
 			
 			$customerAddresses = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $this->request->data['Customer']['id'])));
@@ -547,8 +545,8 @@ Lieferzeit: ca. 40. KW 2014
 		// 14 = aktuelles Jahr
 		
 		// 019 = Anzahl der AB im Monat
-		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))))+1;
-		$countMonthConfirmations = str_pad($countMonthConfirmations, 3, "0", STR_PAD_LEFT);
+		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))));
+		$countMonthConfirmations = str_pad($countMonthConfirmations, 2, "0", STR_PAD_LEFT);
 		// 11 = aktueller Monat
 		$month = date('m');
 		// 14 = aktuelles Jahr

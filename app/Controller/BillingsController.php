@@ -198,7 +198,7 @@ Lieferzeit: ca. 3-4 Wochen
 	
 		// 427 = laufende Rechnung im Jahr
 		$countYearBillings = count($this->Billing->find('all',array('conditions' => array('Billing.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))))+1;
-		$countYearBillings = str_pad($countYearBillings, 3, "0", STR_PAD_LEFT);
+		$countYearBillings = str_pad($countYearBillings, 2, "0", STR_PAD_LEFT);
 		// 14 = aktuelles Jahr
 		$year = date('y');
 		
@@ -234,6 +234,9 @@ Lieferzeit: ca. 3-4 Wochen
 	
 		if(!is_null($this->request->data['Confirmation']['customer_id'])) {
 			
+			$customer = $this->Customer->find('first', array('conditions' => array('Customer.id' => $this->request->data['Confirmation']['customer_id'])));
+			$this->request->data['Customer'] = $customer['Customer'];
+			
 			$customerAddresses = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $this->request->data['Confirmation']['customer_id'])));
 			$this->request->data['Customer']['Addresses'] = array();
 						
@@ -247,6 +250,10 @@ Lieferzeit: ca. 3-4 Wochen
 		
 		$confirmation = $Confirmations->calcPrice($this->request->data);		
 		$this->request->data['Confirmation'] += $confirmation;		
+
+		//Nachladen des Lieferscheins
+		$delivery = $this->Delivery->find('first', array('conditions' => array('Delivery.id' => $this->request->data['Confirmation']['delivery_id'])));
+		$this->request->data['Delivery'] = $delivery['Delivery'];
 
 		return $Confirmations->calcPrice($this->request->data);
 
@@ -279,9 +286,7 @@ Lieferzeit: ca. 3-4 Wochen
 		
 		// for($i=0; $i<=10;$i++) {
 		foreach ($data as $item) {
-			
-			//$item = $items[$i];
-			
+						
 			//Load Customer for the Billing
 			$customer = $this->Customer->findById($item['Confirmation']['customer_id']);
 			if($Customers->splitCustomerData($customer)) {
