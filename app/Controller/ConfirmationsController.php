@@ -297,11 +297,7 @@ class ConfirmationsController extends AppController {
 				}
 				
 				$confirmation['Confirmation']['cart_id'] = $confirmation['Confirmation']['cart_id'];
-				$confirmation['Confirmation']['additional_text'] = '
-Zahlungsbedingung: 10 Tage 2% Skonto oder 30 Tage netto<br />
-Lieferung frei Haus<br />
-Lieferzeit: ca. 40. KW 2014
-				';
+				$confirmation['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
 				
 				
 				$confirmation['CartProducts'] = $this->getSettingCartProducts($confirmation);
@@ -513,10 +509,10 @@ Lieferzeit: ca. 40. KW 2014
 		$vat_price = $data['Confirmation']['vat'] * $part_price / 100;
 		$data_price = floatval($part_price + $vat_price);
 		
-		if($data['Cart']['sum_retail_price'] > 500) {
-			$delivery_cost = 0;
+		if($data['Cart']['sum_retail_price'] > Configure::read('padcon.delivery_cost.versandkostenfrei_ab')) {
+			$delivery_cost = Configure::read('padcon.delivery_cost.frei');
 		} else {
-			$delivery_cost = 8;
+			$delivery_cost = Configure::read('padcon.delivery_cost.paket');
 		}
 		
 		$arr_data['Confirmation']['delivery_cost'] = $delivery_cost;
