@@ -129,25 +129,12 @@ $(document).ready(function() {
 
 <div class="wood_bg">
 
-	<div class="buttons">
-		     
-	    <div id="addToCustomer" class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
-			<a href="#" class="btn btn-default">Kunde hinzufügen</a>
-		</div>
-		<div id="addToOffer" class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
-			<a  href="#" class="btn btn-default">Produkt hinzufügen</a>
-		 </div>
-		<div id="offerSettings" class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-cog"></i></span>
-			<a href="#" class="btn btn-default">Angebots-einstellungen</a>
-		 </div>
-		 <div id="printOffer" class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-			<?php echo $this->Html->link('Drucken', '/admin/offers/createPdf', array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
-		</div>
-	</div>
+	
+	<?php if(!empty($offer)) {
+		echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons'); 
+		}
+	?>
+	
 	<div class="pages">
 		<?php  
 			if(isset($pdf)) {
@@ -155,6 +142,6 @@ $(document).ready(function() {
 			} else {
 				echo $this->element('backend/SheetOffer');
 			}
-			 ?>
+		?>
 	</div>
 </div>

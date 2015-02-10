@@ -180,6 +180,9 @@ class ConfirmationsController extends AppController {
 				//Gernerierung der Auftragsbestätigungsnummer
 				$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
 				
+				//Default settings
+				$confirmation['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
+				
 				//Warenkorb des Angebots kopieren
 				$confirmationCart = $this->Cart->findById($confirmation['Cart']['id']);
 				$confirmationCart['Cart']['id'] = NULL;

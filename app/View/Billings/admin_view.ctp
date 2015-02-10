@@ -27,38 +27,25 @@ $(document).ready(function() {
 			
 
 <div class="wood_bg">
-	<div class="buttons">
 		
-		<?php if($this->request->params['action'] == 'admin_convert') {	?>	
-		
-		<script>
-		$(document).ready(function() {
-		
-			$('#settings').find('a').click(function() {
-				$('#settings_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Billings\/settings\/<?php echo $this->data['Billing']['id'];?>');
-				$('#settings_modal').modal('show')
-			});
-		
-			$("body").on("hidden", "#settings", function(){ $(this).removeData("modal");});
-		 
+	
+	
+	<script>
+	$(document).ready(function() {
+	
+		$('#settings').find('a').click(function() {
+			$('#settings_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Billings\/settings\/<?php echo $this->data['Billing']['id'];?>');
+			$('#settings_modal').modal('show')
 		});
-		</script>
+	
+		$("body").on("hidden", "#settings", function(){ $(this).removeData("modal");});
+	 
+	});
+	</script>
+	
+	<?php echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons'); ?>
 		
 		
-		<div id="settings" class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-cog"></i></span>
-			<a href="#" class="btn btn-default">Einstellungen</a>
-		 </div>
-		
-		<?php 
-			}
-		?>	
-		
-		<div id="printOffer" class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-			<?php echo $this->Html->link('Drucken', '/admin/billings/createPdf/'.$this->data['Billing']['id'], array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
-		</div>
-	</div>
 	<div class="pages">
 		<?php  
 			if(isset($pdf)) {

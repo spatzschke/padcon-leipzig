@@ -67,6 +67,10 @@ class OffersController extends AppController {
 			$offer['Offer']['customer_id'] = '';
 			$offer['Offer']['cart_id'] = $cart['Cart']['id'];
 			
+			//Default settings
+			$offer['Offer']['additional_text'] = Configure::read('padcon.Angebot.additional_text.default');
+			
+			
 			$this->Offer->save($offer);
 	
 			$this->generateDataByOffer($this->Offer->findById($this->Offer->id));
@@ -461,10 +465,10 @@ Lieferzeit: ca. 2-3 Wochen
 		$vat_price = $offer['Offer']['vat'] * $part_price / 100;
 		$offer_price = floatval($part_price + $vat_price);
 		
-		if($offer['Cart']['sum_retail_price'] > 500) {
-			$delivery_cost = 0;
+		if($offer['Cart']['sum_retail_price'] > Configure::read('padcon.delivery_cost.versandkostenfrei_ab')) {
+			$delivery_cost = Configure::read('padcon.delivery_cost.frei');
 		} else {
-			$delivery_cost = 8;
+			$delivery_cost = Configure::read('padcon.delivery_cost.paket');
 		}
 		
 		$arr_offer['Offer']['delivery_cost'] = $delivery_cost;
