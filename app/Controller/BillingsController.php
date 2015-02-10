@@ -79,6 +79,10 @@ class BillingsController extends AppController {
 				$billing['Billing']['status'] = 'open';
 				$billing['Billing']['confirmation_id'] = $confirmation['Confirmation']['id'];
 				
+				//Default Settings
+				$billing['Billing']['additional_text'] = Configure::read('padcon.Rechnung.additional_text.default');
+		
+				
 				//Gernerierung der Auftragsbestätigungsnummer
 				$billing['Billing']['billing_number'] = $this->generateBillingNumber();
 				$this->Billing->save($billing);
@@ -152,11 +156,7 @@ class BillingsController extends AppController {
 			} else {
 				$data = $this->Billing->findById($id);
 
-				$data['Billing']['additional_text'] = '
-Zahlungsbedingung: 10 Tage 2% Skonto oder 30 Tage netto<br />
-Lieferung frei Haus<br />
-Lieferzeit: ca. 3-4 Wochen
-				';
+				$data['Billing']['additional_text'] = Configure::read('padcon.Rechnung.additional_text.default');
 				
 				$controller_name = 'Billings'; 
 				$controller_id = $data['Billing']['id'];
