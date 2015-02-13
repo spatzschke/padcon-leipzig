@@ -1,9 +1,8 @@
 <?php
 class Delivery extends AppModel {
 	var $name = 'Delivery';
-	var $displayField = 'delivery_number';
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
-
+	var $displayField = 'id';
+	//The Associations below have been created with all possible keys, those that are not needed can be remove
 	
 	var $hasOne = array(
 		'Confirmation' => array(

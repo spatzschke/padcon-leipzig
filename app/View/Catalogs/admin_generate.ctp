@@ -96,7 +96,7 @@ if(empty($this->data['Catalogs'])) {
 	<div class="buttons">
 		 <div id="printOffer" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-			<?php echo $this->Html->link('Katalog drucken', array('controller' => 'Catalogs', 'action' => 'createPdf', $this->data['Catalogs'][0]['Category']['id']), array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
+			<?php echo $this->Html->link('Katalog drucken', array('controller' => 'Catalogs', 'action' => 'createPdf', $this->data['Catalogs'][0]['Category']['id'], $this->data['Price']), array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
 		</div>
 	</div>
 

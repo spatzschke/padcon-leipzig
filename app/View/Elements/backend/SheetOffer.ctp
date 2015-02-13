@@ -21,6 +21,7 @@
 	$('#addToOffer a').addClass('disabled');
 	$('#offerSettings a').addClass('disabled');
 	$('#printOffer a').addClass('disabled');
+	$('#createConfirmation a').addClass('disabled');
 	
 	<?php if(!is_null($this->data['Customer']['id'])) { ?>
 		$('#addToOffer a').removeClass('disabled');
@@ -32,12 +33,13 @@
 	<?php if(!empty($this->data['Cart']['CartProduct'])) { ?>	
 		$('#addToOffer .input-group-addon').css('backgroundColor','lightgreen');	
 	<?php } ?>
-	<?php if(!empty($this->data['Offer']['additional_text'])) { ?>	
-		$('#offerSettings .input-group-addon').css('backgroundColor','lightgreen');
-	<?php } ?>
+	// <?php if(!empty($this->data['Offer']['additional_text'])) { ?>	
+		// $('#offerSettings .input-group-addon').css('backgroundColor','lightgreen');
+	// <?php } ?>
 	<?php 
 	if(((!empty($this->data['Offer']['additional_text'])) && (!empty($this->data['Cart']['CartProduct']))) || $this->request->params['action'] == 'admin_view') { ?>	
 		$('#printOffer a').removeClass('disabled');
+		$('#createConfirmation a').removeClass('disabled');
 	<?php } ?>
 	
 </script>

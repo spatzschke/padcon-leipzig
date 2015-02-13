@@ -133,7 +133,7 @@ class AddressesController extends AppController {
  *
  * @return void
  */
-	public function admin_add($count = 0) {
+	public function admin_add($count = 0, $customer = null) {
 		
 		$this->layout = 'ajax';
 		if ($this->request->is('post')) {

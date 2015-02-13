@@ -135,13 +135,11 @@
 					<td> 
 						<?php if(!isset($item['Confirmation']['offer_number'])) {
 							 echo '-'; 
-							} else {
-								
-								echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'view', $item['Confirmation']['offer_id']), array('escape' => false));
-								
-								echo '&nbsp;&nbsp;&nbsp;';
-								echo $item['Confirmation']['offer_number'];	
-							
+							} else {	
+								echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
+								data-content="'.$item['Confirmation']['offer_number'].'"
+								data-trigger="hover"></i>', 
+								array('admin' => true, 'controller' => 'Offers', 'action' => 'view', $item['Confirmation']['offer_id']), array('escape' => false));
 							}
 						?>
 					</td>
@@ -170,12 +168,14 @@
 							if(empty($item['Cart']['count']) || $item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
 								echo '-';
 							} else {
-								if(empty($item['Confirmation']['confirmation_id'])) {
+								if(empty($item['Confirmation']['delivery_id'])) {
 									echo $this->Html->link('Lieferschein', array('controller' => 'Deliveries', 'action' => 'convert', 'admin' =>'true', $item['Confirmation']['id']),
 																	array('class' => 'btn btn-default')); 	
 								} else {
-									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Confirmation']['confirmation_id']), array('escape' => false));
-									echo $item['Delivery']['delivery_number'];
+									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
+									data-content="'.$item['Delivery']['delivery_number'].'"
+									data-trigger="hover"></i>', 
+									array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Confirmation']['delivery_id']), array('escape' => false));
 								}
 									
 								

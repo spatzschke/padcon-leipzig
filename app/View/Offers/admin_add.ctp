@@ -21,7 +21,7 @@ $(document).ready(function() {
 		
 	?>
 	
-	$('.newOffer').click(function() {
+	$('.showNew').click(function() {
 	
 		$('#active_offer_modal').modal('hide');
 		$('#main').load('<?php echo FULL_BASE_URL.$this->base;?>\/Offers\/archiveActiveOffer\/');
@@ -71,11 +71,17 @@ $(document).ready(function() {
 		$('#offerSettigs_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Offers\/settings\/<?php echo $offer['Offer']['id'];?>');
 		$('#offerSettigs_modal').modal('show')
 	});
+	
+	$('#addAddress').find('a').click(function() {
+		$('#address_add .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/add\/<?php echo $offer['Offer']['customer_id'];?>');
+		$('#address_add').modal('show')
+	});
 
 	$("body").on("hidden", "#add_to_customer_modal", function(){ $(this).removeData("modal");});
 	$("body").on("hidden", "#add_to_offer_modal", function(){ $(this).removeData("modal");});
 	$("body").on("hidden", "#print_modal", function(){ $(this).removeData("modal");});
 	$("body").on("hidden", "#offerSettings_modal", function(){ $(this).removeData("modal");});
+	$("body").on("hidden", "#customer_address_modal", function(){ $(this).removeData("modal");});
  
 });
 </script>
@@ -90,7 +96,7 @@ $(document).ready(function() {
 				<p>Es ist ein aktives Angebot vorhanden.</p>
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-success newOffer">Neues Angebot erstellen</button>
+				<button class="btn btn-success showNew">Neues Angebot erstellen</button>
 				<button class="btn showActive">Aktives Angebot auswählen</button>
 			</div>
 		</div>
@@ -127,27 +133,24 @@ $(document).ready(function() {
 	</div>
 </div>
 
-<div class="wood_bg">
-
-	<div class="buttons">
-		     
-	    <div id="addToCustomer" class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
-			<a href="#" class="btn btn-default">Kunde hinzufügen</a>
-		</div>
-		<div id="addToOffer" class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
-			<a  href="#" class="btn btn-default">Produkt hinzufügen</a>
-		 </div>
-		<div id="offerSettings" class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-cog"></i></span>
-			<a href="#" class="btn btn-default">Angebots-einstellungen</a>
-		 </div>
-		 <div id="printOffer" class="input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-			<?php echo $this->Html->link('Angebot drucken', '/admin/offers/createPdf', array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
+<div class="modal" id="address_add" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-lg offer-dialog">
+	 	<div class="modal-content">
+			<div class="modal-body">
+				<?php echo $this->element('backend/helper/loadingHelper', array("size" => "large")); ?>	
+			</div>
 		</div>
 	</div>
+</div>
+
+<div class="wood_bg">
+
+	
+	<?php if(!empty($offer)) {
+		echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons'); 
+		}
+	?>
+	
 	<div class="pages">
 		<?php  
 			if(isset($pdf)) {
@@ -155,6 +158,6 @@ $(document).ready(function() {
 			} else {
 				echo $this->element('backend/SheetOffer');
 			}
-			 ?>
+		?>
 	</div>
 </div>

@@ -67,6 +67,10 @@ class OffersController extends AppController {
 			$offer['Offer']['customer_id'] = '';
 			$offer['Offer']['cart_id'] = $cart['Cart']['id'];
 			
+			//Default settings
+			$offer['Offer']['additional_text'] = Configure::read('padcon.Angebot.additional_text.default');
+			
+			
 			$this->Offer->save($offer);
 	
 			$this->generateDataByOffer($this->Offer->findById($this->Offer->id));
@@ -191,7 +195,6 @@ class OffersController extends AppController {
 					$offer['Offer']['request_date'] = date_format($date, 'd.m.Y');
 				}
 				
-				debug($offer['Offer']['request_date']);
 				
 				$offer['Offer']['cart_id'] = $offer['Offer']['cart_id'];
 				$offer['Offer']['additional_text'] = '
@@ -223,7 +226,8 @@ Lieferzeit: ca. 2-3 Wochen
 					'order' => array('Offer.id' => 'desc'),
 			        'conditions' => array('Customer.id' => $offer['Customer']['id'])
 			    ));
-				$this->request->data['Customer']['last_discount'] = $lastOfferByCustomer[1]['Offer']['discount'];
+				
+				$this->request->data['Customer']['last_discount'] = $lastOfferByCustomer[0]['Offer']['discount'];
 				
 			    // Use data from serialized form
 			    // print_r($this->request->data['Contacts']); // name, email, message
@@ -357,7 +361,7 @@ Lieferzeit: ca. 2-3 Wochen
 		
 		
 		if($offer) {
-			$offer['Offer']['offer_number'] = $this->generateOfferNumber($id, $offer);
+			$offer['Offer']['offer_number'] = $this->generateOfferNumber($id);
 			$offer['Offer']['customer_id'] = $id;
 			
 			
@@ -461,10 +465,10 @@ Lieferzeit: ca. 2-3 Wochen
 		$vat_price = $offer['Offer']['vat'] * $part_price / 100;
 		$offer_price = floatval($part_price + $vat_price);
 		
-		if($offer['Cart']['sum_retail_price'] > 500) {
-			$delivery_cost = 0;
+		if($offer['Cart']['sum_retail_price'] > Configure::read('padcon.delivery_cost.versandkostenfrei_ab')) {
+			$delivery_cost = Configure::read('padcon.delivery_cost.frei');
 		} else {
-			$delivery_cost = 8;
+			$delivery_cost = Configure::read('padcon.delivery_cost.paket');
 		}
 		
 		$arr_offer['Offer']['delivery_cost'] = $delivery_cost;
@@ -510,16 +514,28 @@ Lieferzeit: ca. 2-3 Wochen
 		$this->render('admin_add');
 	}
 	
-	function generateOfferNumber($customerId = null, $offer = null) {
+	function generateOfferNumber($customerId = null) {
 	
-		// Anzahl aller Angebote im Jahr / Anzahl aller Angebote im Monat_Aktueller Monat_Anzahl aller Angebote des Kunden	
+		// Angebot Nr.: 204/091104
+		// 204 = Fortlaufende Nummer im Jahr
+		// 09 = laufende Nummer im Monat
+		// 11 = Monat November
+		// 04 = Anzahl der gemachten Angebote für den Kunden im laufendem Jahrr
 		
-		$countYearOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))));
-		$countMonthOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))));
+		// 204 = Fortlaufende Nummer im Jahr
+		$countYearOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))))+1;
+		$countYearOffers = str_pad($countYearOffers, 2, "0", STR_PAD_LEFT);
+		// 09 = laufende Nummer im Monat
+		$countMonthOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))))+1;
+		$countMonthOffers = str_pad($countMonthOffers, 2, "0", STR_PAD_LEFT);
+		// 11 = Monat November
+		$month = date('m');
+		// 04 = Anzahl der gemachten Angebote für den Kunden im laufendem Jahr
 		$countCustomerOffers = count($this->Offer->find('all',array('conditions' => array('Offer.customer_id' => $customerId), 'Offer.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d')))))+1;
+		$countCustomerOffers = str_pad($countCustomerOffers, 2, "0", STR_PAD_LEFT);
 		
-		
-		return str_pad($countYearOffers, 3, "0", STR_PAD_LEFT).'/'.str_pad($countMonthOffers, 2, "0", STR_PAD_LEFT).date('m', strtotime($offer['Offer']['created'])).str_pad($countCustomerOffers, 2, "0", STR_PAD_LEFT);
+		// Angebot Nr.: 204/091104
+		return $countYearOffers.'/'.$countMonthOffers.$month.$countCustomerOffers;
 	}
 	
 	function generateDataByOffer($offer = null) {

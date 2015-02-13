@@ -1,5 +1,5 @@
 <?php 
-if(!isset($ajax)) {$ajax = 1;}
+$ajax = 1;
 
 foreach ($products as $product):?>
 									

@@ -1,4 +1,4 @@
-<?php	
+<?php
 	foreach ($data as $item):
 	
 		if($item['Confirmation']['cart_id'] != 0) {				
@@ -6,27 +6,27 @@
 				<tr>
 					<td>
 					<?php 
-						if($item['Confirmation']['status'] == "open") {
+						if($item['Delivery']['status'] == "open") {
 							echo '<i class="glyphicon glyphicon-open"  style="color: grey; cursor: pointer"
 								 data-toggle="popover"
 								 data-content="Offen"
 								 data-trigger="hover"
 							></i>';
 						} 
-						elseif($item['Confirmation']['status'] == "close") {
+						elseif($item['Delivery']['status'] == "close") {
 							echo '<i class="glyphicon glyphicon-lock" style="color: lightgrey; cursor: pointer"
 								 data-toggle="popover"
 								 data-content="Abgeschlossen"
 								 data-trigger="hover"
 							></i>';
 						}
-						elseif($item['Confirmation']['status'] == "active") {
+						elseif($item['Delivery']['status'] == "active") {
 							echo '<i class="glyphicon glyphicon-open"  style="color: grey; cursor: pointer"
 								 data-toggle="popover"
 								 data-content="Aktiv"
 								 data-trigger="hover"
 							></i>';
-						}elseif($item['Confirmation']['status'] == "") {
+						}elseif($item['Delivery']['status'] == "") {
 							echo '<i class="glyphicon glyphicon-ban-circle" style="color: lightgrey; cursor: pointer"
 								 data-toggle="popover"
 								 data-content="Unvollständig"
@@ -37,21 +37,21 @@
 						
 					</td>
 					<td>
-						<?php if(empty($item['Confirmation']['confirmation_number'])) {
+						<?php if(empty($item['Delivery']['delivery_number'])) {
 							 echo '-'; 
 							} else {
 								
-								echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['id']), array('escape' => false));
+								echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Delivery']['id']), array('escape' => false));
 								
 								echo '&nbsp;&nbsp;&nbsp;';
-								echo $item['Confirmation']['confirmation_number'];	
+								echo $item['Delivery']['delivery_number'];	
 							
 							}
 						?>
 					</td>
 					<td>
 						<?php 						
-						if(!is_null($item['Customer']['id'])) {
+						if(!is_null($item['Confirmation']['customer_id'])) {
 							
 							if(empty($item['Confirmation']['customer_id'])) { echo '-'; } else {
 								echo $item['Confirmation']['customer_id'];	
@@ -69,10 +69,17 @@
 												echo $item['Customer']['department_'.$i].'<br>';
 											}
 										}
-									 	echo 		 $item['Customer']['name'].'<br>'.
-													 $item['Customer']['phone'].'<br>'.
-													 $item['Customer']['email'].
-									 '"
+										if(!empty($item['Customer']['name'])) {
+											echo $item['Customer']['name'].'<br>';
+										}
+										if(!empty($item['Customer']['phone'])) {
+											echo $item['Customer']['phone'].'<br>';
+										}
+										if(!empty($item['Customer']['email'])) {
+											echo $item['Customer']['email'].'<br>';
+										}
+									 	
+									 echo '"
 									 data-trigger="hover"
 								
 								></i>';
@@ -80,15 +87,15 @@
 						} else { echo '-'; } 
 						 ?>
 					</td>
-					<td>
+					<!-- <td>
 						<?php 
-						if($item['Confirmation']['order_date'] == null) {
+						if($item['Delivery']['order_date'] == null) {
 							echo '-';
 						} else {
-							echo $this->Time->format($item['Confirmation']['order_date'], '%d.%m.%Y'); 
+							echo $this->Time->format($item['Delivery']['order_date'], '%d.%m.%Y'); 
 						}
 						?>
-					</td>
+					</td> -->
 					<td>
 						<?php 
 						$cartProducts = "";
@@ -108,51 +115,47 @@
 							></i>';
 						} ?>
 					</td>
-					<!--<td><?php echo $item['Confirmation']['discount']; ?>&nbsp;</td>
-					<td><?php echo $item['Confirmation']['delivery_cost']; ?>&nbsp;</td>-->
+					<!--<td><?php echo $item['Delivery']['discount']; ?>&nbsp;</td>
+					<td><?php echo $item['Delivery']['delivery_cost']; ?>&nbsp;</td>-->
 					<td> 
-						<?php if(!isset($item['Confirmation']['offer_number'])) {
+						<?php if(!isset($item['Delivery']['confirmation_number'])) {
 							 echo '-'; 
 							} else {
 								
-								echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'view', $item['Confirmation']['offer_id']), array('escape' => false));
-								
-								echo '&nbsp;&nbsp;&nbsp;';
-								echo $item['Confirmation']['offer_number'];	
-							
+								echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
+								data-content="'.$item['Confirmation']['confirmation_number'].'"
+								data-trigger="hover"></i>',
+								array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['id']), array('escape' => false));							
 							}
 						?>
 					</td>
 					<td>
 						<?php 
 							
-							if(empty($item['Cart']['count']) || $item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
-								echo '-';
+							if(empty($item['Confirmation']['billing_id'])) {
+								echo $this->Html->link('Rechnung', array('controller' => 'Billings', 'action' => 'convert', 'admin' =>'true', $item['Confirmation']['id']),
+																array('class' => 'btn btn-default')); 	
 							} else {
-								if(empty($item['Confirmation']['billing_id'])) {
-									echo $this->Html->link('Rechnung', array('controller' => 'Billings', 'action' => 'convert', 'admin' =>'true', $item['Confirmation']['id']),
-																	array('class' => 'btn btn-default')); 	
-								} else {
-									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'view', $item['Confirmation']['billing_id']), array('escape' => false));
-									echo $item['Billing']['billing_number'];
-								}
-									
+								echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
+								data-content="'.$item['Delivery']['billing_number'].'"
+								data-trigger="hover"></i>', 
+								array('admin' => true, 'controller' => 'Billings', 'action' => 'view', $item['Confirmation']['billing_id']), array('escape' => false));
 								
 							}
 							  
 						 ?>
 					</td>
 					
-					<td><?php echo $this->Time->format($item['Confirmation']['created'], '%d.%m.%Y'); ?></td>
-					<!-- <td><?php echo $item['Confirmation']['modified']; ?>&nbsp;</td> -->
+					<td><?php echo $this->Time->format($item['Delivery']['created'], '%d.%m.%Y'); ?></td>
+					<!-- <td><?php echo $item['Delivery']['modified']; ?>&nbsp;</td> -->
 					
 					
 					<?php
 						
 							echo '<td class="actions">';
 							
-							if(!empty($item['Confirmation']['offer_number']))
-								echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'createPdf', $item['Confirmation']['id']), array('escape' => false, 'target' => '_blank'));
+							if(!empty($item['Delivery']['offer_number']))
+								echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'createPdf', $item['Delivery']['id']), array('escape' => false, 'target' => '_blank'));
 							
 							echo '</td>';
 						

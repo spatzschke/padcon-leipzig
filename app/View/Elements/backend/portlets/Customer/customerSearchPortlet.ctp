@@ -3,6 +3,9 @@
 	// echo $this->Html->script('jquery.caret.1.02.min', false);
 	// echo $this->Html->script('jquery.liveValidation', false);
 	
+	
+	$addressTypeName = "Angebotsadresse";
+	
 ?>
 
 <script>
@@ -27,11 +30,16 @@
 		</div>
 	</div>
 </div>
-			<?php 			
+			<?php
+			 	if(is_null($this->data['Customer']['id'])) {
+			 		
+			 	}	else {
+			 		
+			 	
 				if(!isset($this->data['Address'])) {
 					
 					echo'<div class="alert alert-danger" role="alert">';
-						echo 'Es exisitert keine Angebotsadresse für den Kunden: </br>';
+						echo 'Es exisitert keine '.$addressTypeName.' für den Kunden: </br>';
 						echo '</br>';
 						if(!empty($this->data['Customer']['last_name'])) {
 							echo '<b>'.$this->data['Customer']['salutation'].' '.$this->data['Customer']['title'].' '.$this->data['Customer']['first_name'].' '.$this->data['Customer']['last_name'].' '.'</b></br>';
@@ -46,12 +54,7 @@
 						echo '<div id="addAddress" class="input-group">';
 						echo $this->Html->link(
 								    'Adresse hinzufügen',
-								    array(
-								        'controller' => 'Customers',
-								        'action' => 'edit',
-								        $this->data['Customer']['id'],
-								        'admin' => true	
-								    ),
+								    '#',
 								    array(
 								        'class' => 'btn btn-default',
 								        'id' => 'addAddress'
@@ -104,7 +107,8 @@
 						echo '</div>';
 					?>	
 			<?php 					
-				} 		
+				} 
+			}		
 			?>
 	<script>
 
