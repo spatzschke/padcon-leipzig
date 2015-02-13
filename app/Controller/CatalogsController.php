@@ -110,7 +110,10 @@ class CatalogsController extends AppController {
 				
 				$this->Product->unbindModel(array('hasAndBelongsToMany' => array('Cart')));			
 				$this->request->data['Catalogs'][0]['Products'] = $this->Product->find('all', array(
-					'conditions' => array('Product.category_id' => $this->request->data['Catalogs'][0]['Category']['id']),
+					'conditions' => array(
+						'Product.category_id' => $this->request->data['Catalogs'][0]['Category']['id'],
+						'Product.custom' => 0
+					),
 					'fields' => array('Product.*', 'Size.*', 'Material.*'), 
 					'order' => array('Product.product_number' => 'ASC')));					
 			} else {
@@ -191,16 +194,25 @@ class CatalogsController extends AppController {
 		$this->render('admin_generate_pl'); 
 	}
 
-	function admin_createPdf($id = null){
+	function admin_createPdf($id = null, $priceFlag = 0){
 
 		$this->layout = 'pdf';
+		if($id != 99) {
+			$this->request->data['Catalogs'][0] = $this->Catalog->find('first', array('conditions' => array('Catalog.category_id' => $id)));
+			$this->request->data['Catalogs'][0]['Catalog']['count'] = $this->Product->find('count', array('conditions' => array('Product.category_id' => $id)));
+			$this->request->data['Catalogs'][0]['Products'] = $this->Product->find('all', array(
+					'conditions' => array(
+						'Product.category_id' => $this->request->data['Catalogs'][0]['Category']['id'],
+						'Product.custom' => 0
+					),
+					'fields' => array('Product.*', 'Size.*', 'Material.*'), 
+					'order' => array('Product.product_number' => 'ASC')));
+				
+			$title = $this->data['Catalogs'][0]['Catalog']['name'].'-Katalog-'.date('y');
+		} else {
+			$title = 'Gesamt-Katalog-'.date('y');
+		}
 		
-		$this->request->data = $this->Catalog->find('first', array('conditions' => array('Catalog.category_id' => $id)));
-		$this->request->data['Catalog']['count'] = $this->Product->find('count', array('conditions' => array('Product.category_id' => $id)));
-		$this->request->data['Catalog']['Products'] = $this->Product->find('all', array(
-			'conditions' => array('Product.category_id' => $id),
-			'fields' => array('Product.*', 'Size.*', 'Material.*'), 
-			'order' => array('Product.product_number' => 'DESC')));
 		
 		$Sites = new SiteContentsController;
 		
@@ -224,8 +236,10 @@ class CatalogsController extends AppController {
 		$this->request->data['Categories'] = $this->Catalog->Category->find('list');
 		$this->request->data['Material'] = $this->Material->find('all');
 		
+		$this->request->data['Price'] = $priceFlag;
 		
-		$title = $this->data['Catalog']['name'].'-Katalog-'.date('y');
+		
+		$title = $this->data['Catalogs'][0]['Catalog']['name'].'-Katalog-'.date('y');
 		
 		$this->set('title_for_layout', $title);
       	$this->render('admin_generate'); 

@@ -77,6 +77,10 @@ article.sheet {
 
 .catalogListItem .catalogItemNumber { left: -95px !important}
 
+.catalogListItem .catalogItemFeatures {
+	margin-left: 0px !important;
+}
+
 .sheetHeader .bandage, .sheetFooter .bandage { width: 105% !important}
 
 .pages .ruckseite .sheetContent .more{

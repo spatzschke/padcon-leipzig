@@ -54,12 +54,7 @@
 						echo '<div id="addAddress" class="input-group">';
 						echo $this->Html->link(
 								    'Adresse hinzufügen',
-								    array(
-								        'controller' => 'Customers',
-								        'action' => 'edit',
-								        $this->data['Customer']['id'],
-								        'admin' => true	
-								    ),
+								    '#',
 								    array(
 								        'class' => 'btn btn-default',
 								        'id' => 'addAddress'

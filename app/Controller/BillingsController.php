@@ -289,6 +289,7 @@ class BillingsController extends AppController {
 						
 			//Load Customer for the Billing
 			$customer = $this->Customer->findById($item['Confirmation']['customer_id']);
+			
 			if($Customers->splitCustomerData($customer)) {
 				$item['Customer'] = $Customers->splitCustomerData($customer);
 			}			
