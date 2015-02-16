@@ -6,7 +6,7 @@ App::import('Controller', 'Customers');
 class OffersController extends AppController {
 
 	var $name = 'Offers';
-	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation');
+	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'User');
 	public $components = array('Auth', 'Session');
 	
 	public function beforeFilter() {
@@ -90,24 +90,15 @@ class OffersController extends AppController {
 	}
 
 	function admin_edit($id = null) {
-		if (!$id && empty($this->data)) {
-			$this->Session->setFlash(__('Invalid offer', true));
-			$this->redirect(array('action' => 'index'));
-		}
-		if (!empty($this->data)) {
-			if ($this->Offer->save($this->data)) {
-				$this->Session->setFlash(__('The offer has been saved', true));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The offer could not be saved. Please, try again.', true));
-			}
-		}
-		if (empty($this->data)) {
-			$this->data = $this->Offer->read(null, $id);
-		}
-		$carts = $this->Offer->Cart->find('list');
-		$users = $this->Offer->User->find('list');
-		$this->set(compact('carts', 'users'));
+		$this->layout = 'admin';
+		
+		$offer = $this->Offer->read(null, $id);
+		
+		$this->set('offer', $offer);
+		$this->set('pdf', null);
+		//$this->request->data = $offer;
+		$this->generateDataByOffer($offer);
+		$this->render('admin_add'); 
 	}
 
 	function admin_delete($id = null) {

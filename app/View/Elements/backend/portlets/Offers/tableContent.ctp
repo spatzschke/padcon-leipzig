@@ -43,7 +43,7 @@
 								if($item['Offer']['status'] == "active") {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'active'), array('escape' => false));
 								} elseif($item['Offer']['status'] != "") {
-									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'view', $item['Offer']['id']), array('escape' => false));
+									echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'edit', $item['Offer']['id']), array('escape' => false));
 								}
 								echo '&nbsp;&nbsp;&nbsp;';
 								echo $item['Offer']['offer_number'];	
@@ -137,7 +137,7 @@
 					<td>
 						<?php 
 							
-							if(empty($item['Cart']['count']) || $item['Offer']['request_date'] == '0000-00-00' || empty($item['Offer']['customer_id']) || empty($item['Offer']['offer_number']) || empty($item['Offer']['offer_price'])) {
+							if(empty($item['Cart']['count'])  || empty($item['Offer']['customer_id']) || empty($item['Offer']['offer_number']) || empty($item['Offer']['offer_price'])) {
 								echo '-';
 							} else {
 								if(empty($item['Offer']['confirmation_id'])) {
