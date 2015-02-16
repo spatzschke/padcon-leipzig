@@ -246,7 +246,7 @@ class BillingsController extends AppController {
 			
 		}
 		
-		$this->request->data = $Addresses->getAddressByType($this->request->data, 3);
+		$this->request->data = $Addresses->getAddressByType($this->request->data, 4);
 		
 		$confirmation = $Confirmations->calcPrice($this->request->data);		
 		$this->request->data['Confirmation'] += $confirmation;		

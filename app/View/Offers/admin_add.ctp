@@ -72,16 +72,13 @@ $(document).ready(function() {
 		$('#offerSettigs_modal').modal('show')
 	});
 	
-	$('#addAddress').find('a').click(function() {
-		$('#address_add .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/add\/<?php echo $offer['Offer']['customer_id'];?>');
-		$('#address_add').modal('show')
-	});
+
 
 	$("body").on("hidden", "#add_to_customer_modal", function(){ $(this).removeData("modal");});
 	$("body").on("hidden", "#add_to_offer_modal", function(){ $(this).removeData("modal");});
 	$("body").on("hidden", "#print_modal", function(){ $(this).removeData("modal");});
 	$("body").on("hidden", "#offerSettings_modal", function(){ $(this).removeData("modal");});
-	$("body").on("hidden", "#customer_address_modal", function(){ $(this).removeData("modal");});
+	$("body").on("hidden", "#address_add", function(){ $(this).removeData("modal");});
  
 });
 </script>
@@ -134,12 +131,12 @@ $(document).ready(function() {
 </div>
 
 <div class="modal" id="address_add" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
-	<div class="modal-dialog modal-lg offer-dialog">
-	 	<div class="modal-content">
+	<div class="modal-dialog offer-dialog">
+	 	
 			<div class="modal-body">
 				<?php echo $this->element('backend/helper/loadingHelper', array("size" => "large")); ?>	
 			</div>
-		</div>
+		
 	</div>
 </div>
 

@@ -22,13 +22,13 @@ $(document).ready(function() {
 
 				xhr = $.ajax({
 					 type: 'POST',
-					 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/Addresses/add/<?php echo $count;?>',
+					 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/Addresses/add/<?php echo $count;?>/<?php echo $this->data['Customer']['id'];?>',
 					 data: <?php echo $data ?>,
 					 success:function (data, textStatus) {
-	
-					 	$('.add_address').parents('.row').before(data);
+					 		
+					 	$('#customerAddressBox').html(data);
+					 	$('#addAddress_modal').modal('hide')
 					 	
-					 	$('#address_add').modal('hide')
 					 },
 					 error:function (data, textStatus) {
 					 	console.log("Error");
@@ -69,7 +69,8 @@ $(document).ready(function() {
 								'div' => FALSE,
 								'data-model' => 'Address', 
 								'data-field' => 'type', 
-								'autoComplete' => true));
+								'autoComplete' => true,
+								'value' => $this->data['addressType']));
 							?>   
 						</div>                          
                         
@@ -83,7 +84,8 @@ $(document).ready(function() {
 										'div' => FALSE,
 										'data-model' => 'Address', 
 										'data-field' => 'salutation', 
-										'autoComplete' => true));
+										'autoComplete' => true,
+										'value' => $this->data['Customer']['salutation']));
 									?>   
 								</div>                          
                         	</div>
@@ -96,7 +98,8 @@ $(document).ready(function() {
 										'data-model' => 'Address',
 										'placeholder' => 'Titel',
 										'data-field' => 'title', 
-										'autoComplete' => true
+										'autoComplete' => true,
+										'value' => $this->data['Customer']['title']
 									));
 									?>                                      
 	                             </div>
@@ -110,7 +113,8 @@ $(document).ready(function() {
 								'data-model' => 'Address',
 								'placeholder' => 'Vorname',
 								'data-field' => 'first_name', 
-								'autoComplete' => true
+								'autoComplete' => true,
+								'value' => $this->data['Customer']['first_name']
 							));
 							?>                                      
                          </div>
@@ -122,7 +126,8 @@ $(document).ready(function() {
 								'data-model' => 'Address',
 								'placeholder' => 'Nachname',
 								'data-field' => 'last_name', 
-								'autoComplete' => true
+								'autoComplete' => true,
+								'value' => $this->data['Customer']['last_name']
 							));
 							?>                                      
                          </div>
@@ -136,7 +141,8 @@ $(document).ready(function() {
 								'placeholder' => 'Organisation',
 								'data-field' => 'organisation', 
 								'autoComplete' => true,
-								'type' => 'textarea'
+								'type' => 'textarea',
+								'value' => $this->data['Customer']['organisation']
 							));
 							?> 
 						</div>
@@ -151,7 +157,8 @@ $(document).ready(function() {
 								'data-field' => 'department', 
 								'autoComplete' => true,
 								'type' => 'textarea',
-								'rows' => '3'
+								'rows' => '3',
+								'value' => $this->data['Customer']['department']
 							));
 							?> 
 						</div>
