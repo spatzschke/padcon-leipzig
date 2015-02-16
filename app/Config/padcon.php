@@ -6,21 +6,27 @@
 	Configure::write('padcon.delivery_cost.paeckchen', 6);
 	Configure::write('padcon.delivery_cost.frei', 0);
 	
+//Standardtext Settings
+	Configure::write('padcon.zahlungsbedingung.skonto.tage', 10);
+	Configure::write('padcon.zahlungsbedingung.skonto.wert', 2);
+	Configure::write('padcon.zahlungsbedingung.netto.tage', 30);
+	Configure::write('padcon.lieferzeit.min', 2);
+	Configure::write('padcon.lieferzeit.max', 3);
+	
+	Configure::write('padcon.lieferzeit.week', date('W')+3);
+	Configure::write('padcon.lieferzeit.year', date('Y'));
 	
 //Angebot - Offer
-	Configure::write('padcon.Angebot.additional_text.default','Zahlungsbedingung: 10 Tage 2% Skonto oder 30 Tage netto <br />Die Lieferung erfolgt zuzüglich anteiliger Versandkosten in Höhe von 8,00 Euro (Lieferung frei Haus ab einem Nettobestellwert von 500,00 Euro). <br />Lieferzeit: ca. 2-3 Wochen.');
-	
+	Configure::write('padcon.Angebot.additional_text.default','Zahlungsbedingung: '.Configure::read('padcon.zahlungsbedingung.skonto.tage').' Tage '.Configure::read('padcon.zahlungsbedingung.skonto.wert').'% Skonto oder '.Configure::read('padcon.zahlungsbedingung.skonto.tage').' Tage netto <br />Die Lieferung erfolgt zuzüglich anteiliger Versandkosten in Höhe von '.Configure::read('padcon.delivery_cost.paket').',00 Euro (Lieferung frei Haus ab einem Nettobestellwert von '.Configure::read('padcon.delivery_cost.versandkostenfrei_ab').',00 Euro). <br />Lieferzeit: ca. '.Configure::read('padcon.lieferzeit.min').'-'.Configure::read('padcon.lieferzeit.max').' Wochen.');
 	
 //Auftragsbestätigung - Confirmation	
-	Configure::write('padcon.Auftragsbestaetigung.additional_text.default','Zahlungsbedingung: 10 Tage 2% Skonto oder 30 Tage netto<br />Lieferung frei Haus<br />Lieferzeit: ca. 40. KW 2014');
+	Configure::write('padcon.Auftragsbestaetigung.additional_text.default','Zahlungsbedingung: '.Configure::read('padcon.zahlungsbedingung.skonto.tage').' Tage '.Configure::read('padcon.zahlungsbedingung.skonto.wert').'% Skonto oder '.Configure::read('padcon.zahlungsbedingung.skonto.tage').' Tage netto <br />Die Lieferung erfolgt zuzüglich anteiliger Versandkosten in Höhe von '.Configure::read('padcon.delivery_cost.paket').',00 Euro (Lieferung frei Haus ab einem Nettobestellwert von '.Configure::read('padcon.delivery_cost.versandkostenfrei_ab').',00 Euro). <br />Lieferzeit: ca. '.Configure::read('padcon.lieferzeit.week').'. KW '.Configure::read('padcon.lieferzeit.year').'');
 
 //Lieferschein - Delivery
-	Configure::write('padcon.Lieferschein.additional_text.default','Zahlungsbedingung: 10 Tage 2% Skonto oder 30 Tage netto<br />Lieferung frei Haus<br />Lieferzeit: ca. 40. KW 2014');
+	Configure::write('padcon.Lieferschein.additional_text.default','Zahlungsbedingung: '.Configure::read('padcon.zahlungsbedingung.skonto.tage').' Tage '.Configure::read('padcon.zahlungsbedingung.skonto.wert').'% Skonto oder '.Configure::read('padcon.zahlungsbedingung.skonto.tage').' Tage netto <br />Die Lieferung erfolgt zuzüglich anteiliger Versandkosten in Höhe von '.Configure::read('padcon.delivery_cost.paket').',00 Euro (Lieferung frei Haus ab einem Nettobestellwert von '.Configure::read('padcon.delivery_cost.versandkostenfrei_ab').',00 Euro). <br />Lieferzeit: ca. '.Configure::read('padcon.lieferzeit.week').'. KW '.Configure::read('padcon.lieferzeit.year').'');
 	
-
-
 //Rechnung - Billing
-	Configure::write('padcon.Rechnung.additional_text.default','Zahlungsbedingung: 10 Tage 2% Skonto oder 30 Tage netto<br />Lieferung frei Haus<br />Lieferzeit: ca. 40. KW 2014');
+	Configure::write('padcon.Rechnung.additional_text.default','Zahlungsbedingung: '.Configure::read('padcon.zahlungsbedingung.skonto.tage').' Tage '.Configure::read('padcon.zahlungsbedingung.skonto.wert').'% Skonto oder '.Configure::read('padcon.zahlungsbedingung.skonto.tage').' Tage netto <br />Die Lieferung erfolgt zuzüglich anteiliger Versandkosten in Höhe von '.Configure::read('padcon.delivery_cost.paket').',00 Euro (Lieferung frei Haus ab einem Nettobestellwert von '.Configure::read('padcon.delivery_cost.versandkostenfrei_ab').',00 Euro). <br />Lieferzeit: ca. '.Configure::read('padcon.lieferzeit.week').'. KW '.Configure::read('padcon.lieferzeit.year').'');
 	
 
 ?>

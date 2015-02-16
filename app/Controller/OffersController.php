@@ -188,12 +188,7 @@ class OffersController extends AppController {
 				
 				
 				$offer['Offer']['cart_id'] = $offer['Offer']['cart_id'];
-				$offer['Offer']['additional_text'] = '
-				
-Zahlungsbedingung: 10 Tage 2% Skonto oder 30 Tage netto <br />
-Die Lieferung erfolgt zuzüglich anteiliger Versandkosten in Höhe von 8,00 Euro (Lieferung frei Haus ab einem Nettobestellwert von 500,00 Euro). <br />
-Lieferzeit: ca. 2-3 Wochen
-				';
+				$offer['Offer']['additional_text'] = Configure::read('padcon.Angebot.additional_text.default');
 				
 				
 				$offer['CartProducts'] = $this->getSettingCartProducts();
