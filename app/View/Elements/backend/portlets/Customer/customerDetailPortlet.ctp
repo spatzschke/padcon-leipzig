@@ -15,16 +15,6 @@ $(document).ready(function() {
 						autoSave: false,
 						});
 						
-	$('.add_address').on('click', function(){
-			
-			var c = $('.address_dummy').length;
-				
-			$('#address_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/add\/'+c);
-			$('#address_add').modal('show');
-			
-			return false;
-		});
-		
 	$('.glyphicon').popover({
             html:true
         });
@@ -183,7 +173,25 @@ $(document).ready(function() {
                          
                          
 					</div>
+					<?php
+					if(isset($this->data['Customer'])) {
+					?>
+					<script>
+
+					$(document).ready(function() {
+								
+						$('.add_address').on('click', function(){
+								
+							var c = $('.address_dummy').length;
+								
+							$('#address_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/add\/'+c+'\/<?php echo $this->data['Customer']['id'];?>');
+							$('#address_add').modal('show');
+							
+							return false;
+						});														
+					});
 					
+					</script>
 					<!-- Rechts -->
 					<div class="col-md-6">
 						<h5>Adressen</h5>
@@ -207,6 +215,11 @@ $(document).ready(function() {
 						</div>
 						
 					</div>
+					
+					<?php
+					}
+					?>
+					
                     <div style="margin-top:10px" class="form-group">
                         <!-- Button -->
                         <div class="col-sm-12 controls">                         

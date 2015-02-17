@@ -48,7 +48,7 @@ $(document).ready(function() {
 
 	$('#addToOffer').find('a').click(function() {
 
-		$('#add_to_offer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/index\/ajax\/<?php echo $offer['Offer']['cart_id'];?>');
+		$('#add_to_offer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/indexAjax\/ajax\/<?php echo $offer['Offer']['cart_id'];?>');
 		$('#add_to_offer_modal').modal('show')
 
 	})

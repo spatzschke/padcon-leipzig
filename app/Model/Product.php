@@ -14,7 +14,7 @@ class Product extends AppModel {
 			),
 			'notempty' => array(
 				'rule' => array('notempty'),
-				'message' => 'Darf nicht leer sein!',
+				'message' => 'Kategory darf nicht leer sein!',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -24,7 +24,7 @@ class Product extends AppModel {
 		'name' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				'message' => 'Darf nicht leer sein!',
+				'message' => 'Produktname darf nicht leer sein!',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -34,12 +34,12 @@ class Product extends AppModel {
 		'product_number' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				'message' => 'Darf nicht leer sein!',
+				'message' => 'Die Producktnummer darf nicht leer sein!',
 				
 			),
 			'alphaNumeric' => array(
 				'rule' => array('alphaNumeric'),
-				'message' => 'Es sind nur Zahlen von 0-9 erlaubt!',
+				'message' => 'Es sind nur Zahlen und Buchstaben erlaubt!',
 				//'allowEmpty' => false,
 				
 			),
@@ -55,7 +55,7 @@ class Product extends AppModel {
 		'featurelist' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				'message' => 'Darf nicht leer sein!',
+				'message' => 'Featureliste darf nicht leer sein!',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -73,7 +73,7 @@ class Product extends AppModel {
 			),
 			'notempty' => array(
 				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
+				'message' => 'Material darf nicht leer sein!',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -83,7 +83,7 @@ class Product extends AppModel {
 		'base_price' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
+				'message' => 'Einkaufspreis darf nicht leer sein!',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -93,7 +93,7 @@ class Product extends AppModel {
 		'retail_price' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
+				'message' => 'Verkaufspreis darf nicht leer sein!',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule

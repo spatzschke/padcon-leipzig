@@ -26,7 +26,7 @@
 				</div>
 			<?php }?>
 	        <div class="catalogItemSize">
-	        	<?php echo $präfix_size;?><?php $this->requestAction('Products/sizeBuilder/'.$product['Size']['id']); ?>
+	        	<?php echo $präfix_size;?><?php echo $product['Product']['size']; ?>
 	        
 	        <div class="catalogItemPrice">
 	        	<?php if($this->data['Price']) {

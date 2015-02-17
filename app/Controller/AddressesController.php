@@ -164,8 +164,19 @@ class AddressesController extends AppController {
 			}
 		}
 		else {
-			$options = array('conditions' => array('Customer.' . $this->Customer->primaryKey => $customer));
-			$this->request->data = $this->Customer->find('first', $options);
+			
+			if($customer) {
+				$options = array('conditions' => array('Customer.' . $this->Customer->primaryKey => $customer));
+				$this->request->data = $this->Customer->find('first', $options);	
+			} else {
+				$this->request->data['Customer']['salutation'] = array();
+				$this->request->data['Customer']['title'] = array();
+				$this->request->data['Customer']['first_name'] = array();
+				$this->request->data['Customer']['last_name'] = array();
+				$this->request->data['Customer']['organisation'] = array();
+				$this->request->data['Customer']['department'] = array();
+			}
+			
 						
 			unset($this->request->data['Offer']);
 			$types = $this->Address->getAddressTypes();

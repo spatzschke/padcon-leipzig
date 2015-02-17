@@ -66,11 +66,7 @@ $(document).ready(function() {
 			<table class="tablesorter" cellspacing="0"> 
 			<thead> 
 				<tr> 
-   					<?php
-						if($this->request->is('ajax')) {
-							echo '<th></th> ';
-						}
-					?>
+   					<th><?php __('');?></th>
     			<!--<th><?php __('ID');?></th>-->
 					<th><?php echo('pd-#');?></th>
 					<th><?php echo('Name');?></th>

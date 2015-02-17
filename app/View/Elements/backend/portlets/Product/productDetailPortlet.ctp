@@ -55,7 +55,27 @@ function loadCustomProductNumber() {
 
                     <div class="panel-body" >
 
-                       	<?php echo $this->Session->flash(); ?>
+                       	<?php 
+                       		if(isset($errors)) {
+                       			echo '
+                       				<div class="row alert-row">
+										<div class="alert alert-danger col-md-12" role="alert" style="margin-bottom: 0;">
+										  Folgende Fehler sind aufgetreten
+										  <br /><br />
+										  <ul>
+										  ';
+										  foreach($errors as $error) {
+										  	echo '<li>'.$error[0].'</li>';
+										  }
+								echo '
+										</ul>
+										</div>
+									</div>
+                       			';
+                       		} else {
+                       			echo $this->Session->flash();
+                       		}
+                       		 ?>
                             
                    
                         <?php echo $this->Form->create('Product', array(
@@ -175,13 +195,20 @@ function loadCustomProductNumber() {
                             	<div class="col-md-4">
 		                             <div class="input-group">
 		                                <span class="input-group-addon">
-											<?php echo $this->Form->input('active', array(
+											<?php 
+											$checked = "";
+											if($this->data['Product']['active']) {
+												$checked = "checked";
+											}
+											
+											echo $this->Form->input('active', array(
 												'label' => false,
 												'data-model' => 'Product',
 												'placeholder' => 'Aktiv',
 												'data-field' => 'active', 
 												'autoComplete' => true,
-												'div' => false
+												'div' => false,
+												$checked
 											));
 											?>  
 										</span>
@@ -207,13 +234,22 @@ function loadCustomProductNumber() {
 								<div class="col-md-4">
 		                             <div class="input-group">
 		                                <span class="input-group-addon">
-											<?php echo $this->Form->input('custom', array(
+		                                	<?php 
+		                                	
+		                                	if($this->request->params['action'] == "admin_edit") {
+												$readonlyCustom = "disabled";
+											} else {
+												$readonlyCustom = "";
+											}
+		                                	
+											echo $this->Form->input('custom', array(
 												'label' => false,
 												'data-model' => 'Product',
 												'placeholder' => 'Sonderanfertigung',
 												'data-field' => 'custom', 
 												'autoComplete' => true,
-												'div' => false
+												'div' => false,
+												$readonlyCustom
 											));
 											?>  
 										</span>
