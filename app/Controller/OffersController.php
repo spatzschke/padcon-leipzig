@@ -224,12 +224,12 @@ class OffersController extends AppController {
 		
 	}
 
-	function admin_removeProductFromOffers($id = null) {
+	function admin_removeProductFromOffers($id = null, $offer_id = null) {
 		
 		$this->layout = 'ajax';
 		$this->autoRender = false;
 		
-		$offer = $this->getActiveOffer();
+		$offer = $this->Offer->findById($offer_id);
 		
 		//Lösche Eintrag
 		if ($id) {
@@ -238,7 +238,10 @@ class OffersController extends AppController {
 		$Carts = new CartsController();		
 		$Carts->updateCartCount($offer['Cart']);
 		
+		$offer = $this->Offer->findById($offer_id);
+		
 		$offer['CartProducts'] = $this->getSettingCartProducts();
+		
 		$this->request->data = $offer;
 		
 		$this->render('/Elements/backend/portlets/Product/settingsProductTable');

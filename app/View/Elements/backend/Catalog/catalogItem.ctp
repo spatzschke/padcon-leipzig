@@ -26,8 +26,11 @@
 				</div>
 			<?php }?>
 	        <div class="catalogItemSize">
-	        	<?php echo $präfix_size;?><?php echo $product['Product']['size']; ?>
-	        
+	        	<?php if(!empty($product['Product']['size'])) {	?>
+	        		<?php echo $präfix_size;?><?php echo $product['Product']['size']; ?>
+	        	<?php }	else {
+	        		echo "<br />";
+	        	}?>
 	        <div class="catalogItemPrice">
 	        	<?php if($this->data['Price']) {
 	        		echo $this->Number->currency($product['Product']['retail_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));

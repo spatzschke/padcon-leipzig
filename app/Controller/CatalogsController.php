@@ -112,7 +112,8 @@ class CatalogsController extends AppController {
 				$this->request->data['Catalogs'][0]['Products'] = $this->Product->find('all', array(
 					'conditions' => array(
 						'Product.category_id' => $this->request->data['Catalogs'][0]['Category']['id'],
-						'Product.custom' => 0
+						'Product.custom' => 0,
+						'Product.active' => 1
 					),
 					'fields' => array('Product.*', 'Size.*', 'Material.*'), 
 					'order' => array('Product.product_number' => 'ASC')));					
@@ -203,7 +204,8 @@ class CatalogsController extends AppController {
 			$this->request->data['Catalogs'][0]['Products'] = $this->Product->find('all', array(
 					'conditions' => array(
 						'Product.category_id' => $this->request->data['Catalogs'][0]['Category']['id'],
-						'Product.custom' => 0
+						'Product.custom' => 0,
+						'Product.active' => 1
 					),
 					'fields' => array('Product.*', 'Size.*', 'Material.*'), 
 					'order' => array('Product.product_number' => 'ASC')));
