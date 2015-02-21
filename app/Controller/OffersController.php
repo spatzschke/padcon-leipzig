@@ -6,7 +6,7 @@ App::import('Controller', 'Customers');
 class OffersController extends AppController {
 
 	var $name = 'Offers';
-	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation');
+	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'User');
 	public $components = array('Auth', 'Session');
 	
 	public function beforeFilter() {
@@ -90,24 +90,15 @@ class OffersController extends AppController {
 	}
 
 	function admin_edit($id = null) {
-		if (!$id && empty($this->data)) {
-			$this->Session->setFlash(__('Invalid offer', true));
-			$this->redirect(array('action' => 'index'));
-		}
-		if (!empty($this->data)) {
-			if ($this->Offer->save($this->data)) {
-				$this->Session->setFlash(__('The offer has been saved', true));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The offer could not be saved. Please, try again.', true));
-			}
-		}
-		if (empty($this->data)) {
-			$this->data = $this->Offer->read(null, $id);
-		}
-		$carts = $this->Offer->Cart->find('list');
-		$users = $this->Offer->User->find('list');
-		$this->set(compact('carts', 'users'));
+		$this->layout = 'admin';
+		
+		$offer = $this->Offer->read(null, $id);
+		
+		$this->set('offer', $offer);
+		$this->set('pdf', null);
+		//$this->request->data = $offer;
+		$this->generateDataByOffer($offer);
+		$this->render('admin_add'); 
 	}
 
 	function admin_delete($id = null) {
@@ -197,12 +188,7 @@ class OffersController extends AppController {
 				
 				
 				$offer['Offer']['cart_id'] = $offer['Offer']['cart_id'];
-				$offer['Offer']['additional_text'] = '
-				
-Zahlungsbedingung: 10 Tage 2% Skonto oder 30 Tage netto <br />
-Die Lieferung erfolgt zuzüglich anteiliger Versandkosten in Höhe von 8,00 Euro (Lieferung frei Haus ab einem Nettobestellwert von 500,00 Euro). <br />
-Lieferzeit: ca. 2-3 Wochen
-				';
+				$offer['Offer']['additional_text'] = Configure::read('padcon.Angebot.additional_text.default');
 				
 				
 				$offer['CartProducts'] = $this->getSettingCartProducts();
@@ -238,12 +224,12 @@ Lieferzeit: ca. 2-3 Wochen
 		
 	}
 
-	function admin_removeProductFromOffers($id = null) {
+	function admin_removeProductFromOffers($id = null, $offer_id = null) {
 		
 		$this->layout = 'ajax';
 		$this->autoRender = false;
 		
-		$offer = $this->getActiveOffer();
+		$offer = $this->Offer->findById($offer_id);
 		
 		//Lösche Eintrag
 		if ($id) {
@@ -252,7 +238,10 @@ Lieferzeit: ca. 2-3 Wochen
 		$Carts = new CartsController();		
 		$Carts->updateCartCount($offer['Cart']);
 		
+		$offer = $this->Offer->findById($offer_id);
+		
 		$offer['CartProducts'] = $this->getSettingCartProducts();
+		
 		$this->request->data = $offer;
 		
 		$this->render('/Elements/backend/portlets/Product/settingsProductTable');
@@ -523,10 +512,10 @@ Lieferzeit: ca. 2-3 Wochen
 		// 04 = Anzahl der gemachten Angebote für den Kunden im laufendem Jahrr
 		
 		// 204 = Fortlaufende Nummer im Jahr
-		$countYearOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))))+1;
+		$countYearOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))));
 		$countYearOffers = str_pad($countYearOffers, 2, "0", STR_PAD_LEFT);
 		// 09 = laufende Nummer im Monat
-		$countMonthOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))))+1;
+		$countMonthOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))));
 		$countMonthOffers = str_pad($countMonthOffers, 2, "0", STR_PAD_LEFT);
 		// 11 = Monat November
 		$month = date('m');

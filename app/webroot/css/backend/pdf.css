@@ -160,7 +160,8 @@ article.sheet {
 .sheet.business .sheetHeader,
 .sheet.business .customerData {width: 780px !important}
 .sheet.business .customerData {margin-top: 55px !important}
-.sheet.business .customerData .col-md-6 {width: 358px !important}
+.sheet.business .customerData .col-md-6 {width: 358px !important; padding-left: 0px !important}
+.sheet.business .customerData .col-md-6 .col-md-12 {padding-left: 0px !important}
 
 .sheet.business .row-fluid .offerInfo label { width: 110px !important}
 

@@ -35,41 +35,9 @@ class CustomersController extends AppController {
 			$this->Customer->create();
 			if ($this->Customer->save($this->request->data)) {
 				
-				if(isset($this->data['Address'])) {
+				$lastId = $this->Customer->getLastInsertID();
 					
-					$this->Session->setFlash(__('Kunde ohne Adresse wurde erfolgreich erstellt', true), 'flash_message', array('class' => 'alert-success'));
-					
-					$lastCustomerId = $this->Customer->getLastInsertID();
-				
-					$customerAddresses = array();
-					$i = 0;
-					foreach ($this->request->data['Address'] as $address) {
-						array_push($customerAddresses, array('CustomerAddress' => 
-							array('customer_id' => $lastCustomerId,'address_id' => $address['id'])
-						));
-						
-					}
-					
-					if ($this->CustomerAddress->saveMany($customerAddresses)) {
-						$this->Session->setFlash(__('Kunde mit Adresse wurde erfolgreich erstellt', true), 'flash_message', array('class' => 'alert-success'));
-						//	$this->redirect(array('action' => 'index'));
-						
-						$customer = $this->Customer->read(null, $lastCustomerId);
-						unset($customer['Offer']);
-						
-						$customerAddresses = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $lastCustomerId)));
-						$customer['Customer']['Addresses'] = array();
-						
-						$Addresses = new AddressesController();
-						
-						foreach ($customerAddresses as $address) {
-							array_push($customer['Customer']['Addresses'], $Addresses->splitAddressData($address));
-						}
-						$this->set('addressTypes', $this->Address->getAddressTypes());
-						$this->request->data = $customer;
-					}	
-				}
-				
+				$this->redirect(array('action' => 'edit', $lastId));			
 			
 			} else {
 				$this->Session->setFlash(__('Kunde konnte nicht erstellt werden!. Bitte versuchen Sie es erneut.', true), 'flash_message', array('class' => 'alert-danger'));

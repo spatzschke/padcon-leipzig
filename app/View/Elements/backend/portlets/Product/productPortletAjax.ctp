@@ -15,7 +15,7 @@ $(document).ready(function() {
 	
 		$('#filter .search input').dynamicSearch({
 			url: "<?php echo FULL_BASE_URL.$this->base;?>\/Products\/search\/<?php echo $ajax;?>\/",
-			renderTemplate: '/Elements/backend/portlets/Product/productPortletTableContent',
+			renderTemplate: '/Elements/backend/portlets/Product/productPortletTableContentAjax',
 			cancel: '.form-search .cancel',
 			addToCartUrl: '<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/loadProductAddPopup\/',
 			loadingClass: 'loadingSpinner',
@@ -102,7 +102,7 @@ $(document).ready(function() {
 					<td>&nbsp;</td>-->
 				</tr> */ ?>
 				
-				<?php echo $this->element('backend/portlets/Product/productPortletTableContent', array('products' => $products)); ?>
+				<?php echo $this->element('backend/portlets/Product/productPortletTableContentAjax', array('products' => $products)); ?>
 				
 			</tbody>
 			 

@@ -133,25 +133,55 @@ class AddressesController extends AppController {
  *
  * @return void
  */
-	public function admin_add($count = 0, $customer = null) {
+	public function admin_add($count = 0, $customer = null, $type = null) {
 		
 		$this->layout = 'ajax';
 		if ($this->request->is('post')) {
 			$this->Address->create();
 			if ($this->Address->save($this->request->data)) {
 				//$this->Session->setFlash(__('Adresse gespeichert.'));
-						
-				$this->request->data['Address'] = $this->splitAddressData($this->request->data['Address']);
-				$this->request->data['Address']['id'] = $this->Address->getLastInsertID();
-				$this->set('count', $count);
-				$this->set('addressTypes', $this->Address->getAddressTypes());
-				$this->render('/Elements/backend/portlets/Address/addressMiniViewPortlet');
+					
+				$lastAddressId = $this->Address->getLastInsertID();
+				if(is_null($customer)) {
+					$this->request->data['Address'] = $this->splitAddressData($this->request->data['Address']);
+					$this->request->data['Address']['id'] = $lastAddressId;
+					$this->set('count', $count);
+					$this->set('addressTypes', $this->Address->getAddressTypes());
+					$this->render('/Elements/backend/portlets/Address/addressMiniViewPortlet');
+				} else {
+					$this->request->data['CustomerAddress']['customer_id'] = $customer;
+					$this->request->data['CustomerAddress']['address_id'] = $lastAddressId;
+					if ($this->CustomerAddress->save($this->request->data)) {
+						$loadAddress = $this->Address->findById($lastAddressId);
+						$this->request->data['Address'] = $this->splitAddressData($loadAddress['Address']);
+						$this->render('/Elements/backend/portlets/Customer/customerFormPortlet');		
+					}
+				}
+				
 				$this->autoRender = false;
 			} else {
 				$this->Session->setFlash(__('The address could not be saved. Please, try again.'));
 			}
 		}
-		else {	
+		else {
+			
+			if($customer) {
+				$options = array('conditions' => array('Customer.' . $this->Customer->primaryKey => $customer));
+				$this->request->data = $this->Customer->find('first', $options);	
+			} else {
+				$this->request->data['Customer']['salutation'] = array();
+				$this->request->data['Customer']['title'] = array();
+				$this->request->data['Customer']['first_name'] = array();
+				$this->request->data['Customer']['last_name'] = array();
+				$this->request->data['Customer']['organisation'] = array();
+				$this->request->data['Customer']['department'] = array();
+			}
+			
+						
+			unset($this->request->data['Offer']);
+			$types = $this->Address->getAddressTypes();
+			$this->request->data['addressType'] = $type; 
+				
 			$this->set('primary_button','Hinzufügen');
 			$this->set('count', $count);
 			

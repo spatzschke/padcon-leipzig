@@ -30,6 +30,11 @@ class ProductsController extends AppController {
 		$this->set('ajax', 0);
 	}
 	
+	function admin_indexAjax($layout = null, $cart_id = null) {
+		$this->admin_index($layout, $cart_id);
+		$this->render('/Elements/backend/portlets/Product/productPortletAjax');
+	}
+	
 	function listing($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash(__('Invalid product', true));
@@ -50,7 +55,7 @@ class ProductsController extends AppController {
 			$con = array('Product.active' => '1', 'Category.short' => $categoryID);
 		}
 		
-		$products = $this->Product->find('all',array('conditions' =>  $con,'order' => array('Product.product_number ASC')));
+		$products = $this->Product->find('all',array('conditions' =>  $con,'order' => array('Product.product_number ASC'), 'group' =>  array('Product.product_number')));
 		
 		return $products;
 	}
@@ -164,17 +169,20 @@ class ProductsController extends AppController {
 		$this->layout = 'admin';
 		$this->set('title_for_panel', 'Produkt betrachten');
 	}
-
-	function add() {
+	
+	function admin_add() {
 		$this->layout = 'admin';
 		
 		
 		if (!empty($this->data)) {
 			$this->Product->create();
 			if ($this->Product->save($this->data)) {
-				$this->Session->setFlash(__('The product has been saved', true));
-				//$this->redirect(array('action' => 'edit', $this->data['Product']['product_number']));
+				$this->Session->setFlash(__('Produkt wurde angelegt!', true));
+				$lastId = $this->Product->getLastInsertID();					
+				$this->redirect(array('action' => 'edit', $lastId));
 			} else {
+				$errors = $this->Product->invalidFields();
+				$this->set(compact("errors"));
 				$this->Session->setFlash(__('The product could not be saved. Please, try again.', true));
 			}
 		}
@@ -191,13 +199,6 @@ class ProductsController extends AppController {
 		// $this->request->data['Materials'] = $materials;
 		// $this->request->data['Sizes'] = $sizes;
 		// $this->request->data['Carts'] = $carts;
-		
-		
-	}
-	
-	function admin_add($id = null) {
-		$this->add($id);
-		$this->layout = 'admin';
 		
 	}
 	

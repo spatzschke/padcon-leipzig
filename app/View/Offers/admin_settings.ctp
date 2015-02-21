@@ -72,12 +72,12 @@
 								   
 								<script type="text/javascript">
 									    $('.date').datepicker({
-									    startDate: 'd',
+									    startDate: '-3m',
 									    format: "dd.mm.yyyy",
 									    language: "de",
 									    calendarWeeks: true,
 									    autoclose: true,
-									    todayHighlight: true
+									    todayHighlight: true, 
 									    });
 								</script>
 								
