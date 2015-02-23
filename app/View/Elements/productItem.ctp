@@ -1,11 +1,3 @@
-<?php 
-	$präfix_number = 'PD-';
-	$präfix_material = 'Material';
-	$präfix_color = 'Farbe';
-	$präfix_size = 'Maße';
-	$productItemFeaturesHeader = 'Eigenschaften';
-?>		
-
 <div id="p<?php echo $product['Product']['product_number'];?>" class="productListItem productListItem-<?php echo $product['Category']['short'];?>">
 	<div class="productItemHeader"></div>
     <div class="productItemCenter">
@@ -19,24 +11,24 @@
 			?>
         </div>
     	<div class="productItemContent">
-            <div class="productItemNumber"><?php echo $präfix_number;?><?php echo $product['Product']['product_number'];?></div>
+            <div class="productItemNumber"><?php echo Configure::read('padcon.product.number.präfix'); ?><?php echo $product['Product']['product_number'];?></div>
             <div class="productItemName"><?php echo $product['Product']['name'];?></div>
             <?php if(!empty($product['Material']['name'])) {?>
 	            <div class="productItemMaterial">
-					<label><?php echo $präfix_material;?>:</label> 
+					<label><?php echo Configure::read('padcon.product.material.präfix');?>:</label> 
 					<?php echo $product['Material']['name'];?></div>
 	            <div class="productItemColor">
-					<label class="color"><?php echo $präfix_color;?>:</label>
+					<label class="color"><?php echo Configure::read('padcon.product.color.präfix');?>:</label>
 					<?php echo $this->element('productItemColorSlider', array('product' => $product)); ?>	
 				</div>
 			<?php }?>
             <div class="productItemSize">
-				<label><?php echo $präfix_size;?>:</label>
-            	<?php $this->requestAction('Products/sizeBuilder/'.$product['Size']['id']); ?>
+				<label><?php echo Configure::read('padcon.product.size.präfix')?>:</label>
+            	<?php echo $product['Product']['size'].Configure::read('padcon.product.size.suffix') ?>
             </div>
         </div>
         <div class="productItemFeatures">
-        	<div class="productItemFeaturesHeader"><?php echo $productItemFeaturesHeader;?>:</div>
+        	<div class="productItemFeaturesHeader"><?php echo Configure::read('padcon.product.feature.präfix');?>:</div>
             <ul>
             	<?php echo $product['Product']['featurelist'];?>
             </ul>

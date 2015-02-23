@@ -28,5 +28,16 @@
 //Rechnung - Billing
 	Configure::write('padcon.Rechnung.additional_text.default','Zahlungsbedingung: '.Configure::read('padcon.zahlungsbedingung.skonto.tage').' Tage '.Configure::read('padcon.zahlungsbedingung.skonto.wert').'% Skonto oder '.Configure::read('padcon.zahlungsbedingung.skonto.tage').' Tage netto <br />Die Lieferung erfolgt zuzüglich anteiliger Versandkosten in Höhe von '.Configure::read('padcon.delivery_cost.paket').',00 Euro (Lieferung frei Haus ab einem Nettobestellwert von '.Configure::read('padcon.delivery_cost.versandkostenfrei_ab').',00 Euro). <br />Lieferzeit: ca. '.Configure::read('padcon.lieferzeit.week').'. KW '.Configure::read('padcon.lieferzeit.year').'');
 	
-
+//Product
+	Configure::write('padcon.product.number.präfix', 'PD-');
+	Configure::write('padcon.product.material.präfix', 'Bezug');
+	Configure::write('padcon.product.color.präfix', 'Farbe');
+	Configure::write('padcon.product.size.präfix', 'Maße');
+	Configure::write('padcon.product.size.suffix', 'cm');
+	Configure::write('padcon.product.feature.präfix', 'Eigenschaften');
+	Configure::write('padcon.product.farbindex', 'Farbe laut Farben-Index');
+	
+//Währung
+	Configure::write('padcon.currency.symbol', '€');
+	Configure::write('padcon.currency.format', '€');
 ?>

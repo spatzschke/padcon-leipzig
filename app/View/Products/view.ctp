@@ -43,7 +43,7 @@
 		</dd>
 		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Size'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $this->Html->link($product['Size']['id'], array('controller' => 'sizes', 'action' => 'view', $product['Size']['id'])); ?>
+			<?php // echo $this->Html->link($product['Size']['id'], array('controller' => 'sizes', 'action' => 'view', $product['Size']['id'])); ?>
 			&nbsp;
 		</dd>
 		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Active'); ?></dt>

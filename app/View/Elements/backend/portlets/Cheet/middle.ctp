@@ -10,10 +10,9 @@
 						$product = $this->requestAction('Products/getProduct/'.$cartProduct['product_id']);
 						$color = $this->requestAction('Colors/getColor/'.$cartProduct['color_id']);
 						$material = $this->requestAction('Materials/getMaterial/'.$product['Product']['material_id']);
-						$size = $this->requestAction('Sizes/getSize/'.$product['Product']['size_id']);
 						$features = $this->requestAction('Products/seperatFeatureList/'.$cartProduct['product_id']);
 						
-						$product_number_präfix = 'PD-';
+						$product_number_präfix = Configure::read('padcon.product.number.präfix');
 						if($product['Product']['custom']) {$product_number_präfix = '';}
 
 						echo '
@@ -31,11 +30,11 @@
 										echo '<input class="text col-md-12" type="text" value="'.$fea.'" /><br />';
 									}
 									echo '<input class="text col-md-12" type="text" value="Bezug: '.$material['Material']['name'].', Farbe: '.$color['Color']['name'].'" />
-								<div class="size"><input type="text" value="Maße: '.$size['Size']['name'].'" /></div>
+								<div class="size"><input type="text" value="'.Configure::read('padcon.product.size.präfix').': '.$product['Product']['size'].Configure::read('padcon.product.number.suffix').'" /></div>
 								';
 								if($this->request->params['controller'] != "Deliveries") {
-								echo '<div class="price"><input type="text" value="'.number_format($product['Product']['retail_price'], 2, ",", ".").'" /> €</div>
-									<div class="sum_price">'.number_format(floatVal($product['Product']['retail_price'])*intVal($cartProduct['amount']), 2, ",", ".").' €</div>';							
+								echo '<div class="price"><input type="text" value="'.number_format($product['Product']['retail_price'], 2, ",", ".").'" /> '.Configure::read('padcon.currency.symbol').'</div>
+									<div class="sum_price">'.number_format(floatVal($product['Product']['retail_price'])*intVal($cartProduct['amount']), 2, ",", ".").' '.Configure::read('padcon.currency.symbol').'</div>';							
 								}
 								echo '</div>
 						</div>

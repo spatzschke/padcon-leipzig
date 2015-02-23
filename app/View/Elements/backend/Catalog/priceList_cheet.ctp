@@ -102,7 +102,7 @@
 							
 							<?php
 							
-								$size = $product['Size']['name'];
+								$size = $product['Product']['size'];
 								$size = str_replace('cm', '', $size);
 								$size = str_replace('Höhe', 'H', $size);
 								

@@ -1,12 +1,3 @@
-<?php 
-	$präfix_number = 'PD-';
-	$präfix_material = 'Material';
-	$präfix_color = 'Farbe';
-	$präfix_size = 'Maße';
-	$productItemFeaturesHeader = 'Eigenschaften';
-	
-?>		
-
 <div id="p<?php echo $partner['Partner']['id'];?>" class="partnerListItem">
     <div class="partnerItemCenter">
     	<div class="partnerItemImage">	

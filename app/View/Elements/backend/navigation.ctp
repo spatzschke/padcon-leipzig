@@ -49,7 +49,6 @@
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle Produkte anzeigen', '/admin/products/index'); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Material hinzufügen', '/admin/materials/add', array('disabled' => 'disabled')); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Farben hinzufügen', '/admin/colors/add', array('disabled' => 'disabled')); ?></li>
-			<li class="icn_view_users"><?php echo $this->Html->link('Maße hinzufügen', '/admin/sizes/add', array('disabled' => 'disabled')); ?></li>
 		</ul>
 		
 		<h3>Partnerdatenbank</h3>
