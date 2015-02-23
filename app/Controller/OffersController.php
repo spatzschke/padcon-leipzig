@@ -586,7 +586,6 @@ class OffersController extends AppController {
 					unset($product['Cart']);
 					unset($product['Category']);
 					unset($product['Material']);
-					unset($product['Size']);
 					$offer['Cart']['CartProduct'][$j]['Information'] = $product;
 					$j++;
 				}

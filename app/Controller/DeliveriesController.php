@@ -297,7 +297,6 @@ Lieferzeit: ca. 3-4 Wochen
 					unset($product['Cart']);
 					unset($product['Category']);
 					unset($product['Material']);
-					unset($product['Size']);
 					$item['Cart']['CartProduct'][$j]['Information'] = $product;
 					$j++;
 				}

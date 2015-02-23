@@ -581,7 +581,6 @@ class ConfirmationsController extends AppController {
 					unset($product['Cart']);
 					unset($product['Category']);
 					unset($product['Material']);
-					unset($product['Size']);
 					$item['Cart']['CartProduct'][$j]['Information'] = $product;
 					$j++;
 				}
