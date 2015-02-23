@@ -16,9 +16,13 @@ foreach ($products as $product):?>
 					<td><?php echo $product['Product']['name']; ?>&nbsp;</td>
 				<!--<td><?php echo $product['Product']['description']; ?>&nbsp;</td>
 					<td><?php echo $product['Product']['featurelist']; ?>&nbsp;</td>-->
-					<td><?php echo $product['Category']['name']; ?>&nbsp;</td>
+					<!-- <td><?php echo $product['Category']['name']; ?>&nbsp;</td> -->
 					<td><?php echo $product['Material']['name']; ?>&nbsp;</td>
-					<td><?php echo $product['Product']['size']; ?>&nbsp;</td>
+					<td><?php 
+						if($product['Product']['size'] != "") {
+							echo $product['Product']['size'].Configure::read('padcon.product.size.suffix');
+						}
+					?>&nbsp;</td>
 				<!--<td><?php echo $product['Product']['price']; ?>&nbsp;�</td>
 					<td><?php echo $product['Product']['new']; ?>&nbsp;</td>
 					<td><?php echo $product['Product']['active']; ?>&nbsp;</td>

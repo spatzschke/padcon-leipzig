@@ -48,7 +48,6 @@
 
 			if($catalogi != 'empty') {
 				for($j = ($page - 1 ) * $productsPerPage; $j < $page * $productsPerPage; $j++) {
-
 				if(!empty($this->data['Catalogs'][0]['Products'][$j])) {
 				
 						$catalogProduct = $this->data['Catalogs'][0]['Products'][$j];

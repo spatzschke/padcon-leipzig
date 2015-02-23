@@ -13,15 +13,16 @@
 	        <?php if(!empty($product['Material']['name'])) {?>
 	            <div class="catalogItemMaterial">
 					<?php echo Configure::read('padcon.product.material.präfix').': ';?>
-					<?php echo $product['Material']['name'];?>
-					<?php echo ' ,'.Configure::read('padcon.product.farbindex');?>
+					<?php echo $product['Material']['name'].', '.Configure::read('padcon.product.farbindex');?>
 				</div>
 			<?php }?>
 	        <div class="catalogItemSize">
 	        	<?php if(!empty($product['Product']['size'])) {	?>
-	        		<?php echo Configure::read('padcon.product.size.präfix').': ';?><?php echo $product['Product']['size']; ?>
+	        		<?php echo Configure::read('padcon.product.size.präfix').': ';?><?php echo $product['Product']['size'].Configure::read('padcon.product.size.suffix'); ?>
 	        	<?php }	else {
-	        		echo "<br />";
+	        		if($this->data['Price']) {
+	        			echo "<br />";
+					}
 	        	}?>
 	        <div class="catalogItemPrice">
 	        	<?php if($this->data['Price']) {
