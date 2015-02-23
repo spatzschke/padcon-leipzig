@@ -794,21 +794,60 @@ div.form, div.index, div.view {
     width: 111px;
     z-index: 9999;
     display: none;
-}
-
-.searchContent .headLoader img {
-	margin-bottom: 10px;
-    margin-left: 25px;
+    text-align: center;
+    font-size: 15px
 }
 
 .searchContent .headLoader .titel {
 	width: 100%;
 	float: left;
-	font-size: 15px;
+	font-size: 20px;
     font-weight: bold;
     color: #346AA6;
     padding-left: 13px; 
 }
+
+.loadingSpinner {
+  -webkit-animation: spin 1s infinite linear;
+  -moz-animation: spin 1s infinite linear;
+  -o-animation: spin 1s infinite linear;
+  animation: spin 1s infinite linear;
+  width: 100%;
+}
+
+.searchContent .headLoader .loadingSpinner:before {
+  content: "\e031";
+  font-size: 50px;
+}
+
+@-moz-keyframes spin {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
 
 /* Login */
 
@@ -824,5 +863,4 @@ div.form, div.index, div.view {
 }
 
 .alert { margin-bottom: 0;}
-
 

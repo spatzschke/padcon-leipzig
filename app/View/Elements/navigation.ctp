@@ -9,7 +9,7 @@
 	$(document).ready(function() {
 	
 		$('#topNavigation .search input').dynamicSearch({
-			url: "<?php echo FULL_BASE_URL.$this->base;?>/Products/search/",
+			url: "<?php echo FULL_BASE_URL.$this->base;?>/Products/search2/",
 			content: '.searchContent .result',
 			ajaxLoader: '.searchContent .headLoader',
 			originContent: '#content',
