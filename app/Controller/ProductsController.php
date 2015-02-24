@@ -355,7 +355,12 @@ class ProductsController extends AppController {
 		$this->autoRender = false;
 		$this->layout = 'ajax';
 		
-		$custom =  $this->Product->find('all',array('conditions' => array('Product.custom' => 1) ,'order' => array('Product.created' => 'desc')));
+		$custom =  $this->Product->find('all',array('conditions' => array(
+			'Product.custom' => 1,
+			'Product.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))),
+			
+			'order' => array('Product.created' => 'desc'))
+		);
 		
 		if(empty($custom)) {
 			$number = 1;
