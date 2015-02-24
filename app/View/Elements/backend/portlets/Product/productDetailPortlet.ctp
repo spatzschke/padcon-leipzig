@@ -197,7 +197,7 @@ function loadCustomProductNumber() {
 		                                <span class="input-group-addon">
 											<?php 
 											$checked = "";
-											if($this->data['Product']['active']) {
+											if(isset($this->data['Product']['active'])) {
 												$checked = "checked";
 											}
 											
