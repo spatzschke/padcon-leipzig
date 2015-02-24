@@ -28,7 +28,7 @@
 	<tr>
 		<th></th>
 		<th>#</th>
-		<th>pd-#</th>
+		<th><?php echo Configure::read('padcon.product.number.präfix');?>#</th>
 		<th>Name</th>
 		<th>Farbe</th>
 	</tr>
@@ -45,7 +45,7 @@
 					
 						</td>';
 					echo '<td>'.$products['Product']['amount'].'</td>';
-					echo '<td>pd-'.$products['Product']['product_number'].'</td>';
+					echo '<td>'.Configure::read('padcon.product.number.präfix').$products['Product']['product_number'].'</td>';
 					echo '<td>'.$products['Product']['name'].'</td>';
 					echo '<td><div class="color" style="background-color: #'.$products['Color']['rgb'].'"data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="'.$products['Color']['name'].'"></div></td>';
 				echo '</tr>';

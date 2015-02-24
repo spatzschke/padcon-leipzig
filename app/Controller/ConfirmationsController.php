@@ -89,6 +89,9 @@ class ConfirmationsController extends AppController {
 			$confirmation['Confirmation']['cart_id'] = $cart['Cart']['id'];
 			//$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
 			
+			//Default settings
+			$confirmation['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
+			
 			$this->Confirmation->save($confirmation);
 			$id = $this->Confirmation->id;
 
@@ -263,6 +266,8 @@ class ConfirmationsController extends AppController {
 				
 				
 				$confirmation['Confirmation']['order_number'] = $this->request->data['Confirmation']['order_number'];
+								
+				$confirmation['Confirmation']['delivery_cost'] = $this->request->data['Confirmation']['deliveryCost'];
 				
 				
 				if($this->Confirmation->save($confirmation)){
@@ -300,7 +305,12 @@ class ConfirmationsController extends AppController {
 				}
 				
 				$confirmation['Confirmation']['cart_id'] = $confirmation['Confirmation']['cart_id'];
-				$confirmation['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
+				
+				if(empty($confirmation['Confirmation']['additional_text'])) {
+					$confirmation['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
+				} 
+				
+				
 				
 				
 				$confirmation['CartProducts'] = $this->getSettingCartProducts($confirmation);
@@ -313,6 +323,8 @@ class ConfirmationsController extends AppController {
 				$controller_id = $cart['Confirmation']['id'];
 
 				$this->set(compact('controller_id', 'controller_name'));
+				
+				
 				
 				$this->request->data = $confirmation;
 				
@@ -515,7 +527,12 @@ class ConfirmationsController extends AppController {
 		if($data['Cart']['sum_retail_price'] > Configure::read('padcon.delivery_cost.versandkostenfrei_ab')) {
 			$delivery_cost = Configure::read('padcon.delivery_cost.frei');
 		} else {
-			$delivery_cost = Configure::read('padcon.delivery_cost.paket');
+			if($data['Confirmation']['delivery_cost'] != Configure::read('padcon.delivery_cost.paeckchen')) {
+				$delivery_cost = Configure::read('padcon.delivery_cost.paket');
+			} else {
+				$delivery_cost = Configure::read('padcon.delivery_cost.paeckchen');
+			}
+			
 		}
 		
 		$arr_data['Confirmation']['delivery_cost'] = $delivery_cost;

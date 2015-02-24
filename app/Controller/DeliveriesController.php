@@ -77,7 +77,7 @@ class DeliveriesController extends AppController {
 				
 				$currDeliveryId = $this->Delivery->getLastInsertId();
 				
-				//Neue Liverschein-ID in AUftragsbestäätigung speichern 
+				//Neue Lieferschein-ID in AUftragsbestäätigung speichern 
 				$confirmation['Confirmation']['delivery_id'] = $currDeliveryId;
 				$this->Confirmation->save($confirmation);
 				

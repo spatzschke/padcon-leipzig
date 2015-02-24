@@ -155,6 +155,8 @@ class OffersController extends AppController {
 					$offer['Offer']['request_date'] = date_format($date, 'Y-m-d');
 				}	
 				
+				$offer['Offer']['delivery_cost'] = $this->request->data['Offer']['deliveryCost'];
+				
 				if($this->Offer->save($offer)){
 					$this->Session->setFlash(__('Speicherung erfolgreich', true));
 				} else {
@@ -188,8 +190,10 @@ class OffersController extends AppController {
 				
 				
 				$offer['Offer']['cart_id'] = $offer['Offer']['cart_id'];
-				$offer['Offer']['additional_text'] = Configure::read('padcon.Angebot.additional_text.default');
 				
+				if(empty($offer['Offer']['additional_text'])) {
+					$offer['Offer']['additional_text'] = Configure::read('padcon.Angebot.additional_text.default');
+				} 				
 				
 				$offer['CartProducts'] = $this->getSettingCartProducts();
 				
@@ -457,7 +461,11 @@ class OffersController extends AppController {
 		if($offer['Cart']['sum_retail_price'] > Configure::read('padcon.delivery_cost.versandkostenfrei_ab')) {
 			$delivery_cost = Configure::read('padcon.delivery_cost.frei');
 		} else {
-			$delivery_cost = Configure::read('padcon.delivery_cost.paket');
+			if($offer['Offer']['delivery_cost'] != Configure::read('padcon.delivery_cost.paeckchen')) {
+				$delivery_cost = Configure::read('padcon.delivery_cost.paket');
+			} else {
+				$delivery_cost = Configure::read('padcon.delivery_cost.paeckchen');
+			}
 		}
 		
 		$arr_offer['Offer']['delivery_cost'] = $delivery_cost;

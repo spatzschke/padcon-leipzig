@@ -30,7 +30,7 @@
 										echo '<input class="text col-md-12" type="text" value="'.$fea.'" /><br />';
 									}
 									echo '<input class="text col-md-12" type="text" value="Bezug: '.$material['Material']['name'].', Farbe: '.$color['Color']['name'].'" />
-								<div class="size"><input type="text" value="'.Configure::read('padcon.product.size.präfix').': '.$product['Product']['size'].Configure::read('padcon.product.number.suffix').'" /></div>
+								<div class="size"><input type="text" value="'.Configure::read('padcon.product.size.präfix').': '.$product['Product']['size'].Configure::read('padcon.product.size.suffix').'" /></div>
 								';
 								if($this->request->params['controller'] != "Deliveries") {
 								echo '<div class="price"><input type="text" value="'.number_format($product['Product']['retail_price'], 2, ",", ".").'" /> '.Configure::read('padcon.currency.symbol').'</div>

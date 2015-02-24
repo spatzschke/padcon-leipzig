@@ -175,7 +175,8 @@ article.sheet {
 	font-size: 14px;
 }
 
-.pages .row-fluid .offerText input.text { width: 100%; }
+.pages .row-fluid .offerText input.text { width: 100%;}
+.pages .row-fluid .offerText { width: 100%; float: left;}
 
 .offerMiddle .price input {max-width: 65px; margin-top: -1px;}
 

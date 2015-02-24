@@ -6,8 +6,6 @@
 	echo $this->Html->script('jquery.dynamicSearch', false);
 		
 	echo $this->Html->css('backend/page');
-
-
 ?>	
 
 <script>
