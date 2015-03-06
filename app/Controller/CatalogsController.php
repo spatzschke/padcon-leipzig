@@ -115,7 +115,7 @@ class CatalogsController extends AppController {
 						'Product.custom' => 0,
 						'Product.active' => 1
 					),
-					'fields' => array('Product.*', 'Size.*', 'Material.*'), 
+					'fields' => array('Product.*', 'Material.*'), 
 					'order' => array('Product.product_number' => 'ASC')));					
 			} else {
 				$catalogs = $this->Catalog->find('all');
@@ -132,7 +132,6 @@ class CatalogsController extends AppController {
 						'conditions' => array('Product.category_id' => $catalog['Category']['id']),
 						'fields' => array(
 							'Product.*', 
-							'Size.*', 
 							'Material.*'
 						), 
 						'order' => array('Product.product_number' => 'ASC')));			
@@ -207,7 +206,7 @@ class CatalogsController extends AppController {
 						'Product.custom' => 0,
 						'Product.active' => 1
 					),
-					'fields' => array('Product.*', 'Size.*', 'Material.*'), 
+					'fields' => array('Product.*', 'Material.*'), 
 					'order' => array('Product.product_number' => 'ASC')));
 				
 			$title = $this->data['Catalogs'][0]['Catalog']['name'].'-Katalog-'.date('y');

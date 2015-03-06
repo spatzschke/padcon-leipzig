@@ -121,7 +121,7 @@ function loadCustomProductNumber() {
 							</div>
 							<div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                                <?php echo $this->Form->input('size_id', array(
+                                <?php echo $this->Form->input('size', array(
 									'label' => false,
 									'class' => 'form-control',
 									'data-model' => 'Product',
@@ -177,7 +177,8 @@ function loadCustomProductNumber() {
 												'placeholder' => 'Aktiv',
 												'data-field' => 'active', 
 												'autoComplete' => true,
-												'div' => false
+												'div' => false,
+												'disabled' => 'disabled'
 											));
 											?>  
 										</span>
@@ -193,7 +194,8 @@ function loadCustomProductNumber() {
 												'placeholder' => 'New',
 												'data-field' => 'new', 
 												'autoComplete' => true,
-												'div' => false
+												'div' => false,
+												'disabled' => 'disabled'
 											));
 											?>  
 										</span>
@@ -209,7 +211,8 @@ function loadCustomProductNumber() {
 												'placeholder' => 'Sonderanfertigung',
 												'data-field' => 'custom', 
 												'autoComplete' => true,
-												'div' => false
+												'div' => false,
+												'disabled' => 'disabled'
 											));
 											?>  
 										</span>
@@ -230,7 +233,8 @@ function loadCustomProductNumber() {
 									'placeholder' => 'Beschreibung',
 									'data-field' => 'description', 
 									'autoComplete' => true,
-									'type' => 'textarea'
+									'type' => 'textarea',
+									'disabled' => 'disabled'
 								));
 								?> 
 							</div>
@@ -244,7 +248,8 @@ function loadCustomProductNumber() {
 										'placeholder' => 'Featurliste',
 										'data-field' => 'featurelist', 
 										'autoComplete' => true,
-										'type' => 'textarea'
+										'type' => 'textarea',
+										'disabled' => 'disabled'
 									));
 									?>                                      
 	                        </div>

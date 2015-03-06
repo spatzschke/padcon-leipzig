@@ -10,7 +10,7 @@ $(document).ready(function() {
 
 	$('#addProduct').find('a').click(function() {
 
-		$('#add_to_offer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/index\/ajax\/<?php echo $this->data['Cart']['id'];?>');
+		$('#add_to_offer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/indexAjax\/ajax\/<?php echo $this->data['Cart']['id'];?>');
 		$('#add_to_offer_modal').modal('show')
 
 	})

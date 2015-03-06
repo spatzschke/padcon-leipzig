@@ -100,24 +100,6 @@ class Product extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'size_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-			'notempty' => array(
-				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
 		'active' => array(
 			'boolean' => array(
 				'rule' => array('boolean'),
@@ -162,13 +144,6 @@ class Product extends AppModel {
 		'Material' => array(
 			'className' => 'Material',
 			'foreignKey' => 'material_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
-		'Size' => array(
-			'className' => 'Size',
-			'foreignKey' => 'size_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

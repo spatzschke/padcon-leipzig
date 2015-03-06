@@ -79,8 +79,8 @@
 
 			<div class="searchContent">
 				<div class="headLoader">
-					<img src="<?php echo $this->webroot.'img/ajax_64.gif'; ?>" alt="Ladevorgang"/>
-					<div class="titel">Lade Inhalte</div>
+					<i class="glyphicon loadingSpinner"></i>
+					Inhalt laden ...
 				</div>
 				<div class="result"></div>
 			</div>

@@ -2,7 +2,7 @@
 class ProductsController extends AppController {
 
 	var $name = 'Products';
-	public $uses = array('Cart', 'Product', 'Material', 'Size', 'Color', 'Image');
+	public $uses = array('Cart', 'Product', 'Material', 'Color', 'Image');
 	var $components = array('RequestHandler', 'Auth', 'Session');
 	var $helpers = array('Html', 'Js');
 	
@@ -10,7 +10,7 @@ class ProductsController extends AppController {
 
 		if(isset($this->Auth)) {
 			$this->Auth->fields = array('username' => 'email', 'password' => 'password');
-			$this->Auth->allow('listing', 'sizeBuilder', 'getColors', 'search', 'liveValidate');
+			$this->Auth->allow('listing', 'getColors', 'search', 'liveValidate');
 			
 			$this->set('auth',$this->Auth->user());	
 		}
@@ -88,46 +88,7 @@ class ProductsController extends AppController {
 		
 	}
 	
-	function sizeBuilder($id = null) {
-		$size = $this->Size->findById( $id );
-		
-		$sizeString = '';
-		
-        // B x L
-		if($size['Size']['depth'] != '' && $size['Size']['width'] != '') {
-			$sizeString = $size['Size']['depth'].' x '.$size['Size']['width'];
-		}
-		
-		// B x L x H
-		if($size['Size']['depth'] != '' && $size['Size']['width'] != '' && $size['Size']['height'] != '') {
-			$sizeString = $size['Size']['depth'].' x '.$size['Size']['width'].' x '.$size['Size']['height'];
-		}
-		
-        // ØA, ØI, H
-		if($size['Size']['outer'] != '' && $size['Size']['inner'] != '' && $size['Size']['height'] != '') {
-			$sizeString = 'ØA:'.$size['Size']['outer'].', ØI:'.$size['Size']['inner'].', '.$size['Size']['height'];
-		}
-		
-        // Ø x L
-		if($size['Size']['outer'] != '' && $size['Size']['width'] != '') {
-			$sizeString = 'Ø'.$size['Size']['outer'].' x '.$size['Size']['width'];
-		}
-		
-        // B x L x H, ØI
-		if($size['Size']['depth'] != '' && $size['Size']['width'] != '' && $size['Size']['height'] != '' && $size['Size']['inner'] != '') {
-			$sizeString = $size['Size']['depth'].' x '.$size['Size']['width'].' x '.$size['Size']['height'].', ØI:'.$size['Size']['inner'];
-		}		
-		
-		if($sizeString == '') {
-			echo 'siehe Eigenschaften';
-		} else {
-			echo $sizeString. ' cm';	
-		}
-		
-		
-	}
-	
-	function getColors($material = null) {
+		function getColors($material = null) {
 		
 		
 		$colors = $this->Color->find('all',array('conditions' => array('Color.material_id' => $material)));
@@ -162,9 +123,8 @@ class ProductsController extends AppController {
 		
 		$categories = $this->Product->Category->find('list');
 		$materials = $this->Product->Material->find('list');
-		$sizes = $this->Product->Size->find('list');
 		$carts = $this->Product->Cart->find('list');
-		$this->set(compact('categories', 'materials', 'sizes', 'carts'));
+		$this->set(compact('categories', 'materials', 'carts'));
 		
 		$this->layout = 'admin';
 		$this->set('title_for_panel', 'Produkt betrachten');
@@ -188,16 +148,14 @@ class ProductsController extends AppController {
 		}
 		$categories = $this->Product->Category->find('list');
 		$materials = $this->Product->Material->find('list');
-		$sizes = $this->Product->Size->find('list');
 		$carts = $this->Product->Cart->find('list');
-		$this->set(compact('categories', 'materials', 'sizes', 'carts'));
+		$this->set(compact('categories', 'materials', 'carts'));
 		$this->set('primary_button', 'Anlegen');
 		$this->set('title_for_panel', 'Produkt anlegen');
 		$this->render('/Elements/backend/portlets/Product/productDetailPortlet');
 		
 		// $this->request->data['Categories'] = $categories;
 		// $this->request->data['Materials'] = $materials;
-		// $this->request->data['Sizes'] = $sizes;
 		// $this->request->data['Carts'] = $carts;
 		
 	}
@@ -268,9 +226,8 @@ class ProductsController extends AppController {
 		$categories = $this->Product->Category->find('list');
 		$materials = $this->Product->Material->find('list');
 		
-		$sizes = $this->Product->Size->find('list');
 		$carts = $this->Product->Cart->find('list');
-		$this->set(compact('categories', 'materials', 'sizes', 'carts', 'colors'));
+		$this->set(compact('categories', 'materials', 'carts', 'colors'));
 	}
 	
 	function admin_edit($id = null) {
@@ -308,8 +265,7 @@ class ProductsController extends AppController {
 			array (	'Product.name LIKE' 			=> '%'.$this->data['str'].'%' ,
 					'Product.product_number LIKE' 	=> '%'.$this->data['str'].'%' ,
 					'Material.name LIKE' 	=> '%'.$this->data['str'].'%', 
-					'Category.name LIKE' 	=> '%'.$this->data['str'].'%', 
-					'Size.name LIKE' 	=> '%'.$this->data['str'].'%'))));	
+					'Category.name LIKE' 	=> '%'.$this->data['str'].'%'))));	
 		
 			$this->set('products', $products);
 			
@@ -328,8 +284,7 @@ class ProductsController extends AppController {
 			array (	'Product.name LIKE' 			=> '%'.$this->data['str'].'%' ,
 					'Product.product_number LIKE' 	=> '%'.$this->data['str'].'%' ,
 					'Material.name LIKE' 	=> '%'.$this->data['str'].'%', 
-					'Category.name LIKE' 	=> '%'.$this->data['str'].'%', 
-					'Size.name LIKE' 	=> '%'.$this->data['str'].'%'))));	
+					'Category.name LIKE' 	=> '%'.$this->data['str'].'%'))));	
 		
 		$this->set('products', $products);
 		$this->set('ajax', $ajax);
@@ -400,7 +355,12 @@ class ProductsController extends AppController {
 		$this->autoRender = false;
 		$this->layout = 'ajax';
 		
-		$custom =  $this->Product->find('all',array('conditions' => array('Product.custom' => 1) ,'order' => array('Product.created' => 'desc')));
+		$custom =  $this->Product->find('all',array('conditions' => array(
+			'Product.custom' => 1,
+			'Product.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))),
+			
+			'order' => array('Product.created' => 'desc'))
+		);
 		
 		if(empty($custom)) {
 			$number = 1;

@@ -11,7 +11,7 @@ foreach ($products as $product):?>
 		<td><?php echo $product['Product']['featurelist']; ?>&nbsp;</td>-->
 		<td><?php echo $product['Category']['name']; ?>&nbsp;</td>
 		<td><?php echo $product['Material']['name']; ?>&nbsp;</td>
-		<td><?php echo $product['Size']['name']; ?>&nbsp;</td>
+		<td><?php echo $product['Product']['size']; ?>&nbsp;</td>
 	<!--<td><?php echo $product['Product']['price']; ?>&nbsp;�</td>
 		<td><?php echo $product['Product']['new']; ?>&nbsp;</td>
 		<td><?php echo $product['Product']['active']; ?>&nbsp;</td>

@@ -17,12 +17,7 @@
 		echo '<![endif]-->';
 		
 		echo $this->Html->script('jquery-2.1.1.min');
-		echo $this->Html->script('jquery.lazyload.min');
-		echo $this->Html->script('backend/jquery.iphone-style-checkboxes');
-		
-		echo $this->Html->css('backend/jquery.iphone-style-checkboxes');
-		
-		
+		echo $this->Html->script('jquery.lazyload.min');		
 		
 		echo $scripts_for_layout;		
 		
@@ -32,6 +27,8 @@
 		echo $this->Html->script('backend/Chart.min');
 		echo $this->Html->script('backend/bootstrap-datepicker');
 		echo $this->Html->css('backend/datepicker3');
+		echo $this->Html->script('backend/bootstrap-switch.min');
+		echo $this->Html->css('backend/bootstrap-switch.min');
 		
 		echo $this->Html->script('backend/admin_main');
 

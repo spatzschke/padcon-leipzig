@@ -77,7 +77,7 @@ class DeliveriesController extends AppController {
 				
 				$currDeliveryId = $this->Delivery->getLastInsertId();
 				
-				//Neue Liverschein-ID in AUftragsbestäätigung speichern 
+				//Neue Lieferschein-ID in AUftragsbestäätigung speichern 
 				$confirmation['Confirmation']['delivery_id'] = $currDeliveryId;
 				$this->Confirmation->save($confirmation);
 				
@@ -297,7 +297,6 @@ Lieferzeit: ca. 3-4 Wochen
 					unset($product['Cart']);
 					unset($product['Category']);
 					unset($product['Material']);
-					unset($product['Size']);
 					$item['Cart']['CartProduct'][$j]['Information'] = $product;
 					$j++;
 				}

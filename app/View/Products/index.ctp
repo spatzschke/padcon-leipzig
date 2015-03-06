@@ -39,7 +39,7 @@
 		</td>
 		<td><?php echo $product['Product']['price']; ?>&nbsp;</td>
 		<td>
-			<?php echo $this->Html->link($product['Size']['id'], array('controller' => 'sizes', 'action' => 'view', $product['Size']['id'])); ?>
+			<?php // echo $this->Html->link($product['Size']['id'], array('controller' => 'sizes', 'action' => 'view', $product['Size']['id'])); ?>
 		</td>
 		<td><?php echo $product['Product']['active']; ?>&nbsp;</td>
 		<td><?php echo $product['Product']['new']; ?>&nbsp;</td>

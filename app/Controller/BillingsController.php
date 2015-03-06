@@ -85,6 +85,7 @@ class BillingsController extends AppController {
 				
 				//Gernerierung der Auftragsbestätigungsnummer
 				$billing['Billing']['billing_number'] = $this->generateBillingNumber();
+				$billing['Billing']['additional_text'] = Configure::read('padcon.Rechnung.additional_text.default');
 				$this->Billing->save($billing);
 				
 				$currBillingId = $this->Billing->getLastInsertId();
@@ -304,7 +305,6 @@ class BillingsController extends AppController {
 					unset($product['Cart']);
 					unset($product['Category']);
 					unset($product['Material']);
-					unset($product['Size']);
 					$item['Cart']['CartProduct'][$j]['Information'] = $product;
 					$j++;
 				}

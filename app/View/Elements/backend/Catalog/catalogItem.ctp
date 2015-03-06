@@ -1,11 +1,3 @@
-<?php 
-	$präfix_number = 'PD-';
-	$präfix_material = 'Bezug: ';
-	$präfix_color = 'Farbe';
-	$präfix_size = 'Maße: ';
-	$catalogItemFeaturesHeader = 'Eigenschaften';
-?>		
-
 <div id="p<?php echo $product['Product']['product_number'];?>" class="catalogListItem catalogListItem-<?php echo $product['Category']['short'];?> col-md-12">
     
     	<div class="col-md-3">
@@ -20,16 +12,17 @@
 	        </div>
 	        <?php if(!empty($product['Material']['name'])) {?>
 	            <div class="catalogItemMaterial">
-					<?php echo $präfix_material;?>
-					<?php echo $product['Material']['name'];?>
-					 Farbe laut Farben-Index
+					<?php echo Configure::read('padcon.product.material.präfix').': ';?>
+					<?php echo $product['Material']['name'].', '.Configure::read('padcon.product.farbindex');?>
 				</div>
 			<?php }?>
 	        <div class="catalogItemSize">
 	        	<?php if(!empty($product['Product']['size'])) {	?>
-	        		<?php echo $präfix_size;?><?php echo $product['Product']['size']; ?>
+	        		<?php echo Configure::read('padcon.product.size.präfix').': ';?><?php echo $product['Product']['size'].Configure::read('padcon.product.size.suffix'); ?>
 	        	<?php }	else {
-	        		echo "<br />";
+	        		if($this->data['Price']) {
+	        			echo "<br />";
+					}
 	        	}?>
 	        <div class="catalogItemPrice">
 	        	<?php if($this->data['Price']) {
@@ -38,7 +31,7 @@
 	        </div>
 	        </div>
 	        <div class="catalogItemNumber">
-	    		<b><?php echo $präfix_number;?><?php echo $product['Product']['product_number'];?></b>-xx
+	    		<b><?php echo Configure::read('padcon.product.number.präfix');?><?php echo $product['Product']['product_number'];?></b>-xx
 	    	</div>
         </div>
         

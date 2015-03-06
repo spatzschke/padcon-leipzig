@@ -38,8 +38,8 @@
 	// <?php } ?>
 	<?php 
 	if(((!empty($this->data['Offer']['additional_text'])) && (!empty($this->data['Cart']['CartProduct']))) || $this->request->params['action'] == 'admin_view') { ?>	
-		$('#printOffer a').removeClass('disabled');
 		$('#createConfirmation a').removeClass('disabled');
+		$('#printOffer a').removeClass('disabled');
 	<?php } ?>
 	
 </script>
