@@ -19,7 +19,8 @@
 		$sonderseite = $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page + $Anzahl_Sonderseiten, 'type' => 'information'));
 		$sonderseite = split("Stand:", $sonderseite);
 		setlocale(LC_ALL, 'de_DE', 'German_Germany.1252');
-		echo $sonderseite[0]."Stand: ".utf8_encode(strftime("%B %Y")).$sonderseite[1];
+		$year = strftime("%Y");
+		echo $sonderseite[0]."Stand: ".utf8_encode(strftime("%B %Y", strtotime($this->data['month']."/01/".$year))).$sonderseite[1];
 		
 		$page++;
 		echo $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page + $Anzahl_Sonderseiten, 'type' => 'lagerung'));

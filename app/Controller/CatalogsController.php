@@ -92,7 +92,8 @@ class CatalogsController extends AppController {
 		$this->set('title_for_panel', 'Katalog generieren');
 		
 		if(isset($this->request->data['Categories'])) {
-				$id = $this->request->data['Categories']['id'];
+			$id = $this->request->data['Categories']['id'];
+			$this->request->data['month'] = $this->data['Categories']['month'];	
 		}
 		
 		if($id) {
@@ -141,7 +142,7 @@ class CatalogsController extends AppController {
 
 				$this->request->data['Catalogs'] = $data;
 
-			}		
+			}	
 			
 			
 			$Sites = new SiteContentsController;
@@ -194,7 +195,7 @@ class CatalogsController extends AppController {
 		$this->render('admin_generate_pl'); 
 	}
 
-	function admin_createPdf($id = null, $priceFlag = 0){
+	function admin_createPdf($id = null, $priceFlag = 0, $month = null){
 
 		$this->layout = 'pdf';
 		if($id != 99) {
@@ -240,6 +241,9 @@ class CatalogsController extends AppController {
 		$this->request->data['Price'] = $priceFlag;
 		
 		
+		$this->request->data['month'] = $month;	
+		
+		
 		$title = $this->data['Catalogs'][0]['Catalog']['name'].'-Katalog-'.date('y');
 		
 		$this->set('title_for_layout', $title);
@@ -247,7 +251,7 @@ class CatalogsController extends AppController {
 	    
 	}
 
-	function admin_createPdf_pl($id = null){
+	function admin_createPdf_pl($id = null, $month = null){
 	
 		$catalog = $this->Catalog->find('first', array('conditions' => array('Catalog.category_id' => $id)));
 		$name = "";
@@ -256,6 +260,8 @@ class CatalogsController extends AppController {
 		} else {
 			$name = "Gesamt";
 		}
+		
+		$this->request->data['month'] = $month;	
 		
 		$title = 'Preisliste-'.$name.'-'.date('m/Y');
 		$this->set('title_for_layout', $title);

@@ -51,22 +51,45 @@ if(empty($this->data['Catalogs'])) {
 						</div>	
 					</div> 
 					<div class="col-md-12">
-		                             <div class="input-group">
-		                                <span class="input-group-addon">
-											<?php echo $this->Form->input('price', array(
-												'label' => false,
-												'data-model' => 'Product',
-												'placeholder' => 'Preise anzeigen',
-												'data-field' => 'custom', 
-												'autoComplete' => true,
-												'div' => false,
-												'type' => 'checkbox'
-											));
-											?>  
-										</span>
-		                                <input type="text" class="form-control" value="Preise im Katalog anzeigen" readonly="readonly">                                    
-		                             </div>
-								</div>
+                         <div class="input-group">
+                            <span class="input-group-addon">
+								<?php echo $this->Form->input('price', array(
+									'label' => false,
+									'data-model' => 'Product',
+									'placeholder' => 'Preise anzeigen',
+									'data-field' => 'custom', 
+									'autoComplete' => true,
+									'div' => false,
+									'type' => 'checkbox'
+								));
+								?>  
+							</span>
+                            <input type="text" class="form-control" value="Preise im Katalog anzeigen" readonly="readonly">                                    
+                         </div>
+					</div>
+					<div class="col-md-12">
+						<?php
+							$months = array();
+							setlocale(LC_ALL, 'de_DE', 'German_Germany.1252');
+							for ($i = 0; $i < 8; $i++) {
+							    $timestamp = mktime(0, 0, 0, date('n') - $i, 1);
+							    $months[date('n', $timestamp)] = utf8_encode(strftime('%B', $timestamp));
+							}
+						?>
+                         <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <?php echo $this->Form->input('month', array(
+                            	'options' => $months,
+								'label' => false,
+								'class' => 'form-control',
+								'data-model' => 'Categories',
+								'placeholder' => 'Erstellungsdaten',
+								'data-field' => 'category_id', 
+								'autoComplete' => true
+							));
+							?> 
+						</div>	
+					</div>
                     
                     <div style="margin-top:10px" class="form-group">
                         <!-- Button -->
@@ -89,6 +112,7 @@ if(empty($this->data['Catalogs'])) {
 
 <?php 
 } else {
+
 ?>
 
 <div class="wood_bg">
@@ -96,7 +120,7 @@ if(empty($this->data['Catalogs'])) {
 	<div class="buttons">
 		 <div id="printOffer" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-			<?php echo $this->Html->link('Katalog drucken', array('controller' => 'Catalogs', 'action' => 'createPdf', $this->data['Catalogs'][0]['Category']['id'], $this->data['Price']), array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
+			<?php echo $this->Html->link('Katalog drucken', array('controller' => 'Catalogs', 'action' => 'createPdf', $this->data['Catalogs'][0]['Category']['id'], $this->data['Price'], $this->data['month']), array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
 		</div>
 	</div>
 
