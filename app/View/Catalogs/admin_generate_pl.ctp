@@ -54,7 +54,7 @@ if(empty($this->data['Catalogs'])) {
 						<?php
 							$months = array();
 							setlocale(LC_ALL, 'de_DE', 'German_Germany.1252');
-							for ($i = 0; $i < 8; $i++) {
+							for ($i = 0; $i < 12; $i++) {
 							    $timestamp = mktime(0, 0, 0, date('n') - $i, 1);
 							    $months[date('n', $timestamp)] = utf8_encode(strftime('%B', $timestamp));
 							}
