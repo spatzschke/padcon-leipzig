@@ -51,9 +51,7 @@
 		echo $scripts_for_layout;		
 		
 		echo $this->Html->script('main');
-	
-
-	?>
+	?>	
 </head>
 <body>
 	<div id="navigationBandage"></div>
