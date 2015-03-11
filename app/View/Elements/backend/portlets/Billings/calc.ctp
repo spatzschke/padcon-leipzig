@@ -38,7 +38,7 @@ if(!empty($this->data['Cart']['CartProduct'])) { ?>
 					
 					<!-- Zwischensumme -->
 					<div>
-						<label><?php echo 'Rechnungswert:';?></label>
+						<label><?php echo 'Rechnungsbetrag:';?></label>
 						<p class="sum_price"><span class="double"><?php echo $this->Number->currency(floatval($this->data['Confirmation']['confirmation_price']),'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));?></span></p>
 					</div>
 					
