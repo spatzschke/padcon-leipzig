@@ -11,8 +11,8 @@
 					<!-- Rabatt -->
 					<?php if(isset($this->data['Offer']['discount']) && $this->data['Offer']['discount'] != 0) { ?>
 						<div>
-							<label><?php echo '-'.$this->data['Offer']['discount'].'% Rabatt:';?></label>
-							<p class="discount"><?php echo $this->Number->currency($this->data['Offer']['discount_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));?></p>
+							<label><?php echo $this->data['Offer']['discount'].'% Rabatt:';?></label>
+							<p class="discount"><?php echo '- '.$this->Number->currency($this->data['Offer']['discount_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));?></p>
 						</div>
 					<?php } ?>
 					

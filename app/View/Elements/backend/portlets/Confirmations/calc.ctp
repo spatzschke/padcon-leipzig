@@ -13,8 +13,8 @@ if(!empty($this->data['Cart']['CartProduct'])) { ?>
 					<!-- Rabatt -->
 					<?php if(isset($this->data['Confirmation']['discount']) && $this->data['Confirmation']['discount'] != 0) { ?>
 						<div>
-							<label><?php echo '-'.$this->data['Confirmation']['discount'].'% Rabatt:';?></label>
-							<p class="discount"><?php echo $this->Number->currency($this->data['Confirmation']['discount_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));?></p>
+							<label><?php echo $this->data['Confirmation']['discount'].'% Rabatt:';?></label>
+							<p class="discount"><?php echo '- '.$this->Number->currency($this->data['Confirmation']['discount_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));?></p>
 						</div>
 					<?php } ?>
 					
