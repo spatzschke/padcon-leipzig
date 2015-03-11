@@ -10,11 +10,11 @@
 		$i = 0;
 		
 		$maxPage = round(ceil($cart['count'] / $productsPerPage),0,PHP_ROUND_HALF_UP);
-		if($cartModulo == 3 || $cartModulo == 0) {
+		$maxPage = 1;
+		if($cartModulo == $productsPerPage-1) {
 			$maxPage++;
 		}
 	}
-	
 ?>
 
 <script>
@@ -22,12 +22,15 @@
 	$('#offerSettings a').addClass('disabled');
 	$('#printOffer a').addClass('disabled');
 	$('#createConfirmation a').addClass('disabled');
+	$('#addAddressButton a').addClass('disabled');
 	
 	<?php if(!is_null($this->data['Customer']['id'])) { ?>
 		$('#addToOffer a').removeClass('disabled');
 		$('#offerSettings a').removeClass('disabled');
 		
-		$('#addToCustomer .input-group-addon').css('backgroundColor','lightgreen');		
+		$('#addToCustomer .input-group-addon').css('backgroundColor','lightgreen');	
+		$('#addAddressButton a').removeClass('disabled');			
+			
 	<?php } ?>
 	
 	<?php if(!empty($this->data['Cart']['CartProduct'])) { ?>	
@@ -41,6 +44,8 @@
 		$('#createConfirmation a').removeClass('disabled');
 		$('#printOffer a').removeClass('disabled');
 	<?php } ?>
+	
+	$(".maxPage").html($(".sheet ").length)
 	
 </script>
 
