@@ -50,7 +50,29 @@ if(empty($this->data['Catalogs'])) {
 							?> 
 						</div>	
 					</div> 
-					
+					<div class="col-md-12">
+						<?php
+							$months = array();
+							setlocale(LC_ALL, 'de_DE', 'German_Germany.1252');
+							for ($i = 0; $i < 12; $i++) {
+							    $timestamp = mktime(0, 0, 0, date('n') - $i, 1);
+							    $months[date('n', $timestamp)] = utf8_encode(strftime('%B', $timestamp));
+							}
+						?>
+                         <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            <?php echo $this->Form->input('month', array(
+                            	'options' => $months,
+								'label' => false,
+								'class' => 'form-control',
+								'data-model' => 'Categories',
+								'placeholder' => 'Erstellungsdaten',
+								'data-field' => 'category_id', 
+								'autoComplete' => true
+							));
+							?> 
+						</div>	
+					</div>
 					
 					
                     
@@ -82,7 +104,7 @@ if(empty($this->data['Catalogs'])) {
 	<div class="buttons">
 		 <div id="printOffer" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-			<?php  echo $this->Html->link('Preisliste drucken', array('controller' => 'Catalogs', 'action' => 'createPdf_pl', $catalog_id), array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
+			<?php  echo $this->Html->link('Preisliste drucken', array('controller' => 'Catalogs', 'action' => 'createPdf_pl', $catalog_id, $this->data['month']), array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
 		</div>
 	</div>
 
