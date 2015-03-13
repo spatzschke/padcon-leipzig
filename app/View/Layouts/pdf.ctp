@@ -71,6 +71,11 @@
 		        }
 		        $(".counter").html(Math.round((counter*100)/length)+"% abgeschlossen");
 		     });
+		     $(this).error(function(){
+		     	counter++;
+		     	console.log("ERROR - Bild konnte nicht geladen werden - "+$(this).attr("src")+" - No Pic geladen")
+		     	$(this).attr("src","/padcon-leipzig/img/no_pic.png")
+		     });
 		   });
 		});
 	
