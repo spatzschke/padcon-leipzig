@@ -85,7 +85,7 @@ function saveAndReloadOfferHeader(id) {
 				echo '<div class="controls col-md-12">';
 				
 					echo '<label class="col-md-4"> Seite: </label>';
-					echo '<p class="col-md-8 pageNumber">'.$page.' von '.$maxPage.'</p>';
+					echo '<p class="col-md-8 pageNumber">'.$page.' von <span class="maxPage">'.$maxPage.'</span></p>';
 				echo '</div>';
 			?>	
 
