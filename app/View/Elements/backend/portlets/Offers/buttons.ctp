@@ -6,6 +6,10 @@
             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> 
 			<a href="#" class="btn btn-default">Kunde hinzufügen</a>
 		</div>
+		<div id="additionalAddress" class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span> 
+			<a href="#" class="btn btn-default">Weitere Adressen</a>
+		</div>
 		<div id="addToOffer" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
 			<a  href="#" class="btn btn-default">Produkt hinzufügen</a>

@@ -99,6 +99,11 @@ class CustomersController extends AppController {
 		$this->set(compact('cart_id', 'controller_id', 'controller_name'));
 	}
 
+	function admin_indexAjax($layout = null, $cart_id = null) {
+		$this->admin_index($layout, $cart_id);
+		$this->render('/Elements/backend/portlets/Customer/customerPortletAjax');
+	}
+
 	function admin_view($id = null) {
 		$this->layout = 'admin';
 		if (!$id) {

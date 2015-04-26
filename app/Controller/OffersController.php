@@ -336,11 +336,11 @@ class OffersController extends AppController {
 		return $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));	
 	}
 	
-	function admin_update($id = null, $offer = null) {
-		$this->update($id, $offer);
+	function admin_update($id = null, $offer = null, $address = null) {
+		$this->update($id, $offer, $address);
 	}
 	
-	function update($id = null, $offer = null) {
+	function update($customer = null, $offer = null, $address = null) {
 		
 		$this->layout="ajax";
 		
@@ -351,12 +351,20 @@ class OffersController extends AppController {
 		
 		$offer = $this->Offer->findById($offer);
 		
-		
-		
 		if($offer) {
-			$offer['Offer']['offer_number'] = $this->generateOfferNumber($id);
-			$offer['Offer']['customer_id'] = $id;
 			
+			
+			if($address) {
+				$address = $this->Address->findById($address);
+			} else {
+				$address = $this->Address->find("first");
+			}
+			$offer['Offer']['address_id'] = $address['Address']['id'];
+			
+			$offer['Offer']['offer_number'] = $this->generateOfferNumber($customer);
+			$offer['Offer']['customer_id'] = $customer;
+			
+					
 			
 			if($this->Offer->save($offer)){
 				$offer['Offer']['stat'] = 'saved';
@@ -367,6 +375,7 @@ class OffersController extends AppController {
 			$offer['Offer']['stat'] = 'error';
 		}	
 		
+
 		
 		$this->request->data = $offer;
 				
@@ -393,7 +402,7 @@ class OffersController extends AppController {
 		$arr_customer = null;
 		
 
-		$customerAddress = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $offer['Customer']['id'])));
+		$customerAddress = $this->Address->find('all', array('conditions' => array('Address.id' => $offer['Offer']['address_id'])));
 		
 		if(empty($customerAddress)) {
 			return null;

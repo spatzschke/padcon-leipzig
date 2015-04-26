@@ -53,10 +53,20 @@ $(document).ready(function() {
 	
 	$('#addToCustomer').find('a').click(function() {
 
-		$('#add_to_customer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Customers\/index\/ajax\/<?php echo $offer['Offer']['cart_id'];?>');
+		$('#add_to_customer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Customers\/indexAjax\/ajax\/<?php echo $offer['Offer']['cart_id'];?>');
 		$('#add_to_customer_modal').modal('show')
 
 	})
+	
+	<?php if(isset($offer['Customer']['id']) ){ ?>
+	$('#additionalAddress').find('a').click(function() {
+
+		$('#additional_address_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/index\/ajax\/<?php echo $offer['Customer']['id'];?>\/<?php echo $offer['Offer']['id'];?>');
+		$('#additional_address_modal').modal('show')
+
+	})
+	
+	<?php } ?>
 	
 	$('#print').click(function() {
 
@@ -108,6 +118,8 @@ $(document).ready(function() {
 	</div>
 </div>
 
+
+
 <div class="modal" id="add_to_customer_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
 	<div class="modal-dialog modal-lg offer-dialog">
 	 	<div class="modal-content">
@@ -128,9 +140,8 @@ $(document).ready(function() {
 	</div>
 </div>
 
-<div class="modal" id="address_add" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+<div class="modal" id="additional_address_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
 	<div class="modal-dialog offer-dialog">
-	 	
 			<div class="modal-body">
 				<?php echo $this->element('backend/helper/loadingHelper', array("size" => "large")); ?>	
 			</div>

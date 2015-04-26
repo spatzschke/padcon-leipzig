@@ -108,9 +108,18 @@ class AddressesController extends AppController {
  *
  * @return void
  */
-	public function admin_index() {
-		$this->Address->recursive = 0;
-		$this->set('addresses', $this->Paginator->paginate());
+	public function admin_index($layout = null, $customer_id = null, $offer_id = null) {
+		
+		$this->layout = 'ajax';
+
+		$addresses = $this->CustomerAddress->find('all', array('condition' => array("customer_id" => $customer_id)));
+		$customer = $this->Customer->find('first', array('condition' => array("id" => $customer_id)));
+		
+		$this->set('offer_id', $offer_id);
+		$this->set('customer', $customer);
+		$this->set('addresses', $addresses);
+		
+		$this->render('/Elements/backend/portlets/Address/addressListPortlet');
 	}
 
 /**

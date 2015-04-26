@@ -209,8 +209,10 @@ class CatalogsController extends AppController {
 					),
 					'fields' => array('Product.*', 'Material.*'), 
 					'order' => array('Product.product_number' => 'ASC')));
-				
-			$title = $this->data['Catalogs'][0]['Catalog']['name'].'-Katalog-'.date('y');
+			$priceSuffix = "";
+			if($priceFlag) { $priceSuffix = Configure::read('padcon.catalog.price.suffix');	}
+			
+			$title = $this->data['Catalogs'][0]['Catalog']['name'].'-Katalog-'.date('y')."_".$priceSuffix;
 		} else {
 			$title = 'Gesamt-Katalog-'.date('y');
 		}
