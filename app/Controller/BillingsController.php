@@ -288,12 +288,16 @@ class BillingsController extends AppController {
 		// for($i=0; $i<=10;$i++) {
 		foreach ($data as $item) {
 						
-			//Load Customer for the Billing
-			$customer = $this->Customer->findById($item['Confirmation']['customer_id']);
+			//Load Customer for the Delivery
+			$customer= $this->Customer->findById($item['Confirmation']['customer_id']);
+			$address = $this->Address->findById($item['Billing']['address_id']);
+			$customer['Address'] = $address['Address'];
+
+			$item['Customer'] = $customer['Customer'];
 			
 			if($Customers->splitCustomerData($customer)) {
-				$item['Customer'] = $Customers->splitCustomerData($customer);
-			}			
+				$item['Address'] = $Customers->splitCustomerData($customer);
+			}				
 			
 			$cart = $Carts->get_cart_by_id($item['Confirmation']['cart_id']);
 			$item['Cart'] = $cart['Cart'];
@@ -312,18 +316,15 @@ class BillingsController extends AppController {
 
 			$item['Billing'] += $Confirmations->calcPrice($item);
 			
-			//Finde Nummer der Auftragsbestätigung und des Lieferscheins
-			if($item['Billing']['confirmation_id'] != 0) {
-				
-				//Auftragsbestätigung
-				$confirmation = $this->Confirmation->findById($item['Billing']['confirmation_id']);
-				$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
-				
-				//Lieferschein
-				$delivery = $this->Delivery->findById($item['Confirmation']['delivery_id']);
-				$item['Billing']['delivery_number'] = $delivery['Delivery']['delivery_number'];
-			}
 			
+			//Auftragsbestätigung
+			$confirmation = $this->Confirmation->findByBillingId($item['Billing']['id']);
+			$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
+			
+			//Lieferschein
+			$delivery = $this->Delivery->findById($item['Confirmation']['delivery_id']);
+			$item['Billing']['delivery_number'] = $delivery['Delivery']['delivery_number'];
+
 						
 			array_push($data_temp, $item);
 			

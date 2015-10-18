@@ -67,11 +67,11 @@ $(document).ready(function() {
 						}
 					?> 
     				<th><?php echo('#');?></th>
-					<th><?php echo('Anrede');?></th>
+					<!-- <th><?php echo('Anrede');?></th>
 					<th><?php echo('Vorname');?></th>
-					<th><?php echo('Nachname');?></th>
+					<th><?php echo('Nachname');?></th> -->
 					<th><?php echo('Organisation');?></th>
-					<th><?php echo('Abteilung');?></th>
+					<!-- <th><?php echo('Abteilung');?></th> -->
 				<!--<th><?php echo('Straße');?></th>
 					<th><?php echo('PLZ');?></th>
 					<th><?php echo('Stadt');?></th>

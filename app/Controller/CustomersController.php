@@ -434,48 +434,9 @@ class CustomersController extends AppController {
 	
 	function splitCustomerData($data = null)
 	{
-		$arr_customer = null;
-		
-		$customerAddress = $data['Customer'];	
-
-			//split department and company
-			$split_arr = array('department','organisation');
-			
-			foreach($split_arr as $split_str) {
-				if(isset($customerAddress[$split_str])) {
-					$arr = explode("\n", $customerAddress[$split_str]);
-				
-					$count = 0;
-					for ($i = 0; $i <= count($arr)-1; $i++) {
-						if($arr[$i] != '') {
-							$arr_customer[$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
-							$count++;			
-						}
-					}
-					
-					$arr_customer[$split_str.'_count'] = $count;
-				}
-			}
-			$str_salutation = '';
-			$str_title = '';
-			$str_first_name = '';
-			$str_last_name = '';
-			
-			if(!empty($customerAddress['salutation'])){
-				$str_salutation = $customerAddress['salutation'].' ';
-			};
-			if(!empty($customerAddress['title'])){
-				$str_title = $customerAddress['title'].' ';
-			};
-			if(!empty($customerAddress['first_name'])){
-				$str_first_name = $customerAddress['first_name'].' ';
-			};
-			if(!empty($customerAddress['last_name'])){
-				$str_last_name = $customerAddress['last_name'];
-			};
-			$arr_customer['name'] = $str_salutation.$str_title.$str_first_name.$str_last_name;
-		
-		return $arr_customer;
+		$Addresses = new AddressesController();
+		$temp = $Addresses->splitAddressData($data);		
+		return $temp['Address'];
 	}
 
 }

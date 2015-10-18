@@ -54,32 +54,18 @@
 						if(!is_null($item['Confirmation']['customer_id'])) {
 							
 							if(empty($item['Confirmation']['customer_id'])) { echo '-'; } else {
+															
 								echo $item['Confirmation']['customer_id'];	
 								echo '&nbsp;';
 								echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
 									 data-toggle="popover"
 									 data-content="';
-									 	if(!empty($item['Customer']['organisation_count'])) {
-											for ($i = 0; $i < $item['Customer']['organisation_count']; $i++) {
-												echo $item['Customer']['organisation_'.$i].'<br>';
-											}
+									 	echo $item['Address']['organisation'].'<br>';
+										if(!empty($item['Address']['department'])) {
+											echo $item['Address']['department'].'<br>';
 										}
-										if(!empty($item['Customer']['department_count'])) {
-											for ($i = 0; $i < $item['Customer']['department_count']; $i++) {
-												echo $item['Customer']['department_'.$i].'<br>';
-											}
-										}
-										if(!empty($item['Customer']['name'])) {
-											echo $item['Customer']['name'].'<br>';
-										}
-										if(!empty($item['Customer']['phone'])) {
-											echo $item['Customer']['phone'].'<br>';
-										}
-										if(!empty($item['Customer']['email'])) {
-											echo $item['Customer']['email'].'<br>';
-										}
-									 	
-									 echo '"
+									 	echo $item['Address']['name'].'<br>'.
+									 '"
 									 data-trigger="hover"
 								
 								></i>';

@@ -1,4 +1,5 @@
-<?php	
+<?php
+	
 	foreach ($offers as $item):
 	
 		if($item['Offer']['cart_id'] != 0) {	
@@ -52,7 +53,7 @@
 						?>
 					</td>
 					<td>
-						<?php 						
+						<?php 												
 						if(!is_null($item['Customer']['id'])) {
 							
 							if(empty($item['Offer']['customer_id'])) { echo '-'; } else {
@@ -61,17 +62,9 @@
 								echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
 									 data-toggle="popover"
 									 data-content="';
-									 	if(!empty($item['Customer']['organisation_count'])) {
-											for ($i = 0; $i < $item['Customer']['organisation_count']; $i++) {
-												echo $item['Customer']['organisation_'.$i].'<br>';
-											}
-										}
-										if(!empty($item['Customer']['department_count'])) {
-											for ($i = 0; $i < $item['Customer']['department_count']; $i++) {
-												echo $item['Customer']['department_'.$i].'<br>';
-											}
-										}
-									 	echo 		 $item['Customer']['name'].'<br>'.
+									 	echo $item['Address']['organisation'].'<br>';
+										echo $item['Address']['department'].'<br>';
+									 	echo $item['Customer']['name'].'<br>'.
 									 '"
 									 data-trigger="hover"
 								

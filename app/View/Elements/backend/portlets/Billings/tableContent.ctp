@@ -55,23 +55,17 @@
 						if(!is_null($item['Customer'])) {
 							
 							if(empty($item['Confirmation']['customer_id'])) { echo '-'; } else {
+																	
 								echo $item['Confirmation']['customer_id'];	
 								echo '&nbsp;';
 								echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
 									 data-toggle="popover"
 									 data-content="';
-									 	if(!empty($item['Customer']['organisation_count'])) {
-											for ($i = 0; $i < $item['Customer']['organisation_count']; $i++) {
-												echo $item['Customer']['organisation_'.$i].'<br>';
-											}
+									 	echo $item['Address']['organisation'].'<br>';
+										if(!empty($item['Address']['department'])) {
+											echo $item['Address']['department'].'<br>';
 										}
-										if(!empty($item['Customer']['department_count'])) {
-											for ($i = 0; $i < $item['Customer']['department_count']; $i++) {
-												echo $item['Customer']['department_'.$i].'<br>';
-											}
-										}
-									 	echo 		 $item['Customer']['name'].'<br>'.
-													 
+									 	echo $item['Address']['name'].'<br>'.
 									 '"
 									 data-trigger="hover"
 								
@@ -111,7 +105,7 @@
 					</td>
 					<td>
 						<?php 
-						if($item['Billing']['payment_target'] == '0000-00-00') {
+						if($item['Billing']['payment_target'] == '0000-00-00' || empty($item['Billing']['payment_target'])) {
 							echo '-';
 						} else {
 							echo $this->Time->format($item['Billing']['payment_target'], '%d.%m.%Y'); 
@@ -120,7 +114,7 @@
 					</td>
 					<td>
 						<?php 
-						if($item['Billing']['payment_date'] == '0000-00-00') {
+						if($item['Billing']['payment_date'] == '0000-00-00' || empty($item['Billing']['payment_date'])) {
 							echo '-';
 						} else {
 							echo $this->Time->format($item['Billing']['payment_date'], '%d.%m.%Y'); 

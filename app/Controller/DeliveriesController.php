@@ -274,17 +274,19 @@ Lieferzeit: ca. 3-4 Wochen
 		$Customers = new CustomersController();
 		$Confirmations = new ConfirmationsController();
 		
-		
-		
 		// for($i=0; $i<=10;$i++) {
 		foreach ($data as $item) {
-			
+
 			//Load Customer for the Delivery
-			$customer = $this->Customer->findById($item['Confirmation']['customer_id']);
-			if($Customers->splitCustomerData($customer)) {
-				$item['Customer'] = $Customers->splitCustomerData($customer);
-			}			
+			$customer= $this->Customer->findById($item['Confirmation']['customer_id']);
+			$address = $this->Address->findById($item['Delivery']['address_id']);
+			$customer['Address'] = $address['Address'];
+			$item['Customer'] = $customer['Customer'];
 			
+			if($Customers->splitCustomerData($customer)) {
+				$item['Address'] = $Customers->splitCustomerData($customer);
+			}			
+
 			$cart = $Carts->get_cart_by_id($item['Confirmation']['cart_id']);
 			
 			$item += $cart;

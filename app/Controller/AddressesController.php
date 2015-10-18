@@ -251,45 +251,39 @@ class AddressesController extends AppController {
 
 	
 	function splitAddressData($data = null)
-	{
+	{		
 		if(!empty($data['Address'])) {
 			$data = $data['Address'];
-		}
-		
-		
-		$arr_customer = null;
-	
-		$split_arr = array('department','organisation');
-		
-		foreach($split_arr as $split_str) {
-			$arr = explode("\n", $data[$split_str]);
-			$count = 0;
-			for ($i = 0; $i <= count($arr)-1; $i++) {
-				if($arr[$i] != '') {
-					$arr_customer[$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
-					$count++;			
-				}
-			}
+		}		
 			
-			$arr_customer[$split_str.'_count'] = $count;
-		}
-		
-		
-		
+		$arr_customer = null;
+		$str_salutation = '';
 		$str_title = '';
 		$str_first_name = '';
+		$str_last_name = '';
 		
+		if(!empty($data['organisation'])){
+			$arr_customer['Address']['organisation'] = trim($data['organisation']);
+		};
+		if(!empty($data['department'])){
+			$arr_customer['Address']['department'] = trim($data['department']);
+		};
+		if(!empty($data['salutation'])){
+			$str_salutation = trim($data['salutation']).' ';
+		};
 		if(!empty($data['title'])){
-			$str_title = $data['title'].' ';
+			$str_title = trim($data['title']).' ';
 		};
 		if(!empty($data['first_name'])){
-			$str_first_name = $data['first_name'].' ';
+			$str_first_name = trim($data['first_name']).' ';
 		};
+		if(!empty($data['last_name'])){
+			$str_last_name = trim($data['last_name']);
+		};
+		$arr_customer['Address']['name'] = $str_salutation.$str_title.$str_first_name.$str_last_name;
 		
-		
-		$arr_customer['Address']['name'] = $data['salutation'].' '.$str_title.$str_first_name.$data['last_name'];
-		$arr_customer['Address']['street'] = $data['street'];
-		$arr_customer['Address']['city_combination'] = $data['postal_code'].' '.$data['city'];
+		$arr_customer['Address']['street'] = trim($data['street']);
+		$arr_customer['Address']['city_combination'] = trim($data['postal_code']).' '.trim($data['city']);
 		$arr_customer['Address']['type'] = $data['type'];
 			
 		return $arr_customer;
@@ -299,9 +293,10 @@ class AddressesController extends AppController {
 	{		
 		if(!empty($data['Customer']['Addresses'])) {
 			$addresses = $data['Customer']['Addresses'];
+			
 			foreach ($addresses as $address) {
-				if($address['type'] == $type) {					
-					$data['Address'] = $address;
+				if($address['Address']['type'] == $type) {					
+					$data['Address'] = $address['Address'];
 					return $data;
 				}
 			}

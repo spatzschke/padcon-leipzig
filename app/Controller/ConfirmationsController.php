@@ -498,7 +498,7 @@ class ConfirmationsController extends AppController {
 	
 		if(!is_null($this->request->data['Customer']['id'])) {
 			
-			$customerAddresses = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $this->request->data['Customer']['id'])));
+			$customerAddresses = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $this->request->data['Customer']['id'])));			
 			$this->request->data['Customer']['Addresses'] = array();
 						
 			foreach ($customerAddresses as $address) {						
@@ -506,10 +506,9 @@ class ConfirmationsController extends AppController {
 			}
 			
 		}
-		
-		
-		
+				
 		$this->request->data = $Addresses->getAddressByType($this->request->data, 2);
+		
 		$this->request->data['Confirmation'] += $this->calcPrice($this->request->data);
 		return $this->calcPrice($this->request->data);
 

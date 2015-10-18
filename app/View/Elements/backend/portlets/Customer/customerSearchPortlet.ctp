@@ -57,7 +57,7 @@
 						if(!empty($this->data['Customer']['department'])) {
 							echo '<b>'.$this->data['Customer']['department'].'</b></br>';
 						}
-						echo '<b>'.$this->data['Customer']['email'].'</b></br></br>';
+						echo '<br /><br />';
 						echo '<div id="addAddress" class="input-group">';
 						echo $this->Html->link(
 								    'Adresse hinzufügen',
