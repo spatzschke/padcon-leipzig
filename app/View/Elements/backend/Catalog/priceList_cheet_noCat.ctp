@@ -1,6 +1,8 @@
 <?php
 	
-	$catalogs = $this->data['Catalogs'];
+	$catalog = $this->data['Catalogs'];
+	
+	debug($this->data);
 		
 	$Anzahl_Sonderseiten = 1;
 	$page = 0 - $Anzahl_Sonderseiten;
@@ -12,7 +14,7 @@
 ?>
 <?php 
 
-	if(!empty($catalogs)) {
+	if(!empty($catalog)) {
 		
 		//Sonderseiten
 		echo $this->element('backend/Catalog/deckblatt_priceList', array('page' => $page + $Anzahl_Sonderseiten));
@@ -32,7 +34,7 @@
 		// echo $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page + $Anzahl_Sonderseiten, 'type' => 'waschanleitung'));
 		// $page++;
 
-	foreach($catalogs as $catalog) {
+	
 		
 		$categoryPage = 0;
 			
@@ -147,7 +149,7 @@
 			$i++;
 		}
 	}
-}
+
 	$page += $Anzahl_Sonderseiten;
 	// echo $this->element('backend/Catalog/sonderseiten_cheet', array('page' => $page, 'type' => 'color'));
 	// $page++;

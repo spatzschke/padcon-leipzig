@@ -72,8 +72,6 @@
 											}
 										}
 									 	echo 		 $item['Customer']['name'].'<br>'.
-													 $item['Customer']['phone'].'<br>'.
-													 $item['Customer']['email'].
 									 '"
 									 data-trigger="hover"
 								

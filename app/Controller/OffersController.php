@@ -352,14 +352,25 @@ class OffersController extends AppController {
 		$offer = $this->Offer->findById($offer);
 		
 		if($offer) {
+						
 			
 			
 			if($address) {
 				$address = $this->Address->findById($address);
 			} else {
-				$address = $this->Address->find("first");
+				$customerAddress = $this->CustomerAddress->findByCustomerId($customer);				
+
+				if(!empty($customerAddress)) {
+					$address = $this->Address->findById($customerAddress['CustomerAddress']['address_id']);
+				}
 			}
-			$offer['Offer']['address_id'] = $address['Address']['id'];
+			
+			if(!empty($address)) {
+				$offer['Offer']['address_id'] = $address['Address']['id'];
+			} else {
+				$offer['Offer']['address_id'] = '0';
+			}
+			 			
 			
 			$offer['Offer']['offer_number'] = $this->generateOfferNumber($customer);
 			$offer['Offer']['customer_id'] = $customer;
@@ -445,13 +456,15 @@ class OffersController extends AppController {
 	function getAddressByType($offer = null , $type = null)
 	{
 		
+
+		
 		if(!empty($offer['Customer']['Address'])) {
 			$addresses = $offer['Customer']['Address'];
 			foreach ($addresses as $address) {
-				if($address['type'] == $type) {					
-					$offer['Address'] = $address;
-					return $offer;
-				}
+				if($address['type'] == $type) {				
+					$offer['Address'] = $address;					
+				} 
+				return $offer;
 			}
 		} else {
 			return $offer;
@@ -549,7 +562,7 @@ class OffersController extends AppController {
 		if(!$offer) {
 			$offer = $this->getActiveOffer();		
 		} 
-			
+					
 	    $this->request->data = $offer;
 		
 		if(!empty($offer)) {
@@ -569,6 +582,7 @@ class OffersController extends AppController {
 		}
 				
 		$this->request->data = $this->getAddressByType($this->request->data, 1);
+		
 	
 		$this->request->data['Offer'] += $this->calcOfferPrice($this->request->data);
 		

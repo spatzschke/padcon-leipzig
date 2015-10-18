@@ -1025,7 +1025,8 @@ input::-webkit-selection {
 }
 
 .wood_bg .buttons { 
-	position: fixed;
+	/*position: fixed;*/
+	height: 0px;
 	width: 130px;
 	margin-left: 5px;
 	z-index: 1000;

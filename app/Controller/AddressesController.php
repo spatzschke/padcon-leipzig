@@ -108,16 +108,18 @@ class AddressesController extends AppController {
  *
  * @return void
  */
-	public function admin_index($layout = null, $customer_id = null, $offer_id = null) {
+	public function admin_index($layout = null, $customer_id = null, $controller_id = null, $controller_name = null, $type = null) {
 		
 		$this->layout = 'ajax';
 
-		$addresses = $this->CustomerAddress->find('all', array('condition' => array("customer_id" => $customer_id)));
-		$customer = $this->Customer->find('first', array('condition' => array("id" => $customer_id)));
+		$addresses = $this->CustomerAddress->findAllByCustomerId($customer_id);
+		$customer = $this->Customer->findById($customer_id);
 		
-		$this->set('offer_id', $offer_id);
+		$this->set('controller_id', $controller_id);
+		$this->set('controller_name', $controller_name);
 		$this->set('customer', $customer);
 		$this->set('addresses', $addresses);
+		$this->set('type', $type);
 		
 		$this->render('/Elements/backend/portlets/Address/addressListPortlet');
 	}
@@ -143,7 +145,7 @@ class AddressesController extends AppController {
  * @return void
  */
 	public function admin_add($count = 0, $customer = null, $type = null) {
-		
+
 		$this->layout = 'ajax';
 		if ($this->request->is('post')) {
 			$this->Address->create();
@@ -163,7 +165,9 @@ class AddressesController extends AppController {
 					if ($this->CustomerAddress->save($this->request->data)) {
 						$loadAddress = $this->Address->findById($lastAddressId);
 						$this->request->data['Address'] = $this->splitAddressData($loadAddress['Address']);
-						$this->render('/Elements/backend/portlets/Customer/customerFormPortlet');		
+						
+							$this->render('/Elements/backend/portlets/Customer/customerFormPortlet');	
+						
 					}
 				}
 				
@@ -248,6 +252,11 @@ class AddressesController extends AppController {
 	
 	function splitAddressData($data = null)
 	{
+		if(!empty($data['Address'])) {
+			$data = $data['Address'];
+		}
+		
+		
 		$arr_customer = null;
 	
 		$split_arr = array('department','organisation');
@@ -278,10 +287,10 @@ class AddressesController extends AppController {
 		};
 		
 		
-		$arr_customer['name'] = $data['salutation'].' '.$str_title.$str_first_name.$data['last_name'];
-		$arr_customer['street'] = $data['street'];
-		$arr_customer['city_combination'] = $data['postal_code'].' '.$data['city'];
-		$arr_customer['type'] = $data['type'];
+		$arr_customer['Address']['name'] = $data['salutation'].' '.$str_title.$str_first_name.$data['last_name'];
+		$arr_customer['Address']['street'] = $data['street'];
+		$arr_customer['Address']['city_combination'] = $data['postal_code'].' '.$data['city'];
+		$arr_customer['Address']['type'] = $data['type'];
 			
 		return $arr_customer;
 	}

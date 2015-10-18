@@ -28,6 +28,8 @@ $(document).ready(function() {
 					 		
 					 	$('#customerAddressBox').html(data);
 					 	$('#addAddress_modal').modal('hide')
+					 	$('#address_add').modal('hide')
+					 	$('#additional_address_modal').modal('hide');
 					 	
 					 },
 					 error:function (data, textStatus) {
@@ -47,7 +49,11 @@ $(document).ready(function() {
     <div class="mainbox col-md-10">                   
         <div class="panel panel-info" >
                <div class="panel-body" >
-                       
+                      <?php
+				
+					//echo '<span>Addressen zu Kunde: '.$customer['Customer']['id'].' - '.$customer['Customer']['organisation'].'/span>';
+					echo '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>';
+			?>	 
                
                     <?php echo $this->Form->create('Address', array(
 						'class' => 'form-horizontal'

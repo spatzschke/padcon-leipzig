@@ -15,6 +15,7 @@
 			$maxPage++;
 		}
 	}
+
 ?>
 
 <script>
@@ -24,7 +25,7 @@
 	$('#createConfirmation a').addClass('disabled');
 	$('#addAddressButton a').addClass('disabled');
 	
-	<?php if(!is_null($this->data['Customer']['id'])) { ?>
+	<?php if(!empty($this->data['Customer']['id'])) { ?>
 		$('#addToOffer a').removeClass('disabled');
 		$('#offerSettings a').removeClass('disabled');
 		

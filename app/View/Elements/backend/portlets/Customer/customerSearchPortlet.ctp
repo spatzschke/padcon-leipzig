@@ -37,7 +37,7 @@
 	</div>
 </div>
 <div id="customerAddressBox">
-			<?php
+			<?php			
 			 	if(is_null($this->data['Customer']['id'])) {
 			 		
 			 	}	else {
