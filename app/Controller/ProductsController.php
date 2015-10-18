@@ -159,6 +159,192 @@ class ProductsController extends AppController {
 		// $this->request->data['Carts'] = $carts;
 		
 	}
+
+	function admin_quickAdd() {
+		$this->layout = 'admin';
+		
+		
+		if (!empty($this->data)) {
+					
+			$newProduct;
+			$newProducts = array();
+			$features = array();
+	
+			$string = trim($this->data['Product']['description_quick']);
+			
+			$multi = false;
+			$parts = false;
+			if(substr_count($string, 'PD') > 1) {$multi = true;}
+			if(substr_count($string, 'Maße') > 1 && !$multi) {$parts = true;}
+			
+			$input = explode(PHP_EOL, $string);
+			
+			$ek = array();
+			$vk = array();
+			$maße = array();
+			$number = array();
+			
+			foreach($input as $i=>$value)
+			{
+				//Erste Zeile gesondert auslesen auslesen
+				$val = $value;
+			    if($i == 0) {
+					$val = explode('	',trim($val));
+					if (
+						strpos($val[0], 'PD') !== FALSE ||
+						strpos($val[0], 'SB') !== FALSE ||
+						strpos($val[0], 'Z') !== FALSE
+					) {
+				    	$number = str_ireplace('-xx', '', trim($val[0]));
+						$number = str_ireplace('pd ', '', trim($number));
+						$number = str_ireplace('(alt)', '', trim($number));
+						$name = trim($val[1]);
+					} else {
+						$name = trim($val[0]);
+					}
+					continue;
+			    }
+				
+				//Feature Schaum
+				$val = $value;
+				if (strpos($val, 'Fa. padcon') !== FALSE) {
+					$val = explode('	',trim($val));
+					
+					//Sonderfall: Im Feature steht der Bezug
+					if (strpos($val[1], 'Bezug') !== FALSE) {
+						$bezug = explode(', ', explode('Bezug:', trim($val[1]))[1]);		
+						$bezug = $this->Product->Material->findByName(trim($bezug[0]));
+					} else {
+						array_push($features, trim($val[1]));
+					}
+					continue;	
+				}
+
+				//Bezug
+				$val = $value;
+				if (strpos($val, 'Bezug:') !== FALSE) {
+					
+				
+					$val = explode(', Farbe',trim($val));
+					$val = str_ireplace('Bezug:', '', trim($val[0]));
+					$bezug = $this->Product->Material->findByName(trim($val));
+					continue;
+				}
+				
+				//Maße und Preise - Auswertung Multiprodukt
+				$val = $value;
+				if (strpos($val, 'cm') !== FALSE) {
+					if($multi) {
+						$str = explode('	', trim($val));	
+						$tempNumber = str_ireplace('-xx', '', $str[0]);
+						$tempNumber = str_ireplace('pd ', '', trim($tempNumber));
+						$tempNumber = str_ireplace('(alt)', '', trim($tempNumber));
+						array_push($number, $tempNumber);
+						$tempMaße = str_ireplace('Maße:', '', $str[1]);	
+						array_push($maße, trim(str_replace('cm', '', trim($tempMaße))));
+						array_push($ek, $str[2]);
+						array_push($vk, $str[3]);
+					} else {
+						$str = explode('	', trim($val));		
+						if($parts){
+							array_push($features, trim($val));
+							$maße = '';
+						} else {
+							$tempMaße = str_ireplace('Maße:', '', $str[0]);	
+							$maße = trim(str_replace('cm', '', trim($tempMaße)));
+						}						
+						if(strpos($val, '€') !== FALSE) {
+							$ek = $str[1];	
+							$vk = $str[2];
+						}
+					}			
+					continue;
+				}
+				
+				//Preise
+				$val = $value;
+				if (strpos($val, '€') !== FALSE) {
+						$str = explode('	', trim($val));		
+													
+						$ek = $str[0];	
+						$vk = $str[1];
+								
+					continue;
+				}
+
+				//Alles weiter als Feature
+				array_push($features, trim($value));
+
+			}
+			
+			$tempFeatures = '';
+			foreach($features as $entry) {
+				$tempFeatures = $tempFeatures.'<li>'.$entry.'</li>'.PHP_EOL;
+			}
+			$features = $tempFeatures;
+
+			if($multi) {				
+				foreach($number as $i=>$product) {
+					foreach($this->data['Product']['category_id'] as $category) {
+						$newProduct['Product']['number'] = $number[$i];
+						$newProduct['Product']['name'] = $name;
+	
+				 		$newProduct['Product']['material'] = $bezug['Material']['id'];
+				 		$newProduct['Product']['feature'] = $features;
+						$newProduct['Product']['maße'] = $maße[$i];
+						$newProduct['Product']['ek'] = str_replace(',', '.', str_replace(' €', '', $ek))[$i];
+						$newProduct['Product']['vk'] = str_replace(',', '.', str_replace(' €', '', $vk))[$i];
+						$newProduct['Product']['active'] = 'checked';
+						$newProduct['Product']['new'] = '';
+						if (strpos($number[$i], 'Z') !== FALSE) {
+							$newProduct['Product']['custom'] = 'checked';
+						} else {
+							$newProduct['Product']['custom'] = '';
+						}
+						$newProduct['Product']['category_id'] = $category;
+						
+						array_push($newProducts, $newProduct);
+					}
+				}
+			} else {
+				foreach($this->data['Product']['category_id'] as $category) {
+					$newProduct['Product']['number'] = $number;
+					$newProduct['Product']['name'] = $name;
+	
+				 	$newProduct['Product']['material'] = $bezug['Material']['id'];
+				 	$newProduct['Product']['feature'] = $features;
+					$newProduct['Product']['maße'] = $maße;
+					$newProduct['Product']['ek'] = str_replace(',', '.', str_replace(' €', '', $ek));
+					$newProduct['Product']['vk'] = str_replace(',', '.', str_replace(' €', '', $vk));
+					$newProduct['Product']['active'] = 'checked';
+					$newProduct['Product']['new'] = '';
+					if (strpos($number, 'Z') !== FALSE) {
+						$newProduct['Product']['custom'] = 'checked';
+					} else {
+						$newProduct['Product']['custom'] = '';
+					}
+					$newProduct['Product']['category_id'] = $category;
+					
+					array_push($newProducts, $newProduct);
+				}
+			}
+			
+			$this->request->data['Products'] = $newProducts;
+							
+		}
+		$categories = $this->Product->Category->find('list');
+		$materials = $this->Product->Material->find('list');
+		$carts = $this->Product->Cart->find('list');
+		$this->set(compact('categories', 'materials', 'carts'));
+		$this->set('primary_button', 'Anlegen');
+		$this->set('title_for_panel', 'Produkt anlegen');
+		//$this->render('/Elements/backend/portlets/Product/productDetailPortlet');
+		
+		// $this->request->data['Categories'] = $categories;
+		// $this->request->data['Materials'] = $materials;
+		// $this->request->data['Carts'] = $carts;
+		
+	}
 	
 	function admin_loadProductAddPopup($id = null, $cart_id = null) {
 		$this->autoRender = false;
