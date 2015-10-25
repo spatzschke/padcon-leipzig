@@ -180,7 +180,13 @@ class AddressesController extends AppController {
 			
 			if($customer) {
 				$options = array('conditions' => array('Customer.' . $this->Customer->primaryKey => $customer));
-				$this->request->data = $this->Customer->find('first', $options);	
+				$customerArr = $this->Customer->find('first', $options);
+				$this->request->data = $customerArr;
+				$this->request->data['Customer']['salutation'] = array();
+				$this->request->data['Customer']['title'] = array();
+				$this->request->data['Customer']['first_name'] = array();
+				$this->request->data['Customer']['last_name'] = array();
+				$this->request->data['Customer']['department'] = array();
 			} else {
 				$this->request->data['Customer']['salutation'] = array();
 				$this->request->data['Customer']['title'] = array();

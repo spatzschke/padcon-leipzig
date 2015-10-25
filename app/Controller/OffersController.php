@@ -46,15 +46,21 @@ class OffersController extends AppController {
 		$active = null;
 		$this->set('pdf', null);
 		
-		if(!$isActive) {
-			$active = $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));
-		} 
+		$active = $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));
+		 
 		
 		$offer = null;
-		if($active || $isActive) {
+		if($active) {
 			
-			$this->request->data['Cart'] = array();
-			$this->set(compact('offer', 'active'));
+			$this->generateDataByOffer();
+		
+			$this->request->data = $active;
+		
+			$this->set('pdf', null);
+			
+		    $this->set('offer', $this->request->data);
+			
+			$this->set(compact('active'));
 			
 		} else {
 		
@@ -72,7 +78,7 @@ class OffersController extends AppController {
 			
 			
 			$this->Offer->save($offer);
-	
+			
 			$this->generateDataByOffer($this->Offer->findById($this->Offer->id));
 			
 			$offer['Offer']['id'] = $this->Offer->id;
@@ -375,6 +381,8 @@ class OffersController extends AppController {
 			$offer['Offer']['offer_number'] = $this->generateOfferNumber($customer);
 			$offer['Offer']['customer_id'] = $customer;
 			
+			$offer['Offer']['status'] = 'open';
+			
 					
 			
 			if($this->Offer->save($offer)){
@@ -397,13 +405,15 @@ class OffersController extends AppController {
 		
 	}
 	
-	function reloadSheet() {
+	function reloadSheet($offer_id = null) {
 		$this->layout = 'ajax';
 		$this->set('pdf', null);
 		
-		$this->generateDataByOffer();
+		$offer = $this->Offer->find('first', array('conditions' => array('Offer.id' => $offer_id)));
 		
-		$this->request->data['Offer'] += $this->generateDataByOffer();
+		$this->generateDataByOffer($offer);
+		
+		array_push($this->request->data['Offer'] ,$this->generateDataByOffer($offer));
 		
 		$this->render('/Elements/backend/SheetOffer');
 	}
@@ -582,8 +592,7 @@ class OffersController extends AppController {
 		}
 				
 		$this->request->data = $this->getAddressByType($this->request->data, 1);
-		
-	
+			
 		$this->request->data['Offer'] += $this->calcOfferPrice($this->request->data);
 		
 		return 	$this->calcOfferPrice($this->request->data);

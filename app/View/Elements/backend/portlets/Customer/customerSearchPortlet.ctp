@@ -41,9 +41,8 @@
 			 	if(is_null($this->data['Customer']['id'])) {
 			 		
 			 	}	else {
-			 		
-			 	
-				if(!isset($this->data['Address'])) {
+			 					 	
+				if(!isset($this->data['Address']['street'])) {
 					
 					echo'<div class="alert alert-danger" role="alert">';
 						echo 'Es exisitert keine '.$addressTypeName.' für den Kunden: </br>';

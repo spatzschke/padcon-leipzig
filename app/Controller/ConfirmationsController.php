@@ -83,7 +83,7 @@ class ConfirmationsController extends AppController {
 					
 			$this->Confirmation->create();
 			
-			$confirmation['Confirmation']['status'] = 'active';
+			$confirmation['Confirmation']['status'] = 'open';
 			$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
 			$confirmation['Confirmation']['customer_id'] = '';
 			$confirmation['Confirmation']['cart_id'] = $cart['Cart']['id'];

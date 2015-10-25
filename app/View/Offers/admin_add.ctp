@@ -11,21 +11,8 @@
 <script>
 $(document).ready(function() {
 	<?php	
-		if(empty($offer)) {
-	    	echo "$('#active_offer_modal').modal('show');";
-		}		
+		
 	?>
-	
-	$('.showNew').click(function() {
-		$('#active_offer_modal').modal('hide');
-		$('#main').load('<?php echo FULL_BASE_URL.$this->base;?>\/Offers\/archiveActiveOffer\/');
-		$('#sidebar .miniCart').load('<?php echo FULL_BASE_URL.$this->base;?>/carts/reloadMiniCart');
-	});
-	
-	$('.showActive').click(function() {
-		$('#active_offer_modal').modal('hide');
-		$('#main').load('<?php echo FULL_BASE_URL.$this->base;?>\/Offers\/viewActiveOffer\/ajax');
-	});
 	
 	$('#print').click(function() {
 		$('#print_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Offers\/createPdf');
@@ -34,24 +21,6 @@ $(document).ready(function() {
  
 });
 </script>
-				
-<div class="modal" id="active_offer_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-	<div class="modal-dialog">
-	    <div class="modal-content">
-			<div class="modal-header">
-				<h3 id="myModalLabel">Achtung! Aktives Angebot vorhanden.</h3>
-			</div>
-			<div class="modal-body">
-				<p>Es ist ein aktives Angebot vorhanden.</p>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-success showNew">Neues Angebot erstellen</button>
-				<button class="btn showActive">Aktives Angebot auswählen</button>
-			</div>
-		</div>
-	</div>
-</div>
-
 
 <?php 
 
