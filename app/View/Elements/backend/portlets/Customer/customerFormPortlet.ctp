@@ -9,7 +9,7 @@
 	if(!empty($this->data['Address']['department'])) {
 		echo $this->Form->input('department', array('type' => 'text', 'disabled'=> 'disabled', 'label' => false, 'placeholder' => 'Abteilung', 'data-model' => 'Customer', 'data-field' => 'department', 'autoComplete' => true, 'div' => false, 'class' => 'noValid col-md-12'));
 	}
-	if($this->data['Address']['name'] != ''){
+	if(!empty($this->data['Address']['name'])){
 																
 		echo '<div class="controls controls-row">';
 		

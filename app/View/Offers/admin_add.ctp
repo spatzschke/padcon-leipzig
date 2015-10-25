@@ -43,7 +43,7 @@ echo $this->element('backend/helper/modalHelper', array(
 
 echo $this->element('backend/helper/modalHelper', array(
 	"id" => "additionalAddress", 
-	"url" => "\/admin\/Addresses\/index\/ajax\/".(isset($offer['Customer']) ? $offer['Customer']['id'] : "0")."\/".$offer['Offer']['id']."\/Offers\/1")); 
+	"url" => "\/admin\/Addresses\/index\/ajax\/".$offer['Offer']['id']."\/Offers\/1")); 
 
 
 ?>

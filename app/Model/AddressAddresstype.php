@@ -31,8 +31,8 @@ class AddressAddresstype extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Type' => array(
-			'className' => 'Type',
+		'Addresstype' => array(
+			'className' => 'Addresstype',
 			'foreignKey' => 'type_id',
 			'conditions' => '',
 			'fields' => '',

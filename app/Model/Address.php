@@ -47,7 +47,15 @@ class Address extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
+		),
+		'AddressAddressType' => array(
+			'className' => 'AddressAddressType',
+			'foreignKey' => 'address_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
+
 
 }

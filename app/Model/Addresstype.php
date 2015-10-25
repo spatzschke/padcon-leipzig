@@ -23,9 +23,9 @@ class Addresstype extends AppModel {
  * @var array
  */
 	public $hasMany = array(
-		'Address' => array(
-			'className' => 'Address',
-			'foreignKey' => 'id',
+		'AddressAddressType' => array(
+			'className' => 'AddressAddressType',
+			'foreignKey' => 'type_id',
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',

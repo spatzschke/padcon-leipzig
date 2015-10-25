@@ -2,11 +2,12 @@
 App::import('Controller', 'Carts');
 App::import('Controller', 'Products');
 App::import('Controller', 'Customers');
+App::import('Controller', 'Addresses');
 
 class OffersController extends AppController {
 
 	var $name = 'Offers';
-	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'User');
+	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'User', 'AddressAddressType');
 	public $components = array('Auth', 'Session');
 	
 	public function beforeFilter() {
@@ -348,6 +349,8 @@ class OffersController extends AppController {
 	
 	function update($customer = null, $offer = null, $address = null) {
 		
+		$Addresses = new AddressesController();
+		
 		$this->layout="ajax";
 		
 		if(!$offer) {
@@ -359,16 +362,10 @@ class OffersController extends AppController {
 		
 		if($offer) {
 						
-			
-			
 			if($address) {
 				$address = $this->Address->findById($address);
 			} else {
-				$customerAddress = $this->CustomerAddress->findByCustomerId($customer);				
-
-				if(!empty($customerAddress)) {
-					$address = $this->Address->findById($customerAddress['CustomerAddress']['address_id']);
-				}
+				$offer = $Addresses->getAddressByType($offer, 1, TRUE);			
 			}
 			
 			if(!empty($address)) {
@@ -458,27 +455,8 @@ class OffersController extends AppController {
 			$arr_customer['Address'][$j]['name'] = $customerAddress[$j]['Address']['salutation'].' '.$str_title.$str_first_name.$customerAddress[$j]['Address']['last_name'];
 			$arr_customer['Address'][$j]['street'] = $customerAddress[$j]['Address']['street'];
 			$arr_customer['Address'][$j]['city_combination'] = str_pad($customerAddress[$j]['Address']['postal_code'],5,'0', STR_PAD_LEFT).' '.$customerAddress[$j]['Address']['city'];
-			$arr_customer['Address'][$j]['type'] = $customerAddress[$j]['Address']['type'];
 		}		
 		return $arr_customer;
-	}
-
-	function getAddressByType($offer = null , $type = null)
-	{
-		
-
-		
-		if(!empty($offer['Customer']['Address'])) {
-			$addresses = $offer['Customer']['Address'];
-			foreach ($addresses as $address) {
-				if($address['type'] == $type) {				
-					$offer['Address'] = $address;					
-				} 
-				return $offer;
-			}
-		} else {
-			return $offer;
-		}
 	}
 	
 	function calcOfferPrice($offer = null) {
@@ -569,6 +547,8 @@ class OffersController extends AppController {
 	
 	function generateDataByOffer($offer = null) {
 	
+		$Addresses = new AddressesController();
+	
 		if(!$offer) {
 			$offer = $this->getActiveOffer();		
 		} 
@@ -580,19 +560,10 @@ class OffersController extends AppController {
 	    	$cart = $Carts->get_cart_by_id($offer['Cart']['id']);
 			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
 		}
-
-		
-		
-		if(!is_null($this->request->data['Customer']['id'])) {
-			$split_str = $this->splitAddressData($offer);
-			if(!is_null($split_str)) {	
-				$this->request->data['Customer'] = $this->request->data['Customer'] + array();
-				$this->request->data['Customer'] += $split_str;
-			}
-		}
 				
-		$this->request->data = $this->getAddressByType($this->request->data, 1);
-			
+		$this->request->data = $Addresses->getAddressByType($this->request->data, 1, TRUE);
+		$this->request->data['Address'] = $Addresses->splitAddressData($this->request->data)['Address'];		
+
 		$this->request->data['Offer'] += $this->calcOfferPrice($this->request->data);
 		
 		return 	$this->calcOfferPrice($this->request->data);
@@ -605,6 +576,7 @@ class OffersController extends AppController {
 		$Carts = new CartsController();
 		$Products = new ProductsController();
 		$Customers = new CustomersController();
+		$Addresses = new AddressesController();
 		
 		// for($i=0; $i<=10;$i++) {
 		foreach ($offers as $offer) {
@@ -614,7 +586,7 @@ class OffersController extends AppController {
 			if($Customers->splitCustomerData($offer)) {
 				
 				$offer['Customer'] += $Customers->splitCustomerData($offer);
-				//$offer = $this->getAddressByType($offer,'1');	
+				$offer = $Addresses->getAddressByType($offer,'1');	
 			}			
 			
 			$cart = $Carts->get_cart_by_id($offer['Cart']['id']);
