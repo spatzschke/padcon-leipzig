@@ -2,7 +2,7 @@
 class ProductsController extends AppController {
 
 	var $name = 'Products';
-	public $uses = array('Cart', 'Product', 'Material', 'Color', 'Image');
+	public $uses = array('Cart', 'Product', 'Material', 'Color', 'Image', 'Category');
 	var $components = array('RequestHandler', 'Auth', 'Session');
 	var $helpers = array('Html', 'Js');
 	
@@ -162,141 +162,226 @@ class ProductsController extends AppController {
 
 	function admin_quickAdd() {
 		$this->layout = 'admin';
-		
-		
+		$errors = array();
+				
 		if (!empty($this->data)) {
+			 
+			 if(!empty($this->data['Product']['description_quick'])) {
 					
-			$newProduct;
-			$newProducts = array();
-			$features = array();
-	
-			$string = trim($this->data['Product']['description_quick']);
-			
-			$multi = false;
-			$parts = false;
-			if(substr_count($string, 'PD') > 1) {$multi = true;}
-			if(substr_count($string, 'Maße') > 1 && !$multi) {$parts = true;}
-			
-			$input = explode(PHP_EOL, $string);
-			
-			$ek = array();
-			$vk = array();
-			$maße = array();
-			$number = array();
-			
-			foreach($input as $i=>$value)
-			{
-				//Erste Zeile gesondert auslesen auslesen
-				$val = $value;
-			    if($i == 0) {
-					$val = explode('	',trim($val));
-					if (
-						strpos($val[0], 'PD') !== FALSE ||
-						strpos($val[0], 'SB') !== FALSE ||
-						strpos($val[0], 'Z') !== FALSE
-					) {
-				    	$number = str_ireplace('-xx', '', trim($val[0]));
-						$number = str_ireplace('pd ', '', trim($number));
-						$number = str_ireplace('(alt)', '', trim($number));
-						$name = trim($val[1]);
-					} else {
-						$name = trim($val[0]);
-					}
-					continue;
-			    }
+				$newProduct;
+				$newProducts = array();
 				
-				//Feature Schaum
-				$val = $value;
-				if (strpos($val, 'Fa. padcon') !== FALSE) {
-					$val = explode('	',trim($val));
-					
-					//Sonderfall: Im Feature steht der Bezug
-					if (strpos($val[1], 'Bezug') !== FALSE) {
-						$bezug = explode(', ', explode('Bezug:', trim($val[1]))[1]);		
-						$bezug = $this->Product->Material->findByName(trim($bezug[0]));
-					} else {
-						array_push($features, trim($val[1]));
-					}
-					continue;	
-				}
+				
+				$features = array();
+		
+				$string = trim($this->data['Product']['description_quick']);
+				
+				$string = explode('€
 
-				//Bezug
-				$val = $value;
-				if (strpos($val, 'Bezug:') !== FALSE) {
-					
+', $string);
+			
+			foreach($string as $string) {
 				
-					$val = explode(', Farbe',trim($val));
-					$val = str_ireplace('Bezug:', '', trim($val[0]));
-					$bezug = $this->Product->Material->findByName(trim($val));
-					continue;
-				}
+							
+			
+				$multi = false;
+				$parts = false;
+				if(substr_count($string, 'PD') > 1) {$multi = true;}
+				if(substr_count($string, 'Maße') > 1 && !$multi) {$parts = true;}
 				
-				//Maße und Preise - Auswertung Multiprodukt
-				$val = $value;
-				if (strpos($val, 'cm') !== FALSE) {
-					if($multi) {
-						$str = explode('	', trim($val));	
-						$tempNumber = str_ireplace('-xx', '', $str[0]);
-						$tempNumber = str_ireplace('pd ', '', trim($tempNumber));
-						$tempNumber = str_ireplace('(alt)', '', trim($tempNumber));
-						array_push($number, $tempNumber);
-						$tempMaße = str_ireplace('Maße:', '', $str[1]);	
-						array_push($maße, trim(str_replace('cm', '', trim($tempMaße))));
-						array_push($ek, $str[2]);
-						array_push($vk, $str[3]);
-					} else {
-						$str = explode('	', trim($val));		
-						if($parts){
-							array_push($features, trim($val));
-							$maße = '';
+				$input = explode(PHP_EOL, $string);
+				
+				$features = array();
+				$ek = array();
+				$vk = array();
+				$maße = array();
+				$number = array();
+				$producerName = array();
+				$producerNumber = array();
+				$categories = array();
+				
+				foreach($input as $i=>$value)
+				{
+	
+					//Erste Zeile gesondert auslesen auslesen
+					$val = $value;
+				    if($i == 0) {
+						$val = explode('	',trim($val));
+						if (
+							strpos($val[0], 'PD') !== FALSE ||
+							strpos($val[0], 'SB') !== FALSE ||
+							strpos($val[0], 'Z') !== FALSE
+						) {
+					    	$number = str_ireplace('-xx', '', trim($val[0]));
+							$number = str_ireplace('pd ', '', trim($number));
+							$number = str_ireplace('(alt)', '', trim($number));
+							$name = trim($val[1]);
 						} else {
-							$tempMaße = str_ireplace('Maße:', '', $str[0]);	
-							$maße = trim(str_replace('cm', '', trim($tempMaße)));
-						}						
-						if(strpos($val, '€') !== FALSE) {
-							$ek = $str[1];	
-							$vk = $str[2];
+							$name = trim($val[0]);
 						}
-					}			
-					continue;
+						continue;
+				    }
+					
+					//Feature Schaum
+					$val = $value;
+					if (strpos($val, 'Fa. padcon') !== FALSE) {
+						$val = explode('	',trim($val));
+						
+						//Sonderfall: Im Feature steht der Bezug
+						if (strpos($val[1], 'Bezug') !== FALSE) {
+							$bezug = explode(', ', explode('Bezug:', trim($val[1]))[1]);		
+							$bezug = $this->Product->Material->findByName(trim($bezug[0]));
+						} else {
+							array_push($features, trim($val[1]));
+						}
+						continue;	
+					}
+	
+					//Bezug
+					$val = $value;
+					if (strpos($val, 'Bezug:') !== FALSE) {
+	
+						$val = explode(', Farbe',trim($val));
+						$val = str_ireplace('Bezug:', '', trim($val[0]));
+						$bezug = $this->Product->Material->findByName(trim($val));
+						continue;
+					}
+	
+					//Kategorien ermitteln
+					$val = $value;
+					if (strpos($val, 'Kategorie:') !== FALSE) {
+						$val = explode('Kategorie:',trim($val));
+						$val = trim($val[1]);
+						foreach (explode(',',$val) as $value) {
+							$cat = '';
+							if($value == 'P') { $cat = 'pflege'; }
+							if($value == 'O') { $cat = 'op'; }
+							if($value == 'I') { $cat = 'intensiv'; }
+							if($value == 'R') { $cat = 'rontgen'; }
+							if($value == 'B') { $cat = 'baby'; }
+							if($value == 'F') { $cat = 'funktion'; }
+							if($value == 'N') { $cat = 'notfall'; }
+							
+							$id = $this->Category->findByShort($cat);
+							
+							array_push($categories, $id['Category']['id']);
+						}
+						continue;
+					}
+					
+					//Maße und Preise - Auswertung Multiprodukt
+					$val = $value;
+					if (strpos($val, 'cm') !== FALSE && strpos($val, '	Maße:') !== FALSE) {
+						if($multi) {
+							$str = explode('	', trim($val));	
+							$tempNumber = str_ireplace('-xx', '', $str[0]);
+							$tempNumber = str_ireplace('pd ', '', trim($tempNumber));
+							$tempNumber = str_ireplace('(alt)', '', trim($tempNumber));
+							array_push($number, $tempNumber);
+							$tempMaße = str_ireplace('Maße:', '', $str[1]);	
+							array_push($maße, trim(str_replace('cm', '', trim($tempMaße))));
+							if(!empty($str[3])) {array_push($vk, $str[2]);}
+							if(!empty($str[3])) {array_push($vk, $str[3]);}
+						} else {
+							$str = explode('	', trim($val));		
+							if($parts){
+								array_push($features, trim($val));
+								$maße = '';
+							} else {
+								$tempMaße = str_ireplace('Maße:', '', $str[0]);	
+								$maße = trim(str_replace('cm', '', trim($tempMaße)));
+							}						
+							if(strpos($val, '€') !== FALSE) {
+								$ek = $str[1];	
+								$vk = $str[2];
+							}
+						}			
+						continue;
+					}
+					
+					//Preise
+					$val = $value;
+					if (strpos($val, '€') !== FALSE) {
+							$str = explode('	', trim($val));		
+														
+							$ek = $str[0];
+							if(!empty($str[1]))	{ $vk = $str[1]; }
+									
+						continue;
+					}
+					
+					//Hersteller
+					$val = $value;
+					if (strpos($val, 'Hersteller:') !== FALSE) {
+							$str = explode(':', trim($val));		
+														
+							$producerName = $str[1];	
+							$producerNumber = $str[2];
+									
+						continue;
+					}
+	
+					//Alles weiter als Feature
+					array_push($features, trim($value));
+	
 				}
 				
-				//Preise
-				$val = $value;
-				if (strpos($val, '€') !== FALSE) {
-						$str = explode('	', trim($val));		
-													
-						$ek = $str[0];	
-						$vk = $str[1];
-								
-					continue;
+				$tempFeatures = '';
+				foreach($features as $entry) {
+					$tempFeatures = $tempFeatures.'<li>'.$entry.'</li>'.PHP_EOL;
 				}
-
-				//Alles weiter als Feature
-				array_push($features, trim($value));
-
-			}
-			
-			$tempFeatures = '';
-			foreach($features as $entry) {
-				$tempFeatures = $tempFeatures.'<li>'.$entry.'</li>'.PHP_EOL;
-			}
-			$features = $tempFeatures;
-
-			if($multi) {				
-				foreach($number as $i=>$product) {
-					foreach($this->data['Product']['category_id'] as $category) {
-						$newProduct['Product']['number'] = $number[$i];
-						$newProduct['Product']['name'] = $name;
+				$features = $tempFeatures;
 	
-				 		$newProduct['Product']['material'] = $bezug['Material']['id'];
-				 		$newProduct['Product']['feature'] = $features;
-						$newProduct['Product']['maße'] = $maße[$i];
-						$newProduct['Product']['ek'] = str_replace(',', '.', str_replace(' €', '', $ek))[$i];
-						$newProduct['Product']['vk'] = str_replace(',', '.', str_replace(' €', '', $vk))[$i];
+				if($multi) {
+									
+					foreach($number as $i=>$product) {
+						foreach($categories as $category) {
+							$newProduct['Product']['number'] = $number[$i];
+							$newProduct['Product']['name'] = $name;
+							
+							$newProduct['Product']['producerName'] = $producerName;
+							$newProduct['Product']['producerNumber'] = $producerNumber;
+		
+					 		$newProduct['Product']['material'] = $bezug['Material']['id'];
+					 		$newProduct['Product']['feature'] = $features;
+							$newProduct['Product']['maße'] = $maße[$i];
+							$newProduct['Product']['ek'] = str_replace(',', '.', str_replace(' €', '', $ek))[$i];
+							$newProduct['Product']['vk'] = str_replace(',', '.', str_replace(' €', '', $vk))[$i];
+							$newProduct['Product']['active'] = 'checked';
+							$newProduct['Product']['new'] = '';
+							if (strpos($number[$i], 'Z') !== FALSE) {
+								$newProduct['Product']['custom'] = 'checked';
+							} else {
+								$newProduct['Product']['custom'] = '';
+							}
+							$newProduct['Product']['category_id'] = $category;
+							
+							array_push($newProducts, $newProduct);
+						}
+					}
+				} else {
+					if(empty($categories)) {
+						
+						$errors['prod-cat'] = array();
+						$error = "Produkt <b>".$number."</b> hat keine Kategorien. Bitte prüfen!";
+						 array_push($errors['prod-cat'], $error);
+					}
+										
+					foreach($categories as $category) {
+						$newProduct['Product']['number'] = $number;
+						$newProduct['Product']['name'] = $name;
+		
+						$newProduct['Product']['producerName'] = $producerName;
+						$newProduct['Product']['producerNumber'] = $producerNumber;
+		
+					 	$newProduct['Product']['material'] = $bezug['Material']['id'];
+					 	$newProduct['Product']['feature'] = $features;
+						$newProduct['Product']['maße'] = $maße;
+						$newProduct['Product']['ek'] = str_replace(',', '.', str_replace(' €', '', $ek));
+						$newProduct['Product']['vk'] = str_replace(',', '.', str_replace(' €', '', $vk));
 						$newProduct['Product']['active'] = 'checked';
 						$newProduct['Product']['new'] = '';
-						if (strpos($number[$i], 'Z') !== FALSE) {
+						if (strpos($number, 'Z') !== FALSE) {
 							$newProduct['Product']['custom'] = 'checked';
 						} else {
 							$newProduct['Product']['custom'] = '';
@@ -306,32 +391,41 @@ class ProductsController extends AppController {
 						array_push($newProducts, $newProduct);
 					}
 				}
-			} else {
-				foreach($this->data['Product']['category_id'] as $category) {
-					$newProduct['Product']['number'] = $number;
-					$newProduct['Product']['name'] = $name;
-	
-				 	$newProduct['Product']['material'] = $bezug['Material']['id'];
-				 	$newProduct['Product']['feature'] = $features;
-					$newProduct['Product']['maße'] = $maße;
-					$newProduct['Product']['ek'] = str_replace(',', '.', str_replace(' €', '', $ek));
-					$newProduct['Product']['vk'] = str_replace(',', '.', str_replace(' €', '', $vk));
-					$newProduct['Product']['active'] = 'checked';
-					$newProduct['Product']['new'] = '';
-					if (strpos($number, 'Z') !== FALSE) {
-						$newProduct['Product']['custom'] = 'checked';
-					} else {
-						$newProduct['Product']['custom'] = '';
-					}
-					$newProduct['Product']['category_id'] = $category;
+				
+				$this->request->data['Products'] = $newProducts;
+				}					
+			} else {				
+				$data = $this->data;
+				$errors = array();
+				foreach($data as $i=>$prod) {
+					$errors['prod'.$i] = array();
+					$check = $this->Product->find('count', array('conditions' => array('product_number' => $prod['Product']['product_number'], 
+																						'category_id' => $prod['Product']['category_id'])));																				
 					
-					array_push($newProducts, $newProduct);
+					$this->Product->create();
+					if ($check == 0 && $this->Product->save($prod)) {
+						$this->Session->setFlash(__('Produkt wurde angelegt!', true));
+					} else {
+						
+						 $cat = $this->Category->findById($prod['Product']['category_id']);	
+
+						 $error = "Produkt <b>".$prod['Product']['product_number']."</b> in Kategorie <b>".$cat['Category']['name']."</b> ist bereits vorhanden. Bitte prüfen!";
+						 array_push($errors['prod'.$i], $error);					
+					}
 				}
-			}
-			
-			$this->request->data['Products'] = $newProducts;
+				
+				
+				
 							
+				//$this->redirect(array('action' => 'edit', $lastId));
+			}
 		}
+
+		if(!empty($errors['prod0']) || !empty($errors['prod-cat'])) {
+			$this->set(compact("errors"));
+			//$this->Session->setFlash(__('The product could not be saved. Please, try again.', true));
+		}
+
 		$categories = $this->Product->Category->find('list');
 		$materials = $this->Product->Material->find('list');
 		$carts = $this->Product->Cart->find('list');
