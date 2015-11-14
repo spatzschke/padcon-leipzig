@@ -48,12 +48,11 @@ class OffersController extends AppController {
 		$this->set('pdf', null);
 		
 		$active = $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));
-		 
 		
 		$offer = null;
 		if($active) {
 			
-			$this->generateDataByOffer();
+			$this->generateDataByOffer($active);
 		
 			$this->request->data = $active;
 		
@@ -565,7 +564,7 @@ class OffersController extends AppController {
 			$this->request->data = $Addresses->getAddressByType($this->request->data, 1, TRUE);
 		}
 				
-		$this->request->data['Address'] = $Addresses->splitAddressData($this->request->data)['Address'];		
+		$this->request->data['Address'] = $Addresses->splitAddressData($this->request->data)['Address'];	
 
 		$this->request->data['Offer'] += $this->calcOfferPrice($this->request->data);
 		

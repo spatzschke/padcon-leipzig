@@ -86,6 +86,12 @@ class BillingsController extends AppController {
 				//Gernerierung der Auftragsbestätigungsnummer
 				$billing['Billing']['billing_number'] = $this->generateBillingNumber();
 				$billing['Billing']['additional_text'] = Configure::read('padcon.Rechnung.additional_text.default');
+				
+				//Erste AB-Adresse zum Kunden finden
+				$Addresses = new AddressesController(); 
+				$address = $Addresses->getAddressByType($confirmation, 3, TRUE);
+				$delivery['Billing']['address_id'] = $address['Address']['id'];
+				
 				$this->Billing->save($billing);
 				
 				$currBillingId = $this->Billing->getLastInsertId();
@@ -232,22 +238,14 @@ class BillingsController extends AppController {
 			$this->request->data['Cart']['count'] = count($cart['CartProduct']);
 		}
 		
-	
-		if(!is_null($this->request->data['Confirmation']['customer_id'])) {
-			
-			$customer = $this->Customer->find('first', array('conditions' => array('Customer.id' => $this->request->data['Confirmation']['customer_id'])));
-			$this->request->data['Customer'] = $customer['Customer'];
-			
-			$customerAddresses = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $this->request->data['Confirmation']['customer_id'])));
-			$this->request->data['Customer']['Addresses'] = array();
-						
-			foreach ($customerAddresses as $address) {						
-				array_push($this->request->data['Customer']['Addresses'], $Addresses->splitAddressData($address['Address']));
-			}
-			
-		}
+		//Customer holen
+		$this->Customer->recursive = 0;
+		$this->request->data += $this->Customer->findById($this->request->data['Confirmation']['customer_id']);
 		
-		$this->request->data = $Addresses->getAddressByType($this->request->data, 4);
+		
+		if(empty($this->request->data['Address'])) {
+			$this->request->data = $Addresses->getAddressByType($this->request->data, 4, TRUE);
+		}
 		
 		$confirmation = $Confirmations->calcPrice($this->request->data);		
 		$this->request->data['Confirmation'] += $confirmation;		

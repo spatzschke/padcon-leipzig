@@ -130,6 +130,7 @@ class ConfirmationsController extends AppController {
 			$options = array('conditions' => array('Confirmation.' . $this->Confirmation->primaryKey => $id));
 			$confirmation = $this->Confirmation->find('first', $options);
 			
+		
 			$this->generateData($confirmation);
 		}
 		$controller_name = 'Confirmations'; 
@@ -171,7 +172,7 @@ class ConfirmationsController extends AppController {
 				
 				$this->Confirmation->create();
 				
-				$confirmation['Confirmation']['status'] = 'active';
+				$confirmation['Confirmation']['status'] = 'open';
 				$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
 				$confirmation['Confirmation']['customer_id'] = $confirmation['Offer']['customer_id'];
 				$confirmation['Confirmation']['offer_id'] = $confirmation['Offer']['id'];
@@ -204,6 +205,11 @@ class ConfirmationsController extends AppController {
 					unset($cartItem['CartProduct']['modified']);			
 					$this->CartProduct->save($cartItem);
 				}
+				
+				//Erste AB-Adresse zum Kunden finden
+				$Addresses = new AddressesController(); 
+				$address = $Addresses->getAddressByType($confirmation, 2, TRUE);
+				$confirmation['Confirmation']['address_id'] = $address['Address']['id'];
 				
 				$this->Confirmation->save($confirmation);
 				
@@ -495,19 +501,11 @@ class ConfirmationsController extends AppController {
 			
 			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
 		}
-	
-		if(!is_null($this->request->data['Customer']['id'])) {
-			
-			$customerAddresses = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $this->request->data['Customer']['id'])));			
-			$this->request->data['Customer']['Addresses'] = array();
-						
-			foreach ($customerAddresses as $address) {						
-				array_push($this->request->data['Customer']['Addresses'], $Addresses->splitAddressData($address['Address']));
-			}
-			
+
+
+		if(empty($this->request->data['Address'])) {
+			$this->request->data = $Addresses->getAddressByType($this->request->data, 2);
 		}
-				
-		$this->request->data = $Addresses->getAddressByType($this->request->data, 2);
 		
 		$this->request->data['Confirmation'] += $this->calcPrice($this->request->data);
 		return $this->calcPrice($this->request->data);
