@@ -326,6 +326,8 @@ class AddressesController extends AppController {
 
 			$customerId = $data['Customer']['id'];
 			$addresses = null;
+			
+			
 		
 			if($first) {
 				$addresses = $this->AddressAddressType->find('first', array('conditions' => array('customer_id' => $customerId, 'type_id' => $type)));
@@ -333,9 +335,9 @@ class AddressesController extends AppController {
 				$addresses = $this->AddressAddressType->find('all', array('conditions' => array('customer_id' => $customerId, 'type_id' => $type)));
 			}
 
-		
-			$data['Address'] = $addresses['Address'];
-			
+			if(!empty($addresses)) {
+				$data['Address'] = $addresses['Address'];				
+			}		
 		} else {			
 			return $data;
 		}

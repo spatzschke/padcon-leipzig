@@ -33,7 +33,7 @@ $(document).ready(function() {
 			});
 			
 			$('#filter .search input').dynamicSearch({
-				url: "<?php echo FULL_BASE_URL.$this->base;?>\/Customers\/search\/",
+				url: "<?php echo FULL_BASE_URL.$this->base;?>\/Customers\/search\/<?php echo $controller_name;?>\/<?php echo $controller_id;?>",
 				renderTemplate: '/Elements/backend/portlets/Customer/customerPortletTableContentAjax',
 				cancel: '.form-search .cancel',
 				content: '.customerPortlet tbody',

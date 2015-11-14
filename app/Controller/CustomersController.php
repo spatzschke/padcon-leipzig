@@ -82,7 +82,9 @@ class CustomersController extends AppController {
 		if($layout) {$this->layout = $layout; } else { $this->layout = 'admin'; }
 	
 		$this->Customer->recursive = 0;
-		$this->set('customers', $this->paginate());
+		
+		$customer = $this->Customer->find('all');
+		$this->set('customers', $customer);
 		$cart = $this->Cart->findById($cart_id);
 		$controller_id = 0;
 		$controller_name = '';
@@ -213,17 +215,23 @@ class CustomersController extends AppController {
 		} 		
 	}
 	
-	function admin_search($searchString = null) {
+	function admin_search($c_name = null, $c_id = null) {
 		
 		$this->layout = 'ajax';
 		
-		$customers = $this->Customer->find('all',array('conditions' => array("OR" => 
-			array (	'Customer.id LIKE' 			=> '%'.$this->data['str'].'%' ,
-					'Customer.first_name LIKE' 	=> '%'.$this->data['str'].'%' ,
-					'Customer.last_name LIKE' 	=> '%'.$this->data['str'].'%', 
-					'Customer.organisation LIKE' 	=> '%'.$this->data['str'].'%',
-					'Customer.department LIKE' 	=> '%'.$this->data['str'].'%'))));	
 		
+		 $customers2 = $this->Customer->find('all',array('conditions' => array("OR" => 
+			 array (	'Customer.id LIKE' 			=> '%'.$this->data['str'].'%' ,					
+					 'Customer.organisation LIKE' 	=> '%'.$this->data['str'].'%'))));	
+		
+		$customers = array();
+		foreach ($customers2 as $i => $customer) {
+			$c['Customer'] = $customer['Customer'];
+			array_push($customers, $c);
+		}
+	
+ 		$this->set('controller_name', $c_name);
+		$this->set('controller_id', $c_id);
 		
 		$this->set('customers', $customers);
 		

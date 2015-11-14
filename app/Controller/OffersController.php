@@ -367,6 +367,7 @@ class OffersController extends AppController {
 			if($address) {
 				$address = $this->Address->findById($address);
 			} else {
+				//Hole erste Adresse des Kunden
 				$offer = $Addresses->getAddressByType($offer, 1, TRUE);			
 			}
 			
@@ -550,11 +551,7 @@ class OffersController extends AppController {
 	
 	function generateDataByOffer($offer = null) {
 	
-		$Addresses = new AddressesController();
-	
-		if(!$offer) {
-			$offer = $this->getActiveOffer();		
-		} 
+		$Addresses = new AddressesController(); 
 					
 	    $this->request->data = $offer;
 		

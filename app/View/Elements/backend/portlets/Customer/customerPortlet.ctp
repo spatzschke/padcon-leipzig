@@ -67,20 +67,7 @@ $(document).ready(function() {
 						}
 					?> 
     				<th><?php echo('#');?></th>
-					<th><?php echo('Anrede');?></th>
-					<th><?php echo('Vorname');?></th>
-					<th><?php echo('Nachname');?></th>
 					<th><?php echo('Organisation');?></th>
-					<th><?php echo('Abteilung');?></th>
-				<!--<th><?php echo('Stra�e');?></th>
-					<th><?php echo('PLZ');?></th>
-					<th><?php echo('Stadt');?></th>
-					<th><?php echo('eMail');?></th>
-					<th><?php echo('Tel.');?></th>
-					<th><?php echo('Fax.');?></th>
-					<th><?php echo('Passwort');?></th>
-					<th><?php echo('Erstellt');?></th>
-					<th><?php echo('Bearbeitet');?></th>-->
 					<th class="actions"><?php __('');?></th>
 				</tr> 
 			</thead> 
