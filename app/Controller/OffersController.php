@@ -361,6 +361,8 @@ class OffersController extends AppController {
 		$offer = $this->Offer->findById($offer);
 		
 		if($offer) {
+				
+			
 						
 			if($address) {
 				$address = $this->Address->findById($address);
@@ -368,19 +370,21 @@ class OffersController extends AppController {
 				$offer = $Addresses->getAddressByType($offer, 1, TRUE);			
 			}
 			
+			
+			
 			if(!empty($address)) {
 				$offer['Offer']['address_id'] = $address['Address']['id'];
 			} else {
 				$offer['Offer']['address_id'] = '0';
 			}
+			
+			
 			 			
 			
 			$offer['Offer']['offer_number'] = $this->generateOfferNumber($customer);
 			$offer['Offer']['customer_id'] = $customer;
 			
 			$offer['Offer']['status'] = 'open';
-			
-					
 			
 			if($this->Offer->save($offer)){
 				$offer['Offer']['stat'] = 'saved';
@@ -391,14 +395,12 @@ class OffersController extends AppController {
 			$offer['Offer']['stat'] = 'error';
 		}	
 		
-
-		
 		$this->request->data = $offer;
 				
 		//echo json_encode($offer['Offer']);
 		$this->autoRender = false;
 		$this->layout = 'admin';
-		//$this->render('admin_add');
+		// $this->render('admin_edit','210');
 		
 	}
 	
@@ -411,6 +413,7 @@ class OffersController extends AppController {
 		$this->generateDataByOffer($offer);
 		
 		array_push($this->request->data['Offer'] ,$this->generateDataByOffer($offer));
+	
 		
 		$this->render('/Elements/backend/SheetOffer');
 	}
@@ -559,9 +562,12 @@ class OffersController extends AppController {
 			$Carts = new CartsController();
 	    	$cart = $Carts->get_cart_by_id($offer['Cart']['id']);
 			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
+		}	
+			
+		if(empty($offer['Address']['id'])){		
+			$this->request->data = $Addresses->getAddressByType($this->request->data, 1, TRUE);
 		}
 				
-		$this->request->data = $Addresses->getAddressByType($this->request->data, 1, TRUE);
 		$this->request->data['Address'] = $Addresses->splitAddressData($this->request->data)['Address'];		
 
 		$this->request->data['Offer'] += $this->calcOfferPrice($this->request->data);

@@ -24,10 +24,11 @@ $(document).ready(function() {
 					 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name; ?>/update/'+customerID+'/'+offerID+'/'+addressID,
 					 success:function (data, textStatus) {
 					 	
-					 	$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/Offers/reloadSheet/');
-					 	obj.removeClass('loading');
+					 	$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/Offers/reloadSheet/<?php echo $controller_id;?>');
+					 	window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/edit/<?php echo $controller_id;?>';
 					 	
-					 	$('#additional_address_modal').modal('hide')
+					 	// obj.removeClass('loading');				 	
+					 	// $('#additional_address_modal').modal('hide')
 					 }
 				}); 
 				
@@ -73,16 +74,18 @@ $(document).ready(function() {
 				<tr> 
    					<th><?php __('');?></th>
 					<th><?php echo('Abteilung');?></th>
+					<th><?php echo('Anrede');?></th>
+					<th><?php echo('Nachname');?></th>
 					<th><?php echo('Straße');?></th>
 					<th><?php echo('Stadt');?></th>
 				</tr> 
 			</thead> 
 			<tbody> 
-				<tr>
+				<!-- <tr>
 					<td colspan="4">
 						<a id="addAddress">Adresse hinzufügen</a>
 					</td>
-				</tr>
+				 --></tr>
 				<?php 					
 					foreach ($addresses as $address):?>	
 						<tr>
@@ -94,6 +97,8 @@ $(document).ready(function() {
 							echo '</td>';	
 							?>
 							<td><?php echo $address['Address']['department']; ?>&nbsp;</td>
+							<td><?php echo $address['Address']['salutation']; ?>&nbsp;</td>
+							<td><?php echo $address['Address']['last_name']; ?>&nbsp;</td>
 							<td><?php echo $address['Address']['street']; ?>&nbsp;</td>
 							<td><?php echo $address['Address']['postal_code']; ?>&nbsp;<?php echo $address['Address']['city']; ?>&nbsp;</td>
 						</tr> 

@@ -12,7 +12,7 @@ $(document).ready(function() {
 </script>
 
 <div class="modal" id="<?php echo $id;?>_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" data-backdrop="<?php echo (isset($backdrop) ? $backdrop : "true");?>">
-	<div class="modal-dialog <?php echo (isset($modalSize) ? $modalSize : "modal_lg");?> offer-dialog">
+	<div class="modal-dialog <?php echo (isset($modalSize) ? $modalSize : "modal-lg");?> offer-dialog">
 	 	<div class="modal-content">
 			<div class="modal-body">
 				<?php echo $this->element('backend/helper/loadingHelper', array("size" => "large")); ?>	

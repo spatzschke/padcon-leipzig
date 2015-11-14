@@ -321,8 +321,7 @@ class AddressesController extends AppController {
 	}
 
 	function getAddressByType($data = null , $type = null, $first = FALSE)
-	{
-
+	{	
 		if($data['Customer']['id'] != null) {
 
 			$customerId = $data['Customer']['id'];
@@ -337,9 +336,6 @@ class AddressesController extends AppController {
 		
 			$data['Address'] = $addresses['Address'];
 			
-					
-
-	
 		} else {			
 			return $data;
 		}
