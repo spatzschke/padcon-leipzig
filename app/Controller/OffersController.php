@@ -23,7 +23,7 @@ class OffersController extends AppController {
 		$this->Offer->recursive = 0;
 		$offers = $this->Offer->find('all', array('order' => array('Offer.created DESC', 'Offer.id DESC')));
 			
-		$this->set('offers', $this->fillIndexOfferData($offers));
+		$this->set('offers', $this->fillIndexData($offers));
 	}
 
 	function admin_view($id = null) {
@@ -274,7 +274,7 @@ class OffersController extends AppController {
 					'Offer.confirmation_id LIKE' 	=> '%'.$this->data['str'].'%')),
 					'order' => array('Offer.created DESC', 'Offer.id DESC')));	
 		
-		$this->set('data', $this->fillIndexOfferData($offers));
+		$this->set('data', $this->fillIndexData($offers));
 		
 		if(isset($this->data['template'])) {
 			$this->render($this->data['template']);
@@ -360,27 +360,20 @@ class OffersController extends AppController {
 		$offer = $this->Offer->findById($offer);
 		
 		if($offer) {
-				
 			
-						
 			if($address) {
 				$address = $this->Address->findById($address);
 			} else {
 				//Hole erste Adresse des Kunden
-				$offer = $Addresses->getAddressByType($offer, 1, TRUE);			
+				$offer = $Addresses->getAddressByType($offer, 1, TRUE);		
 			}
-			
-			
-			
+		
 			if(!empty($address)) {
 				$offer['Offer']['address_id'] = $address['Address']['id'];
 			} else {
-				$offer['Offer']['address_id'] = '0';
+				$offer['Offer']['address_id'] = $offer['Address']['id'];
 			}
-			
-			
-			 			
-			
+
 			$offer['Offer']['offer_number'] = $this->generateOfferNumber($customer);
 			$offer['Offer']['customer_id'] = $customer;
 			
@@ -572,7 +565,7 @@ class OffersController extends AppController {
 
 	}
 	
-	function fillIndexOfferData($offers = null) {
+	function fillIndexData($offers = null) {
 	
 		$offers2 = array();
 		$Carts = new CartsController();
@@ -588,7 +581,9 @@ class OffersController extends AppController {
 			if($Customers->splitCustomerData($offer)) {
 				
 				$offer['Customer'] += $Customers->splitCustomerData($offer);
-				$offer = $Addresses->getAddressByType($offer,'1');	
+				$address = $this->Address->findById($offer['Offer']['address_id']);
+				
+				$offer['Address'] = $address['Address'];
 			}			
 			
 			$cart = $Carts->get_cart_by_id($offer['Cart']['id']);

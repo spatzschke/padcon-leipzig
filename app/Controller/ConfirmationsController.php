@@ -585,7 +585,7 @@ class ConfirmationsController extends AppController {
 			if($Customers->splitCustomerData($item)) {
 				
 				$item['Customer'] += $Customers->splitCustomerData($item);
-			}			
+			}	
 			
 			$cart = $Carts->get_cart_by_id($item['Cart']['id']);
 			$item['Cart']['CartProduct'] = $cart['CartProduct'];
