@@ -93,7 +93,7 @@ $(document).ready(function() {
 																
 							echo '<td>';
 								echo $this->Html->link('<i class="glyphicon glyphicon-open"></i>', '', array('escape' => false, 'class' => 'addAdditionalAddress', 'addId' => $address['Address']['id'],
-								 	'cusId' => $address['Customer']['id']));
+								 	'cusId' => $address['AddressAddressType']['customer_id']));
 							echo '</td>';	
 							?>
 							<td><?php echo $address['Address']['department']; ?>&nbsp;</td>

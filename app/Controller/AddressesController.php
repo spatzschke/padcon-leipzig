@@ -132,7 +132,7 @@ class AddressesController extends AppController {
 			
 		}
 
-        $addresses = $this->CustomerAddress->findAllByCustomerId($customer_id);
+        $addresses = $this->AddressAddressType->findAllByCustomerIdAndTypeId($customer_id, $type);
 		
 		$customer = $this->Customer->findById($customer_id);
 		

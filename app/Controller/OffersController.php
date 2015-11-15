@@ -169,8 +169,9 @@ class OffersController extends AppController {
 					$this->Session->setFlash(__('Es kam zu Fehlern beim Speichern', true));
 				}
 				
-				$offer = $this->getActiveOffer();
-				$offer['CartProducts'] = $this->getSettingCartProducts();
+				$offer['CartProducts'] = $this->getSettingCartProducts($offer);
+				
+				debug($offer);
 				
 				$cart = $this->Cart->findById($offer['Offer']['cart_id']);
 				$controller_id = 0;
@@ -201,7 +202,7 @@ class OffersController extends AppController {
 					$offer['Offer']['additional_text'] = Configure::read('padcon.Angebot.additional_text.default');
 				} 				
 				
-				$offer['CartProducts'] = $this->getSettingCartProducts();
+				$offer['CartProducts'] = $this->getSettingCartProducts($offer);
 				
 				$cart = $this->Cart->findById($offer['Offer']['cart_id']);
 				$controller_id = 0;
@@ -250,9 +251,12 @@ class OffersController extends AppController {
 		
 		$offer = $this->Offer->findById($offer_id);
 		
-		$offer['CartProducts'] = $this->getSettingCartProducts();
+		$offer['CartProducts'] = $this->getSettingCartProducts($offer);
 		
 		$this->request->data = $offer;
+		
+		$this->set('controller', 'Offer');
+		$this->set('controller_id', $id);
 		
 		$this->render('/Elements/backend/portlets/Product/settingsProductTable');
 	}
@@ -281,8 +285,7 @@ class OffersController extends AppController {
 		}
 	}
 
-	function getSettingCartProducts() {
-		$offer = $this->getActiveOffer();	
+	function getSettingCartProducts($offer) {
 		$cart = $this->Cart->find('first', array(
 			'conditions' => array(
 			 	'Cart.id' => $offer['Cart']['id']
