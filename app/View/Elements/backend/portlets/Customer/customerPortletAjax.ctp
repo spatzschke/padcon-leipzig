@@ -25,7 +25,7 @@ $(document).ready(function() {
 
 						window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/edit/<?php echo $controller_id;?>';
 
-					// 	$('#addCustomer_modal').modal('hide')
+					 	//$('#addCustomer_modal').modal('hide')
 					} 
 				}); 
 				

@@ -327,18 +327,17 @@ class AddressesController extends AppController {
 
 			$customerId = $data['Customer']['id'];
 			$addresses = null;
-			
-			
-		
+
 			if($first) {
 				$addresses = $this->AddressAddressType->find('first', array('conditions' => array('customer_id' => $customerId, 'type_id' => $type)));
 			} else {
 				$addresses = $this->AddressAddressType->find('all', array('conditions' => array('customer_id' => $customerId, 'type_id' => $type)));
 			}
-
+			
 			if(!empty($addresses)) {
 				$data['Address'] = $addresses['Address'];				
-			}		
+			}	
+			return $data;	
 		} else {			
 			return $data;
 		}

@@ -358,25 +358,27 @@ class OffersController extends AppController {
 		}
 		
 		$offer = $this->Offer->findById($offer);
+		$customer_arr = $this->Customer->findById($customer);
+		
+		$offer['Offer']['customer_id'] = $customer;
+		$offer['Customer'] = $customer_arr['Customer'];
 		
 		if($offer) {
-			
-			if($address) {
+						
+			if(!is_null($address)) {
 				$address = $this->Address->findById($address);
-			} else {
-				//Hole erste Adresse des Kunden
-				$offer = $Addresses->getAddressByType($offer, 1, TRUE);		
-			}
-		
-			if(!empty($address)) {
 				$offer['Offer']['address_id'] = $address['Address']['id'];
+				$offer['Offer']['Address'] = $address['Address'];
 			} else {
+			//Suche erste Adresse
+				debug("hole erste Adresse");
+				debug($offer);
+				$offer = $Addresses->getAddressByType($offer, 1, TRUE);	
 				$offer['Offer']['address_id'] = $offer['Address']['id'];
+				debug($offer['Offer']['address_id']);
 			}
 
 			$offer['Offer']['offer_number'] = $this->generateOfferNumber($customer);
-			$offer['Offer']['customer_id'] = $customer;
-			
 			$offer['Offer']['status'] = 'open';
 			
 			if($this->Offer->save($offer)){
@@ -406,7 +408,6 @@ class OffersController extends AppController {
 		$this->generateDataByOffer($offer);
 		
 		array_push($this->request->data['Offer'] ,$this->generateDataByOffer($offer));
-	
 		
 		$this->render('/Elements/backend/SheetOffer');
 	}
@@ -557,7 +558,10 @@ class OffersController extends AppController {
 			$this->request->data = $Addresses->getAddressByType($this->request->data, 1, TRUE);
 		}
 				
-		$this->request->data['Address'] = $Addresses->splitAddressData($this->request->data)['Address'];	
+		$this->request->data['Address'] += $Addresses->splitAddressData($this->request->data)['Address'];	
+		$this->request->data['Address']['count'] = $this->AddressAddressType->find('count', array('conditions' => array(
+			'customer_id' => $offer['Offer']['customer_id'],
+			'type_id' => 1)));
 
 		$this->request->data['Offer'] += $this->calcOfferPrice($this->request->data);
 		
