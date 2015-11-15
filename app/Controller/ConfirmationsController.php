@@ -137,6 +137,7 @@ class ConfirmationsController extends AppController {
 		$controller_id = $id;
 		$this->set(compact('controller_id', 'controller_name'));
 		$this->set('pdf', null);
+		$this->render('admin_add'); 
 		
 	}
 
@@ -368,12 +369,26 @@ class ConfirmationsController extends AppController {
 		$this->render('/Elements/backend/portlets/Product/settingsProductTable');
 	}
 	
-	function admin_update($id = null, $confirmation = null) {
+	function admin_update($id = null, $confirmation = null, $address = null) {
 		$this->layout="ajax";
+		
+		$Addresses = new AddressesController();
 
 		$confirmation = $this->Confirmation->findById($confirmation);				
 		
 		if($confirmation) {
+			
+			if(!is_null($address)) {
+				$address = $this->Address->findById($address);
+				$confirmation['Confirmation']['address_id'] = $address['Address']['id'];
+				$confirmation['Confirmation']['Address'] = $address['Address'];
+			} else {
+			//Suche erste Adresse
+				$confirmation = $Addresses->getAddressByType($confirmation, 2, TRUE);	
+				$confirmation['Confirmation']['address_id'] = $confirmation['Address']['id'];
+				
+			}
+			
 			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber($id, $confirmation);
 			$confirmation['Confirmation']['customer_id'] = $id;
 			
@@ -503,12 +518,13 @@ class ConfirmationsController extends AppController {
 		}
 
 
-		if(empty($this->request->data['Address'])) {
+		if(is_null($this->request->data['Address']['id'])) {
 			$this->request->data = $Addresses->getAddressByType($this->request->data, 2, TRUE);
 		}
 		$this->request->data['Address'] += $Addresses->splitAddressData($this->request->data)['Address'];
 
 		$this->request->data['Confirmation'] += $this->calcPrice($this->request->data);
+		
 		return $this->calcPrice($this->request->data);
 
 	}

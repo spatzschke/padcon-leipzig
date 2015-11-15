@@ -22,15 +22,15 @@
         <span class="input-group-addon"><i class="glyphicon glyphicon-file"></i></span>
 		<?php echo $this->Html->link('Lieferschein erstellen', '/admin/Deliveries/convert/'.$this->data['Confirmation']['id'], array('escape' => false, 'class' => 'btn btn-default')); ?>
 	</div>
-	<div id="createBilling" class="input-group">
+	<!-- <div id="createBilling" class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-file"></i></span>
 		<?php echo $this->Html->link('Rechnung erstellen', '/admin/Billings/convert/'.$this->data['Confirmation']['id'], array('escape' => false, 'class' => 'btn btn-default')); ?>
-	</div>
+	</div> -->
 	
 	<br />
 	 <div id="print_btn" class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-		<?php echo $this->Html->link('Drucken', '/admin/offers/createPdf', array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
+		<?php echo $this->Html->link('Drucken', '/admin/offers/createPdf/'.$this->data['Confirmation']['id'], array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
 	</div>
 	
 </div>

@@ -374,11 +374,8 @@ class OffersController extends AppController {
 				$offer['Offer']['Address'] = $address['Address'];
 			} else {
 			//Suche erste Adresse
-				debug("hole erste Adresse");
-				debug($offer);
 				$offer = $Addresses->getAddressByType($offer, 1, TRUE);	
 				$offer['Offer']['address_id'] = $offer['Address']['id'];
-				debug($offer['Offer']['address_id']);
 			}
 
 			$offer['Offer']['offer_number'] = $this->generateOfferNumber($customer);

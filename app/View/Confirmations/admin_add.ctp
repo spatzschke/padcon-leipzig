@@ -8,7 +8,7 @@
 <script>
 $(document).ready(function() {
 
-	$('#addProduct').find('a').click(function() {
+	$('#addProduct_btn').find('a').click(function() {
 
 		$('#add_to_offer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/indexAjax\/ajax\/<?php echo $this->data['Cart']['id'];?>');
 		$('#add_to_offer_modal').modal('show')
@@ -19,36 +19,35 @@ $(document).ready(function() {
 	<?php if(isset($this->data['Customer']['id']) ){	echo 'cusID = '.$this->data['Customer']['id'].';';	} ?>
 	
 	
-	$('#additionalAddress').find('a').click(function() {
-
-		$('#additional_address_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/index\/ajax\/'+cusID+'\/<?php echo $this->data['Confirmation']['id'];?>\/<?php echo ucfirst($this->request->params['controller']) ?>');
+	$('#additionalAddress_btn').find('a').click(function() {
+		$('#additional_address_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/index\/ajax\/<?php echo $this->data['Confirmation']['id'];?>\/<?php echo ucfirst($this->request->params['controller']) ?>\/2');
 		$('#additional_address_modal').modal('show')
 
 	})
 	
-	$('#addToCustomer').find('a').click(function() {
+	$('#addToCustomer_btn').find('a').click(function() {
 
 		$('#add_to_customer_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Customers\/indexAjax\/ajax\/<?php echo $this->data['Confirmation']['cart_id'];?>');
 		$('#add_to_customer_modal').modal('show')
 
 	})
 	
-	$('#print').click(function() {
+	$('#print_btn').click(function() {
 
-		$('#print_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Confirmations\/createPdf');
-		$('#print_modal').modal('show')
+		$('#print_btn_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Confirmations\/createPdf');
+		$('#print_btn_modal').modal('show')
 
 	})	
 
-	$('#settings').find('a').click(function() {
-		$('#settings_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Confirmations\/settings\/<?php echo $this->data['Confirmation']['id'];?>');
-		$('#settings_modal').modal('show')
+	$('#settings_btn').find('a').click(function() {
+		$('#settings_btn_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Confirmations\/settings_btn\/<?php echo $this->data['Confirmation']['id'];?>');
+		$('#settings_btn_modal').modal('show')
 	});
 
 	$("body").on("hidden", "#add_to_customer_modal", function(){ $(this).removeData("modal");});
 	$("body").on("hidden", "#add_to_offer_modal", function(){ $(this).removeData("modal");});
-	$("body").on("hidden", "#print_modal", function(){ $(this).removeData("modal");});
-	$("body").on("hidden", "#offerSettings_modal", function(){ $(this).removeData("modal");});
+	$("body").on("hidden", "#print_btn_modal", function(){ $(this).removeData("modal");});
+	$("body").on("hidden", "#offersettings_btn_modal", function(){ $(this).removeData("modal");});
  
 });
 </script>
@@ -90,7 +89,7 @@ $(document).ready(function() {
 	</div>
 </div>
 
-<div class="modal" id="settings_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+<div class="modal" id="settings_btn_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
 	<div class="modal-dialog modal-lg offer-dialog">
 	 	<div class="modal-content">
 			<div class="modal-body">

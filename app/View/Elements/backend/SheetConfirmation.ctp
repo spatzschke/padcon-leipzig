@@ -17,28 +17,27 @@
 ?>
 
 <script>
-	$('#addToOffer a').addClass('disabled');
-	$('#offerSettings a').addClass('disabled');
-	$('#printOffer a').addClass('disabled');
-	$('#createBilling').hide();
+	$('#addProduct_btn a').addClass('disabled');
+	$('#settings_btn a').addClass('disabled');
+	$('#print_btn a').addClass('disabled');
 	$('#createDelivery a').addClass('disabled');
 	
 	<?php if(!is_null($this->data['Customer']['id'])) { ?>
-		$('#addToCustomer a').removeClass('disabled');
-		$('#offerSettings a').removeClass('disabled');
+		$('#addProduct_btn a').removeClass('disabled');
+		$('#settings_btn a').removeClass('disabled');
 		
-		$('#addToCustomer .input-group-addon').css('backgroundColor','lightgreen');		
+		$('#addToCustomer_btn .input-group-addon').css('backgroundColor','lightgreen');		
 	<?php } ?>
 	
 	<?php if(!empty($this->data['Cart']['CartProduct'])) { ?>	
-		$('#addProduct .input-group-addon').css('backgroundColor','lightgreen');	
+		$('#addProduct_btn .input-group-addon').css('backgroundColor','lightgreen');	
 	<?php } ?>
 	// <?php if(!empty($this->data['Confirmation']['additional_text'])) { 	?>	
-		// $('#settings .input-group-addon').css('backgroundColor','lightgreen');
+		// $('#settings_btn .input-group-addon').css('backgroundColor','lightgreen');
 	// <?php } ?>
 	<?php 
 	if(((!empty($this->data['Confirmation']['additional_text'])) && (!empty($this->data['Cart']['CartProduct']))) || $this->request->params['action'] == 'admin_view') { ?>	
-		$('#printOffer a').removeClass('disabled');
+		$('#print_btn a').removeClass('disabled');
 		$('#createDelivery a').removeClass('disabled');
 	<?php } ?>
 	<?php 

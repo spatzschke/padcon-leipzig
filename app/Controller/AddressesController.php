@@ -120,15 +120,15 @@ class AddressesController extends AppController {
 		}
 		if($controller_name == "Confirmations") {
 			$data = $this->Confirmation->findById($controller_id);
-			$customer_id = $data['Offer']['customer_id'];
+			$customer_id = $data['Confirmation']['customer_id'];
 		}
 		if($controller_name == "Deliveries") {
 			$data = $this->Delivery->findById($controller_id); 
-			$customer_id = $data['Offer']['customer_id'];
+			$customer_id = $data['Delivery']['customer_id'];
 		}
 		if($controller_name == "Billings") {
 			$data = $this->Billing->findById($controller_id); 
-			$customer_id = $data['Offer']['customer_id'];
+			$customer_id = $data['Billing']['customer_id'];
 			
 		}
 
@@ -321,8 +321,7 @@ class AddressesController extends AppController {
 	}
 
 	function getAddressByType($data = null , $type = null, $first = FALSE)
-	{
-			
+	{		
 		if($data['Customer']['id'] != null) {
 
 			$customerId = $data['Customer']['id'];
