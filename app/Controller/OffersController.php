@@ -558,7 +558,8 @@ class OffersController extends AppController {
 			$this->request->data = $Addresses->getAddressByType($this->request->data, 1, TRUE);
 		}
 				
-		$this->request->data['Address'] += $Addresses->splitAddressData($this->request->data)['Address'];	
+		$add = $Addresses->splitAddressData($this->request->data);
+		$this->request->data['Address'] += $add['Address'];	
 		$this->request->data['Address']['count'] = $this->AddressAddressType->find('count', array('conditions' => array(
 			'customer_id' => $offer['Offer']['customer_id'],
 			'type_id' => 1)));
