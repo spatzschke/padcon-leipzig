@@ -521,8 +521,11 @@ class ConfirmationsController extends AppController {
 		if(is_null($this->request->data['Address']['id'])) {
 			$this->request->data = $Addresses->getAddressByType($this->request->data, 2, TRUE);
 		}
-		$a = $Addresses->splitAddressData($this->request->data);
-		$this->request->data['Address'] += $a['Address'];
+			
+		if(!is_null($this->request->data['Address'])) {
+			$a = $Addresses->splitAddressData($this->request->data);
+			$this->request->data['Address'] += $a['Address'];
+		}
 
 		$this->request->data['Confirmation'] += $this->calcPrice($this->request->data);
 		
