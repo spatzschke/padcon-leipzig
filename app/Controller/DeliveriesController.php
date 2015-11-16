@@ -241,7 +241,8 @@ Lieferzeit: ca. 3-4 Wochen
 		if(empty($this->request->data['Address'])) {
 			$this->request->data = $Addresses->getAddressByType($this->request->data, 3, TRUE);
 		}
-		$this->request->data['Address'] += $Addresses->splitAddressData($this->request->data)['Address'];
+		$a = $Addresses->splitAddressData($this->request->data);
+		$this->request->data['Address'] += $a['Address'];
 		
 		$confirmation = $Confirmations->calcPrice($this->request->data);		
 		$this->request->data['Confirmation'] += $confirmation;		

@@ -229,7 +229,8 @@ class ProductsController extends AppController {
 						
 						//Sonderfall: Im Feature steht der Bezug
 						if (strpos($val[1], 'Bezug') !== FALSE) {
-							$bezug = explode(', ', explode('Bezug:', trim($val[1]))[1]);		
+							$t = explode('Bezug:', trim($val[1]));
+							$bezug = explode(', ', $t[1]);		
 							$bezug = $this->Product->Material->findByName(trim($bezug[0]));
 						} else {
 							array_push($features, trim($val[1]));
@@ -345,8 +346,10 @@ class ProductsController extends AppController {
 					 		$newProduct['Product']['material'] = $bezug['Material']['id'];
 					 		$newProduct['Product']['feature'] = $features;
 							$newProduct['Product']['maße'] = $maße[$i];
-							$newProduct['Product']['ek'] = str_replace(',', '.', str_replace(' €', '', $ek))[$i];
-							$newProduct['Product']['vk'] = str_replace(',', '.', str_replace(' €', '', $vk))[$i];
+							$p = str_replace(',', '.', str_replace(' €', '', $ek));
+							$newProduct['Product']['ek'] = $p[$i];
+							$r = str_replace(',', '.', str_replace(' €', '', $vk));
+							$newProduct['Product']['vk'] = $r[$i];
 							$newProduct['Product']['active'] = 'checked';
 							$newProduct['Product']['new'] = '';
 							if (strpos($number[$i], 'Z') !== FALSE) {
