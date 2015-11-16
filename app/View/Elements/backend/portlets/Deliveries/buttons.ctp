@@ -20,11 +20,11 @@
 		 <br /> -->
 		 <div id="createBilling" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-file"></i></span>
-			<?php echo $this->Html->link('Rechnung erstellen', '/admin/Billings/convert/'.$this->data['Confirmation']['id'], array('escape' => false, 'class' => 'btn btn-default')); ?>
+			<?php echo $this->Html->link('Rechnung erstellen', '/admin/Billings/convert/'.$this->data['Delivery']['id'], array('escape' => false, 'class' => 'btn btn-default')); ?>
 		</div>
 		 <div id="print" class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-			<?php echo $this->Html->link('Drucken', '/admin/Deliveries/createPdf', array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
+			<?php echo $this->Html->link('Drucken', '/admin/Deliveries/createPdf/'.$this->data['Delivery']['id'], array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
 		</div>
 		
 	</div>

@@ -30,7 +30,7 @@
 	<br />
 	 <div id="print_btn" class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-		<?php echo $this->Html->link('Drucken', '/admin/offers/createPdf/'.$this->data['Confirmation']['id'], array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
+		<?php echo $this->Html->link('Drucken', '/admin/Confirmations/createPdf/'.$this->data['Confirmation']['id'], array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
 	</div>
 	
 </div>

@@ -173,13 +173,12 @@ Lieferzeit: ca. 3-4 Wochen
 		$this->layout = 'pdf';
 		$pdf = true;
 		
-		$data = $this->Billing->findById($id);
-		
+		$data = $this->Delivery->findById($id);
 		
 		$this->generateData($data);
 		
 				
-		$title = "Rechnung_".str_replace('/', '-', $data['Delivery']['billing_number']);
+		$title = "Lieferschein_".str_replace('/', '-', $data['Delivery']['delivery_number']);
 		$this->set('title_for_layout', $title);
 		
 		$this->set('pdf', $pdf);
@@ -214,6 +213,7 @@ Lieferzeit: ca. 3-4 Wochen
 		$Carts = new CartsController();
 		$Confirmations = new ConfirmationsController();
 	
+
 		if(!$data) {
 			$confirmation_id = $data['Delivery']['confirmation_id'];
 			$data = $this->Confirmation->findById($confirmation_id);		

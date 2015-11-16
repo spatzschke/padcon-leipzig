@@ -40,7 +40,7 @@ $(document).ready(function() {
 	})	
 
 	$('#settings_btn').find('a').click(function() {
-		$('#settings_btn_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Confirmations\/settings_btn\/<?php echo $this->data['Confirmation']['id'];?>');
+		$('#settings_btn_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Confirmations\/settings\/<?php echo $this->data['Confirmation']['id'];?>');
 		$('#settings_btn_modal').modal('show')
 	});
 

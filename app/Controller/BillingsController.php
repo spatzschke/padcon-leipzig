@@ -242,11 +242,13 @@ class BillingsController extends AppController {
 		$this->Customer->recursive = 0;
 		$this->request->data += $this->Customer->findById($this->request->data['Confirmation']['customer_id']);
 		
-		
-		if(empty($this->request->data['Address'])) {
+		if(!isset($this->request->data['Address']['id'])) {
 			$this->request->data = $Addresses->getAddressByType($this->request->data, 4, TRUE);
 		}
-		$this->request->data['Address'] += $Addresses->splitAddressData($this->request->data)['Address'];
+		
+		if(!is_null($this->request->data['Address'])) {
+			$this->request->data['Address'] += $Addresses->splitAddressData($this->request->data)['Address'];
+		}
 		
 		$confirmation = $Confirmations->calcPrice($this->request->data);		
 		$this->request->data['Confirmation'] += $confirmation;		

@@ -33,7 +33,7 @@
 		
 		 $("[name='delivery-cb']").bootstrapSwitch({
 			size: "large",
-			onText: "Packet", 
+			onText: "Paket", 
 			offText: "Päckchen",
 			handleWidth: "70px",
 			state: <?php 

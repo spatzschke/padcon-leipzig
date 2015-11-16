@@ -660,17 +660,13 @@ class ConfirmationsController extends AppController {
 			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
 		}
 
+		$Addresses = new AddressesController();	
 		
-		
-		if(!is_null($this->request->data['Customer']['id'])) {
-			$split_str = $this->splitAddressData($data);
-			if(!is_null($split_str)) {	
-				$this->request->data['Customer'] = $this->request->data['Customer'] + array();
-				$this->request->data['Customer'] += $split_str;
-			}
-		}
 				
-		$this->request->data = $this->getAddressByType($this->request->data, 2);
+		$this->request->data = $Addresses->getAddressByType($this->request->data, 2, TRUE);
+		if(!is_null($this->request->data['Address'])) {
+			$this->request->data['Address'] += $Addresses->splitAddressData($this->request->data)['Address'];
+		}
 	
 		$this->request->data['Confirmation'] += $this->calcPrice($this->request->data);
 		
@@ -693,51 +689,5 @@ class ConfirmationsController extends AppController {
 			return $data;
 		}
 	}
-	
-	function splitAddressData($data = null)
-	{
-		$arr_customer = null;
-		
-
-		$customerAddress = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $data['Customer']['id'])));
-		
-		if(empty($customerAddress)) {
-			return null;
-		}
-		
-		for($j=0; $j < count($customerAddress); $j++) {
-			//split department and company
-			$split_arr = array('department','organisation');
-			
-			foreach($split_arr as $split_str) {
-				$arr = explode("\n", $customerAddress[$j]['Address'][$split_str]);
-				$count = 0;
-				for ($i = 0; $i <= count($arr)-1; $i++) {
-					if($arr[$i] != '') {
-						$arr_customer['Address'][$j][$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
-						$count++;			
-					}
-				}
-				
-				$arr_customer['Address'][$j][$split_str.'_count'] = $count;
-			}
-			
-			$str_title = '';
-			$str_first_name = '';
-			
-			if(!empty($customerAddress[$j]['Address']['title'])){
-				$str_title = $customerAddress[$j]['Address']['title'].' ';
-			};
-			if(!empty($customerAddress[$j]['Address']['first_name'])){
-				$str_first_name = $customerAddress[$j]['Address']['first_name'].' ';
-			};
-			$arr_customer['Address'][$j]['name'] = $customerAddress[$j]['Address']['salutation'].' '.$str_title.$str_first_name.$customerAddress[$j]['Address']['last_name'];
-			$arr_customer['Address'][$j]['street'] = $customerAddress[$j]['Address']['street'];
-			$arr_customer['Address'][$j]['city_combination'] = str_pad($customerAddress[$j]['Address']['postal_code'],5,'0', STR_PAD_LEFT).' '.$customerAddress[$j]['Address']['city'];
-			$arr_customer['Address'][$j]['type'] = $customerAddress[$j]['Address']['type'];
-		}		
-		return $arr_customer;
-	}
-
 	
 }
