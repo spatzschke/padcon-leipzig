@@ -17,38 +17,6 @@
 	
 ?>
 
-<script>
-	$('#additionalAddress_btn a').addClass('disabled');
-	$('#addProduct_btn a').addClass('disabled');
-	$('#settings_btn a').addClass('disabled');	
-	$('#createDelivery a').addClass('disabled');
-	$('#print_btn a').addClass('disabled');
-	
-	<?php if(!empty($this->data['Address']['street'])) { ?>
-		$('#addProduct_btn a').removeClass('disabled');
-		$('#settings_btn a').removeClass('disabled');
-		
-		$('#addCustomer_btn .input-group-addon').css('backgroundColor','lightgreen');	
-		
-		<?php if(isset($this->data['Address']['count']) && $this->data['Address']['count'] > 1) {?>			
-			$('#additionalAddress_btn a').removeClass('disabled');	
-		<?php } ?>			
-	<?php } ?>
-	
-	<?php if(!empty($this->data['Cart']['CartProduct'])) { ?>	
-		$('#addProduct_btn .input-group-addon').css('backgroundColor','lightgreen');	
-	<?php } ?>
-	// <?php if(!empty($this->data['Confirmation']['additional_text'])) { ?>	
-		// $('#settings_btn .input-group-addon').css('backgroundColor','lightgreen');
-	// <?php } ?>
-	<?php 
-	if(((!empty($this->data['Confirmation']['additional_text'])) && (!empty($this->data['Cart']['CartProduct']))) || $this->request->params['action'] == 'admin_view') { ?>	
-		$('#createDelivery a').removeClass('disabled');
-		$('#print_btn a').removeClass('disabled');
-	<?php } ?>
-	
-</script>
-
 <?php 
 
 	if(!empty($cart)) {

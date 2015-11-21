@@ -24,26 +24,7 @@ $(document).ready(function() {
 
 <?php 
 
-echo $this->element('backend/helper/modalHelper', array(
-	"id" => "addCustomer",
-	"url" => "\/admin\/Customers\/indexAjax\/ajax\/".$offer['Offer']['cart_id']));
-	
-echo $this->element('backend/helper/modalHelper', array(
-	"id" => "addProduct",
-	"url" => "\/admin\/Products\/indexAjax\/ajax\/".$offer['Offer']['cart_id']));
-	
-echo $this->element('backend/helper/modalHelper', array(
-	"backdrop" => "false",
-	"id" => "address_add",
-	"url" => "\/admin\/Customers\/indexAjax\/ajax\/".$offer['Offer']['cart_id']));	
 
-echo $this->element('backend/helper/modalHelper', array(
-	"id" => "settings",
-	"url" => "\/admin\/Offers\/settings\/".$offer['Offer']['id']));
-
-echo $this->element('backend/helper/modalHelper', array(
-	"id" => "additionalAddress", 
-	"url" => "\/admin\/Addresses\/index\/ajax\/".$offer['Offer']['id']."\/Offers\/1")); 
 
 
 ?>
@@ -51,7 +32,20 @@ echo $this->element('backend/helper/modalHelper', array(
 <div class="wood_bg">
 
 	<?php if(!empty($offer)) {
-		echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons'); 
+		 	$redirectURL = FULL_BASE_URL.$this->base."\/admin\/".ucfirst($this->request->params['controller'])."\/edit\/".$offer['Offer']['id'];
+			$cartId = $offer['Offer']['cart_id'];
+			$dataId = $offer['Offer']['id'];
+			$nextSheet = "Confirmations";
+			$controller = "Offer";
+
+			echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons', array(
+				"redirectURL" => $redirectURL,
+				"cartId" => $cartId,
+				"dataId" => $dataId,
+				"nextSheet" =>$nextSheet,
+				"controller" => $controller,
+				"addressType" => "1"
+			)); 
 		}
 	?>
 	

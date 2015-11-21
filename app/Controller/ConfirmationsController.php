@@ -18,7 +18,7 @@ class ConfirmationsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation');
+	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'AddressAddresstype');
 	public $components = array('Auth', 'Session', 'Paginator');
 	
 	public function beforeFilter() {
@@ -526,6 +526,9 @@ class ConfirmationsController extends AppController {
 			$a = $Addresses->splitAddressData($this->request->data);
 			$this->request->data['Address'] += $a['Address'];
 		}
+		$this->request->data['Address']['count'] = $this->AddressAddresstype->find('count', array('conditions' => array(
+			'customer_id' => $confirmation['Confirmation']['customer_id'],
+			'type_id' => 1)));
 
 		$this->request->data['Confirmation'] += $this->calcPrice($this->request->data);
 		

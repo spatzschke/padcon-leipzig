@@ -96,7 +96,7 @@ class BillingsController extends AppController {
 				
 				$currBillingId = $this->Billing->getLastInsertId();
 				
-				//Neue Auftragsbestätigungs-ID in Angebot speichern 
+				//Neue Rechnungs-ID in AB speichern 
 				$confirmation['Confirmation']['billing_id'] = $currBillingId;
 				$this->Confirmation->save($confirmation);
 				
@@ -122,7 +122,7 @@ class BillingsController extends AppController {
 								
 				$confirmation = $this->Confirmation->findByConfirmationNumber($number);
 				if(!empty($confirmation)) {
-					return $this->redirect(array('action' => 'convert', $confirmation['Confirmation']['id']));
+					return $this->redirect(array('action' => 'convert', $confirmation['Confirmation']['billing_id']));
 				} else {
 					$this->Session->setFlash(__('Rechnung mit Rechnungsnummer nicht vorhanden.'));
 				}
@@ -217,11 +217,6 @@ class BillingsController extends AppController {
 		$Carts = new CartsController();
 		$Confirmations = new ConfirmationsController();
 	
-		if(!$data) {
-			$confirmation_id = $data['Billing']['confirmation_id'];
-			$data = $this->Confirmation->findById($confirmation_id);		
-		} 
-			
 	    $this->request->data = $data;
 		
 		if(!empty($data)) {
@@ -254,6 +249,7 @@ class BillingsController extends AppController {
 
 		//Nachladen des Lieferscheins
 		$delivery = $this->Delivery->find('first', array('conditions' => array('Delivery.id' => $this->request->data['Confirmation']['delivery_id'])));
+		
 		$this->request->data['Delivery'] = $delivery['Delivery'];
 
 		return $Confirmations->calcPrice($this->request->data);

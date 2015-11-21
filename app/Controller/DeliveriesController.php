@@ -48,7 +48,9 @@ class DeliveriesController extends AppController {
 			throw new NotFoundException(__('Invalid delivery'));
 		}
 		$options = array('conditions' => array('Delivery.' . $this->Delivery->primaryKey => $id));
-		$data = $this->Delivery->find('first', $options);		
+		$data = $this->Delivery->find('first', $options);	
+
+		debug($data);
 		
 		$this->generateData($data);
 		$controller_name = 'Deliveries'; 
