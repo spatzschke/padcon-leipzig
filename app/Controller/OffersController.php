@@ -81,8 +81,11 @@ class OffersController extends AppController {
 			$this->Offer->save($offer);
 			
 			$this->generateDataByOffer($this->Offer->findById($this->Offer->id));
-			
 			$offer['Offer']['id'] = $this->Offer->id;
+			
+			// Generate Hash für Offer
+			$offer['Offer']['hash'] =  Security::hash($this->Offer->id, 'md5', true);
+			$this->Offer->save($offer);
 			
 			$this->set(compact('offer', 'active'));
 			
@@ -121,8 +124,11 @@ class OffersController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 	
-	function createPdf ($offerID = null){
-		$this->admin_createPdf($offerID);
+	function createPdf ($hash = null) { 
+		$result = $this->Offer->findByHash($hash);
+		if(!empty($result)) {
+			$this->admin_createPdf($result['Offer']['id']);
+		} 			
 	}
 
 	function admin_createPdf ($offerID = null){

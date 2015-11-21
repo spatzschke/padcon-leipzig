@@ -90,11 +90,15 @@ class BillingsController extends AppController {
 				//Erste AB-Adresse zum Kunden finden
 				$Addresses = new AddressesController(); 
 				$address = $Addresses->getAddressByType($confirmation, 3, TRUE);
-				$delivery['Billing']['address_id'] = $address['Address']['id'];
+				$billing['Billing']['address_id'] = $address['Address']['id'];
 				
 				$this->Billing->save($billing);
 				
 				$currBillingId = $this->Billing->getLastInsertId();
+				
+				// Generate Hash für Offer
+				$billing['Billing']['hash'] =  Security::hash($currBillingId, 'md5', true);
+				$this->Billing->save($billing);
 				
 				//Neue Rechnungs-ID in AB speichern 
 				$confirmation['Confirmation']['billing_id'] = $currBillingId;
@@ -173,6 +177,13 @@ class BillingsController extends AppController {
 			    $this->render('admin_settings', 'ajax'); 
 			}
 		}
+	}
+
+	function createPdf ($hash = null) { 
+		$result = $this->Billing->findByHash($hash);
+		if(!empty($result)) {
+			$this->admin_createPdf($result['Billing']['id']);
+		} 			
 	}
 
 	function admin_createPdf ($id= null){

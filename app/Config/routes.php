@@ -90,6 +90,13 @@
 	Router::connect('/Anmelden', array('controller' => 'Users', 'action' => 'login'));
 	Router::connect('/Abmelden', array('controller' => 'Users', 'action' => 'logout'));
 	Router::connect('/produkte.php', array('controller' => 'Categories', 'action' => 'overview'));
+	
+//Pdf Routes
+	
+	Router::connect('/Angebot/*', array('controller' => 'Offers', 'action' => 'createPdf'));
+	Router::connect('/Auftrag/*', array('controller' => 'Confirmations', 'action' => 'createPdf'));
+	Router::connect('/Lieferung/*', array('controller' => 'Deliveries', 'action' => 'createPdf'));
+	Router::connect('/Rechnung/*', array('controller' => 'Billings', 'action' => 'createPdf'));
 
 /**
  * Load all plugin routes. See the CakePlugin documentation on

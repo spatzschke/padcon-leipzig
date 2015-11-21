@@ -85,6 +85,10 @@ class DeliveriesController extends AppController {
 				
 				$currDeliveryId = $this->Delivery->getLastInsertId();
 				
+				// Generate Hash für Offer
+				$delivery['Delivery']['hash'] =  Security::hash($currDeliveryId, 'md5', true);
+				$this->Delivery->save($delivery);
+				
 				//Neue Lieferschein-ID in AUftragsbestäätigung speichern 
 				$confirmation['Confirmation']['delivery_id'] = $currDeliveryId;
 				
@@ -168,6 +172,13 @@ Lieferzeit: ca. 3-4 Wochen
 			    $this->render('admin_settings', 'ajax'); 
 			}
 		}
+	}
+
+	function createPdf ($hash = null) { 
+		$result = $this->Delivery->findByHash($hash);
+		if(!empty($result)) {
+			$this->admin_createPdf($result['Delivery']['id']);
+		} 			
 	}
 
 	function admin_createPdf ($id= null){

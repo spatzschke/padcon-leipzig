@@ -94,6 +94,12 @@ class ConfirmationsController extends AppController {
 			
 			$this->Confirmation->save($confirmation);
 			$id = $this->Confirmation->id;
+			
+			debug($id);
+			
+			// Generate Hash für Offer
+			$confirmation['Confirmation']['hash'] =  Security::hash($id, 'md5', true);
+			$this->Confirmation->save($confirmation);
 
 			$this->redirect(array('action'=>'add', $id));
 		}
@@ -215,6 +221,10 @@ class ConfirmationsController extends AppController {
 				$this->Confirmation->save($confirmation);
 				
 				$currConfirmationId = $this->Confirmation->getLastInsertId();
+				
+				// Generate Hash für Offer
+				$confirmation['Confirmation']['hash'] =  Security::hash($currConfirmationId, 'md5', true);
+				$this->Confirmation->save($confirmation);
 				
 				//Neue Auftragsbestätigungs-ID in Angebot speichern 
 				$confirmation['Offer']['confirmation_id'] = $currConfirmationId;
@@ -406,6 +416,13 @@ class ConfirmationsController extends AppController {
 		$this->request->data = $confirmation;
 		$this->autoRender = false;
 		$this->layout = 'admin';
+	}
+	
+	function createPdf ($hash = null) { 
+		$result = $this->Confirmation->findByHash($hash);
+		if(!empty($result)) {
+			$this->admin_createPdf($result['Confirmation']['id']);
+		} 			
 	}
 	
 	function admin_createPdf ($id= null){
