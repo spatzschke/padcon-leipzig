@@ -1,5 +1,8 @@
 <?php
 /**
+ *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -17,7 +20,7 @@
 <h2><?php echo __d('cake_dev', 'Database Error'); ?></h2>
 <p class="error">
 	<strong><?php echo __d('cake_dev', 'Error'); ?>: </strong>
-	<?php echo $message; ?>
+	<?php echo $name; ?>
 </p>
 <?php if (!empty($error->queryString)) : ?>
 	<p class="notice">
@@ -33,6 +36,4 @@
 	<strong><?php echo __d('cake_dev', 'Notice'); ?>: </strong>
 	<?php echo __d('cake_dev', 'If you want to customize this error message, create %s', APP_DIR . DS . 'View' . DS . 'Errors' . DS . 'pdo_error.ctp'); ?>
 </p>
-<?php
-echo $this->element('exception_stack_trace');
-?>
+<?php echo $this->element('exception_stack_trace'); ?>

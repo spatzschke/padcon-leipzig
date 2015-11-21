@@ -4,6 +4,8 @@
  *
  * Automatic forms and actions generation for rapid web application development.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -18,6 +20,8 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
+App::uses('Scaffold', 'View');
+
 /**
  * Scaffolding is a set of automatic actions for starting web development work faster.
  *
@@ -26,8 +30,7 @@
  * and afford the web developer an early look at the data, and the possibility to over-ride
  * scaffolded actions with custom-made ones.
  *
- * @package Cake.Controller
- * @deprecated 3.0.0 Dynamic scaffolding will be removed and replaced in 3.0
+ * @package       Cake.Controller
  */
 class Scaffold {
 
@@ -76,7 +79,7 @@ class Scaffold {
 /**
  * Valid session.
  *
- * @var bool
+ * @var boolean
  */
 	protected $_validSession = null;
 
@@ -145,9 +148,7 @@ class Scaffold {
 			$this->controller->viewClass = 'Scaffold';
 		}
 		$this->_validSession = (
-			isset($this->controller->Session) &&
-			$this->controller->Session->valid() &&
-			isset($this->controller->Flash)
+			isset($this->controller->Session) && $this->controller->Session->valid()
 		);
 		$this->_scaffold($request);
 	}
@@ -248,12 +249,12 @@ class Scaffold {
 							Inflector::humanize($this->modelKey),
 							$success
 						);
-						return $this->_sendMessage($message, 'success');
+						return $this->_sendMessage($message);
 					}
 					return $this->controller->afterScaffoldSaveError($action);
 				}
 				if ($this->_validSession) {
-					$this->controller->Flash->set(__d('cake', 'Please correct errors below.'));
+					$this->controller->Session->setFlash(__d('cake', 'Please correct errors below.'));
 				}
 			}
 
@@ -305,7 +306,7 @@ class Scaffold {
 			}
 			if ($this->ScaffoldModel->delete()) {
 				$message = __d('cake', 'The %1$s with id: %2$s has been deleted.', Inflector::humanize($this->modelClass), $id);
-				return $this->_sendMessage($message, 'success');
+				return $this->_sendMessage($message);
 			}
 			$message = __d('cake',
 				'There was an error deleting the %1$s with id: %2$s',
@@ -323,12 +324,11 @@ class Scaffold {
  * on the availability of a session
  *
  * @param string $message Message to display
- * @param string $element Flash template to use
  * @return void
  */
-	protected function _sendMessage($message, $element = 'default') {
+	protected function _sendMessage($message) {
 		if ($this->_validSession) {
-			$this->controller->Flash->set($message, compact('element'));
+			$this->controller->Session->setFlash($message);
 			return $this->controller->redirect($this->redirect);
 		}
 		$this->controller->flash($message, $this->redirect);
@@ -402,7 +402,7 @@ class Scaffold {
 				}
 			} else {
 				throw new MissingActionException(array(
-					'controller' => get_class($this->controller),
+					'controller' => $this->controller->name,
 					'action' => $request->action
 				));
 			}

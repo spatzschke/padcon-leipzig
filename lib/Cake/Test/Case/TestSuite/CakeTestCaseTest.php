@@ -4,6 +4,8 @@
  *
  * Test Case for CakeTestCase class
  *
+ * PHP 5
+ *
  * CakePHP : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -17,27 +19,9 @@
  * @since         CakePHP v 1.2.0.4487
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-App::uses('CakePlugin', 'Core');
+
 App::uses('Controller', 'Controller');
 App::uses('CakeHtmlReporter', 'TestSuite/Reporter');
-App::uses('Model', 'Model');
-
-/**
- * Secondary Post stub class.
- */
-class SecondaryPost extends Model {
-
-/**
- * @var string
- */
-	public $useTable = 'posts';
-
-/**
- * @var string
- */
-	public $useDbConfig = 'secondary';
-
-}
 
 /**
  * CakeTestCaseTest
@@ -53,11 +37,6 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public $fixtures = array('core.post', 'core.author', 'core.test_plugin_comment');
 
-/**
- * CakeTestCaseTest::setUpBeforeClass()
- *
- * @return void
- */
 	public static function setUpBeforeClass() {
 		require_once CAKE . 'Test' . DS . 'Fixture' . DS . 'AssertTagsTestCase.php';
 		require_once CAKE . 'Test' . DS . 'Fixture' . DS . 'FixturizedTestCase.php';
@@ -85,31 +64,24 @@ class CakeTestCaseTest extends CakeTestCase {
 	}
 
 /**
- * testAssertTags
+ * testAssertGoodTags
  *
  * @return void
  */
-	public function testAssertTagsBasic() {
+	public function testAssertTagsQuotes() {
 		$test = new AssertTagsTestCase('testAssertTagsQuotes');
 		$result = $test->run();
 		$this->assertEquals(0, $result->errorCount());
 		$this->assertTrue($result->wasSuccessful());
 		$this->assertEquals(0, $result->failureCount());
-	}
 
-/**
- * test assertTags works with single and double quotes
- *
- * @return void
- */
-	public function testAssertTagsQuoting() {
 		$input = '<a href="/test.html" class="active">My link</a>';
 		$pattern = array(
 			'a' => array('href' => '/test.html', 'class' => 'active'),
 			'My link',
 			'/a'
 		);
-		$this->assertTags($input, $pattern);
+		$this->assertTrue($test->assertTags($input, $pattern), 'Double quoted attributes %s');
 
 		$input = "<a href='/test.html' class='active'>My link</a>";
 		$pattern = array(
@@ -117,7 +89,7 @@ class CakeTestCaseTest extends CakeTestCase {
 			'My link',
 			'/a'
 		);
-		$this->assertTags($input, $pattern);
+		$this->assertTrue($test->assertTags($input, $pattern), 'Single quoted attributes %s');
 
 		$input = "<a href='/test.html' class='active'>My link</a>";
 		$pattern = array(
@@ -125,7 +97,7 @@ class CakeTestCaseTest extends CakeTestCase {
 			'My link',
 			'/a'
 		);
-		$this->assertTags($input, $pattern);
+		$this->assertTrue($test->assertTags($input, $pattern), 'Single quoted attributes %s');
 
 		$input = "<span><strong>Text</strong></span>";
 		$pattern = array(
@@ -135,7 +107,7 @@ class CakeTestCaseTest extends CakeTestCase {
 			'/strong',
 			'/span'
 		);
-		$this->assertTags($input, $pattern);
+		$this->assertTrue($test->assertTags($input, $pattern), 'Tags with no attributes');
 
 		$input = "<span class='active'><strong>Text</strong></span>";
 		$pattern = array(
@@ -145,34 +117,7 @@ class CakeTestCaseTest extends CakeTestCase {
 			'/strong',
 			'/span'
 		);
-		$this->assertTags($input, $pattern);
-	}
-
-/**
- * Test that assertTags runs quickly.
- *
- * @return void
- */
-	public function testAssertTagsRuntimeComplexity() {
-		$pattern = array(
-			'div' => array(
-				'attr1' => 'val1',
-				'attr2' => 'val2',
-				'attr3' => 'val3',
-				'attr4' => 'val4',
-				'attr5' => 'val5',
-				'attr6' => 'val6',
-				'attr7' => 'val7',
-				'attr8' => 'val8',
-			),
-			'My div',
-			'/div'
-		);
-		$input = '<div attr8="val8" attr6="val6" attr4="val4" attr2="val2"' .
-			' attr1="val1" attr3="val3" attr5="val5" attr7="val7" />' .
-			'My div' .
-			'</div>';
-		$this->assertTags($input, $pattern);
+		$this->assertTrue($test->assertTags($input, $pattern), 'Test attribute presence');
 	}
 
 /**
@@ -327,6 +272,7 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextStartsWith() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
+		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
 
 		$this->assertStringStartsWith("some\nstring", $stringDirty);
 		$this->assertStringStartsNotWith("some\r\nstring\r\nwith", $stringDirty);
@@ -343,6 +289,8 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextStartsNotWith() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
+		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
+
 		$this->assertTextStartsNotWith("some\nstring\nwithout", $stringDirty);
 	}
 
@@ -353,6 +301,8 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextEndsWith() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
+		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
+
 		$this->assertTextEndsWith("string\nwith\r\ndifferent\rline endings!", $stringDirty);
 		$this->assertTextEndsWith("string\r\nwith\ndifferent\nline endings!", $stringDirty);
 	}
@@ -364,6 +314,8 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextEndsNotWith() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
+		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
+
 		$this->assertStringEndsNotWith("different\nline endings", $stringDirty);
 		$this->assertTextEndsNotWith("different\rline endings", $stringDirty);
 	}
@@ -375,8 +327,11 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextContains() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
+		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
+
 		$this->assertContains("different", $stringDirty);
 		$this->assertNotContains("different\rline", $stringDirty);
+
 		$this->assertTextContains("different\rline", $stringDirty);
 	}
 
@@ -387,6 +342,8 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testAssertTextNotContains() {
 		$stringDirty = "some\nstring\r\nwith\rdifferent\nline endings!";
+		$stringClean = "some\nstring\nwith\ndifferent\nline endings!";
+
 		$this->assertTextNotContains("different\rlines", $stringDirty);
 	}
 
@@ -397,12 +354,12 @@ class CakeTestCaseTest extends CakeTestCase {
  */
 	public function testGetMockForModel() {
 		App::build(array(
-			'Model' => array(
-				CAKE . 'Test' . DS . 'test_app' . DS . 'Model' . DS
-			)
+				'Model' => array(
+					CAKE . 'Test' . DS . 'test_app' . DS . 'Model' . DS
+				)
 		), App::RESET);
 		$Post = $this->getMockForModel('Post');
-		$this->assertEquals('test', $Post->useDbConfig);
+
 		$this->assertInstanceOf('Post', $Post);
 		$this->assertNull($Post->save(array()));
 		$this->assertNull($Post->find('all'));
@@ -415,44 +372,22 @@ class CakeTestCaseTest extends CakeTestCase {
 	}
 
 /**
- * Test getMockForModel on secondary datasources.
- *
- * @return void
- */
-	public function testGetMockForModelSecondaryDatasource() {
-		App::build(array(
-			'Plugin' => array(CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS),
-			'Model/Datasource/Database' => array(
-				CAKE . 'Test' . DS . 'test_app' . DS . 'Model' . DS . 'Datasource' . DS . 'Database' . DS
-			)
-		), App::RESET);
-		CakePlugin::load('TestPlugin');
-		ConnectionManager::create('test_secondary', array(
-			'datasource' => 'Database/TestLocalDriver'
-		));
-		$post = $this->getMockForModel('SecondaryPost', array('save'));
-		$this->assertEquals('test_secondary', $post->useDbConfig);
-		ConnectionManager::drop('test_secondary');
-	}
-
-/**
  * test getMockForModel() with plugin models
  *
  * @return void
  */
 	public function testGetMockForModelWithPlugin() {
 		App::build(array(
-			'Plugin' => array(
-				CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS
-			)
+				'Plugin' => array(
+					CAKE . 'Test' . DS . 'test_app' . DS . 'Plugin' . DS
+				)
 		), App::RESET);
 		CakePlugin::load('TestPlugin');
 		$this->getMockForModel('TestPlugin.TestPluginAppModel');
-		$this->getMockForModel('TestPlugin.TestPluginComment');
+		$TestPluginComment = $this->getMockForModel('TestPlugin.TestPluginComment');
 
 		$result = ClassRegistry::init('TestPlugin.TestPluginComment');
 		$this->assertInstanceOf('TestPluginComment', $result);
-		$this->assertEquals('test', $result->useDbConfig);
 
 		$TestPluginComment = $this->getMockForModel('TestPlugin.TestPluginComment', array('save'));
 
@@ -473,7 +408,7 @@ class CakeTestCaseTest extends CakeTestCase {
  * @return void
  */
 	public function testGetMockForModelModel() {
-		$Mock = $this->getMockForModel('Model', array('save', 'setDataSource'), array('name' => 'Comment'));
+		$Mock = $this->getMockForModel('Model', array('save'), array('name' => 'Comment'));
 
 		$result = ClassRegistry::init('Comment');
 		$this->assertInstanceOf('Model', $result);

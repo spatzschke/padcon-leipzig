@@ -2,6 +2,8 @@
 /**
  * BlowfishAuthenticateTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -200,7 +202,7 @@ class BlowfishAuthenticateTest extends CakeTestCase {
 			'username' => 'gwoo',
 			'created' => '2007-03-17 01:16:23'
 		);
-		$this->assertEquals(static::date(), $result['updated']);
+		$this->assertEquals(self::date(), $result['updated']);
 		unset($result['updated']);
 		$this->assertEquals($expected, $result);
 		CakePlugin::unload();

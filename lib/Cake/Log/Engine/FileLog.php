@@ -2,6 +2,8 @@
 /**
  * File Storage stream for Logging
  *
+ * PHP 5
+ *
  * CakePHP(tm) :  Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -61,7 +63,7 @@ class FileLog extends BaseLog {
 /**
  * Max file size, used for log file rotation.
  *
- * @var int
+ * @var integer
  */
 	protected $_size = null;
 
@@ -83,7 +85,7 @@ class FileLog extends BaseLog {
  * - `mask` A mask is applied when log files are created. Left empty no chmod
  *   is made.
  *
- * @param array $config Options for the FileLog, see above.
+ * @param array $options Options for the FileLog, see above.
  */
 	public function __construct($config = array()) {
 		$config = Hash::merge($this->_defaults, $config);
@@ -128,7 +130,7 @@ class FileLog extends BaseLog {
  *
  * @param string $type The type of log you are making.
  * @param string $message The message you want to log.
- * @return bool success of write.
+ * @return boolean success of write.
  */
 	public function write($type, $message) {
 		$output = date('Y-m-d H:i:s') . ' ' . ucfirst($type) . ': ' . $message . "\n";
@@ -157,7 +159,6 @@ class FileLog extends BaseLog {
 
 /**
  * Get filename
- *
  * @param string $type The type of log.
  * @return string File name
  */
@@ -166,7 +167,7 @@ class FileLog extends BaseLog {
 
 		if (!empty($this->_file)) {
 			$filename = $this->_file;
-		} elseif ($type === 'error' || $type === 'warning') {
+		} elseif ($type == 'error' || $type == 'warning') {
 			$filename = 'error.log';
 		} elseif (in_array($type, $debugTypes)) {
 			$filename = 'debug.log';
@@ -182,7 +183,7 @@ class FileLog extends BaseLog {
  * Also if `rotate` count is reached oldest file is removed.
  *
  * @param string $filename Log file name
- * @return mixed True if rotated successfully or false in case of error, otherwise null.
+ * @return mixed True if rotated successfully or false in case of error.
  *   Void if file doesn't need to be rotated.
  */
 	protected function _rotateFile($filename) {
@@ -196,7 +197,7 @@ class FileLog extends BaseLog {
 		if (!file_exists($filepath) ||
 			filesize($filepath) < $this->_size
 		) {
-			return null;
+			return;
 		}
 
 		if ($this->_config['rotate'] === 0) {

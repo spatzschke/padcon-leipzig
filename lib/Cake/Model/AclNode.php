@@ -1,5 +1,8 @@
 <?php
 /**
+ *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -26,7 +29,7 @@ class AclNode extends Model {
 /**
  * Explicitly disable in-memory query caching for ACL models
  *
- * @var bool
+ * @var boolean
  */
 	public $cacheQueries = false;
 
@@ -39,6 +42,7 @@ class AclNode extends Model {
 
 /**
  * Constructor
+ *
  */
 	public function __construct() {
 		$config = Configure::read('Acl.database');
@@ -87,8 +91,6 @@ class AclNode extends Model {
 				'order' => $db->name("{$type}.lft") . ' DESC'
 			);
 
-			$conditionsAfterJoin = array();
-
 			foreach ($path as $i => $alias) {
 				$j = $i - 1;
 
@@ -97,25 +99,23 @@ class AclNode extends Model {
 					'alias' => "{$type}{$i}",
 					'type' => 'INNER',
 					'conditions' => array(
-						$db->name("{$type}{$i}.alias") . ' = ' . $db->value($alias, 'string')
+						$db->name("{$type}{$i}.lft") . ' > ' . $db->name("{$type}{$j}.lft"),
+						$db->name("{$type}{$i}.rght") . ' < ' . $db->name("{$type}{$j}.rght"),
+						$db->name("{$type}{$i}.alias") . ' = ' . $db->value($alias, 'string'),
+						$db->name("{$type}{$j}.id") . ' = ' . $db->name("{$type}{$i}.parent_id")
 					)
 				);
-
-				// it will be better if this conditions will performs after join operation
-				$conditionsAfterJoin[] = $db->name("{$type}{$j}.id") . ' = ' . $db->name("{$type}{$i}.parent_id");
-				$conditionsAfterJoin[] = $db->name("{$type}{$i}.rght") . ' < ' . $db->name("{$type}{$j}.rght");
-				$conditionsAfterJoin[] = $db->name("{$type}{$i}.lft") . ' > ' . $db->name("{$type}{$j}.lft");
 
 				$queryData['conditions'] = array('or' => array(
 					$db->name("{$type}.lft") . ' <= ' . $db->name("{$type}0.lft") . ' AND ' . $db->name("{$type}.rght") . ' >= ' . $db->name("{$type}0.rght"),
 					$db->name("{$type}.lft") . ' <= ' . $db->name("{$type}{$i}.lft") . ' AND ' . $db->name("{$type}.rght") . ' >= ' . $db->name("{$type}{$i}.rght"))
 				);
 			}
-			$queryData['conditions'] = array_merge($queryData['conditions'], $conditionsAfterJoin);
 			$result = $db->read($this, $queryData, -1);
 			$path = array_values($path);
 
-			if (!isset($result[0][$type]) ||
+			if (
+				!isset($result[0][$type]) ||
 				(!empty($path) && $result[0][$type]['alias'] != $path[count($path) - 1]) ||
 				(empty($path) && $result[0][$type]['alias'] != $start)
 			) {

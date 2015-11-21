@@ -2,6 +2,8 @@
 /**
  * SanitizeTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -58,7 +60,7 @@ class SanitizeTest extends CakeTestCase {
 /**
  * autoFixtures property
  *
- * @var bool
+ * @var boolean
  */
 	public $autoFixtures = false;
 
@@ -154,7 +156,7 @@ class SanitizeTest extends CakeTestCase {
 		$string = '';
 		$expected = '';
 		$result = Sanitize::clean($string, array('connection' => 'test'));
-		$this->assertEquals($expected, $result);
+		$this->assertEquals($expected, $string);
 
 		$data = array(
 			'Grant' => array(

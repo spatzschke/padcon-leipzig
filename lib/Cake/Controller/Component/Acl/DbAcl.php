@@ -29,11 +29,11 @@ App::uses('ClassRegistry', 'Utility');
  *
  * Would point to a tree structure like
  *
- * ```
+ * {{{
  *	controllers
  *		Users
  *			edit
- * ```
+ * }}}
  *
  * @package       Cake.Controller.Component.Acl
  */
@@ -41,6 +41,7 @@ class DbAcl extends Object implements AclInterface {
 
 /**
  * Constructor
+ *
  */
 	public function __construct() {
 		parent::__construct();
@@ -52,7 +53,7 @@ class DbAcl extends Object implements AclInterface {
 /**
  * Initializes the containing component and sets the Aro/Aco objects to it.
  *
- * @param AclComponent $component The AclComponent instance.
+ * @param AclComponent $component
  * @return void
  */
 	public function initialize(Component $component) {
@@ -66,7 +67,7 @@ class DbAcl extends Object implements AclInterface {
  * @param string $aro ARO The requesting object identifier.
  * @param string $aco ACO The controlled object identifier.
  * @param string $action Action (defaults to *)
- * @return bool Success (true if ARO has access to action in ACO, false otherwise)
+ * @return boolean Success (true if ARO has access to action in ACO, false otherwise)
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/access-control-lists.html#checking-permissions-the-acl-component
  */
 	public function check($aro, $aco, $action = "*") {
@@ -79,8 +80,8 @@ class DbAcl extends Object implements AclInterface {
  * @param string $aro ARO The requesting object identifier.
  * @param string $aco ACO The controlled object identifier.
  * @param string $actions Action (defaults to *)
- * @param int $value Value to indicate access type (1 to give access, -1 to deny, 0 to inherit)
- * @return bool Success
+ * @param integer $value Value to indicate access type (1 to give access, -1 to deny, 0 to inherit)
+ * @return boolean Success
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/access-control-lists.html#assigning-permissions
  */
 	public function allow($aro, $aco, $actions = "*", $value = 1) {
@@ -93,7 +94,7 @@ class DbAcl extends Object implements AclInterface {
  * @param string $aro ARO The requesting object identifier.
  * @param string $aco ACO The controlled object identifier.
  * @param string $action Action (defaults to *)
- * @return bool Success
+ * @return boolean Success
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/access-control-lists.html#assigning-permissions
  */
 	public function deny($aro, $aco, $action = "*") {
@@ -106,7 +107,7 @@ class DbAcl extends Object implements AclInterface {
  * @param string $aro ARO The requesting object identifier.
  * @param string $aco ACO The controlled object identifier.
  * @param string $action Action (defaults to *)
- * @return bool Success
+ * @return boolean Success
  */
 	public function inherit($aro, $aco, $action = "*") {
 		return $this->allow($aro, $aco, $action, 0);
@@ -118,7 +119,7 @@ class DbAcl extends Object implements AclInterface {
  * @param string $aro ARO The requesting object identifier.
  * @param string $aco ACO The controlled object identifier.
  * @param string $action Action (defaults to *)
- * @return bool Success
+ * @return boolean Success
  * @see allow()
  */
 	public function grant($aro, $aco, $action = "*") {
@@ -131,7 +132,7 @@ class DbAcl extends Object implements AclInterface {
  * @param string $aro ARO The requesting object identifier.
  * @param string $aco ACO The controlled object identifier.
  * @param string $action Action (defaults to *)
- * @return bool Success
+ * @return boolean Success
  * @see deny()
  */
 	public function revoke($aro, $aco, $action = "*") {

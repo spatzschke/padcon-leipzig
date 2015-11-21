@@ -2,6 +2,8 @@
 /**
  * SchemaShellTest Test file
  *
+ * PHP 5
+ *
  * CakePHP : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -425,29 +427,6 @@ class SchemaShellTest extends CakeTestCase {
 	}
 
 /**
- * Test schema run create with --yes option
- *
- * @return void
- */
-	public function testCreateOptionYes() {
-		$this->Shell = $this->getMock(
-			'SchemaShell',
-			array('in', 'out', 'hr', 'createFile', 'error', 'err', '_stop', '_run'),
-			array(&$this->Dispatcher)
-		);
-
-		$this->Shell->params = array(
-			'connection' => 'test',
-			'yes' => true,
-		);
-		$this->Shell->args = array('i18n');
-		$this->Shell->expects($this->never())->method('in');
-		$this->Shell->expects($this->exactly(2))->method('_run');
-		$this->Shell->startup();
-		$this->Shell->create();
-	}
-
-/**
  * Test schema run create with no table args.
  *
  * @return void
@@ -550,36 +529,9 @@ class SchemaShellTest extends CakeTestCase {
 		$this->Shell->expects($this->any())
 			->method('in')
 			->will($this->returnValue('y'));
-		$this->Shell->expects($this->once())
+		$r = $this->Shell->expects($this->once())
 			->method('_run')
 			->with($this->arrayHasKey('newone'), 'update', $this->isInstanceOf('CakeSchema'));
-
-		$this->Shell->update();
-	}
-
-/**
- * test run update with --yes option
- *
- * @return void
- */
-	public function testUpdateWithOptionYes() {
-		$this->Shell = $this->getMock(
-			'SchemaShell',
-			array('in', 'out', 'hr', 'createFile', 'error', 'err', '_stop', '_run'),
-			array(&$this->Dispatcher)
-		);
-
-		$this->Shell->params = array(
-			'connection' => 'test',
-			'force' => true,
-			'yes' => true,
-		);
-		$this->Shell->args = array('SchemaShellTest', 'articles');
-		$this->Shell->startup();
-		$this->Shell->expects($this->never())->method('in');
-		$this->Shell->expects($this->once())
-			->method('_run')
-			->with($this->arrayHasKey('articles'), 'update', $this->isInstanceOf('CakeSchema'));
 
 		$this->Shell->update();
 	}
@@ -617,25 +569,25 @@ class SchemaShellTest extends CakeTestCase {
 		$this->Shell->params = array(
 			'plugin' => 'TestPlugin',
 			'connection' => 'test',
-			'name' => 'custom_names',
+			'name' => 'custom_name',
 			'force' => false,
 			'overwrite' => true,
 		);
 		$this->Shell->startup();
-		if (file_exists($this->Shell->Schema->path . DS . 'custom_names.php')) {
-			unlink($this->Shell->Schema->path . DS . 'custom_names.php');
+		if (file_exists($this->Shell->Schema->path . DS . 'custom_name.php')) {
+			unlink($this->Shell->Schema->path . DS . 'custom_name.php');
 		}
 		$this->Shell->generate();
 
-		$contents = file_get_contents($this->Shell->Schema->path . DS . 'custom_names.php');
-		$this->assertRegExp('/class CustomNamesSchema/', $contents);
-		unlink($this->Shell->Schema->path . DS . 'custom_names.php');
+		$contents = file_get_contents($this->Shell->Schema->path . DS . 'custom_name.php');
+		$this->assertRegExp('/class CustomNameSchema/', $contents);
+		unlink($this->Shell->Schema->path . DS . 'custom_name.php');
 		CakePlugin::unload();
 	}
 
 /**
  * test that passing name and file creates the passed filename with the
- * passed class name
+ * passed classname
  *
  * @return void
  */

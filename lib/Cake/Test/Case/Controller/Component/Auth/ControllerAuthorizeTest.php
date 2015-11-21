@@ -2,6 +2,8 @@
 /**
  * ControllerAuthorizeTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -45,20 +47,14 @@ class ControllerAuthorizeTest extends CakeTestCase {
 	}
 
 /**
- * testControllerTypeError
- *
  * @expectedException PHPUnit_Framework_Error
- * @return void
  */
 	public function testControllerTypeError() {
 		$this->auth->controller(new StdClass());
 	}
 
 /**
- * testControllerErrorOnMissingMethod
- *
  * @expectedException CakeException
- * @return void
  */
 	public function testControllerErrorOnMissingMethod() {
 		$this->auth->controller(new Controller());
@@ -91,5 +87,4 @@ class ControllerAuthorizeTest extends CakeTestCase {
 
 		$this->assertTrue($this->auth->authorize($user, $request));
 	}
-
 }

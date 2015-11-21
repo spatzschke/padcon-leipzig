@@ -2,6 +2,8 @@
 /**
  * CacheSessionTest
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -39,7 +41,7 @@ class CacheSessionTest extends CakeTestCase {
 			'engine' => 'File',
 			'prefix' => 'session_test_'
 		));
-		static::$_sessionBackup = Configure::read('Session');
+		self::$_sessionBackup = Configure::read('Session');
 
 		Configure::write('Session.handler.config', 'session_test');
 	}
@@ -53,7 +55,7 @@ class CacheSessionTest extends CakeTestCase {
 		Cache::clear(false, 'session_test');
 		Cache::drop('session_test');
 
-		Configure::write('Session', static::$_sessionBackup);
+		Configure::write('Session', self::$_sessionBackup);
 	}
 
 /**

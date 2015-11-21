@@ -4,6 +4,8 @@
  *
  * Test Case for project generation shell task
  *
+ * PHP 5
+ *
  * CakePHP : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -197,6 +199,7 @@ class ProjectTaskTest extends CakeTestCase {
 			'Test' . DS . 'Case' . DS . 'View' . DS . 'Helper' => 'empty',
 			'Test' . DS . 'Fixture' => 'empty',
 			'Vendor' => 'empty',
+			'View' . DS . 'Elements' => 'empty',
 			'View' . DS . 'Scaffolds' => 'empty',
 			'tmp' . DS . 'cache' . DS . 'models' => 'empty',
 			'tmp' . DS . 'cache' . DS . 'persistent' => 'empty',

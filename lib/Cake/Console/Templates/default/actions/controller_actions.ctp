@@ -2,6 +2,8 @@
 /**
  * Bake Template for Controller action generation.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -53,10 +55,10 @@
 			$this-><?php echo $currentModelName; ?>->create();
 			if ($this-><?php echo $currentModelName; ?>->save($this->request->data)) {
 <?php if ($wannaUseSession): ?>
-				$this->Flash->success(__('The <?php echo strtolower($singularHumanName); ?> has been saved.'));
+				$this->Session->setFlash(__('The <?php echo strtolower($singularHumanName); ?> has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The <?php echo strtolower($singularHumanName); ?> could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The <?php echo strtolower($singularHumanName); ?> could not be saved. Please, try again.'));
 <?php else: ?>
 				return $this->flash(__('The <?php echo strtolower($singularHumanName); ?> has been saved.'), array('action' => 'index'));
 <?php endif; ?>
@@ -94,10 +96,10 @@
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this-><?php echo $currentModelName; ?>->save($this->request->data)) {
 <?php if ($wannaUseSession): ?>
-				$this->Flash->success(__('The <?php echo strtolower($singularHumanName); ?> has been saved.'));
+				$this->Session->setFlash(__('The <?php echo strtolower($singularHumanName); ?> has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The <?php echo strtolower($singularHumanName); ?> could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The <?php echo strtolower($singularHumanName); ?> could not be saved. Please, try again.'));
 <?php else: ?>
 				return $this->flash(__('The <?php echo strtolower($singularHumanName); ?> has been saved.'), array('action' => 'index'));
 <?php endif; ?>
@@ -135,12 +137,12 @@
 		if (!$this-><?php echo $currentModelName; ?>->exists()) {
 			throw new NotFoundException(__('Invalid <?php echo strtolower($singularHumanName); ?>'));
 		}
-		$this->request->allowMethod('post', 'delete');
+		$this->request->onlyAllow('post', 'delete');
 		if ($this-><?php echo $currentModelName; ?>->delete()) {
 <?php if ($wannaUseSession): ?>
-			$this->Flash->success(__('The <?php echo strtolower($singularHumanName); ?> has been deleted.'));
+			$this->Session->setFlash(__('The <?php echo strtolower($singularHumanName); ?> has been deleted.'));
 		} else {
-			$this->Flash->error(__('The <?php echo strtolower($singularHumanName); ?> could not be deleted. Please, try again.'));
+			$this->Session->setFlash(__('The <?php echo strtolower($singularHumanName); ?> could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
 <?php else: ?>

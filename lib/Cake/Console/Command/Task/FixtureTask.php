@@ -2,6 +2,8 @@
 /**
  * The FixtureTask handles creating and updating fixture files.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -60,28 +62,27 @@ class FixtureTask extends BakeTask {
 	}
 
 /**
- * Gets the option parser instance and configures it.
+ * get the option parser.
  *
- * @return ConsoleOptionParser
+ * @return void
  */
 	public function getOptionParser() {
 		$parser = parent::getOptionParser();
-
-		$parser->description(
+		return $parser->description(
 			__d('cake_console', 'Generate fixtures for use with the test suite. You can use `bake fixture all` to bake all fixtures.')
 		)->addArgument('name', array(
 			'help' => __d('cake_console', 'Name of the fixture to bake. Can use Plugin.name to bake plugin fixtures.')
 		))->addOption('count', array(
 			'help' => __d('cake_console', 'When using generated data, the number of records to include in the fixture(s).'),
 			'short' => 'n',
-			'default' => 1
+			'default' => 10
 		))->addOption('connection', array(
 			'help' => __d('cake_console', 'Which database configuration to use for baking.'),
 			'short' => 'c',
 			'default' => 'default'
 		))->addOption('plugin', array(
 			'help' => __d('cake_console', 'CamelCased name of the plugin to bake fixtures for.'),
-			'short' => 'p'
+			'short' => 'p',
 		))->addOption('schema', array(
 			'help' => __d('cake_console', 'Importing schema for fixtures rather than hardcoding it.'),
 			'short' => 's',
@@ -93,15 +94,10 @@ class FixtureTask extends BakeTask {
 			'short' => 'f',
 			'help' => __d('cake_console', 'Force overwriting existing files without prompting.')
 		))->addOption('records', array(
-			'help' => __d('cake_console', 'Used with --count and <name>/all commands to pull [n] records from the live tables, ' .
-				'where [n] is either --count or the default of 10.'),
+			'help' => __d('cake_console', 'Used with --count and <name>/all commands to pull [n] records from the live tables, where [n] is either --count or the default of 10.'),
 			'short' => 'r',
 			'boolean' => true
-		))->epilog(
-			__d('cake_console', 'Omitting all arguments and options will enter into an interactive mode.')
-		);
-
-		return $parser;
+		))->epilog(__d('cake_console', 'Omitting all arguments and options will enter into an interactive mode.'));
 	}
 
 /**
@@ -210,7 +206,7 @@ class FixtureTask extends BakeTask {
  * @param string $model Name of model to bake.
  * @param string $useTable Name of table to use.
  * @param array $importOptions Options for public $import
- * @return string|null Baked fixture content, otherwise null.
+ * @return string Baked fixture content
  */
 	public function bake($model, $useTable = false, $importOptions = array()) {
 		App::uses('CakeSchema', 'Model');
@@ -242,8 +238,8 @@ class FixtureTask extends BakeTask {
 		$this->_Schema = new CakeSchema();
 		$data = $this->_Schema->read(array('models' => false, 'connection' => $this->connection));
 		if (!isset($data['tables'][$useTable])) {
-			$this->err("<warning>Warning:</warning> Could not find the '${useTable}' table for ${model}.");
-			return null;
+			$this->error('Could not find your selected table ' . $useTable);
+			return false;
 		}
 
 		$tableInfo = $data['tables'][$useTable];
@@ -316,7 +312,7 @@ class FixtureTask extends BakeTask {
  * Generate String representation of Records
  *
  * @param array $tableInfo Table schema array
- * @param int $recordCount The number of records to generate.
+ * @param integer $recordCount
  * @return array Array of records to use in the fixture.
  */
 	protected function _generateRecords($tableInfo, $recordCount = 1) {
@@ -340,7 +336,7 @@ class FixtureTask extends BakeTask {
 							isset($fieldInfo['length']) && $fieldInfo['length'] == 36
 						);
 						if ($isPrimaryUuid) {
-							$insert = CakeText::uuid();
+							$insert = String::uuid();
 						} else {
 							$insert = "Lorem ipsum dolor sit amet";
 							if (!empty($fieldInfo['length'])) {
@@ -381,7 +377,7 @@ class FixtureTask extends BakeTask {
 	}
 
 /**
- * Convert a $records array into a string.
+ * Convert a $records array into a a string.
  *
  * @param array $records Array of records to be converted to string
  * @return string A string value of the $records array.
@@ -414,26 +410,19 @@ class FixtureTask extends BakeTask {
  * @return array Array of records.
  */
 	protected function _getRecordsFromTable($modelName, $useTable = null) {
-		$modelObject = new Model(array('name' => $modelName, 'table' => $useTable, 'ds' => $this->connection));
 		if ($this->interactive) {
 			$condition = null;
 			$prompt = __d('cake_console', "Please provide a SQL fragment to use as conditions\nExample: WHERE 1=1");
 			while (!$condition) {
 				$condition = $this->in($prompt, null, 'WHERE 1=1');
 			}
-
-			$recordsFound = $modelObject->find('count', array(
-				'conditions' => $condition,
-				'recursive' => -1,
-			));
-
 			$prompt = __d('cake_console', "How many records do you want to import?");
-			$recordCount = $this->in($prompt, null, ($recordsFound < 10 ) ? $recordsFound : 10);
+			$recordCount = $this->in($prompt, null, 10);
 		} else {
 			$condition = 'WHERE 1=1';
 			$recordCount = (isset($this->params['count']) ? $this->params['count'] : 10);
 		}
-
+		$modelObject = new Model(array('name' => $modelName, 'table' => $useTable, 'ds' => $this->connection));
 		$records = $modelObject->find('all', array(
 			'conditions' => $condition,
 			'recursive' => -1,

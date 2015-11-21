@@ -79,19 +79,18 @@ class ClassRegistry {
  *
  * When $class is a numeric keyed array, multiple class instances will be stored in the registry,
  *  no instance of the object will be returned
- * ```
+ * {{{
  * array(
  *		array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry'),
  *		array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry'),
  *		array('class' => 'ClassName', 'alias' => 'AliasNameStoredInTheRegistry')
  * );
- * ```
- *
+ * }}}
  * @param string|array $class as a string or a single key => value array instance will be created,
  *  stored in the registry and returned.
- * @param bool $strict if set to true it will return false if the class was not found instead
+ * @param boolean $strict if set to true it will return false if the class was not found instead
  *	of trying to create an AppModel
- * @return $class instance of ClassName.
+ * @return object instance of ClassName.
  * @throws CakeException when you try to construct an interface or abstract class.
  */
 	public static function init($class, $strict = false) {
@@ -120,7 +119,7 @@ class ClassRegistry {
 
 			if (is_array($settings)) {
 				$pluginPath = null;
-				$settings += $defaults;
+				$settings = array_merge($defaults, $settings);
 				$class = $settings['class'];
 
 				list($plugin, $class) = pluginSplit($class);
@@ -181,9 +180,15 @@ class ClassRegistry {
 					} elseif ($plugin && class_exists($plugin . 'AppModel')) {
 						$appModel = $plugin . 'AppModel';
 					}
+					if (!empty($appModel)) {
+						$settings['name'] = $class;
+						$instance = new $appModel($settings);
+					}
 
-					$settings['name'] = $class;
-					$instance = new $appModel($settings);
+					if (!isset($instance)) {
+						trigger_error(__d('cake_dev', '(ClassRegistry::init() could not create instance of %s', $class), E_USER_WARNING);
+						return false;
+					}
 				}
 				$_this->map($alias, $class);
 			}
@@ -200,7 +205,7 @@ class ClassRegistry {
  *
  * @param string $key Key for the object in registry
  * @param object $object Object to store
- * @return bool True if the object was written, false if $key already exists
+ * @return boolean True if the object was written, false if $key already exists
  */
 	public static function addObject($key, $object) {
 		$_this = ClassRegistry::getInstance();
@@ -230,7 +235,7 @@ class ClassRegistry {
  * Returns true if given key is present in the ClassRegistry.
  *
  * @param string $key Key to look for
- * @return bool true if key exists in registry, false otherwise
+ * @return boolean true if key exists in registry, false otherwise
  */
 	public static function isKeySet($key) {
 		$_this = ClassRegistry::getInstance();
@@ -298,9 +303,9 @@ class ClassRegistry {
 /**
  * Checks to see if $alias is a duplicate $class Object
  *
- * @param string $alias Alias to check.
- * @param string $class Class name.
- * @return bool
+ * @param string $alias
+ * @param string $class
+ * @return boolean
  */
 	protected function &_duplicate($alias, $class) {
 		$duplicate = false;

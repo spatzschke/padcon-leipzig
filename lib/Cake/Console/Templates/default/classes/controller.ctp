@@ -4,6 +4,8 @@
  *
  * Allows templating of Controllers generated from bake.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -23,10 +25,10 @@ echo "App::uses('{$plugin}AppController', '{$pluginPath}Controller');\n";
 ?>
 /**
  * <?php echo $controllerName; ?> Controller
+ *
 <?php
 if (!$isScaffold) {
 	$defaultModel = Inflector::singularize($controllerName);
-	echo " *\n";
 	echo " * @property {$defaultModel} \${$defaultModel}\n";
 	if (!empty($components)) {
 		foreach ($components as $component) {
@@ -74,9 +76,7 @@ class <?php echo $controllerName; ?>Controller extends <?php echo $plugin; ?>App
 		echo ");\n\n";
 	endif;
 
-	if (!empty($actions)) {
-		echo trim($actions) . "\n";
-	}
+	echo trim($actions);
 
 endif; ?>
 }
