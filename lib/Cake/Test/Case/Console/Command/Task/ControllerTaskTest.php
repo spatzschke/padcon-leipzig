@@ -2,8 +2,6 @@
 /**
  * ControllerTask Test Case
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -224,7 +222,7 @@ class ControllerTaskTest extends CakeTestCase {
 	public function testDoComponentsNo() {
 		$this->Task->expects($this->any())->method('in')->will($this->returnValue('n'));
 		$result = $this->Task->doComponents();
-		$this->assertSame(array('Paginator'), $result);
+		$this->assertSame(array('Paginator', 'Flash'), $result);
 	}
 
 /**
@@ -237,7 +235,7 @@ class ControllerTaskTest extends CakeTestCase {
 		$this->Task->expects($this->at(1))->method('in')->will($this->returnValue(' RequestHandler, Security  '));
 
 		$result = $this->Task->doComponents();
-		$expected = array('Paginator', 'RequestHandler', 'Security');
+		$expected = array('Paginator', 'Flash', 'RequestHandler', 'Security');
 		$this->assertEquals($expected, $result);
 	}
 
@@ -251,7 +249,7 @@ class ControllerTaskTest extends CakeTestCase {
 		$this->Task->expects($this->at(1))->method('in')->will($this->returnValue(' RequestHandler, Security, , '));
 
 		$result = $this->Task->doComponents();
-		$expected = array('Paginator', 'RequestHandler', 'Security');
+		$expected = array('Paginator', 'Flash', 'RequestHandler', 'Security');
 		$this->assertEquals($expected, $result);
 	}
 

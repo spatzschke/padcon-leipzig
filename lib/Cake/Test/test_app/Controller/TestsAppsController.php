@@ -2,8 +2,6 @@
 /**
  * TestsAppsController file
  *
- * PHP 5
- *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -44,6 +42,10 @@ class TestsAppsController extends AppController {
 	public function set_action() {
 		$this->set('var', 'string');
 		$this->render('index');
+	}
+
+	public function file() {
+		$this->response->file(__FILE__);
 	}
 
 	public function redirect_to() {

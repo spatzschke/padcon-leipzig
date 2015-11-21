@@ -121,19 +121,13 @@ class OffersController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 	
-	function createPdf ($hash = null){
-		
-		$key = 'wt1U5MACWJFTXGenFoZoiLwQGrLgdbHA';
-		$offerID = Security::decrypt($hash, $key);	
+	function createPdf ($offerID = null){
 		$this->admin_createPdf($offerID);
 	}
 
 	function admin_createPdf ($offerID = null){
 
 		$this->layout = 'pdf';
-		
-		$key = 'wt1U5MACWJFTXGenFoZoiLwQGrLgdbHA';
-		debug(Security::encrypt($offerID, $key));
 		
 		$pdf = true;
 		if(!$offerID) {
