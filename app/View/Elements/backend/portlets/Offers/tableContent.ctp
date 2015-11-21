@@ -156,6 +156,10 @@
 							
 							if(!empty($item['Offer']['offer_number']))
 								echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'createPdf', $item['Offer']['id']), array('escape' => false, 'target' => '_blank'));
+							
+							if(!empty($item['Offer']['hash']))
+								echo $this->Html->link('<i class="glyphicon glyphicon-link"></i>', '/Angebot/'.$item['Offer']['hash'], array('escape' => false, 'target' => '_blank'));
+							
 							echo '</td>';
 						
 						
