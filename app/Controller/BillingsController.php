@@ -135,8 +135,6 @@ class BillingsController extends AppController {
 		
 		$this->layout = 'ajax';
 
-		debug($this->request->data);
-
 		if ($this->request->is('ajax')) {
 			if(!empty($this->request->data)) {
 				

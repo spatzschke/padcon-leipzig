@@ -13,6 +13,7 @@ class OffersController extends AppController {
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			$this->Auth->deny('*');
+			$this->Auth->allow('createPdf');
 			
 		}
 	}
@@ -119,10 +120,20 @@ class OffersController extends AppController {
 		$this->Session->setFlash(__('Offer was not deleted', true));
 		$this->redirect(array('action' => 'index'));
 	}
+	
+	function createPdf ($hash = null){
+		
+		$key = 'wt1U5MACWJFTXGenFoZoiLwQGrLgdbHA';
+		$offerID = Security::decrypt($hash, $key);	
+		$this->admin_createPdf($offerID);
+	}
 
 	function admin_createPdf ($offerID = null){
 
 		$this->layout = 'pdf';
+		
+		$key = 'wt1U5MACWJFTXGenFoZoiLwQGrLgdbHA';
+		debug(Security::encrypt($offerID, $key));
 		
 		$pdf = true;
 		if(!$offerID) {
@@ -170,8 +181,7 @@ class OffersController extends AppController {
 				}
 				
 				$offer['CartProducts'] = $this->getSettingCartProducts($offer);
-				
-				debug($offer);
+
 				
 				$cart = $this->Cart->findById($offer['Offer']['cart_id']);
 				$controller_id = 0;

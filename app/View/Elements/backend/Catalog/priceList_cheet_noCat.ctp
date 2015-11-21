@@ -1,8 +1,6 @@
 <?php
 	
 	$catalog = $this->data['Catalogs'];
-	
-	debug($this->data);
 		
 	$Anzahl_Sonderseiten = 1;
 	$page = 0 - $Anzahl_Sonderseiten;
