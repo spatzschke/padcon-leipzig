@@ -14,7 +14,7 @@ class AddressesController extends AppController {
  * @var array
  */
 	public $components = array('Paginator');
-	public $uses = array('Customer', 'Address', 'CustomerAddress', 'AddressAddressType', 'Offer', 'Confirmation', 'Billing', 'Delivery');
+	public $uses = array('Customer', 'Address', 'CustomerAddress', 'AddressAddresstype', 'Offer', 'Confirmation', 'Billing', 'Delivery');
 
 /**
  * index method
@@ -132,7 +132,7 @@ class AddressesController extends AppController {
 			
 		}
 
-        $addresses = $this->AddressAddressType->findAllByCustomerIdAndTypeId($customer_id, $type);
+        $addresses = $this->AddressAddresstype->findAllByCustomerIdAndTypeId($customer_id, $type);
 		
 		$customer = $this->Customer->findById($customer_id);
 		
@@ -332,9 +332,9 @@ class AddressesController extends AppController {
 			
 
 			if($first) {
-				$addresses = $this->AddressAddressType->find('first', array('conditions' => array('customer_id' => $customerId, 'type_id' => $type)));
+				$addresses = $this->AddressAddresstype->find('first', array('conditions' => array('customer_id' => $customerId, 'type_id' => $type)));
 			} else {
-				$addresses = $this->AddressAddressType->find('all', array('conditions' => array('customer_id' => $customerId, 'type_id' => $type)));
+				$addresses = $this->AddressAddresstype->find('all', array('conditions' => array('customer_id' => $customerId, 'type_id' => $type)));
 			}
 			
 			if(!empty($addresses)) {

@@ -23,8 +23,8 @@ class Addresstype extends AppModel {
  * @var array
  */
 	public $hasMany = array(
-		'AddressAddressType' => array(
-			'className' => 'AddressAddressType',
+		'AddressAddresstype' => array(
+			'className' => 'AddressAddresstype',
 			'foreignKey' => 'type_id',
 			'dependent' => false,
 			'conditions' => '',

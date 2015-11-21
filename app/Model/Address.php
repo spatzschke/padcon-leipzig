@@ -48,8 +48,8 @@ class Address extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'AddressAddressType' => array(
-			'className' => 'AddressAddressType',
+		'AddressAddresstype' => array(
+			'className' => 'AddressAddresstype',
 			'foreignKey' => 'address_id',
 			'conditions' => '',
 			'fields' => '',

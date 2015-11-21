@@ -7,7 +7,7 @@ App::import('Controller', 'Addresses');
 class OffersController extends AppController {
 
 	var $name = 'Offers';
-	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'User', 'AddressAddressType');
+	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'User', 'AddressAddresstype');
 	public $components = array('Auth', 'Session');
 	
 	public function beforeFilter() {
@@ -562,7 +562,7 @@ class OffersController extends AppController {
 			$this->request->data['Address'] += $add['Address'];	
 		}
 		
-		$this->request->data['Address']['count'] = $this->AddressAddressType->find('count', array('conditions' => array(
+		$this->request->data['Address']['count'] = $this->AddressAddresstype->find('count', array('conditions' => array(
 			'customer_id' => $offer['Offer']['customer_id'],
 			'type_id' => 1)));
 
