@@ -20,9 +20,7 @@
 
 	if(!empty($cart)) {
 		
-		if(empty($this->data['CartProduct'])) {
-			$this->data['CartProduct'] = array('empty');	
-		}
+	
 		
 		foreach ($this->data['CartProduct'] as $carti) {				
 			if(($i % $productsPerPage) == 0 ) {	
