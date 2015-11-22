@@ -266,7 +266,6 @@ class BillingsController extends AppController {
 
 		//Nachladen des Lieferscheins
 		$delivery = $this->Delivery->find('first', array('conditions' => array('Delivery.id' => $this->request->data['Confirmation']['delivery_id'])));
-		
 		$this->request->data['Delivery'] = $delivery['Delivery'];
 
 		return $Confirmations->calcPrice($this->request->data);

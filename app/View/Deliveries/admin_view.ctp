@@ -20,7 +20,7 @@ $(document).ready(function() {
 		
 		
 <?php 
-		$dataId = $this->data['Confirmation']['id'];
+		$dataId = $this->data['Delivery']['id'];
 		$redirectURL = FULL_BASE_URL.$this->base."\/admin\/".ucfirst($this->request->params['controller'])."\/view\/".$dataId;
 		$cartId = $this->data['Confirmation']['cart_id'];
 		$nextSheet = "Billings";

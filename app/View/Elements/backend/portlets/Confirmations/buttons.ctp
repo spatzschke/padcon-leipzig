@@ -21,8 +21,8 @@
 	echo $this->element('backend/helper/modalHelper', array(
 		"backdrop" => "false",
 		"id" => $id_addAdditionalAddress,
-		"url" => "\/admin\/Customers\/indexAjax\/ajax\/".$cartId,
-		"redirect" => $redirectURL));	
+		"url" => "\/admin\/Addresses\/index\/ajax\/".$dataId."\/".ucfirst($this->request->params['controller'])."\/".$addressType,
+		"redirect" => $redirectURL));
 			
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
 	

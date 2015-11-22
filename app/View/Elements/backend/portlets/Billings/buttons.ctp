@@ -1,5 +1,7 @@
 <div class="buttons">
 	<?php
+				
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
 	
 	$id_addAdditionalAddress = 'addAdditionalAddress';
 	echo $this->element('backend/helper/sheetButtonHelper', array(
@@ -9,20 +11,7 @@
 	echo $this->element('backend/helper/modalHelper', array(
 		"backdrop" => "false",
 		"id" => $id_addAdditionalAddress,
-		"url" => "\/admin\/Customers\/indexAjax\/ajax\/".$cartId,
-		"redirect" => $redirectURL));	
-			
-	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
-	
-	$id_settings = 'settings_btn';
-	echo $this->element('backend/helper/sheetButtonHelper', array(
-		"id" => $id_settings,
-		"icon" => "cog",
-		"text" => "Einstellung"));		
-
-	echo $this->element('backend/helper/modalHelper', array(
-		"id" => $id_settings,
-		"url" => "\/admin\/".ucfirst($this->request->params['controller'])."\/settings\/".$dataId,
+		"url" => "\/admin\/Addresses\/index\/ajax\/".$dataId."\/".ucfirst($this->request->params['controller'])."\/".$addressType,
 		"redirect" => $redirectURL));
 	 
 	

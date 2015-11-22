@@ -124,12 +124,11 @@ class AddressesController extends AppController {
 		}
 		if($controller_name == "Deliveries") {
 			$data = $this->Delivery->findById($controller_id); 
-			$customer_id = $data['Delivery']['customer_id'];
+			$customer_id = $data['Confirmation']['customer_id'];
 		}
 		if($controller_name == "Billings") {
 			$data = $this->Billing->findById($controller_id); 
-			$customer_id = $data['Billing']['customer_id'];
-			
+			$customer_id = $data['Confirmation']['customer_id'];
 		}
 
         $addresses = $this->AddressAddresstype->findAllByCustomerIdAndTypeId($customer_id, $type);

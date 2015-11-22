@@ -96,8 +96,6 @@ class ConfirmationsController extends AppController {
 			$this->Confirmation->save($confirmation);
 			$id = $this->Confirmation->id;
 			
-			debug($id);
-			
 			// Generate Hash für Offer
 			$confirmation['Confirmation']['hash'] =  Security::hash($id, 'md5', true);
 			$this->Confirmation->save($confirmation);

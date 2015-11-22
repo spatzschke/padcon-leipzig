@@ -13,17 +13,19 @@
 <div class="wood_bg">
 	
 	<?php	
-		$dataId = $this->data['Confirmation']['id'];
+		$dataId = $this->data['Billing']['id'];
 		$redirectURL = FULL_BASE_URL.$this->base."\/admin\/".ucfirst($this->request->params['controller'])."\/view\/".$dataId;
 		$cartId = $this->data['Confirmation']['cart_id'];
 		$controller = "Billing";
+		$customId = $this->data['Confirmation']['id'];
 
 		echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons', array(
 			"redirectURL" => $redirectURL,
 			"cartId" => $cartId,
 			"dataId" => $dataId,
 			"controller" => $controller,
-			"addressType" => "4"
+			"addressType" => "4",
+			"customId" => $customId
 		)); 
 	?>
 		
