@@ -1,5 +1,6 @@
 <?php
 	
+	
 	if(!empty($this->data['Cart'])) {
 		$cart = $this->data['Cart'];
 	
@@ -27,9 +28,12 @@
 <?php 
 	if(!empty($cart)) {
 		
-	
+		$cartTemp = $this->data;
+		if(empty($this->data['CartProduct'])) {
+			$cartTemp['CartProduct'] = array('empty');	
+		}
 		
-		foreach ($this->data['CartProduct'] as $carti) {				
+		foreach ($cartTemp['CartProduct'] as $carti) {				
 			if(($i % $productsPerPage) == 0 ) {	
 				$page++;
 				
