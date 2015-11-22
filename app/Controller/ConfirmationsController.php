@@ -24,6 +24,7 @@ class ConfirmationsController extends AppController {
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			$this->Auth->deny('*');
+			$this->Auth->allow('createPdf');
 			
 		}
 	}
@@ -531,7 +532,7 @@ class ConfirmationsController extends AppController {
 			
 	    	$cart = $Carts->get_cart_by_id($confirmation['Cart']['id']);
 			
-			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
+			$this->request->data += $cart;
 		}
 
 
@@ -681,7 +682,7 @@ class ConfirmationsController extends AppController {
 		if(!empty($data)) {
 			$Carts = new CartsController();
 	    	$cart = $Carts->get_cart_by_id($data['Cart']['id']);
-			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
+			$this->request->data += $cart;
 		}
 
 		$Addresses = new AddressesController();	

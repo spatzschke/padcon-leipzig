@@ -10,7 +10,7 @@ class ProductsController extends AppController {
 
 		if(isset($this->Auth)) {
 			$this->Auth->fields = array('username' => 'email', 'password' => 'password');
-			$this->Auth->allow('listing', 'getColors', 'search', 'liveValidate');
+			$this->Auth->allow('listing', 'getColors', 'search', 'liveValidate', 'getProduct', 'seperatFeatureList');
 			
 			$this->set('auth',$this->Auth->user());	
 		}

@@ -560,8 +560,8 @@ class OffersController extends AppController {
 		
 		if(!empty($offer)) {
 			$Carts = new CartsController();
-	    	$cart = $Carts->get_cart_by_id($offer['Cart']['id']);
-			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
+	    	$cart = $Carts->get_cart_by_id($offer['Cart']['id']);		
+			$this->request->data += $cart;
 		}	
 			
 		if(empty($offer['Address']['id'])){		

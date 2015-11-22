@@ -13,7 +13,13 @@ App::uses('AppController', 'Controller');
 class DeliveriesController extends AppController {
 
 	public $uses = array('Delivery', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Billing');
-	
+	public function beforeFilter() {
+		if(isset($this->Auth)) {
+			$this->Auth->deny('*');
+			$this->Auth->allow('createPdf');
+			
+		}
+	}
 /**
  * Components
  *
@@ -49,8 +55,6 @@ class DeliveriesController extends AppController {
 		}
 		$options = array('conditions' => array('Delivery.' . $this->Delivery->primaryKey => $id));
 		$data = $this->Delivery->find('first', $options);	
-
-		debug($data);
 		
 		$this->generateData($data);
 		$controller_name = 'Deliveries'; 
@@ -242,7 +246,7 @@ Lieferzeit: ca. 3-4 Wochen
 			
 			$this->request->data['Cart'] = $cart['Cart'];
 		
-			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
+			$this->request->data += $cart;
 			$this->request->data['Cart']['count'] = count($cart['CartProduct']);
 		}
 		

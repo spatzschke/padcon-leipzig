@@ -89,14 +89,14 @@
 		<?php } ?>			
 	<?php } ?>
 	
-	<?php if(!empty($this->data['Cart']['CartProduct'])) { ?>	
+	<?php if(!empty($this->data['CartProduct'])) { ?>	
 		$('#<?php echo $id_addProduct;?>_btn .input-group-addon').css('backgroundColor','lightgreen');	
 	<?php } ?>
 	// <?php if(!empty($this->data[$controller]['additional_text'])) { ?>	
 		// $('#<?php echo $id_settings;?>_btn .input-group-addon').css('backgroundColor','lightgreen');
 	// <?php } ?>
 	<?php 
-	if(((!empty($this->data[$controller]['additional_text'])) && (!empty($this->data['Cart']['CartProduct']))) || $this->request->params['action'] == 'admin_view') { ?>	
+	if(((!empty($this->data[$controller]['additional_text'])) && (!empty($this->data['CartProduct']))) || $this->request->params['action'] == 'admin_view') { ?>	
 		$('#<?php echo $id_createConfirmation;?>_btn a').removeClass('disabled');
 		$('#<?php echo $id_print;?>_btn a').removeClass('disabled');
 	<?php } ?>

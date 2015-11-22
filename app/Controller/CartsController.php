@@ -10,6 +10,7 @@ class CartsController extends AppController {
 	
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
+			parent::beforeFilter();
 			$this->Auth->allow('addToCart', 'add', 'reloadFrontendMiniCart','calcSumPriceByCartId','updateCartCount','get_cart_by_id', 'get_cart_by_cookie');
 		}
 	}

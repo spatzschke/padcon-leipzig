@@ -14,7 +14,13 @@ class BillingsController extends AppController {
 
 	
 	public $uses = array('Billing', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Delivery');
-	
+	public function beforeFilter() {
+		if(isset($this->Auth)) {
+			$this->Auth->deny('*');
+			$this->Auth->allow('createPdf');
+			
+		}
+	}
 /**
  * Components
  *
@@ -238,7 +244,7 @@ class BillingsController extends AppController {
 			
 			$this->request->data['Cart'] = $cart['Cart'];
 		
-			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
+			$this->request->data += $cart;
 			$this->request->data['Cart']['count'] = count($cart['CartProduct']);
 		}
 		
