@@ -127,6 +127,10 @@ class OffersController extends AppController {
 	function createPdf ($hash = null) { 
 		$result = $this->Offer->findByHash($hash);
 		if(!empty($result)) {
+			 $this->pdfConfig = array(
+	            'orientation' => 'portrait',
+	            'filename' => 'Invoice_' . $hash
+	            );
 			$this->admin_createPdf($result['Offer']['id']);
 		} 			
 	}
