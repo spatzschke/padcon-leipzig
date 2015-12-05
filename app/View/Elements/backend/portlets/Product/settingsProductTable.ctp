@@ -8,8 +8,7 @@
 				 type: 'POST',
 				 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller;?>/removeProductFrom<?php echo $controller;?>/'+obj.attr('pdid')+'/<?php echo $controller_id;?>',
 				 data: obj.attr('pdid'),
-				 success:function (data, textStatus) {	
-				 	console.log(data);
+				 success:function (data, textStatus) {
 				 				 	
 					$(".settingsPortlet .productTable").html(data);
 					$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/<?php echo $controller;?>/reloadSheet/<?php echo $controller_id;?>');

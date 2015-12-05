@@ -14,7 +14,7 @@ class AddressesController extends AppController {
  * @var array
  */
 	public $components = array('Paginator');
-	public $uses = array('Customer', 'Address', 'CustomerAddress');
+	public $uses = array('Customer', 'Address', 'CustomerAddress', 'AddressAddresstype', 'Offer', 'Confirmation', 'Billing', 'Delivery');
 
 /**
  * index method
@@ -108,9 +108,40 @@ class AddressesController extends AppController {
  *
  * @return void
  */
-	public function admin_index() {
-		$this->Address->recursive = 0;
-		$this->set('addresses', $this->Paginator->paginate());
+	public function admin_index($layout = null, $controller_id = null, $controller_name = null, $type = null) {
+		
+		$this->layout = 'ajax';
+		$data = null;
+		$addresses = null;
+		$customer_id = null;
+		if($controller_name == "Offers") {
+			$data = $this->Offer->findById($controller_id); 
+			$customer_id = $data['Offer']['customer_id'];
+		}
+		if($controller_name == "Confirmations") {
+			$data = $this->Confirmation->findById($controller_id);
+			$customer_id = $data['Confirmation']['customer_id'];
+		}
+		if($controller_name == "Deliveries") {
+			$data = $this->Delivery->findById($controller_id); 
+			$customer_id = $data['Confirmation']['customer_id'];
+		}
+		if($controller_name == "Billings") {
+			$data = $this->Billing->findById($controller_id); 
+			$customer_id = $data['Confirmation']['customer_id'];
+		}
+
+        $addresses = $this->AddressAddresstype->findAllByCustomerIdAndTypeId($customer_id, $type);
+		
+		$customer = $this->Customer->findById($customer_id);
+		
+		$this->set('controller_id', $controller_id);
+		$this->set('controller_name', $controller_name);
+		$this->set('customer', $customer);
+		$this->set('addresses', $addresses);
+		$this->set('type', $type);
+		
+		$this->render('/Elements/backend/portlets/Address/addressListPortlet');
 	}
 
 /**
@@ -134,7 +165,7 @@ class AddressesController extends AppController {
  * @return void
  */
 	public function admin_add($count = 0, $customer = null, $type = null) {
-		
+
 		$this->layout = 'ajax';
 		if ($this->request->is('post')) {
 			$this->Address->create();
@@ -154,7 +185,9 @@ class AddressesController extends AppController {
 					if ($this->CustomerAddress->save($this->request->data)) {
 						$loadAddress = $this->Address->findById($lastAddressId);
 						$this->request->data['Address'] = $this->splitAddressData($loadAddress['Address']);
-						$this->render('/Elements/backend/portlets/Customer/customerFormPortlet');		
+						
+							$this->render('/Elements/backend/portlets/Customer/customerFormPortlet');	
+						
 					}
 				}
 				
@@ -167,7 +200,13 @@ class AddressesController extends AppController {
 			
 			if($customer) {
 				$options = array('conditions' => array('Customer.' . $this->Customer->primaryKey => $customer));
-				$this->request->data = $this->Customer->find('first', $options);	
+				$customerArr = $this->Customer->find('first', $options);
+				$this->request->data = $customerArr;
+				$this->request->data['Customer']['salutation'] = array();
+				$this->request->data['Customer']['title'] = array();
+				$this->request->data['Customer']['first_name'] = array();
+				$this->request->data['Customer']['last_name'] = array();
+				$this->request->data['Customer']['department'] = array();
 			} else {
 				$this->request->data['Customer']['salutation'] = array();
 				$this->request->data['Customer']['title'] = array();
@@ -238,55 +277,71 @@ class AddressesController extends AppController {
 
 	
 	function splitAddressData($data = null)
-	{
-		$arr_customer = null;
-	
-		$split_arr = array('department','organisation');
-		
-		foreach($split_arr as $split_str) {
-			$arr = explode("\n", $data[$split_str]);
-			$count = 0;
-			for ($i = 0; $i <= count($arr)-1; $i++) {
-				if($arr[$i] != '') {
-					$arr_customer[$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
-					$count++;			
-				}
-			}
+	{		
+		if(!empty($data['Address'])) {
+			$data = $data['Address'];
+		}	
 			
-			$arr_customer[$split_str.'_count'] = $count;
-		}
-		
-		
-		
+		$arr_customer = null;
+		$str_salutation = '';
 		$str_title = '';
 		$str_first_name = '';
+		$str_last_name = '';
 		
+		if(!empty($data['organisation'])){
+			$arr_customer['Address']['organisation'] = trim($data['organisation']);
+		};
+		if(!empty($data['department'])){
+			$arr_customer['Address']['department'] = trim($data['department']);
+		};
+		if(!empty($data['salutation'])){
+			$str_salutation = trim($data['salutation']).' ';
+		};
 		if(!empty($data['title'])){
-			$str_title = $data['title'].' ';
+			$str_title = trim($data['title']).' ';
 		};
 		if(!empty($data['first_name'])){
-			$str_first_name = $data['first_name'].' ';
+			$str_first_name = trim($data['first_name']).' ';
 		};
+		if(!empty($data['last_name'])){
+			$str_last_name = trim($data['last_name']);
+		};
+		$arr_customer['Address']['name'] = $str_salutation.$str_title.$str_first_name.$str_last_name;
 		
+		$arr_customer['Address']['street'] = trim($data['street']);
 		
-		$arr_customer['name'] = $data['salutation'].' '.$str_title.$str_first_name.$data['last_name'];
-		$arr_customer['street'] = $data['street'];
-		$arr_customer['city_combination'] = $data['postal_code'].' '.$data['city'];
-		$arr_customer['type'] = $data['type'];
+		if(count($data['postal_code']) < 5) {
+			$data['postal_code'] = "0".$data['postal_code'];
+		}
+		
+		$arr_customer['Address']['city_combination'] = trim($data['postal_code']).' '.trim($data['city']);
 			
 		return $arr_customer;
 	}
 
-	function getAddressByType($data = null , $type = null)
-	{		
-		if(!empty($data['Customer']['Addresses'])) {
-			$addresses = $data['Customer']['Addresses'];
-			foreach ($addresses as $address) {
-				if($address['type'] == $type) {					
-					$data['Address'] = $address;
-					return $data;
-				}
+	function getAddressByType($data = null , $type = null, $first = FALSE)
+	{
+		
+				
+		if($data['Customer']['id'] != null) {
+
+			$customerId = $data['Customer']['id'];
+			$addresses = null;
+			
+			
+
+			if($first) {
+				$addresses = $this->AddressAddresstype->find('first', array('conditions' => array('customer_id' => $customerId, 'type_id' => $type)));
+			} else {
+				$addresses = $this->AddressAddresstype->find('all', array('conditions' => array('customer_id' => $customerId, 'type_id' => $type)));
 			}
+			
+			if(!empty($addresses)) {
+				$data['Address'] = $addresses['Address'];				
+			} else {
+				$data['Address'] = null;
+			}
+			return $data;	
 		} else {			
 			return $data;
 		}

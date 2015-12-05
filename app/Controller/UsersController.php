@@ -83,7 +83,7 @@ class UsersController extends AppController {
     }
 
 	public function createAnonymous($user = null) {
-		debug($user);
+
 		$this->User->create();
 		if ($this->User->save($user)) {
            return true;

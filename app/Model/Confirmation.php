@@ -54,6 +54,13 @@ class Confirmation extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Address' => array(
+			'className' => 'Address',
+			'foreignKey' => 'address_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 }

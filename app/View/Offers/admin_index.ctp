@@ -18,6 +18,12 @@ $(document).ready(function() {
 		$('.glyphicon').popover({
             html:true
         });
+        
+        $('a.mail').on('click',function() {
+            
+            console.log("Mail");
+            return false;
+        });
 });
 
 </script>

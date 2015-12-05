@@ -110,10 +110,13 @@ if(empty($this->data['Catalogs'])) {
 
 	<div class="pages">
 		<?php  
+			$cheet = "backend/Catalog/priceList_cheet";
+			if($this->request->data['id'] == "0") { $cheet = "backend/Catalog/priceList_cheet_noCat"; }
+		
 			if(isset($pdf)) {
-				echo $this->element('backend/Catalog/priceList_cheet', array("pdf" => $pdf));
+				echo $this->element($cheet, array("pdf" => $pdf));
 			} else {
-				echo $this->element('backend/Catalog/priceList_cheet');
+				echo $this->element($cheet);
 			}
 			 ?>
 	</div>

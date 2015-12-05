@@ -8,7 +8,7 @@ class ColorsController extends AppController {
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			$this->Auth->fields = array('username' => 'email', 'password' => 'password');
-			$this->Auth->deny('*');
+			$this->Auth->allow('getColor');
 			
 		}
 	}

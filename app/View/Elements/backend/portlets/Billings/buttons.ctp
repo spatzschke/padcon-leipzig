@@ -1,12 +1,59 @@
 <div class="buttons">
-
-	<!-- <div id="settings" class="input-group">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-cog"></i></span>
-		<a href="#" class="btn btn-default">Einstellungen</a>
-	 </div> -->
+	<?php
+				
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
 	
-	<div id="print" class="input-group">
-        <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-		<?php echo $this->Html->link('Drucken', '/admin/billings/createPdf/'.$this->data['Billing']['id'], array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank')); ?>
-	</div>
+	$id_addAdditionalAddress = 'addAdditionalAddress';
+	echo $this->element('backend/helper/sheetButtonHelper', array(
+		"id" => $id_addAdditionalAddress,
+		"icon" => "road",
+		"text" => "Weitere Adressen"));		
+	echo $this->element('backend/helper/modalHelper', array(
+		"backdrop" => "false",
+		"id" => $id_addAdditionalAddress,
+		"url" => "\/admin\/Addresses\/index\/ajax\/".$dataId."\/".ucfirst($this->request->params['controller'])."\/".$addressType,
+		"redirect" => $redirectURL));
+	 
+	
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
+	
+	$id_print = 'print';
+	echo $this->element('backend/helper/sheetButtonHelper', array(
+		"id" => $id_print,
+		"icon" => "print",
+		"href" => $this->Html->link('Drucken', '/admin/'.ucfirst($this->request->params['controller']).'/createPdf/'.$dataId, array('escape' => false, 'class' => 'btn btn-default', 'target' => '_blank'))
+		));
+			
+	?>	
 </div>
+
+<script>
+
+	$('#<?php echo $id_addAdditionalAddress;?>_btn a').addClass('disabled');
+	$('#<?php echo $id_settings;?>_btn a').addClass('disabled');
+	$('#<?php echo $id_print;?>_btn a').addClass('disabled');
+	
+	<?php if(!empty($this->data['Address']['street'])) { ?>
+		$('#<?php echo $id_addProduct;?>_btn a').removeClass('disabled');
+		$('#<?php echo $id_settings;?>_btn a').removeClass('disabled');
+		
+		$('#<?php echo $id_addCustomer;?>_btn .input-group-addon').css('backgroundColor','lightgreen');	
+		
+		<?php if($this->data['Address']['count'] > 1) {?>			
+			$('#<?php echo $id_addAdditionalAddress;?>_btn a').removeClass('disabled');	
+		<?php } ?>			
+	<?php } ?>
+	
+	<?php if(!empty($this->data['CartProduct'])) { ?>	
+		$('#<?php echo $id_addProduct;?>_btn .input-group-addon').css('backgroundColor','lightgreen');	
+	<?php } ?>
+	// <?php if(!empty($this->data[$controller]['additional_text'])) { ?>	
+		// $('#<?php echo $id_settings;?>_btn .input-group-addon').css('backgroundColor','lightgreen');
+	// <?php } ?>
+	<?php 
+	if(((!empty($this->data[$controller]['additional_text'])) && (!empty($this->data['CartProduct']))) || $this->request->params['action'] == 'admin_view') { ?>	
+		$('#<?php echo $id_print;?>_btn a').removeClass('disabled');
+	<?php } ?>
+	
+</script>
+

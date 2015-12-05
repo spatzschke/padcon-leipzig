@@ -50,28 +50,20 @@
 						?>
 					</td>
 					<td>
-						<?php 						
+						<?php 	
+										
 						if(!is_null($item['Customer']['id'])) {
 							
 							if(empty($item['Confirmation']['customer_id'])) { echo '-'; } else {
+							
 								echo $item['Confirmation']['customer_id'];	
 								echo '&nbsp;';
 								echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
 									 data-toggle="popover"
 									 data-content="';
-									 	if(!empty($item['Customer']['organisation_count'])) {
-											for ($i = 0; $i < $item['Customer']['organisation_count']; $i++) {
-												echo $item['Customer']['organisation_'.$i].'<br>';
-											}
-										}
-										if(!empty($item['Customer']['department_count'])) {
-											for ($i = 0; $i < $item['Customer']['department_count']; $i++) {
-												echo $item['Customer']['department_'.$i].'<br>';
-											}
-										}
-									 	echo 		 $item['Customer']['name'].'<br>'.
-													 $item['Customer']['phone'].'<br>'.
-													 $item['Customer']['email'].
+									 	echo $item['Address']['organisation'].'<br>';
+										echo $item['Address']['department'].'<br>';
+									 	echo $item['Customer']['name'].'<br>'.
 									 '"
 									 data-trigger="hover"
 								
@@ -193,6 +185,13 @@
 							
 							if(!empty($item['Confirmation']['offer_number']))
 								echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'createPdf', $item['Confirmation']['id']), array('escape' => false, 'target' => '_blank'));
+							
+							if(!empty($item['Confirmation']['hash']))
+								echo $this->Html->link('<i class="glyphicon glyphicon-link" ></i>', '/Auftrag/'.$item['Confirmation']['hash'], array('class' => 'clipboard', 'escape' => false, 'target' => '_blank'));
+							
+							if(!empty($item['Confirmation']['hash']))
+								echo $this->Html->link('<i class="glyphicon glyphicon-envelope"></i>', '/Auftrag/'.$item['Confirmation']['hash'], array('class' => 'mail', 'escape' => false, 'target' => '_blank'));
+							
 							
 							echo '</td>';
 						

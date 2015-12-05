@@ -46,7 +46,12 @@
 		<article class="module width_full sheet priceList noInput<?php if((ceil($catalog['Catalog']['count'] / $productsPerPage)) == $page) { echo ' last';}?>">
 			
 			<div class="sheetHeader">	
-				<div class="content"><?php echo $catalog['Catalog']['name']; ?></div>
+				<div class="content">
+					<?php 
+						if(true)
+						echo $catalog['Catalog']['name']; 
+					?>
+				</div>
 				<div class="logo"><?php echo $this->Html->image('backend/backend_logo.png', array('alt' => 'Adminbereich'))?></div>
 				<div class="bandage" style="background-color: #<?php echo $catalog['Category']['color'];?>; border-color: #<?php echo $catalog['Category']['color'];?>"></div>
 			</div>

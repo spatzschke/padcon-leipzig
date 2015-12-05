@@ -18,6 +18,18 @@ $(document).ready(function() {
 		$('.glyphicon').popover({
             html:true
         });
+        
+        $('a.mail').on('click',function() {
+            var betreff = "padcon Leipzig - Auftragsbestätigung"
+            var link = '<a href="'+$(this).attr('href')+'" >Hier gelangen Sie zu Ihrer Auftragsbestätigung</a>'
+            window.location.href = "mailto: ?subject="+betreff+"&body="+link
+            return false;
+        });
+        
+        $('a.clipboard').on('click',function() {
+
+            return false;
+        });
 });
 
 </script>

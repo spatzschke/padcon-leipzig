@@ -40,4 +40,7 @@
 //Währung
 	Configure::write('padcon.currency.symbol', '€');
 	Configure::write('padcon.currency.format', '€');
+	
+//Katalog
+	Configure::write('padcon.catalog.price.suffix', 'mit_Preis');
 ?>

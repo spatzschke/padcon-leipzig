@@ -8,43 +8,26 @@
 	echo $this->Html->css('backend/page');
 ?>	
 
-<script>
-$(document).ready(function() {
 
- 
-});
-</script>
-
-<div class="modal" id="settings_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
-			<div class="modal-dialog modal-lg offer-dialog">
-			 	<div class="modal-content">
-					<div class="modal-body">
-						<?php echo $this->element('backend/helper/loadingHelper', array("size" => "large")); ?>	
-					</div>
-				</div>
-			</div>
-		</div>
-			
 
 <div class="wood_bg">
-		
 	
-	
-	<script>
-	$(document).ready(function() {
-	
-		$('#settings').find('a').click(function() {
-			$('#settings_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Billings\/settings\/<?php echo $this->data['Billing']['id'];?>');
-			$('#settings_modal').modal('show')
-		});
-	
-		$("body").on("hidden", "#settings", function(){ $(this).removeData("modal");});
-	 
-	});
-	</script>
-	
-	<?php echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons'); ?>
-		
+	<?php	
+		$dataId = $this->data['Billing']['id'];
+		$redirectURL = FULL_BASE_URL.$this->base."\/admin\/".ucfirst($this->request->params['controller'])."\/view\/".$dataId;
+		$cartId = $this->data['Confirmation']['cart_id'];
+		$controller = "Billing";
+		$customId = $this->data['Confirmation']['id'];
+
+		echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons', array(
+			"redirectURL" => $redirectURL,
+			"cartId" => $cartId,
+			"dataId" => $dataId,
+			"controller" => $controller,
+			"addressType" => "4",
+			"customId" => $customId
+		)); 
+	?>
 		
 	<div class="pages">
 		<?php  

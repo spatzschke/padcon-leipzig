@@ -13,7 +13,13 @@ App::uses('AppController', 'Controller');
 class DeliveriesController extends AppController {
 
 	public $uses = array('Delivery', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Billing');
-	
+	public function beforeFilter() {
+		if(isset($this->Auth)) {
+			$this->Auth->deny('*');
+			$this->Auth->allow('createPdf');
+			
+		}
+	}
 /**
  * Components
  *
@@ -48,7 +54,7 @@ class DeliveriesController extends AppController {
 			throw new NotFoundException(__('Invalid delivery'));
 		}
 		$options = array('conditions' => array('Delivery.' . $this->Delivery->primaryKey => $id));
-		$data = $this->Delivery->find('first', $options);		
+		$data = $this->Delivery->find('first', $options);	
 		
 		$this->generateData($data);
 		$controller_name = 'Deliveries'; 
@@ -73,12 +79,23 @@ class DeliveriesController extends AppController {
 				
 				//Gernerierung der Auftragsbestätigungsnummer
 				$delivery['Delivery']['delivery_number'] = $this->generateDeliveryNumber();
+				
+				//Erste AB-Adresse zum Kunden finden
+				$Addresses = new AddressesController(); 
+				$address = $Addresses->getAddressByType($confirmation, 3, TRUE);
+				$delivery['Delivery']['address_id'] = $address['Address']['id'];
+				
 				$this->Delivery->save($delivery);
 				
 				$currDeliveryId = $this->Delivery->getLastInsertId();
 				
+				// Generate Hash für Offer
+				$delivery['Delivery']['hash'] =  Security::hash($currDeliveryId, 'md5', true);
+				$this->Delivery->save($delivery);
+				
 				//Neue Lieferschein-ID in AUftragsbestäätigung speichern 
 				$confirmation['Confirmation']['delivery_id'] = $currDeliveryId;
+				
 				$this->Confirmation->save($confirmation);
 				
 				$this->generateData($this->Delivery->findById($currDeliveryId));
@@ -161,18 +178,24 @@ Lieferzeit: ca. 3-4 Wochen
 		}
 	}
 
+	function createPdf ($hash = null) { 
+		$result = $this->Delivery->findByHash($hash);
+		if(!empty($result)) {
+			$this->admin_createPdf($result['Delivery']['id']);
+		} 			
+	}
+
 	function admin_createPdf ($id= null){
 
 		$this->layout = 'pdf';
 		$pdf = true;
 		
-		$data = $this->Billing->findById($id);
-		
+		$data = $this->Delivery->findById($id);
 		
 		$this->generateData($data);
 		
 				
-		$title = "Rechnung_".str_replace('/', '-', $data['Delivery']['billing_number']);
+		$title = "Lieferschein_".str_replace('/', '-', $data['Delivery']['delivery_number']);
 		$this->set('title_for_layout', $title);
 		
 		$this->set('pdf', $pdf);
@@ -207,6 +230,7 @@ Lieferzeit: ca. 3-4 Wochen
 		$Carts = new CartsController();
 		$Confirmations = new ConfirmationsController();
 	
+
 		if(!$data) {
 			$confirmation_id = $data['Delivery']['confirmation_id'];
 			$data = $this->Confirmation->findById($confirmation_id);		
@@ -222,26 +246,20 @@ Lieferzeit: ca. 3-4 Wochen
 			
 			$this->request->data['Cart'] = $cart['Cart'];
 		
-			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
+			$this->request->data += $cart;
 			$this->request->data['Cart']['count'] = count($cart['CartProduct']);
 		}
 		
-	
-		if(!is_null($this->request->data['Confirmation']['customer_id'])) {
-			
-			$customer = $this->Customer->find('first', array('conditions' => array('Customer.id' => $this->request->data['Confirmation']['customer_id'])));
-			$this->request->data['Customer'] = $customer['Customer'];
-			
-			$customerAddresses = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $this->request->data['Confirmation']['customer_id'])));
-			$this->request->data['Customer']['Addresses'] = array();
-						
-			foreach ($customerAddresses as $address) {						
-				array_push($this->request->data['Customer']['Addresses'], $Addresses->splitAddressData($address['Address']));
-			}
-			
-		}
+		//Customer holen
+		$this->Customer->recursive = 0;
+		$this->request->data += $this->Customer->findById($this->request->data['Confirmation']['customer_id']);
 		
-		$this->request->data = $Addresses->getAddressByType($this->request->data, 3);
+		
+		if(empty($this->request->data['Address'])) {
+			$this->request->data = $Addresses->getAddressByType($this->request->data, 3, TRUE);
+		}
+		$a = $Addresses->splitAddressData($this->request->data);
+		$this->request->data['Address'] += $a['Address'];
 		
 		$confirmation = $Confirmations->calcPrice($this->request->data);		
 		$this->request->data['Confirmation'] += $confirmation;		
@@ -274,17 +292,19 @@ Lieferzeit: ca. 3-4 Wochen
 		$Customers = new CustomersController();
 		$Confirmations = new ConfirmationsController();
 		
-		
-		
 		// for($i=0; $i<=10;$i++) {
 		foreach ($data as $item) {
-			
+
 			//Load Customer for the Delivery
-			$customer = $this->Customer->findById($item['Confirmation']['customer_id']);
-			if($Customers->splitCustomerData($customer)) {
-				$item['Customer'] = $Customers->splitCustomerData($customer);
-			}			
+			$customer= $this->Customer->findById($item['Confirmation']['customer_id']);
+			$address = $this->Address->findById($item['Delivery']['address_id']);
+			$customer['Address'] = $address['Address'];
+			$item['Customer'] = $customer['Customer'];
 			
+			if($Customers->splitCustomerData($customer)) {
+				$item['Address'] = $Customers->splitCustomerData($customer);
+			}			
+
 			$cart = $Carts->get_cart_by_id($item['Confirmation']['cart_id']);
 			
 			$item += $cart;

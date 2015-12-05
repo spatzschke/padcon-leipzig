@@ -1,11 +1,14 @@
 <div class="offerMiddle">
 				<?php
+				
 				if($carti != 'empty') {
 					for($j = ($page - 1 ) * $productsPerPage; $j < $page * $productsPerPage; $j++) {
 
-					if(!empty($cart['CartProduct'][$j])) {
+
+					if(!empty($this->data['CartProduct'][$j])) {
 					
-						$cartProduct = $cart['CartProduct'][$j];
+						$cartProduct = $this->data['CartProduct'][$j];
+
 
 						$product = $this->requestAction('Products/getProduct/'.$cartProduct['product_id']);
 						$color = $this->requestAction('Colors/getColor/'.$cartProduct['color_id']);

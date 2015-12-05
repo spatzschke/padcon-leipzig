@@ -37,13 +37,12 @@
 	</div>
 </div>
 <div id="customerAddressBox">
-			<?php
+			<?php			
 			 	if(is_null($this->data['Customer']['id'])) {
 			 		
 			 	}	else {
-			 		
-			 	
-				if(!isset($this->data['Address'])) {
+			 					 	
+				if(empty($this->data['Address']['street'])) {
 					
 					echo'<div class="alert alert-danger" role="alert">';
 						echo 'Es exisitert keine '.$addressTypeName.' für den Kunden: </br>';
@@ -57,7 +56,7 @@
 						if(!empty($this->data['Customer']['department'])) {
 							echo '<b>'.$this->data['Customer']['department'].'</b></br>';
 						}
-						echo '<b>'.$this->data['Customer']['email'].'</b></br></br>';
+						echo '<br /><br />';
 						echo '<div id="addAddress" class="input-group">';
 						echo $this->Html->link(
 								    'Adresse hinzufügen',

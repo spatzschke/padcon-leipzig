@@ -1,18 +1,15 @@
 <?php echo $this->Form->create('Address', array('div'=>false, 'data-model' => 'Address'));?>
 
-<?php					
+<?php
 	echo $this->Form->input('id', array('disabled'=> 'disabled', 'label' => false, 'placeholder' => 'id', 'data-model' => 'Customer', 'data-field' => 'id', 'autoComplete' => true, 'div' => false, 'class' => 'noValid col-md-12'));
-	
-	for ($i = 0; $i <= $this->data['Address']['organisation_count']-1; $i++) {
-		echo $this->Form->input('organisation_'.$i, array('disabled'=> 'disabled', 'label' => false, 'placeholder' => 'department_1', 'data-model' => 'Customer', 'data-field' => 'department_1', 'autoComplete' => true, 'div' => false, 'class' => 'noValid col-md-12'));
-	
+	if(!empty($this->data['Address']['organisation'])) {
+		echo $this->Form->input('organisation', array('type' => 'text', 'disabled'=> 'disabled', 'label' => false, 'placeholder' => 'Organisation', 'data-model' => 'Customer', 'data-field' => 'organisation', 'autoComplete' => true, 'div' => false, 'class' => 'noValid col-md-12'));
 	}
-	
-	for ($i = 0; $i <= $this->data['Address']['department_count']-1; $i++) {
-		echo $this->Form->input('department_'.$i, array('disabled'=> 'disabled', 'label' => false, 'placeholder' => 'department_1', 'data-model' => 'Customer', 'data-field' => 'department_1', 'autoComplete' => true, 'div' => false, 'class' => 'noValid col-md-12'));
-	
+	if(!empty($this->data['Address']['department'])) {
+		echo $this->Form->input('department', array('type' => 'text', 'disabled'=> 'disabled', 'label' => false, 'placeholder' => 'Abteilung', 'data-model' => 'Customer', 'data-field' => 'department', 'autoComplete' => true, 'div' => false, 'class' => 'noValid col-md-12'));
 	}
-	if($this->data['Address']['name'] != ' '){													
+	if(!empty($this->data['Address']['name'])){
+																
 		echo '<div class="controls controls-row">';
 		
 			/*$options = array('Herr' => 'Herr', 'Frau' => 'Frau');

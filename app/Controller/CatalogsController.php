@@ -91,21 +91,23 @@ class CatalogsController extends AppController {
 		$this->layout = 'admin';
 		$this->set('title_for_panel', 'Katalog generieren');
 		
+		
+		
 		if(isset($this->request->data['Categories'])) {
 			$id = $this->request->data['Categories']['id'];
 			$this->request->data['month'] = $this->data['Categories']['month'];	
 		}
 		
-		if($id) {
+		if(isset($id)) {
 			
 			if(isset($this->request->data['Categories']['price'])) {
 				$price = $this->request->data['Categories']['price'];
 			} else {
 				$price = 0;
 			}
-			
 					
-			if($id != '99') {
+			if($id != '99' && $id != '0') {
+				
 				$this->request->data['Catalogs'] = $this->Catalog->find('all', array('conditions' => array('Catalog.category_id' => $id)));
 				$this->request->data['Catalogs'][0]['Catalog']['count'] = $this->Product->find('count', array('conditions' => array('Product.category_id' => $id)));
 				
@@ -119,30 +121,73 @@ class CatalogsController extends AppController {
 					'fields' => array('Product.*', 'Material.*'), 
 					'order' => array('Product.product_number' => 'ASC')));					
 			} else {
-				$catalogs = $this->Catalog->find('all');
+								
+				if($id == '0')
+				{
 					
-				$data = array();
-				
-				foreach ($catalogs as $catalog) {
-					$catalog['Catalog']['count'] = $this->Product->find('count', array('conditions' => array('Product.category_id' => $catalog['Category']['id'])));
+					// $catalogs = $this->Catalog->find('all');
+// 						
+					 $data = array();
+// 					
+					 // foreach ($catalogs as $catalog) {
+						 // $catalog['Catalog']['count'] = $this->Product->find('count', array('conditions' => array('Product.category_id' => $catalog['Category']['id'])));
+//  						
+						 // $this->Product->unbindModel(array('hasAndBelongsToMany' => array('Cart')));
+						 // $this->Product->unbindModel(array('hasMany' => array('Image')));
+//  							
+						 // $catalog['Products'] = $this->Product->find('all', array(
+							 // 'conditions' => array('Product.category_id' => $catalog['Category']['id']),
+							 // 'fields' => array(
+								 // 'DISTINCT Product.*', 
+								 // 'Material.*'
+							 // ), 
+							 // 'order' => array('Product.product_number' => 'ASC')));				
+// 		
+						 // array_push($data, $catalog);				
+					 // }
+					 					 
+					$catalog = array();
 					
+					$catalog['Catalog']['count'] = $this->Product->find('count');
 					$this->Product->unbindModel(array('hasAndBelongsToMany' => array('Cart')));
-					$this->Product->unbindModel(array('hasMany' => array('Image')));
-						
+					$this->Product->unbindModel(array('hasMany' => array('Image')));							
 					$catalog['Products'] = $this->Product->find('all', array(
-						'conditions' => array('Product.category_id' => $catalog['Category']['id']),
 						'fields' => array(
-							'Product.*', 
-							'Material.*'
+						 'Product.*', 
+						 'Material.*'
 						), 
-						'order' => array('Product.product_number' => 'ASC')));			
+						'order' => array('Product.product_number' => 'ASC')));				
+						
+					$this->request->data['Catalogs'] = $catalog;
 					
-					array_push($data, $catalog);				
+				} else {
+					
+					$catalogs = $this->Catalog->find('all');
+						
+					$data = array();
+					
+					foreach ($catalogs as $catalog) {
+						$catalog['Catalog']['count'] = $this->Product->find('count', array('conditions' => array('Product.category_id' => $catalog['Category']['id'])));
+						
+						$this->Product->unbindModel(array('hasAndBelongsToMany' => array('Cart')));
+						$this->Product->unbindModel(array('hasMany' => array('Image')));
+							
+						$catalog['Products'] = $this->Product->find('all', array(
+							'conditions' => array('Product.category_id' => $catalog['Category']['id']),
+							'fields' => array(
+								'Product.*', 
+								'Material.*'
+							), 
+							'order' => array('Product.product_number' => 'ASC')));				
+					
+						array_push($data, $catalog);				
+					}
+	
+					$this->request->data['Catalogs'] = $data;
 				}
-
-				$this->request->data['Catalogs'] = $data;
-
 			}	
+
+			$this->request->data['id'] = $id;
 			
 			
 			$Sites = new SiteContentsController;
@@ -189,7 +234,10 @@ class CatalogsController extends AppController {
 
 	function admin_generate_pl($id = null, $layout ='admin') {
 
-		$this->admin_generate($id);
+		$this->admin_generate($this->data['Categories']['id']);	
+		
+		array_unshift($this->request->data["Categories"], "Ohne Kategorie");
+				
 		$this->layout = $layout;
 		$this->set('title_for_panel', 'Preisliste generieren');
 		$this->render('admin_generate_pl'); 
@@ -209,8 +257,10 @@ class CatalogsController extends AppController {
 					),
 					'fields' => array('Product.*', 'Material.*'), 
 					'order' => array('Product.product_number' => 'ASC')));
-				
-			$title = $this->data['Catalogs'][0]['Catalog']['name'].'-Katalog-'.date('y');
+			$priceSuffix = "";
+			if($priceFlag) { $priceSuffix = Configure::read('padcon.catalog.price.suffix');	}
+			
+			$title = $this->data['Catalogs'][0]['Catalog']['name'].'-Katalog-'.date('y')."_".$priceSuffix;
 		} else {
 			$title = 'Gesamt-Katalog-'.date('y');
 		}

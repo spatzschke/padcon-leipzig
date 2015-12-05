@@ -18,12 +18,13 @@ class ConfirmationsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation');
+	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'AddressAddresstype');
 	public $components = array('Auth', 'Session', 'Paginator');
 	
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			$this->Auth->deny('*');
+			$this->Auth->allow('createPdf');
 			
 		}
 	}
@@ -83,7 +84,7 @@ class ConfirmationsController extends AppController {
 					
 			$this->Confirmation->create();
 			
-			$confirmation['Confirmation']['status'] = 'active';
+			$confirmation['Confirmation']['status'] = 'open';
 			$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
 			$confirmation['Confirmation']['customer_id'] = '';
 			$confirmation['Confirmation']['cart_id'] = $cart['Cart']['id'];
@@ -94,6 +95,10 @@ class ConfirmationsController extends AppController {
 			
 			$this->Confirmation->save($confirmation);
 			$id = $this->Confirmation->id;
+			
+			// Generate Hash für Offer
+			$confirmation['Confirmation']['hash'] =  Security::hash($id, 'md5', true);
+			$this->Confirmation->save($confirmation);
 
 			$this->redirect(array('action'=>'add', $id));
 		}
@@ -130,12 +135,14 @@ class ConfirmationsController extends AppController {
 			$options = array('conditions' => array('Confirmation.' . $this->Confirmation->primaryKey => $id));
 			$confirmation = $this->Confirmation->find('first', $options);
 			
+		
 			$this->generateData($confirmation);
 		}
 		$controller_name = 'Confirmations'; 
 		$controller_id = $id;
 		$this->set(compact('controller_id', 'controller_name'));
 		$this->set('pdf', null);
+		$this->render('admin_add'); 
 		
 	}
 
@@ -171,7 +178,7 @@ class ConfirmationsController extends AppController {
 				
 				$this->Confirmation->create();
 				
-				$confirmation['Confirmation']['status'] = 'active';
+				$confirmation['Confirmation']['status'] = 'open';
 				$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
 				$confirmation['Confirmation']['customer_id'] = $confirmation['Offer']['customer_id'];
 				$confirmation['Confirmation']['offer_id'] = $confirmation['Offer']['id'];
@@ -205,9 +212,18 @@ class ConfirmationsController extends AppController {
 					$this->CartProduct->save($cartItem);
 				}
 				
+				//Erste AB-Adresse zum Kunden finden
+				$Addresses = new AddressesController(); 
+				$address = $Addresses->getAddressByType($confirmation, 2, TRUE);
+				$confirmation['Confirmation']['address_id'] = $address['Address']['id'];
+				
 				$this->Confirmation->save($confirmation);
 				
 				$currConfirmationId = $this->Confirmation->getLastInsertId();
+				
+				// Generate Hash für Offer
+				$confirmation['Confirmation']['hash'] =  Security::hash($currConfirmationId, 'md5', true);
+				$this->Confirmation->save($confirmation);
 				
 				//Neue Auftragsbestätigungs-ID in Angebot speichern 
 				$confirmation['Offer']['confirmation_id'] = $currConfirmationId;
@@ -362,12 +378,26 @@ class ConfirmationsController extends AppController {
 		$this->render('/Elements/backend/portlets/Product/settingsProductTable');
 	}
 	
-	function admin_update($id = null, $confirmation = null) {
+	function admin_update($id = null, $confirmation = null, $address = null) {
 		$this->layout="ajax";
+		
+		$Addresses = new AddressesController();
 
 		$confirmation = $this->Confirmation->findById($confirmation);				
 		
 		if($confirmation) {
+			
+			if(!is_null($address)) {
+				$address = $this->Address->findById($address);
+				$confirmation['Confirmation']['address_id'] = $address['Address']['id'];
+				$confirmation['Confirmation']['Address'] = $address['Address'];
+			} else {
+			//Suche erste Adresse
+				$confirmation = $Addresses->getAddressByType($confirmation, 2, TRUE);	
+				$confirmation['Confirmation']['address_id'] = $confirmation['Address']['id'];
+				
+			}
+			
 			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber($id, $confirmation);
 			$confirmation['Confirmation']['customer_id'] = $id;
 			
@@ -385,6 +415,13 @@ class ConfirmationsController extends AppController {
 		$this->request->data = $confirmation;
 		$this->autoRender = false;
 		$this->layout = 'admin';
+	}
+	
+	function createPdf ($hash = null) { 
+		$result = $this->Confirmation->findByHash($hash);
+		if(!empty($result)) {
+			$this->admin_createPdf($result['Confirmation']['id']);
+		} 			
 	}
 	
 	function admin_createPdf ($id= null){
@@ -493,24 +530,24 @@ class ConfirmationsController extends AppController {
 			
 	    	$cart = $Carts->get_cart_by_id($confirmation['Cart']['id']);
 			
-			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
+			$this->request->data += $cart;
 		}
-	
-		if(!is_null($this->request->data['Customer']['id'])) {
-			
-			$customerAddresses = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $this->request->data['Customer']['id'])));
-			$this->request->data['Customer']['Addresses'] = array();
-						
-			foreach ($customerAddresses as $address) {						
-				array_push($this->request->data['Customer']['Addresses'], $Addresses->splitAddressData($address['Address']));
-			}
-			
+
+
+		if(is_null($this->request->data['Address']['id'])) {
+			$this->request->data = $Addresses->getAddressByType($this->request->data, 2, TRUE);
 		}
-		
-		
-		
-		$this->request->data = $Addresses->getAddressByType($this->request->data, 2);
+			
+		if(!is_null($this->request->data['Address'])) {
+			$a = $Addresses->splitAddressData($this->request->data);
+			$this->request->data['Address'] += $a['Address'];
+		}
+		$this->request->data['Address']['count'] = $this->AddressAddresstype->find('count', array('conditions' => array(
+			'customer_id' => $confirmation['Confirmation']['customer_id'],
+			'type_id' => 1)));
+
 		$this->request->data['Confirmation'] += $this->calcPrice($this->request->data);
+		
 		return $this->calcPrice($this->request->data);
 
 	}
@@ -587,7 +624,7 @@ class ConfirmationsController extends AppController {
 			if($Customers->splitCustomerData($item)) {
 				
 				$item['Customer'] += $Customers->splitCustomerData($item);
-			}			
+			}	
 			
 			$cart = $Carts->get_cart_by_id($item['Cart']['id']);
 			$item['Cart']['CartProduct'] = $cart['CartProduct'];
@@ -643,20 +680,17 @@ class ConfirmationsController extends AppController {
 		if(!empty($data)) {
 			$Carts = new CartsController();
 	    	$cart = $Carts->get_cart_by_id($data['Cart']['id']);
-			$this->request->data['Cart']['CartProduct'] = $cart['CartProduct'];
+			$this->request->data += $cart;
 		}
 
+		$Addresses = new AddressesController();	
 		
-		
-		if(!is_null($this->request->data['Customer']['id'])) {
-			$split_str = $this->splitAddressData($data);
-			if(!is_null($split_str)) {	
-				$this->request->data['Customer'] = $this->request->data['Customer'] + array();
-				$this->request->data['Customer'] += $split_str;
-			}
-		}
 				
-		$this->request->data = $this->getAddressByType($this->request->data, 2);
+		$this->request->data = $Addresses->getAddressByType($this->request->data, 2, TRUE);
+		if(!is_null($this->request->data['Address'])) {
+			$a = $Addresses->splitAddressData($this->request->data);
+			$this->request->data['Address'] += $a['Address'];
+		}
 	
 		$this->request->data['Confirmation'] += $this->calcPrice($this->request->data);
 		
@@ -679,51 +713,5 @@ class ConfirmationsController extends AppController {
 			return $data;
 		}
 	}
-	
-	function splitAddressData($data = null)
-	{
-		$arr_customer = null;
-		
-
-		$customerAddress = $this->CustomerAddress->find('all', array('conditions' => array('CustomerAddress.customer_id' => $data['Customer']['id'])));
-		
-		if(empty($customerAddress)) {
-			return null;
-		}
-		
-		for($j=0; $j < count($customerAddress); $j++) {
-			//split department and company
-			$split_arr = array('department','organisation');
-			
-			foreach($split_arr as $split_str) {
-				$arr = explode("\n", $customerAddress[$j]['Address'][$split_str]);
-				$count = 0;
-				for ($i = 0; $i <= count($arr)-1; $i++) {
-					if($arr[$i] != '') {
-						$arr_customer['Address'][$j][$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
-						$count++;			
-					}
-				}
-				
-				$arr_customer['Address'][$j][$split_str.'_count'] = $count;
-			}
-			
-			$str_title = '';
-			$str_first_name = '';
-			
-			if(!empty($customerAddress[$j]['Address']['title'])){
-				$str_title = $customerAddress[$j]['Address']['title'].' ';
-			};
-			if(!empty($customerAddress[$j]['Address']['first_name'])){
-				$str_first_name = $customerAddress[$j]['Address']['first_name'].' ';
-			};
-			$arr_customer['Address'][$j]['name'] = $customerAddress[$j]['Address']['salutation'].' '.$str_title.$str_first_name.$customerAddress[$j]['Address']['last_name'];
-			$arr_customer['Address'][$j]['street'] = $customerAddress[$j]['Address']['street'];
-			$arr_customer['Address'][$j]['city_combination'] = str_pad($customerAddress[$j]['Address']['postal_code'],5,'0', STR_PAD_LEFT).' '.$customerAddress[$j]['Address']['city'];
-			$arr_customer['Address'][$j]['type'] = $customerAddress[$j]['Address']['type'];
-		}		
-		return $arr_customer;
-	}
-
 	
 }

@@ -15,40 +15,29 @@ $(document).ready(function() {
 });
 </script>
 
-<div class="modal" id="settings_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
-			<div class="modal-dialog modal-lg offer-dialog">
-			 	<div class="modal-content">
-					<div class="modal-body">
-						<?php echo $this->element('backend/helper/loadingHelper', array("size" => "large")); ?>	
-					</div>
-				</div>
-			</div>
-		</div>
-			
 
 <div class="wood_bg">
-	<div class="buttons">
 		
 		
-		<script>
-		$(document).ready(function() {
-		
-			$('#settings').find('a').click(function() {
-				$('#settings_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Deliveries\/settings\/<?php echo $this->data['Delivery']['id'];?>');
-				$('#settings_modal').modal('show')
-			});
-		
-			$("body").on("hidden", "#settings", function(){ $(this).removeData("modal");});
-		 
-		});
-		</script>
-		
-		
-		<?php echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons'); ?>
+<?php 
+		$dataId = $this->data['Delivery']['id'];
+		$redirectURL = FULL_BASE_URL.$this->base."\/admin\/".ucfirst($this->request->params['controller'])."\/view\/".$dataId;
+		$cartId = $this->data['Confirmation']['cart_id'];
+		$nextSheet = "Billings";
+		$controller = "Delivery";
+
+		echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons', array(
+			"redirectURL" => $redirectURL,
+			"cartId" => $cartId,
+			"dataId" => $dataId,
+			"nextSheet" =>$nextSheet,
+			"controller" => $controller,
+			"addressType" => "3"
+		)); 
+?>
 
 		
 		
-	</div>
 	<div class="pages">
 		<?php  
 			if(isset($pdf)) {
