@@ -167,8 +167,7 @@
 						
 							echo '<td class="actions">';
 							
-							if(!empty($item['Confirmation']['offer_number']))
-								echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'createPdf', $item['Confirmation']['id']), array('escape' => false, 'target' => '_blank'));
+							echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'createPdf', $item['Confirmation']['id']), array('escape' => false, 'target' => '_blank'));
 							
 							if(!empty($item['Billing']['hash']))
 								echo $this->Html->link('<i class="glyphicon glyphicon-link"></i>', '/Rechnung/'.$item['Billing']['hash'], array('escape' => false, 'target' => '_blank'));
