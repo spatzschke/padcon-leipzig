@@ -313,7 +313,7 @@ $product = $product['Product'];
 								'type' => 'textarea',
 								'rows' => '7',
 								'value' => $product['feature'], 
-								'name' => 'data['.$i.'][Product][features]'
+								'name' => 'data['.$i.'][Product][featurelist]'
 							));
 							?>                                      
                     </div>

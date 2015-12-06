@@ -213,7 +213,7 @@ class ProductsController extends AppController {
 							strpos($val[0], 'Z') !== FALSE
 						) {
 					    	$number = str_ireplace('-xx', '', trim($val[0]));
-							$number = str_ireplace('pd ', '', trim($number));
+							//$number = str_ireplace('pd ', '', trim($number));
 							$number = str_ireplace('(alt)', '', trim($number));
 							$name = trim($val[1]);
 						} else {
@@ -329,7 +329,14 @@ class ProductsController extends AppController {
 				
 				$tempFeatures = '';
 				foreach($features as $entry) {
-					$tempFeatures = $tempFeatures.'<li>'.$entry.'</li>'.PHP_EOL;
+					if((strpos($entry, 'Maße: gemäß') !== FALSE) ) {} else {
+						//Formatierung übertragen
+						if((strpos($entry, '+') !== FALSE) ) {$entry = '<u>'.str_ireplace('+', '', $entry).'</u>';}
+						if((strpos($entry, '*') !== FALSE) ) {$entry = '<b>'.str_ireplace('*', '', $entry).'</b>';}
+						
+						$tempFeatures = $tempFeatures.'<li>'.$entry.'</li>'.PHP_EOL;
+					}
+					
 				}
 				$features = $tempFeatures;
 	
@@ -394,7 +401,8 @@ class ProductsController extends AppController {
 						array_push($newProducts, $newProduct);
 					}
 				}
-				
+
+
 				$this->request->data['Products'] = $newProducts;
 				}					
 			} else {				
@@ -404,7 +412,7 @@ class ProductsController extends AppController {
 					$errors['prod'.$i] = array();
 					$check = $this->Product->find('count', array('conditions' => array('product_number' => $prod['Product']['product_number'], 
 																						'category_id' => $prod['Product']['category_id'])));																				
-					
+						
 					$this->Product->create();
 					if ($check == 0 && $this->Product->save($prod)) {
 						$this->Session->setFlash(__('Produkt wurde angelegt!', true));
@@ -414,7 +422,7 @@ class ProductsController extends AppController {
 
 						 $error = "Produkt <b>".$prod['Product']['product_number']."</b> in Kategorie <b>".$cat['Category']['name']."</b> ist bereits vorhanden. Bitte prüfen!";
 						 array_push($errors['prod'.$i], $error);					
-					}
+					}			 
 				}
 				
 				
