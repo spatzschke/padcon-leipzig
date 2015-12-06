@@ -45,29 +45,29 @@
 		
 		<h3>Produktdatenbank</h3>
 		<ul class="toggle">
-			<li class="icn_add_user"><?php echo $this->Html->link('Produkte hinzufügen', '/admin/products/add'); ?></li>
+			<!-- <li class="icn_add_user"><?php echo $this->Html->link('Produkte hinzufügen', '/admin/products/add'); ?></li> -->
 			<li class="icn_add_user"><?php echo $this->Html->link('Produkte QuickAdd', '/admin/products/quickAdd'); ?></li>
-			<li class="icn_view_users"><?php echo $this->Html->link('Alle Produkte anzeigen', '/admin/products/index'); ?></li>
+			<!-- <li class="icn_view_users"><?php echo $this->Html->link('Alle Produkte anzeigen', '/admin/products/index'); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Material hinzufügen', '/admin/materials/add', array('disabled' => 'disabled')); ?></li>
-			<li class="icn_view_users"><?php echo $this->Html->link('Farben hinzufügen', '/admin/colors/add', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Farben hinzufügen', '/admin/colors/add', array('disabled' => 'disabled')); ?></li> -->
 		</ul>
 		
-		<h3>Partnerdatenbank</h3>
+		<!-- <h3>Partnerdatenbank</h3>
 		<ul class="toggle">
 			<li class="icn_add_user"><?php echo $this->Html->link('Partner hinzufügen', '/admin/products/add', array('disabled' => 'disabled')); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle Produkte anzeigen', '/admin/products/index', array('disabled' => 'disabled')); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Partnerkategorie hinzufügen', '/admin/materials/add', array('disabled' => 'disabled')); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle Partnerkategorien anzeigen', '/admin/colors/add', array('disabled' => 'disabled')); ?></li>
-		</ul>
+		</ul> -->
 		
 		<h3>Katalogverwaltung</h3>
 		<ul class="toggle">
-			<li class="icn_add_user"><?php echo $this->Html->link('Kataloge verwalten', '/admin/products/add', array('disabled' => 'disabled')); ?></li>
+			<!-- <li class="icn_add_user"><?php echo $this->Html->link('Kataloge verwalten', '/admin/products/add', array('disabled' => 'disabled')); ?></li> -->
 			<li class="icn_view_users"><?php echo $this->Html->link('Kataloge generieren', '/admin/catalogs/generate'); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Preisliste generieren', '/admin/catalogs/generate_pl'); ?></li>
 		</ul>
 		
-		<h3>Kundendatenbank</h3>
+		<!--<h3>Kundendatenbank</h3>
 		<ul class="toggle">
 			<li class="icn_add_user"><?php echo $this->Html->link('Neuer Kunde', '/admin/customers/add'); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle Kunden anzeigen', '/admin/customers/index'); ?></li>
@@ -77,7 +77,7 @@
 			<li class="icn_add_user"><?php echo $this->Html->link('Neues Kundekonto', '/admin/users/add'); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle Kundenkonten anzeigen', '/admin/users/index'); ?></li>
 		</ul>
-		<!--<h3>Admin</h3>
+		<h3>Admin</h3>
 		<ul class="toggle">
 			<li class="icn_settings"><a href="#">Options</a></li>
 			<li class="icn_security"><a href="#">Security</a></li>

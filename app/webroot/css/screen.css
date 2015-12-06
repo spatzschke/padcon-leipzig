@@ -547,7 +547,7 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 .productListItem .productItemFeatures, .partnerListItem .partnerItemLink{
 	color: #346AA6;	
 	float: left;
-	width: 210px;
+	width: 258px;
 	margin-bottom: 30px;
 }
 
@@ -556,6 +556,10 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 	display: block;
     line-height: 122%;
     padding: 0 0 10px 24px;
+}
+
+.productListItem .productItemFeatures .featureTitle {
+	padding-left: 3px;
 }
 
 .partnerListItem .partnerItemLink{

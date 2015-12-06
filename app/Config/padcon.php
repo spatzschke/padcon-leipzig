@@ -34,7 +34,8 @@
 	Configure::write('padcon.product.color.präfix', 'Farbe');
 	Configure::write('padcon.product.size.präfix', 'Maße');
 	Configure::write('padcon.product.size.suffix', 'cm');
-	Configure::write('padcon.product.feature.präfix', 'Eigenschaften');
+	Configure::write('padcon.product.size.noSize', 'gemäß Beschreibung');
+	Configure::write('padcon.product.feature.präfix', 'Beschreibung');
 	Configure::write('padcon.product.farbindex', 'Farbe laut Farben-Index');
 	
 //Währung

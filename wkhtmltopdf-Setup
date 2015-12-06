@@ -1,0 +1,1 @@
+wkhtmltopdf --disable-smart-shrinking --page-width 270 --page-height 390 --dpi 300 --margin-bottom 0 --margin-left 3 --margin-right 0 --margin-top 0 http://dev.padcon-leipzig.de/Angebot/865b90bc3885af47e7b1bb7cecf7ae3f test3.pdf

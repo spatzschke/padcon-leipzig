@@ -23,20 +23,24 @@
 							<div class="pos">'.($j+1).'</div>
 							<div class="amount">'.$cartProduct['amount'].'</div>
 							<div class="number">
-								<input type="text" class="productNumber col-md-12" value="'.$product_number_präfix.$product['Product']['product_number'].'-'.$color['Color']['code'].'" /> </br><input type="text" value="Fa. padcon" class="col-md-12"/>
+								<p class=""><span class="productNumber">'.$product['Product']['product_number'].'-'.$color['Color']['code'].'</span></br>Fa. padcon</p>
 							</div>
 							<div class="content">
-									<input class="productName text col-md-12" type="text" value="'.$product['Product']['name'].'" /><br />';
+									<p class="productName col-md-12"><span >'.$product['Product']['name'].'</span></p>';
 									foreach($features as $fea)	{
-										$fea = str_replace("<u>", "", $fea);
-										$fea = str_replace("</u>", "", $fea);
-										echo '<input class="text col-md-12" type="text" value="'.$fea.'" /><br />';
+										echo '<span class="text col-md-12">'.$fea.' </span><br />';
 									}
-									echo '<input class="text col-md-12" type="text" value="Bezug: '.$material['Material']['name'].', Farbe: '.$color['Color']['name'].'" />
-								<div class="size"><input type="text" value="'.Configure::read('padcon.product.size.präfix').': '.$product['Product']['size'].Configure::read('padcon.product.size.suffix').'" /></div>
+									echo '<span class="text col-md-12">Bezug: '.$material['Material']['name'].', Farbe: '.$color['Color']['name'].'</span>
+								<div class="size"><span class="text col-md-12">'.Configure::read('padcon.product.size.präfix').': ';
+								if(empty($product['Product']['size'])) {
+			            			echo Configure::read('padcon.product.size.noSize');
+			            		} else {
+			            			echo $product['Product']['size'].Configure::read('padcon.product.size.suffix');
+			            		}
+								echo '</span></div>
 								';
 								if($this->request->params['controller'] != "Deliveries") {
-								echo '<div class="price"><input type="text" value="'.number_format($product['Product']['retail_price'], 2, ",", ".").'" /> '.Configure::read('padcon.currency.symbol').'</div>
+								echo '<div class="price"><span type="text">'.number_format($product['Product']['retail_price'], 2, ",", ".").'</span> '.Configure::read('padcon.currency.symbol').'</div>
 									<div class="sum_price">'.number_format(floatVal($product['Product']['retail_price'])*intVal($cartProduct['amount']), 2, ",", ".").' '.Configure::read('padcon.currency.symbol').'</div>';							
 								}
 								echo '</div>

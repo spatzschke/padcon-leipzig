@@ -11,7 +11,7 @@
 			?>
         </div>
     	<div class="productItemContent">
-            <div class="productItemNumber"><?php echo Configure::read('padcon.product.number.präfix'); ?><?php echo $product['Product']['product_number'];?></div>
+            <div class="productItemNumber"><?php //echo Configure::read('padcon.product.number.präfix'); ?><?php echo $product['Product']['product_number'];?></div>
             <div class="productItemName"><?php echo $product['Product']['name'];?></div>
             <?php if(!empty($product['Material']['name'])) {?>
 	            <div class="productItemMaterial">
@@ -24,13 +24,30 @@
 			<?php }?>
             <div class="productItemSize">
 				<label><?php echo Configure::read('padcon.product.size.präfix')?>:</label>
-            	<?php echo $product['Product']['size'].Configure::read('padcon.product.size.suffix') ?>
+            	<?php
+            		if(empty($product['Product']['size'])) {
+            			echo Configure::read('padcon.product.size.noSize');
+            		} else {
+            			echo $product['Product']['size'].Configure::read('padcon.product.size.suffix');
+            		}
+            		 ?>
             </div>
         </div>
         <div class="productItemFeatures">
         	<div class="productItemFeaturesHeader"><?php echo Configure::read('padcon.product.feature.präfix');?>:</div>
             <ul>
-            	<?php echo $product['Product']['featurelist'];?>
+            	<?php 
+            	$features = explode(PHP_EOL, $product['Product']['featurelist']);
+            	foreach($features as $fea)	{
+            		if((strpos($fea, '<u>') !== FALSE) ) {
+	            		$fea = str_replace("<li>", "", $fea);
+						$fea = str_replace("</li>", "", $fea);
+						echo '<div class="featureTitle">'.$fea.'</div>';
+					} else {
+						echo $fea;
+					}
+				}
+            	?>
             </ul>
         </div>
     </div>
