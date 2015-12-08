@@ -171,17 +171,13 @@ class ProductsController extends AppController {
 				$newProduct;
 				$newProducts = array();
 				
-				
 				$features = array();
-		
 				$string = trim($this->data['Product']['description_quick']);
-				
 				$string = explode('€
 
 ', $string);
 			
 			foreach($string as $string) {
-				
 							
 			
 				$multi = false;
@@ -200,12 +196,19 @@ class ProductsController extends AppController {
 				$producerNumber = array();
 				$categories = array();
 				
+				foreach( $input as $key => $value ) {
+      				if( $value == ' ' || $value == '' ) {unset($input[$key]);}
+				}
+				$input = array_merge($input); 
+								
 				foreach($input as $i=>$value)
 				{
 	
 					//Erste Zeile gesondert auslesen auslesen
 					$val = $value;
-				    if($i == 0) {
+					
+					if($i == 0) {
+				    	$val = trim($val);
 						$val = explode('	',trim($val));
 						if (
 							strpos($val[0], 'PD') !== FALSE ||
@@ -215,6 +218,7 @@ class ProductsController extends AppController {
 					    	$number = str_ireplace('-xx', '', trim($val[0]));
 							//$number = str_ireplace('pd ', '', trim($number));
 							$number = str_ireplace('(alt)', '', trim($number));
+							
 							$name = trim($val[1]);
 						} else {
 							$name = trim($val[0]);
@@ -228,7 +232,7 @@ class ProductsController extends AppController {
 						$val = explode('	',trim($val));
 						
 						//Sonderfall: Im Feature steht der Bezug
-						if (strpos($val[1], 'Bezug') !== FALSE) {
+						if (strpos($val[1], 'Bezug:') !== FALSE) {
 							$t = explode('Bezug:', trim($val[1]));
 							$bezug = explode(', ', $t[1]);		
 							$bezug = $this->Product->Material->findByName(trim($bezug[0]));
@@ -244,7 +248,10 @@ class ProductsController extends AppController {
 	
 						$val = explode(', Farbe',trim($val));
 						$val = str_ireplace('Bezug:', '', trim($val[0]));
+						
 						$bezug = $this->Product->Material->findByName(trim($val));
+						if(empty($bezug)) { $bezug = ""; }
+						
 						continue;
 					}
 	
@@ -255,6 +262,7 @@ class ProductsController extends AppController {
 						$val = trim($val[1]);
 						foreach (explode(',',$val) as $value) {
 							$cat = '';
+							$value = trim($value);
 							if($value == 'P') { $cat = 'pflege'; }
 							if($value == 'O') { $cat = 'op'; }
 							if($value == 'I') { $cat = 'intensiv'; }
@@ -315,9 +323,11 @@ class ProductsController extends AppController {
 					$val = $value;
 					if (strpos($val, 'Hersteller:') !== FALSE) {
 							$str = explode(':', trim($val));		
+							$stri = explode('-', trim($str[1]));	
 														
-							$producerName = $str[1];	
-							$producerNumber = $str[2];
+							$producerName = trim($stri[0]);	
+							if(isset($stri[1])) 
+								$producerNumber = trim($stri[1]);
 									
 						continue;
 					}
@@ -384,13 +394,18 @@ class ProductsController extends AppController {
 						$newProduct['Product']['producerName'] = $producerName;
 						$newProduct['Product']['producerNumber'] = $producerNumber;
 		
-					 	$newProduct['Product']['material'] = $bezug['Material']['id'];
+						if($bezug ='') {
+					 		$newProduct['Product']['material'] = $bezug['Material']['id'];
+					 	} else {
+					 		$newProduct['Product']['material'] = 0;
+					 	}
 					 	$newProduct['Product']['feature'] = $features;
 						$newProduct['Product']['maße'] = $maße;
 						$newProduct['Product']['ek'] = str_replace(',', '.', str_replace(' €', '', $ek));
 						$newProduct['Product']['vk'] = str_replace(',', '.', str_replace(' €', '', $vk));
 						$newProduct['Product']['active'] = 'checked';
-						$newProduct['Product']['new'] = '';
+						$newProduct['Product']['new'] = '';	
+										
 						if (strpos($number, 'Z') !== FALSE) {
 							$newProduct['Product']['custom'] = 'checked';
 						} else {
