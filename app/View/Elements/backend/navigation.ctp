@@ -47,8 +47,8 @@
 		<ul class="toggle">
 			<!-- <li class="icn_add_user"><?php echo $this->Html->link('Produkte hinzufügen', '/admin/products/add'); ?></li> -->
 			<li class="icn_add_user"><?php echo $this->Html->link('Produkte QuickAdd', '/admin/products/quickAdd'); ?></li>
-			<!-- <li class="icn_view_users"><?php echo $this->Html->link('Alle Produkte anzeigen', '/admin/products/index'); ?></li>
-			<li class="icn_view_users"><?php echo $this->Html->link('Material hinzufügen', '/admin/materials/add', array('disabled' => 'disabled')); ?></li>
+			<li class="icn_view_users"><?php echo $this->Html->link('Alle Produkte anzeigen', '/admin/products/index'); ?></li>
+			<!--<li class="icn_view_users"><?php echo $this->Html->link('Material hinzufügen', '/admin/materials/add', array('disabled' => 'disabled')); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Farben hinzufügen', '/admin/colors/add', array('disabled' => 'disabled')); ?></li> -->
 		</ul>
 		
