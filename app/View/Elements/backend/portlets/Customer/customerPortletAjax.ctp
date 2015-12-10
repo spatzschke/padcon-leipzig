@@ -4,10 +4,8 @@
 
 <script>
 $(document).ready(function() {
-	
-			
-			$('.addCustomer').on('click', function(){
 				
+			$(document).on('click','.addCustomer', function(){
 				var xhr = null,
 				obj = $(this);
 				
@@ -33,13 +31,14 @@ $(document).ready(function() {
 			});
 			
 			$('#filter .search input').dynamicSearch({
-				url: "<?php echo FULL_BASE_URL.$this->base;?>\/Customers\/search\/<?php echo $controller_name;?>\/<?php echo $controller_id;?>",
+				url: "<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Customers\/search\/<?php echo $controller_name;?>\/<?php echo $controller_id;?>",
 				renderTemplate: '/Elements/backend/portlets/Customer/customerPortletTableContentAjax',
 				cancel: '.form-search .cancel',
 				content: '.customerPortlet tbody',
 				loadingClass: 'loadingSpinner',
 				loadingElement: '#filter .search .input-group-addon i',
-				admin: true
+				admin: true, 
+				reloadUrl: '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/edit/<?php echo $controller_id;?>'
 			});	
 });
 
