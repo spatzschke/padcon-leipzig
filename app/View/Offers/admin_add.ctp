@@ -31,7 +31,19 @@ $(document).ready(function() {
 
 <div class="wood_bg">
 
-	<?php if(!empty($offer)) {
+
+	
+	<div class="pages">
+		<?php  
+			if(isset($pdf)) {
+				echo $this->element('backend/SheetOffer', array("pdf" => $pdf));
+			} else {
+				echo $this->element('backend/SheetOffer');
+			}
+		?>
+	</div>
+	
+		<?php if(!empty($offer)) {
 		 	$redirectURL = FULL_BASE_URL.$this->base."\/admin\/".ucfirst($this->request->params['controller'])."\/edit\/".$offer['Offer']['id'];
 			$cartId = $offer['Offer']['cart_id'];
 			$dataId = $offer['Offer']['id'];
@@ -48,14 +60,4 @@ $(document).ready(function() {
 			)); 
 		}
 	?>
-	
-	<div class="pages">
-		<?php  
-			if(isset($pdf)) {
-				echo $this->element('backend/SheetOffer', array("pdf" => $pdf));
-			} else {
-				echo $this->element('backend/SheetOffer');
-			}
-		?>
-	</div>
 </div>

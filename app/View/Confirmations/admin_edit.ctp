@@ -85,8 +85,6 @@ $(document).ready(function() {
 
 <div class="wood_bg">
 
-	<?php echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons'); ?>	
-
 	<div class="pages">
 		<?php  
 			if(isset($pdf)) {
@@ -96,4 +94,6 @@ $(document).ready(function() {
 			}
 			 ?>
 	</div>
+	
+	<?php echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons'); ?>	
 </div>
