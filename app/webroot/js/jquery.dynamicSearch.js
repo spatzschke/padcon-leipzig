@@ -25,7 +25,8 @@
 	            addToCartUrl: '',
 	            loadingElement: '',
 	            loadingClass: 'loadingSpinner',
-	            admin: false
+	            admin: false, 
+	            reloadUrl: ''
             };
         var options = $.extend(defaults, options);
            
@@ -87,6 +88,8 @@
 						$("img.lazy").lazyload();
 						
 						$('.addToCart').on('click', function(){
+							
+							console.log("click3");
 				
 							$('#product_add .modal-content').load(options.addToCartUrl+$(this).attr('pdid'));
 							$('#product_add').modal('show');
@@ -95,6 +98,11 @@
 							
 							return false;
 						});
+						
+						$(document).on('click','.addCustomer', function(){
+							return false;
+						});
+	
 					 } 
 				 }); 
 			});

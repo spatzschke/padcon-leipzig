@@ -37,7 +37,7 @@
 		
 		echo $this->Html->css('screen');
 		
-		echo $this->Html->script('jquery-2.1.1.min');
+		echo $this->Html->script('jquery-2.1.4.min');
 		
 		echo $this->Html->script('jquery.dynamicSearch');
 		echo $this->Html->script('jquery.jcarousel.min');
