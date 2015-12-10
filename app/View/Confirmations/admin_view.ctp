@@ -7,7 +7,7 @@
 
 <div class="wood_bg">
 	
-	<?php echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons'); ?>
+	
 	
 	<div class="pages">
 		<?php  
@@ -18,4 +18,6 @@
 			}
 			 ?>
 	</div>
+	
+	<?php echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons'); ?>
 </div>

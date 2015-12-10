@@ -1025,11 +1025,11 @@ input::-webkit-selection {
 }
 
 .wood_bg .buttons { 
-	/*position: fixed;*/
+	position: absolute;
+	top: 145px;
 	height: 0px;
 	width: 130px;
 	margin-left: 5px;
-	z-index: 1000;
 }
 
 .wood_bg .buttons .input-group-addon { min-width: 39px;}

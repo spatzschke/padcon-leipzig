@@ -11,6 +11,16 @@
 
 
 <div class="wood_bg">
+
+	<div class="pages">
+		<?php  
+			if(isset($pdf)) {
+				echo $this->element('backend/SheetBilling', array("pdf" => $pdf));
+			} else {
+				echo $this->element('backend/SheetBilling');
+			}
+			 ?>
+	</div>
 	
 	<?php	
 		$dataId = $this->data['Billing']['id'];
@@ -28,14 +38,4 @@
 			"customId" => $customId
 		)); 
 	?>
-		
-	<div class="pages">
-		<?php  
-			if(isset($pdf)) {
-				echo $this->element('backend/SheetBilling', array("pdf" => $pdf));
-			} else {
-				echo $this->element('backend/SheetBilling');
-			}
-			 ?>
-	</div>
 </div>

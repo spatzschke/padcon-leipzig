@@ -18,8 +18,17 @@ $(document).ready(function() {
 
 <div class="wood_bg">
 		
-		
-<?php 
+	<div class="pages">
+		<?php  
+			if(isset($pdf)) {
+				echo $this->element('backend/SheetDelivery', array("pdf" => $pdf));
+			} else {
+				echo $this->element('backend/SheetDelivery');
+			}
+			 ?>
+	</div>
+	
+	<?php 
 		$dataId = $this->data['Delivery']['id'];
 		$redirectURL = FULL_BASE_URL.$this->base."\/admin\/".ucfirst($this->request->params['controller'])."\/view\/".$dataId;
 		$cartId = $this->data['Confirmation']['cart_id'];
@@ -34,17 +43,5 @@ $(document).ready(function() {
 			"controller" => $controller,
 			"addressType" => "3"
 		)); 
-?>
-
-		
-		
-	<div class="pages">
-		<?php  
-			if(isset($pdf)) {
-				echo $this->element('backend/SheetDelivery', array("pdf" => $pdf));
-			} else {
-				echo $this->element('backend/SheetDelivery');
-			}
-			 ?>
-	</div>
+	?>
 </div>
