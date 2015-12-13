@@ -26,7 +26,6 @@
 	            loadingElement: '',
 	            loadingClass: 'loadingSpinner',
 	            admin: false, 
-	            reloadUrl: ''
             };
         var options = $.extend(defaults, options);
            
@@ -87,11 +86,8 @@
 						
 						$("img.lazy").lazyload();
 						
-						$('.addToCart').on('click', function(){
-							
-							console.log("click3");
-				
-							$('#product_add .modal-content').load(options.addToCartUrl+$(this).attr('pdid'));
+						$(document).on('click','.addToCart', function(){			
+							$('#product_add .modal-content').load(options.addToCartUrl+$(this).attr('pdid')+'/'+$(this).attr('caid')+'/'+$(this).attr('cid')+'/'+$(this).attr('cname'));
 							$('#product_add').modal('show');
 							$('#product_add').css('zIndex','1000')
 							$('#product_add').css('display','block')

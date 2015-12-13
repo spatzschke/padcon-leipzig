@@ -1,4 +1,5 @@
 <?php
+					
 ?>
 
 <script>
@@ -9,7 +10,7 @@ $(document).ready(function() {
 			$('.addToCartNow').on('click', function(){
 					
 				<?php 
-					$data = $this->Js->get('#ProductAdminLoadProductAddPopupForm')->serializeForm(array('isForm' => true, 'inline' => true)); 
+					$data = $this->Js->get('#ProductAdminLoadProductAddPopupForm')->serializeForm(array('isForm' => true, 'inline' => true)); 			
 				?>
 								
 				var xhr = null
@@ -25,8 +26,6 @@ $(document).ready(function() {
 					 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/Carts/addToCart/<?php echo $cart_id;?>',
 					 data: <?php echo $data ?>,
 					 success:function (data, textStatus) {
-					 	
-					 	
 					 	
 					 	$('#sidebar .miniCart').load('<?php echo FULL_BASE_URL.$this->base;?>/carts/reloadMiniCart');
 					 

@@ -14,7 +14,7 @@
 $(document).ready(function() {
 	
 		$('#filter .search input').dynamicSearch({
-			url: "<?php echo FULL_BASE_URL.$this->base;?>\/Products\/search\/<?php echo $ajax;?>\/",
+			url: "<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/search\/<?php echo $ajax;?>\/<?php echo $cart_id;?>\/<?php echo $controller_id;?>\/<?php echo $controller_name;?>",
 			renderTemplate: '/Elements/backend/portlets/Product/productPortletTableContentAjax',
 			cancel: '.form-search .cancel',
 			addToCartUrl: '<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/loadProductAddPopup\/',
@@ -24,7 +24,6 @@ $(document).ready(function() {
 		});	
 
 		$('.addToCart').on('click', function(){
-				
 			$('#product_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Products\/loadProductAddPopup\/'+$(this).attr('pdid')+'\/<?php echo $cart_id;?>');
 			$('#product_add').modal('show');
 			$('#product_add').css('zIndex','1000')

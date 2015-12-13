@@ -30,8 +30,10 @@ class ProductsController extends AppController {
 		$this->set('ajax', 0);
 	}
 	
-	function admin_indexAjax($layout = null, $cart_id = null) {
+	function admin_indexAjax($layout = null, $cart_id = null, $controller_id = null, $controller_name = null) {
 		$this->admin_index($layout, $cart_id);
+		
+		$this->set(compact('controller_name', 'controller_id'));
 		$this->render('/Elements/backend/portlets/Product/productPortletAjax');
 	}
 	
@@ -466,7 +468,7 @@ class ProductsController extends AppController {
 		
 	}
 	
-	function admin_loadProductAddPopup($id = null, $cart_id = null) {
+	function admin_loadProductAddPopup($id = null, $cart_id = null, $controller_id = null, $controller_name = null) {
 		$this->autoRender = false;
 		if ($this->request->is('ajax')) {
 			
@@ -584,16 +586,19 @@ class ProductsController extends AppController {
 		
 	}
 	
-	function admin_search($ajax = null, $searchString = null) {
+	function admin_search($ajax = null, $cart_id = null, $c_id = null, $c_name = null) {
 		
 		$products = $this->Product->find('all',array('conditions' => array("OR" => 
 			array (	'Product.name LIKE' 			=> '%'.$this->data['str'].'%' ,
 					'Product.product_number LIKE' 	=> '%'.$this->data['str'].'%' ,
 					'Material.name LIKE' 	=> '%'.$this->data['str'].'%', 
-					'Category.name LIKE' 	=> '%'.$this->data['str'].'%'))));	
+					'Category.name LIKE' 	=> '%'.$this->data['str'].'%')), 'group' =>  array('Product.product_number')));	
 		
 		$this->set('products', $products);
 		$this->set('ajax', $ajax);
+		$this->set('cart_id', $cart_id);
+		$this->set('controller_id', $c_id);
+		$this->set('controller_name', $c_name);
 		
 		if(isset($this->data['template'])) {
 			$this->render($this->data['template']);

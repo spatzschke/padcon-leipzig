@@ -3,6 +3,9 @@
 $(document).ready(function() {
 
 	$('.addToCart').bind('click', function() {
+		
+		console.log("test");
+		
 		addToCart($(this));
 		return false;
 	})
