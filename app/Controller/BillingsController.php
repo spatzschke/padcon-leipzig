@@ -265,7 +265,6 @@ class BillingsController extends AppController {
 		$this->request->data['Confirmation'] += $confirmation;		
 
 		//Nachladen des Lieferscheins
-		debug($this->request->data['Confirmation']['delivery_id']);
 		$delivery = $this->Delivery->find('first', array('conditions' => array('Delivery.id' => $this->request->data['Confirmation']['delivery_id'])));
 		$this->request->data['Delivery'] = $delivery['Delivery'];
 

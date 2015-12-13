@@ -34,6 +34,9 @@ $(document).ready(function() {
 		$cartId = $this->data['Confirmation']['cart_id'];
 		$nextSheet = "Billings";
 		$controller = "Delivery";
+		$convertId = $this->data['Confirmation']['id'];
+		
+		
 
 		echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons', array(
 			"redirectURL" => $redirectURL,
@@ -41,7 +44,8 @@ $(document).ready(function() {
 			"dataId" => $dataId,
 			"nextSheet" =>$nextSheet,
 			"controller" => $controller,
-			"addressType" => "3"
+			"addressType" => "3",
+			"convertId" => $convertId
 		)); 
 	?>
 </div>
