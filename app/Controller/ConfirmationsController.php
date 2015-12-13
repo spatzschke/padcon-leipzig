@@ -84,6 +84,8 @@ class ConfirmationsController extends AppController {
 					
 			$this->Confirmation->create();
 			
+			debug("create_add");
+			
 			$confirmation['Confirmation']['status'] = 'open';
 			$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
 			$confirmation['Confirmation']['customer_id'] = '';
@@ -168,7 +170,6 @@ class ConfirmationsController extends AppController {
 	}
 
 	public function admin_convert($confirmation_id = null) {
-		
 		$this->layout = 'admin';		
 		if($confirmation_id) {
 				
@@ -177,7 +178,6 @@ class ConfirmationsController extends AppController {
 			if(empty($confirmation['Offer']['confirmation_id'])) {
 				
 				$this->Confirmation->create();
-				
 				$confirmation['Confirmation']['status'] = 'open';
 				$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
 				$confirmation['Confirmation']['customer_id'] = $confirmation['Offer']['customer_id'];
@@ -218,8 +218,11 @@ class ConfirmationsController extends AppController {
 				$confirmation['Confirmation']['address_id'] = $address['Address']['id'];
 				
 				$this->Confirmation->save($confirmation);
-				
 				$currConfirmationId = $this->Confirmation->getLastInsertId();
+				
+				//Neue Auftragsbestätigungs-ID der AB hinzufügen speichern 
+				$confirmation['Confirmation']['id'] = $currConfirmationId;
+				$this->Offer->save($confirmation);
 				
 				// Generate Hash für Offer
 				$confirmation['Confirmation']['hash'] =  Security::hash($currConfirmationId, 'md5', true);

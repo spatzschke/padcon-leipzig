@@ -32,7 +32,7 @@
 	echo $this->element('backend/helper/sheetButtonHelper', array(
 		"id" => $id_createConfirmation,
 		"icon" => "file", 
-		"href" => $this->Html->link('Rechnung erstellen', '/admin/'.$nextSheet.'/convert/'.$dataId, array('escape' => false, 'class' => 'btn btn-default'))));		
+		"href" => $this->Html->link('Rechnung erstellen', '/admin/'.$nextSheet.'/convert/'.$convertId, array('escape' => false, 'class' => 'btn btn-default'))));		
 	
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
 	
