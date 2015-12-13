@@ -1,4 +1,4 @@
-<?php	
+#<?php	
 	foreach ($data as $item):
 	
 		if($item['Confirmation']['cart_id'] != 0) {				
@@ -40,9 +40,9 @@
 						<?php if(empty($item['Confirmation']['confirmation_number'])) {
 							 echo '-'; 
 							} else {
-								
-								echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit', $item['Confirmation']['id']), array('escape' => false));
-								
+								if(empty($item['Confirmation']['delivery_id'])) {
+									echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit', $item['Confirmation']['id']), array('escape' => false));
+								}
 								echo '&nbsp;&nbsp;&nbsp;';
 								echo $item['Confirmation']['confirmation_number'];	
 							

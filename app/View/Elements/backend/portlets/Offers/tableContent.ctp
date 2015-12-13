@@ -41,9 +41,7 @@
 						<?php if(empty($item['Offer']['offer_number'])) {
 							 echo '-'; 
 							} else {
-								if($item['Offer']['status'] == "active") {
-									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'active'), array('escape' => false));
-								} elseif($item['Offer']['status'] != "") {
+								if(empty($item['Offer']['confirmation_id'])) {
 									echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'edit', $item['Offer']['id']), array('escape' => false));
 								}
 								echo '&nbsp;&nbsp;&nbsp;';

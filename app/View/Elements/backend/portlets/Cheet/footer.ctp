@@ -1,10 +1,4 @@
-<?php if((ceil($cart['count'] / $productsPerPage)) == $page && $cart['count']%$productsPerPage <= 3) { ?>
-		
-			
-			
-			
-				
-			<?php } ?>
+
 		<div class="sheetFooter row-fluid">
 			
 			<div class="col-md-2">

@@ -1,6 +1,7 @@
 <?php
  //Import controller
   App::import('Controller', 'Users');
+  App::import('Controller', 'Products');
 
 class CartsController extends AppController {
 
@@ -338,6 +339,84 @@ class CartsController extends AppController {
 		$this->Session->setFlash(__('Cart was not deleted', true));
 		$this->redirect(array('action' => 'index'));
 	}
+	
+	function calcPageLoad($cart = null, $cRow = 5, $tRow = 5) {
+		$Products = new ProductsController();
+		
+		$rowPerPage = 30;
+		$standardProductRow = 5;
+		$calcRow = $cRow;
+		$textRow = $tRow;
+		$featureCount = 0;
+		$featureCountMax = 0;
+		$pages= 0;
+		$page = array();
+		$prodArr = array();
+		$cartProducts = $cart['CartProduct'];
+		
+		//Holen maximale Zeilen
+		foreach ($cart['CartProduct'] as $key => $value) {
+			$features = $Products->seperatFeatureList($value['product_id']);
+			$featureCountMax += count($features)+$standardProductRow; // 5 Standardzeile
+		}
+		
+		if(($featureCountMax % $rowPerPage) > 0) {
+			if($featureCountMax < $rowPerPage) {
+				$pages = 1;
+			} else {
+				$pages = ($featureCountMax - ($featureCountMax % $rowPerPage))/$rowPerPage +1;
+			}
+			
+		} else {
+			$pages = $featureCountMax/$rowPerPage;
+		}
+		
+		
+		
+		for($j = 0; $j < $pages; $j++) {
+			foreach ($cartProducts as $key => $value) {
+				$features = $Products->seperatFeatureList($value['product_id']);
+				$featureCount += count($features)+$standardProductRow; // 5 Standardzeile
+				array_push($prodArr, array('product' => $value , 'count' => count($features)+$standardProductRow));
+				unset($cartProducts[$key]);
+				if($featureCount > $rowPerPage - 5) {
+					$page[$j] = $prodArr;
+					$featureCount = 0;
+					$prodArr = array();
+				} else {
+					continue;
+				}
+			}
+			//auf die letzte Seite die restlichten Produkte packen
+			if($j == $pages - 1) {
+				$addProdArr = array();
+				
+				if($calcRow > 0 ) {
+					if(($featureCount + $calcRow) < $rowPerPage) {
+						array_push($prodArr, 'C');
+					} else {
+						array_push($addProdArr, 'C');
+					}
+				}
+					
+				if(($featureCount + $calcRow + $textRow) < $rowPerPage) {
+					array_push($prodArr, 'T');
+				} else {
+					array_push($addProdArr, 'T');
+				}
+				$page[$j] = $prodArr;
+				
+				if(!empty($addProdArr)) {
+					$page[$j+1] = $addProdArr;
+				}
+			}
+		}
+		
+		return $page;
+		
+	}
+
+	
 
 
 }

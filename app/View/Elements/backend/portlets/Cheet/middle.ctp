@@ -2,12 +2,13 @@
 				<?php
 				
 				if($carti != 'empty') {
-					for($j = ($page - 1 ) * $productsPerPage; $j < $page * $productsPerPage; $j++) {
-
-
-					if(!empty($this->data['CartProduct'][$j])) {
 					
-						$cartProduct = $this->data['CartProduct'][$j];
+					foreach ($carti as $j => $item) {
+						
+					if(!empty($carti[$j]['product'])) {
+											
+					
+						$cartProduct = $carti[$j]['product'];
 
 
 						$product = $this->requestAction('Products/getProduct/'.$cartProduct['product_id']);
