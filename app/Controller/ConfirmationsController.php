@@ -533,6 +533,9 @@ class ConfirmationsController extends AppController {
 			
 	    	$cart = $Carts->get_cart_by_id($confirmation['Cart']['id']);
 			
+			//Berechen Seitenbelegung mit Produkte
+			$this->request->data['Pages'] = $Carts->calcPageLoad($cart);
+			
 			$this->request->data += $cart;
 		}
 
@@ -683,6 +686,12 @@ class ConfirmationsController extends AppController {
 		if(!empty($data)) {
 			$Carts = new CartsController();
 	    	$cart = $Carts->get_cart_by_id($data['Cart']['id']);
+			
+			//Berechen Seitenbelegung mit Produkte
+			$this->request->data['Pages'] = $Carts->calcPageLoad($cart);
+			
+			debug($this->request->data['Pages']);
+			
 			$this->request->data += $cart;
 		}
 

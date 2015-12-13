@@ -565,6 +565,10 @@ class OffersController extends AppController {
 		if(!empty($offer)) {
 			$Carts = new CartsController();
 	    	$cart = $Carts->get_cart_by_id($offer['Cart']['id']);		
+			
+			//Berechen Seitenbelegung mit Produkte
+			$this->request->data['Pages'] = $Carts->calcPageLoad($cart);
+			
 			$this->request->data += $cart;
 		}	
 			

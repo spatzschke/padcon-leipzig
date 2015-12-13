@@ -1,45 +1,21 @@
-<?php
-
-	if(!empty($this->data['Cart'])) {
-		$cart = $this->data['Cart'];
-	
-		$page = 0;
-		$productsPerPage = 3;
-		$cartModulo = $cart['count'] % $productsPerPage;
-		
-		$i = 0;
-		
-		$maxPage = round(ceil($cart['count'] / $productsPerPage),0,PHP_ROUND_HALF_UP);
-		if($cartModulo == 3 || $cartModulo == 0) {
-			$maxPage++;
-		}
-	}
-	
-?>
-
-<script>
-
-	
-</script>
-
 <?php 
-
-	if(!empty($cart)) {
-		
+if(empty($this->data['Pages'])) {
+	$pages = array('0');
+} else {
+	$pages = $this->data['Pages'];
+}	
 		$cartTemp = $this->data;
 		if(empty($this->data['CartProduct'])) {
 			$cartTemp['CartProduct'] = array('empty');	
 		}
+	
+		foreach ($pages as $page => $carti) {	
 		
-		foreach ($cartTemp['CartProduct'] as $carti) {						
-			if(($i % $productsPerPage) == 0 ) {	
-				$page++;				
-
 ?>
 
-<article class="module width_full sheet business noInput<?php if((ceil($cart['count'] / $productsPerPage)) == $page) { echo ' last';}?>">		
+<article class="module width_full sheet business noInput">	
 		<?php 
-			echo $this->element('backend/portlets/Cheet/header', array('cart' => $cart, 'pdf' => $pdf, 'productsPerPage' => $productsPerPage, 'page' => $page, 'maxPage' => $maxPage, 'logo' => true)); 			
+			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $page+1, 'maxPage' => count($pages), 'logo' => true)); 
 			
 			if($this->data['Confirmation']['order_date']) {
 				
@@ -50,47 +26,28 @@
 				}
 			}
 			
+			if(!empty($this->data['Pages'])) {
+				echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'page' => $page, 'pagePrice' => false)); 
+			}
 			
-			echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page, 'pagePrice' => true)); 
-			
-			if((ceil($cart['count'] / $productsPerPage)) == $page && $cartModulo != 0) { 
-				echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/calc', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
-				
-				if(!empty($this->data['Confirmation']['additional_text']) && $cartModulo < $productsPerPage-1) { 
-					echo $this->element('backend/portlets/Billings/additionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
+			if(!empty($this->data['Pages']) && in_array("C", $carti)){ 
+				echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/calc', array('page' => $page)); 
+		
+				if(in_array("T", $carti)) { 
+					echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/additionalText', array('offer' => $this->data, 'page' => $page)); 
+				}
+			} else {
+				if(!empty($this->data['Pages']) && in_array("T", $carti)) { 
+					echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/additionalText', array('offer' => $this->data, 'page' => $page)); 
 				}
 			}
 			
-			echo $this->element('backend/portlets/Cheet/footer', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
+			echo $this->element('backend/portlets/Cheet/footer'); 
 		?>
 	</article>
 
 <?php 
 		}
-		$i++;
-	}
+
 ?>
 
-
-<?php if(($cart['count'] % $productsPerPage == 0 && $cart['count'] > ($productsPerPage-1)) || $cart['count'] % $productsPerPage == $productsPerPage-1) {?>
-	<article class="module width_full sheet business noInput<?php if((ceil($cart['count'] / $productsPerPage)) == $page) { echo ' last';}?>">
-			
-			<?php 
-				echo $this->element('backend/portlets/Cheet/header', array('cart' => $cart, 'pdf' => $pdf, 'productsPerPage' => $productsPerPage, 'page' => $page+1, 'maxPage' => $maxPage, 'logo' => true)); 
-				
-				if($cartModulo == 0) {
-					echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/calc', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
-				}
-				if(!empty($this->data['Confirmation']['additional_text'])) { 
-					echo $this->element('backend/portlets/Billings/additionalText', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page));
-				}
-		
-				echo $this->element('backend/portlets/Cheet/footer', array('cart' => $cart, 'productsPerPage' => $productsPerPage, 'page' => $page)); 
-			?>
-		
-	</article>
-
-<?php
-	}
-}
-?>

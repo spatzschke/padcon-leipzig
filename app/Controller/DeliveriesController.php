@@ -241,7 +241,10 @@ Lieferzeit: ca. 3-4 Wochen
 		if(!empty($data)) {
 			
 	    	$cart = $Carts->get_cart_by_id($data['Confirmation']['cart_id']);
-	
+			
+			//Berechen Seitenbelegung mit Produkte
+			$this->request->data['Pages'] = $Carts->calcPageLoad($cart, 0, 1);
+				
 			$cart = $Carts->calcSumPrice($cart);
 			
 			$this->request->data['Cart'] = $cart['Cart'];
