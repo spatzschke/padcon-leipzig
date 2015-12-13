@@ -38,7 +38,6 @@ $(document).ready(function() {
 				loadingClass: 'loadingSpinner',
 				loadingElement: '#filter .search .input-group-addon i',
 				admin: true, 
-				reloadUrl: '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/edit/<?php echo $controller_id;?>'
 			});	
 });
 

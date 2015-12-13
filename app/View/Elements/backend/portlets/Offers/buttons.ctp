@@ -33,7 +33,7 @@
 		"text" => "Produkt hinzufügen"));	
 	echo $this->element('backend/helper/modalHelper', array(
 		"id" => $id_addProduct,
-		"url" => "\/admin\/Products\/indexAjax\/ajax\/".$cartId,
+		"url" => "\/admin\/Products\/indexAjax\/ajax\/".$cartId."\/".$dataId."\/".ucfirst($this->request->params['controller']),
 		"redirect" => $redirectURL));
 	
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------	

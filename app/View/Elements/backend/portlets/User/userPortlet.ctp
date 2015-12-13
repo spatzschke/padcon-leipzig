@@ -12,6 +12,7 @@
 				<tr> 
    					<th></th> 
     			<!--<th><?php echo('ID');?></th>-->
+    				<th><?php echo('Name');?></th>
 					<th><?php echo('eMail');?></th>
 					<th><?php echo('Rolle');?></th>
 					<th><?php echo('Letzter Login');?></th>
@@ -32,6 +33,9 @@
 				<tr>
 					<td></td>
 				<!--<td><?php echo $user['User']['id']; ?>&nbsp;</td>-->
+					<td><?php 
+						if(!empty($user['User']['name'])) {
+						echo $user['User']['name'];} ?>&nbsp;</td>
 					<td><?php echo $user['User']['username']; ?>&nbsp;</td>
 					<td><?php echo $user['User']['role']; ?>&nbsp;</td>
 					<td><?php echo $user['User']['last_login'];?>&nbsp;</td>

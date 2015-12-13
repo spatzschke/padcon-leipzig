@@ -21,13 +21,22 @@
                    
                         <?php echo $this->Form->create('User', array(
 							'class' => 'form-horizontal'
-						)); ?>            
-                            <div style="margin-bottom: 25px" class="input-group">
+						)); ?>    
+							<div style="margin-bottom: 25px" class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <?php echo $this->Form->input('name', array(
+											'label' => false,
+											'class' => 'form-control',
+											'placeholder' => 'Name'
+										));?>                                      
+                                    </div>
+						        
+                            <div style="margin-bottom: 25px" class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
                                         <?php echo $this->Form->input('username', array(
 											'label' => false,
 											'class' => 'form-control',
-											'placeholder' => 'Benutzername'
+											'placeholder' => 'eMail'
 										));?>                                      
                                     </div>
                                 
