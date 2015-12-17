@@ -84,8 +84,6 @@ class ConfirmationsController extends AppController {
 					
 			$this->Confirmation->create();
 			
-			debug("create_add");
-			
 			$confirmation['Confirmation']['status'] = 'open';
 			$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
 			$confirmation['Confirmation']['customer_id'] = '';
@@ -137,7 +135,6 @@ class ConfirmationsController extends AppController {
 			$options = array('conditions' => array('Confirmation.' . $this->Confirmation->primaryKey => $id));
 			$confirmation = $this->Confirmation->find('first', $options);
 			
-		
 			$this->generateData($confirmation);
 		}
 		$controller_name = 'Confirmations'; 
@@ -434,10 +431,8 @@ class ConfirmationsController extends AppController {
 		
 		$confirmation = $this->Confirmation->findById($id);
 		
+		$this->generateData($confirmation);
 		
-		$this->generateSheetData($confirmation);
-		
-				
 		$title = "Auftragsbestätigung_".str_replace('/', '-', $confirmation['Confirmation']['confirmation_number']);
 		$this->set('title_for_layout', $title);
 		
@@ -690,7 +685,6 @@ class ConfirmationsController extends AppController {
 			//Berechen Seitenbelegung mit Produkte
 			$this->request->data['Pages'] = $Carts->calcPageLoad($cart);
 			
-			debug($this->request->data['Pages']);
 			
 			$this->request->data += $cart;
 		}
