@@ -26,6 +26,7 @@
 					 	
 						$("#settings_modal .modal-body").html(data);
 						$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/<?php echo $controller_name;?>/reloadSheet/<?php echo $controller_id;?>');
+						window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/view/<?php echo $controller_id;?>';
 					 } 
 				 }); 
 				
@@ -51,19 +52,22 @@
 					
 					<?php echo $this->Form->create('Billing');?>
 	
-					<div class="col-md-5">
+					<div class="col-md-12">
 						<?php echo $this->Form->input('id');?>
 						<div class="panel panel-info" >
                     		<div class="panel-body" >
 								
 	                             <div class="input-group">
+	                                <div class="input-group">
 	                                <?php echo $this->Form->input('additional_text', array(
 									    'label' => array(
-									    	'text' => 'Angebotstext',
+									    	'text' => 'Rechnungstext',
 									    	'class' => 'col-md-12'
 									    ),
+									    'cols' => '41'
 										));
 									?>                                     
+	                             </div>                                     
 	                             </div>
 
 							</div>
