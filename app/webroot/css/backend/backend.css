@@ -1144,3 +1144,9 @@ article.sheet {
 .loadingHelper.medium{ font-size:22px }
 .loadingHelper.large{ font-size:30px }
 
+
+.settingsTable .btn{
+    width: 34px !important
+} 
+
+

@@ -32,11 +32,13 @@ if(empty($this->data['Pages'])) {
 			if(!empty($this->data['Pages']) && in_array("C", $carti)){ 
 				echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/calc', array('page' => $page)); 
 		
-				if(in_array("T", $carti)) { 
+				if(in_array("T", $carti)) {
+					echo '<div class="offerFooter"> </div>';
 					echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/additionalText', array('offer' => $this->data, 'page' => $page)); 
 				}
 			} else {
-				if(!empty($this->data['Pages']) && in_array("T", $carti)) { 
+				if(!empty($this->data['Pages']) && in_array("T", $carti)) {
+					echo '<div class="offerFooter"> </div>'; 
 					echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/additionalText', array('offer' => $this->data, 'page' => $page)); 
 				}
 			}

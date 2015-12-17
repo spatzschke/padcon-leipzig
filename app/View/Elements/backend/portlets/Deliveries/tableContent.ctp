@@ -40,9 +40,9 @@
 						<?php if(empty($item['Delivery']['delivery_number'])) {
 							 echo '-'; 
 							} else {
-								if(empty($item['Confirmation']['billing_id'])) {
-									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Delivery']['id']), array('escape' => false));
-									}
+								
+								echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Delivery']['id']), array('escape' => false));
+								
 								echo '&nbsp;&nbsp;&nbsp;';
 								echo $item['Delivery']['delivery_number'];	
 							
