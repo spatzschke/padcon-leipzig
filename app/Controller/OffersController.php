@@ -178,9 +178,8 @@ class OffersController extends AppController {
 					$offer['Offer']['request_date'] = date_format($date, 'Y-m-d');
 				}	
 								
+				$offer['Offer']['request_number'] = $this->request->data['Offer']['request_number'];
 				$offer['Offer']['delivery_cost'] = $this->request->data['Offer']['deliveryCost'];
-				
-				debug($offer['Offer']);
 				
 				if($this->Offer->save($offer)){
 					$this->Session->setFlash(__('Speicherung erfolgreich', true));
@@ -547,8 +546,6 @@ class OffersController extends AppController {
 		// 204 = Fortlaufende Nummer im Jahr
 		$countYearOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))));
 		$countYearOffers = str_pad($countYearOffers, 2, "0", STR_PAD_LEFT);
-		
-		debug($countYearOffers);
 		
 		// 09 = laufende Nummer im Monat
 		$countMonthOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))));

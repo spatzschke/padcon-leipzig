@@ -14,7 +14,7 @@
 			
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
 	
-	$id_settings = 'settings_btn';
+	/*$id_settings = 'settings_btn';
 	echo $this->element('backend/helper/sheetButtonHelper', array(
 		"id" => $id_settings,
 		"icon" => "cog",
@@ -24,7 +24,7 @@
 		"id" => $id_settings,
 		"url" => "\/admin\/".ucfirst($this->request->params['controller'])."\/settings\/".$dataId,
 		"redirect" => $redirectURL));
-	 
+	 */
 	
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
 	

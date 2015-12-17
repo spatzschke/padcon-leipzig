@@ -4,6 +4,7 @@
 		$('#saveSettings').on('click', function(){
 			
 			<?php 
+				$delivery = 0;
 			
 				$data = $this->Js->get('#OfferAdminSettingsForm')->serializeForm(array('isForm' => true, 'inline' => true)); 
 			?>
@@ -21,6 +22,7 @@
 					 	
 						$("#offerSettigs_modal .modal-body").html(data);
 						$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/<?php echo $controller_name;?>/reloadSheet/<?php echo $controller_id;?>');
+						window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/edit/<?php echo $controller_id;?>';
 					 } 
 				 }); 
 			return false;
@@ -34,8 +36,10 @@
 			state: <?php 
 				if($this->data['Offer']['delivery_cost'] == Configure::read('padcon.delivery_cost.paket')) {
 					echo "true";
+					$delivery = Configure::read('padcon.delivery_cost.paeckchen');
 				} else {
 					echo "false";
+					$delivery = Configure::read('padcon.delivery_cost.paket');
 				}
 			
 			?>,
@@ -68,6 +72,7 @@
 				$string = $this->data['Offer']['additional_text'];
 				if(strpos($string,"frei Haus.")!==false) {
 					echo "true";
+					$delivery = Configure::read('padcon.delivery_cost.frei');
 				} else {
 					echo "false";
 				}
@@ -80,19 +85,8 @@
 					res = '<?php echo Configure::read('padcon.Angebot.additional_text.deliveryFree');?>'
 					$('#OfferAdditionalText').html(res);
 					$("#deliveryCost").attr('value','<?php echo Configure::read('padcon.delivery_cost.frei');?>')
-					console.log("versandfrei");
 				} else {
-					var str = '<?php echo Configure::read('padcon.Angebot.additional_text.default');?>'
-					var res = "";
-					if(str.indexOf('<?php echo Configure::read('padcon.delivery_cost.paket');?>,00') !== -1) {
-						res = str.replace('<?php echo Configure::read('padcon.delivery_cost.paket');?>,00', '<?php echo Configure::read('padcon.delivery_cost.paeckchen');?>,00')
-						$("#deliveryCost").attr('value','<?php echo Configure::read('padcon.delivery_cost.paeckchen');?>')
-					} else {
-						res = str.replace('<?php echo Configure::read('padcon.delivery_cost.paeckchen');?>,00', '<?php echo Configure::read('padcon.delivery_cost.paket');?>,00')
-						$("#deliveryCost").attr('value','<?php echo Configure::read('padcon.delivery_cost.paket');?>')	
-					}
-					
-					res = '<?php echo Configure::read('padcon.Angebot.additional_text.default');?>'
+					var res = '<?php echo $this->data['Offer']['additional_text'];?>'
 					$('#OfferAdditionalText').html(res);
 				}	
 				return event.isDefaultPrevented();
@@ -150,6 +144,19 @@
 									    });
 								</script>
 								
+								 <!-- Auftragsnummer -->
+	                            <label class="col-md-6">Anfragenummer</label>
+	                            <div class="input-group">
+	                             	
+	                                <span class="input-group-addon"><b>#</b></span>
+	                                <?php echo $this->Form->input('request_number', array(
+									    'label' => false,
+									    'div' => false,
+									    'class'=> 'form-control span12'));
+									?>                                     
+	                             </div>
+								
+								 <!-- Rabatt -->
 	                            <label class="col-md-6">Rabatt</label>
 	                            <div class="input-group">
 	                             	
@@ -182,7 +189,8 @@
 	                                <?php echo $this->Form->input('deliveryCost', array(
 									    'hidden' => true,
 										'id' => "deliveryCost",
-										'label' => false));
+										'label' => false, 
+										'value' => $delivery));
 									?>                                 
 	                             </div>
 	                             
