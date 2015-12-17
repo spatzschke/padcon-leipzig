@@ -56,7 +56,46 @@
 			}
 			$('#OfferAdditionalText').html(res);			
 			return event.isDefaultPrevented();
-
+			}
+		});
+		
+		$("[name='deliveryfree-cb']").bootstrapSwitch({
+			size: "large",
+			onText: "Ja", 
+			offText: "Nein",
+			handleWidth: "70px",
+			state: <?php 
+				$string = $this->data['Offer']['additional_text'];
+				if(strpos($string,"frei Haus.")!==false) {
+					echo "true";
+				} else {
+					echo "false";
+				}
+			
+			?>,
+			onInit: function(event, state) {},
+			onSwitchChange: function(event, state) {
+				if(state) {
+					//Versandkostenfrei
+					res = '<?php echo Configure::read('padcon.Angebot.additional_text.deliveryFree');?>'
+					$('#OfferAdditionalText').html(res);
+					$("#deliveryCost").attr('value','<?php echo Configure::read('padcon.delivery_cost.frei');?>')
+					console.log("versandfrei");
+				} else {
+					var str = '<?php echo Configure::read('padcon.Angebot.additional_text.default');?>'
+					var res = "";
+					if(str.indexOf('<?php echo Configure::read('padcon.delivery_cost.paket');?>,00') !== -1) {
+						res = str.replace('<?php echo Configure::read('padcon.delivery_cost.paket');?>,00', '<?php echo Configure::read('padcon.delivery_cost.paeckchen');?>,00')
+						$("#deliveryCost").attr('value','<?php echo Configure::read('padcon.delivery_cost.paeckchen');?>')
+					} else {
+						res = str.replace('<?php echo Configure::read('padcon.delivery_cost.paeckchen');?>,00', '<?php echo Configure::read('padcon.delivery_cost.paket');?>,00')
+						$("#deliveryCost").attr('value','<?php echo Configure::read('padcon.delivery_cost.paket');?>')	
+					}
+					
+					res = '<?php echo Configure::read('padcon.Angebot.additional_text.default');?>'
+					$('#OfferAdditionalText').html(res);
+				}	
+				return event.isDefaultPrevented();
 			}
 		});
 		
@@ -123,6 +162,17 @@
 			    						'max' => 100,
 										'default' => 0));
 									?>                                     
+	                             </div>
+	                             
+	                              <!-- Versandkostenfrei -->
+	                             <label class="col-md-6">Versandkostenfrei</label>
+	                             <div class="input-group">
+	                                <input type="checkbox" name="deliveryfree-cb" checked>    
+	                                <?php echo $this->Form->input('deliveryFree', array(
+									    'hidden' => true,
+										'id' => "deliveryFree",
+										'label' => false));
+									?>                                 
 	                             </div>
 	                             
 	                              <!-- PAKET/PÄCKCHEN -->

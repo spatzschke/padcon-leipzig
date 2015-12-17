@@ -23,7 +23,7 @@
 </script>
 
 <?php echo $this->Session->flash(); ?>
-<table class="table table-striped">
+<table class="table table-striped settingsTable">
 	<tr>
 		<th></th>
 		<th>#</th>
@@ -38,13 +38,13 @@
 				echo '<tr>';		
 					echo '<td>
 
-						<button type="button" class="btn btn-danger btn-lg remove active" pdid="'.$products['Product']['cartProduct_id'].'">
+						<button type="button" class="btn btn-danger btn-sm remove active" pdid="'.$products['Product']['cartProduct_id'].'">
 							<span class="glyphicon glyphicon-trash"></i></span>
 						</button>
 					
 						</td>';
 					echo '<td>'.$products['Product']['amount'].'</td>';
-					echo '<td>'.Configure::read('padcon.product.number.präfix').$products['Product']['product_number'].'</td>';
+					echo '<td>'.$products['Product']['product_number'].'</td>';
 					echo '<td>'.$products['Product']['name'].'</td>';
 					echo '<td><div class="color" style="background-color: #'.$products['Color']['rgb'].'"data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="'.$products['Color']['name'].'"></div></td>';
 				echo '</tr>';

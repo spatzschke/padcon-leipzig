@@ -50,6 +50,8 @@ class OffersController extends AppController {
 		
 		$active = $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));
 		
+		$this->generateOfferNumber($active['Customer']['id']);
+		
 		$offer = null;
 		if($active) {
 			
@@ -175,8 +177,10 @@ class OffersController extends AppController {
 					$date = date_create_from_format('d.m.Y', $this->request->data['Offer']['request_date']);
 					$offer['Offer']['request_date'] = date_format($date, 'Y-m-d');
 				}	
-				
+								
 				$offer['Offer']['delivery_cost'] = $this->request->data['Offer']['deliveryCost'];
+				
+				debug($offer['Offer']);
 				
 				if($this->Offer->save($offer)){
 					$this->Session->setFlash(__('Speicherung erfolgreich', true));
@@ -479,7 +483,7 @@ class OffersController extends AppController {
 		$vat_price = $offer['Offer']['vat'] * $part_price / 100;
 		$offer_price = floatval($part_price + $vat_price);
 		
-		if($offer['Cart']['sum_retail_price'] > Configure::read('padcon.delivery_cost.versandkostenfrei_ab')) {
+		if($offer['Cart']['sum_retail_price'] > Configure::read('padcon.delivery_cost.versandkostenfrei_ab') || strpos($offer['Offer']['additional_text'],"frei Haus.")!==false) {
 			$delivery_cost = Configure::read('padcon.delivery_cost.frei');
 		} else {
 			if($offer['Offer']['delivery_cost'] != Configure::read('padcon.delivery_cost.paeckchen')) {
@@ -543,6 +547,9 @@ class OffersController extends AppController {
 		// 204 = Fortlaufende Nummer im Jahr
 		$countYearOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))));
 		$countYearOffers = str_pad($countYearOffers, 2, "0", STR_PAD_LEFT);
+		
+		debug($countYearOffers);
+		
 		// 09 = laufende Nummer im Monat
 		$countMonthOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))));
 		$countMonthOffers = str_pad($countMonthOffers, 2, "0", STR_PAD_LEFT);
