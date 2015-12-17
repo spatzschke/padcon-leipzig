@@ -7,6 +7,9 @@
 		 
 		echo $this->Html->script('jquery-2.1.1.min');
 		?>
+<?php
+	if($this->request['controller'] == "Catalogs") {	
+?>
 	
 	<style>
 		.loadingSpinner {
@@ -85,15 +88,32 @@
 		})
 
 	</script>
+	
+<?php } else { ?>
+	
+	<script type="text/javascript">
+
+		$(window).load(function(){
+			 window.print();
+		})
+
+	</script>
+<?php } ?>
+
 </head> 
 
 <body>
+<?php
+	if($this->request['params']['controller'] == "Catalogs") {	
+?>
 <div class="loadingHelper large">
 	<i class="glyphicon loadingSpinner"></i>
 	Generierung läuft ...
 	<div class="counter"></div>
 </div>	
-<section id="main" class="column pages" style="display: none">
+
+<?php } ?>
+<section id="main" class="column pages" <?php if($this->request['params']['controller'] == "Catalogs") { ?>style="display: none" <?php } ?>>
 	<?php	
 		echo $content_for_layout; 
 	?>

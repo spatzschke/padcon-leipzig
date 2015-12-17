@@ -42,6 +42,8 @@
 							} else {
 								if(empty($item['Confirmation']['delivery_id'])) {
 									echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit', $item['Confirmation']['id']), array('escape' => false));
+								} else {
+									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['id']), array('escape' => false));
 								}
 								echo '&nbsp;&nbsp;&nbsp;';
 								echo $item['Confirmation']['confirmation_number'];	
