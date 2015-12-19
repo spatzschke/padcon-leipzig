@@ -88,7 +88,8 @@ class ConfirmationsController extends AppController {
 			$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
 			$confirmation['Confirmation']['customer_id'] = '';
 			$confirmation['Confirmation']['cart_id'] = $cart['Cart']['id'];
-			//$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
+			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
+			$confirmation['Confirmation']['order_date'] = date('Y-m-d');
 			
 			//Default settings
 			$confirmation['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
@@ -183,6 +184,7 @@ class ConfirmationsController extends AppController {
 				$confirmation['Confirmation']['delivery_cost'] = $confirmation['Offer']['delivery_cost'];
 				$confirmation['Confirmation']['vat'] = $confirmation['Offer']['vat'];
 				$confirmation['Confirmation']['confirmation_price'] = $confirmation['Offer']['offer_price'];
+				$confirmation['Confirmation']['order_date'] = date('Y-m-d');
 				
 				//Gernerierung der Auftragsbestätigungsnummer
 				$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
