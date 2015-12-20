@@ -53,7 +53,21 @@ h1, h1 b{
     position: absolute;
     width: 100%;
 }
- 
+
+#miniCart{
+	position: absolute;
+	width: 70px;
+	height: 100px;
+	z-index: 300px;
+	background-color: red;
+	left: 80px;
+}
+
+#miniCart .miniCartCount {
+	font-size: 30px;
+    padding: 27px;
+}
+
 #container {
 	
 	position: relative;
@@ -107,7 +121,7 @@ h1, h1 b{
 #topNavigation {
 	background: url(../img/layout/bg_border_trans.png) repeat-y 0 0 transparent;
 	padding: 0 18px;
-    width: 968px;
+    width: 100%;
 	height: 80px;	
 }	
 
@@ -187,37 +201,22 @@ h1, h1 b{
 
 #topNavigation .search {
 	float: right;
-    margin-right: 50px;
+    margin-right: 0px;
     margin-top: 32px;
-    width: 150px;
+    width: 200px;
 	position: relative;	
 }
 
-#topNavigation .search div{
+#topNavigation .search .cancel{
     height: 16px;
-    right: -15px;
+    right: 5px;
     position: absolute;
+    z-index: 100;
     top: 10px;
     width: 15px;
-	display: none;	
+	display: none;
+	cursor: pointer;	
 }
-
-#topNavigation .search .cancel {
-	background: url("../img/cancel.png") no-repeat scroll 0 0 transparent;	
-}
-
-#topNavigation .search .cancel:hover {
-	background-position: 0px -18px;	
-}
-
-#topNavigation .search input{
-	background: url("../img/search.png") no-repeat scroll 0 0 #346AA6;
-    border: 0 none;
-    color: #346AA6;
-    padding: 11px 34px 12px;
-    width: 110px;
-}
-
 #wrapper {
 	background: url(../img/layout/bg_border.png) repeat-y 0 0 transparent;
 	padding: 60px 80px 20px;
@@ -236,7 +235,7 @@ h1, h1 b{
 	background: url(../img/layout/bg_footer.png) repeat-y 0 0 transparent;	
 	height: 80px;
 	padding: 0 18px;
-    width: 968px;
+    width: 100%;
 }
 
 #footer .footerContent{
@@ -244,8 +243,8 @@ h1, h1 b{
 	color: #FFFFFF;
 	font-size: 14px;
 	font-weight: bold;
-	height: 20px;
-	width: 948;
+	height: 40px;
+	width: 100%;
 	padding: 10px;
 }
 
@@ -276,11 +275,11 @@ h1, h1 b{
 }
 
 .categoryItem {
-	width: 278px;
-	height: 53px;
 	float: left;
-	font-size: 18px;
-	padding: 32px 0px;	
+    font-size: 18px;
+    height: 117px;
+    padding: 32px 0;
+    width: 374px;
 }
 
 .categoryItem .text{
@@ -291,11 +290,11 @@ h1, h1 b{
 
 #partnerCategories a .categoryItem {
 	padding-top: 23px;
-	height: 62px;	
+	height: 118px;	
 }
 
 #catalogs a .categoryItem {
-	height: 53px;	
+	height: 115px;	
 }
 
 a .categoryItemLeft {
@@ -369,7 +368,7 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 	width: 855px;
 	margin-bottom: 15px;
 	float: left;	
-	
+	position: relative;
 	background:url(../img/horizontal_devider.png) no-repeat 0 bottom transparent
 }
 .productListItem2 .productItemHeader{
@@ -383,6 +382,12 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 	background:url(../img/bg_productItemCenter.png) repeat-y 0 0 transparent;
 	float: left;	
 	width: 100%;	
+}
+
+.productListItem a.addToCart{
+	bottom: 40px;
+    position: absolute;
+    right: 0;
 }
 
 .partnerItemCenter {
@@ -412,11 +417,9 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 .productListItem .productItemImage, .partnerListItem .partnerItemImage{	
 	float: left;
     height: 118px;
-    margin: 10px 40px;
+    margin: 10px 40px 30px 0;
     padding: 10px;
-    width: 198px;
-	height: 118px;
-	margin-bottom: 30px;
+    width: 218px;
 }
 
 .productListItem .productItemImage, .partnerListItem .partnerItemImage {
@@ -458,7 +461,8 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 
 .productListItem .productItemContent label {
 	float: left;
-    width: 75px;	
+    width: 75px;
+    margin-right: 35px;	
 }
 
 .productListItem .productItemContent label.color {
@@ -489,6 +493,11 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 	width: 29px;
 	float: left;
 	margin: 0 10px 5px 0;	
+	border-radius: 5px
+}
+.productItemColor .colorItem[rel="01"],
+.productItemColor .colorItem[rel="26"]{
+	border: 1px solid grey;
 }
 
 .productItemColor .colorItem img {
@@ -497,6 +506,33 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 	float: left;	
 }
 
+.carousel {
+    width: 263px;
+    margin-left: 70px;
+}
+
+.carousel .carousel-inner {
+	margin-left: 40px;
+    width: 197px;
+}
+
+.carousel-control {
+	color: black;
+	background: none !important;
+	font-size: 18px;
+	margin-top: -10px;
+}
+.carousel-control .glyphicon{
+	font-size: 18px !important;
+	margin-top: -10px !important;
+}
+
+.carousel-control:hover {
+	color: grey;
+}
+
+.carousel-control.left { margin-top: -3px;}
+.carousel-control.right { margin-top: -5px;}
 
 .productListItem .productItemContent .productItemSize{	
 	width: 100%;
@@ -511,15 +547,19 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 .productListItem .productItemFeatures, .partnerListItem .partnerItemLink{
 	color: #346AA6;	
 	float: left;
-	width: 210px;
+	width: 258px;
 	margin-bottom: 30px;
 }
 
 .productListItem .productItemFeatures li{
 	background:url(../img/featureList_Point.png) no-repeat 0 1px transparent;
 	display: block;
-    line-height: 120%;
+    line-height: 122%;
     padding: 0 0 10px 24px;
+}
+
+.productListItem .productItemFeatures .featureTitle {
+	padding-left: 3px;
 }
 
 .partnerListItem .partnerItemLink{
@@ -604,7 +644,7 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 }
 
 .contactStatic {
-	margin-top: 40px;	
+	margin-top: 60px;	
 }
 
 .contactForm h2{
@@ -651,36 +691,7 @@ div.form, div.index, div.view {
 	overflow: auto;	
 }
 
-input, textarea {
-	font-size: 90%;
-	padding: 2px;	
-}
-
-form div {
-	margin-bottom: 0;	
-}
-
-
-
-form .submit input[type="submit"]  ,input[type="submit"], div.actions ul li a, td.actions a {
-    background: -moz-linear-gradient(center top , #9cbbea, #5682af) repeat scroll 0 0 #5682af;
-    border: 1px solid #244663;
-    border-radius: 8px 8px 8px 8px;
-    color: #ffffff;
-    font-weight: normal;
-    min-width: 0;
-    padding: 4px 8px;
-    text-decoration: none;
-    text-shadow: 0 1px 0 #000000;
-}
-
-input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form .submit input[type="submit"]:hover {
-    background: -moz-linear-gradient(center top , #5682af, #9cbbea) repeat scroll 0 0 #5682af;
-	text-decoration: none;
-}
-
-
-  .jcarousel-direction-rtl {
+ .jcarousel-direction-rtl {
     direction: rtl;
 }
   .jcarousel-container-horizontal {
@@ -787,20 +798,73 @@ input[type="submit"]:hover, div.actions ul li a:hover, td.actions a:hover, form 
     width: 111px;
     z-index: 9999;
     display: none;
-}
-
-.searchContent .headLoader img {
-	margin-bottom: 10px;
-    margin-left: 25px;
+    text-align: center;
+    font-size: 15px
 }
 
 .searchContent .headLoader .titel {
 	width: 100%;
 	float: left;
-	font-size: 15px;
+	font-size: 20px;
     font-weight: bold;
     color: #346AA6;
     padding-left: 13px; 
 }
 
+.loadingSpinner {
+  -webkit-animation: spin 1s infinite linear;
+  -moz-animation: spin 1s infinite linear;
+  -o-animation: spin 1s infinite linear;
+  animation: spin 1s infinite linear;
+  width: 100%;
+}
+
+.searchContent .headLoader .loadingSpinner:before {
+  content: "\e031";
+  font-size: 50px;
+}
+
+@-moz-keyframes spin {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+/* Login */
+
+.users .container {
+	width: 650px;
+	
+}
+
+.row {
+	margin-bottom: 10px;
+	margin-left: 0px;
+	margin-right: 9px;
+}
+
+.alert { margin-bottom: 0;}
 

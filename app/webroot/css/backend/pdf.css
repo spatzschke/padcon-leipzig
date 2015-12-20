@@ -1,0 +1,176 @@
+.wood_bg .buttons { 
+	display: none !important;
+}
+
+.pages *{color: black !important;}
+
+.pages .sheetFooter {
+	bottom: 0px;
+}
+
+article.sheet.last {
+	height: 1080px;
+}
+
+article.offer .customerData .span12 {min-height: 21px;}
+
+.aditionalContent textarea {
+	
+	background: none;
+	border: none;
+	box-shadow: none;
+	
+}
+
+.row-fluid .offerInfo * {
+    padding-left: 4px;
+}
+
+.customerData > .col-md-6 {padding-right: 0}
+
+article.sheet { 
+	border: 1px solid white;
+	 height: 24mm;
+	width: 160mm;
+    position: relative;
+
+    page-break-after: always;
+}
+
+.sheet.deckblatt {
+	position: relative !important;
+}
+
+.sheet.deckblatt img { 
+	left: 6px !important;
+    position: absolute !important;
+    top: 10px !important;
+    width: 100% !important;
+}
+
+.sheetHeader .bandage {
+	border: 9px solid #346aa6;
+}
+.sheetFooter .bandage {
+    border-top: 40px solid #346aa6;
+    color: white !important;
+    padding: 0px !important;
+    height: 0px;
+}
+
+.sheetFooter .bandage span{
+	position: absolute;
+	right: 40px;
+	bottom : 15px;
+	color: #fff !important;
+}
+.sheetFooter .bandage div {
+	position: absolute;
+	bottom : 15px;
+	color: #fff !important;
+}
+
+.catalogListItem {width: 115%; float: left; margin-left: -30px}
+.catalogListItem .col-md-3 { width: 40mm; min-height: 10px; float: left;}
+.catalogListItem .col-md-6 { width: 100mm; float: left;}
+.catalogListItem .catalogItemImage.col-md-3 {width: 50mm}
+
+.catalogListItem .catalogItemNumber { left: -95px !important}
+
+.catalogListItem .catalogItemFeatures {
+	margin-left: 0px !important;
+}
+
+.sheetHeader .bandage, .sheetFooter .bandage { width: 105% !important}
+
+.pages .ruckseite .sheetContent .more{
+	border-right: 817px solid #346aa6;
+    left: -422px;
+    position: relative;
+}
+
+.pages .ruckseite .sheetContent .more p{
+	color: #fff !important;
+    left: 574px;
+    position: absolute;
+    top: 237px;
+    width: 300px;
+}
+.pages .ruckseite .sheetContent .more ul{
+    left: 574px;
+    position: absolute;
+    top: 300px;
+    width: 300px;
+}
+.pages .ruckseite .sheetContent .more ul li{ color: #fff !important; }
+.pages .sheetFooter {margin-bottom: 0px !important}
+
+.sheetContent { padding: 0 40px !important}
+.waschanleitung  .sheetHeader {top: 50px}
+
+.sheet.sonderseite.color .materialBox.mat3,
+.sheet.sonderseite.color .materialBox.mat4,
+.sheet.sonderseite.color .materialBox.mat5{ left: 40px !important }
+
+.sheet.sonderseite.color .punkt{
+    border-color: black;
+    border-style: solid !important;
+    border-width: 29px 0 8px !important;
+    padding: 0 !important;	
+    position: relative !important;
+}
+.sheet.sonderseite.color .punkt span {
+	left: 8px;
+    position: absolute;
+    top: -21px;
+    color: white !important;
+}
+
+.sheet.sonderseite.color .punkt.col01 span,
+.sheet.sonderseite.color .punkt.col26 span {
+	top: 5px !important;
+}
+
+.sheet.sonderseite.color .punkt.col01 span,
+.sheet.sonderseite.color .punkt.col11 span,
+.sheet.sonderseite.color .punkt.col12 span,
+.sheet.sonderseite.color .punkt.col13 span,
+.sheet.sonderseite.color .punkt.col15 span,
+.sheet.sonderseite.color .punkt.col17 span,
+.sheet.sonderseite.color .punkt.col22 span,
+.sheet.sonderseite.color .punkt.col23 span,
+.sheet.sonderseite.color .punkt.col24 span,
+.sheet.sonderseite.color .punkt.col26 span,
+.sheet.sonderseite.color .punkt.col28 span,
+.sheet.sonderseite.color .punkt.col30 span,
+.sheet.sonderseite.color .punkt.col32 span {
+	color: black !important;	
+}
+
+/* Offer */
+.sheet .col-md-12{width: 780px !important; float: left;}
+.sheet .col-md-8{width: 485px !important; float: left;}
+.sheet .col-md-6{width: 390px !important; float: left;}
+.sheet .col-md-4{width: 260px !important; float: left;}
+
+.sheet.business {
+	padding: 50px 50px 50px 100px;
+}
+
+.sheet.business .sheetHeader {width: 644px !important}
+.sheet.business .sheetHeader .col-md-8 {width: 400px !important}
+.sheet.business .sheetHeader .logo {width: 335px; padding: 0; float: right}
+
+.sheet.business .sheetHeader,
+.sheet.business .customerData {width: 780px !important}
+.sheet.business .customerData {margin-top: 55px !important}
+.sheet.business .customerData .col-md-6 {width: 313px !important; padding-left: 0px !important}
+.sheet.business .customerData .col-md-6 .col-md-12 {padding-left: 0px !important}
+
+.sheet.business .row-fluid .offerInfo label { width: 110px !important}
+
+.sheet.business .offerMiddle .content {width: 420px !important}
+
+.sheet.business .sheetFooter  {width: 626px !important; bottom: 5px !important}
+.sheet.business .sheetFooter .col-md-2 {width: 138px !important; float: left !important;}
+.sheet.business .sheetFooter .col-md-3 {width: 175px !important; float: left !important;}
