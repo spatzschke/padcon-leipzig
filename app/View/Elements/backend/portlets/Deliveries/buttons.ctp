@@ -48,10 +48,10 @@
 
 <script>
 
-	$('#<?php echo $id_addAdditionalAddress;?>_btn a').addClass('disabled');
-	$('#<?php echo $id_createConfirmation;?>_btn a').addClass('disabled');
-	$('#<?php echo $id_settings;?>_btn a').addClass('disabled');
-	$('#<?php echo $id_print;?>_btn a').addClass('disabled');
+	// $('#<?php echo $id_addAdditionalAddress;?>_btn a').addClass('disabled');
+	// $('#<?php echo $id_createConfirmation;?>_btn a').addClass('disabled');
+	// $('#<?php echo $id_settings;?>_btn a').addClass('disabled');
+	// $('#<?php echo $id_print;?>_btn a').addClass('disabled');
 	
 	<?php if(!empty($this->data['Address']['street'])) { ?>
 		$('#<?php echo $id_addProduct;?>_btn a').removeClass('disabled');
