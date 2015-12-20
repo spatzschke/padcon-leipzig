@@ -90,7 +90,7 @@
 						<?php echo $this->Form->input('id');?>
 						<div class="panel panel-info" >
                     		<div class="panel-body" >
-								<label class="col-md-6">Auftragsdatum</label>
+								<label class="col-md-6">Bestelldatum</label>
                                	<div class="input-group date">     	
 	                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 	                                <?php echo $this->Form->input('order_date', array(
@@ -114,7 +114,7 @@
 									    });
 								</script>                                
 							
-								<label class="col-md-6">Auftragsnummer</label>
+								<label class="col-md-6">Bestellnummer</label>
 	                            <div class="input-group">
 	                             	
 	                                <span class="input-group-addon"><b>#</b></span>
