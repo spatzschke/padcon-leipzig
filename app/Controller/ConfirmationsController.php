@@ -596,13 +596,13 @@ class ConfirmationsController extends AppController {
 	function generateConfirmationNumber() {
 		
 		// Auftragsbestätigung Nr.: 019/11/14
-		// 019 = Anzahl der AB im Monat
+		// 019 = Anzahl der AB im Monat - dreistellig
 		// 11 = aktueller Monat
 		// 14 = aktuelles Jahr
 		
-		// 019 = Anzahl der AB im Monat
+		// 019 = Anzahl der AB im Monat - dreistellig
 		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))));
-		$countMonthConfirmations = str_pad($countMonthConfirmations, 2, "0", STR_PAD_LEFT);
+		$countMonthConfirmations = str_pad($countMonthConfirmations, 3, "0", STR_PAD_LEFT);
 		// 11 = aktueller Monat
 		$month = date('m');
 		// 14 = aktuelles Jahr

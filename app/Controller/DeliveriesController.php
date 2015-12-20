@@ -237,18 +237,18 @@ Lieferzeit: ca. 3-4 Wochen
 	function generateDeliveryNumber() {
 	
 		// Lieferschein Nr.: 01711/478
-		// 017 = laufende Anzahl im Monat
+		// 017 = laufende Anzahl im Monat - dreistellig
 		// 11 = aktueller Monat
-		// 478 = laufende Anzahl im Jahr
+		// 478 = laufende Anzahl im Jahr - dreistellig
 		
-		// 017 = laufende Anzahl im Monat
+		// 017 = laufende Anzahl im Monat - dreistellig
 		$countMonthDeliveries = count($this->Delivery->find('all',array('conditions' => array('Delivery.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))))+1;
-		$countMonthDeliveries = str_pad($countMonthDeliveries, 2, "0", STR_PAD_LEFT);
+		$countMonthDeliveries = str_pad($countMonthDeliveries, 3, "0", STR_PAD_LEFT);
 		// 11 = aktueller Monat
 		$month = date('m');
-		// 017 = laufende Anzahl im Jahr
+		// 017 = laufende Anzahl im Jahr - dreistellig
 		$countYearDeliveries = count($this->Delivery->find('all',array('conditions' => array('Delivery.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))))+1;
-		$countYearDeliveries = str_pad($countYearDeliveries, 2, "0", STR_PAD_LEFT);
+		$countYearDeliveries = str_pad($countYearDeliveries, 3, "0", STR_PAD_LEFT);
 		
 		// Lieferschein Nr.: 01711/478
 		return $countMonthDeliveries.$month.'/'.$countYearDeliveries;
