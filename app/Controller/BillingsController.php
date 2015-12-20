@@ -59,7 +59,8 @@ class BillingsController extends AppController {
 		$options = array('conditions' => array('Billing.' . $this->Billing->primaryKey => $id));
 		$data = $this->Billing->find('first', $options);
 		
-		$this->generateData($data);
+		$delivery = $this->Delivery->findById($data['Confirmation']['delivery_id']);
+		$this->generateData($data, $delivery['Delivery']['cart_id']);
 		$controller_name = 'Deliveries'; 
 		$controller_id = $id;
 		$this->set(compact('controller_id', 'controller_name'));
@@ -110,7 +111,8 @@ class BillingsController extends AppController {
 				$confirmation['Confirmation']['billing_id'] = $currBillingId;
 				$this->Confirmation->save($confirmation);
 				
-				$this->generateData($this->Billing->findById($currBillingId));
+				$delivery = $this->Delivery->findById($confirmation['Confirmation']['delivery_id']);
+				$this->generateData($this->Billing->findById($currBillingId), $delivery['Delivery']['cart_id']);
 				
 				$this->set('pdf', null);
 				
@@ -199,8 +201,8 @@ class BillingsController extends AppController {
 		
 		$data = $this->Billing->findById($id);
 		
-		
-		$this->generateData($data);
+		$delivery = $this->Delivery->findById($data['Confirmation']['delivery_id']);
+		$this->generateData($data, $delivery['Delivery']['cart_id']);
 		
 				
 		$title = "Rechnung_".str_replace('/', '-', $data['Billing']['billing_number']);
@@ -228,7 +230,7 @@ class BillingsController extends AppController {
 		return $countYearBillings.'/'.$year;
 	}
 	
-	function generateData($data = null) {
+	function generateData($data = null, $cart_id = null) {
 	
 		$Addresses = new AddressesController();	
 		$Carts = new CartsController();
@@ -238,7 +240,7 @@ class BillingsController extends AppController {
 		
 		if(!empty($data)) {
 			
-	    	$cart = $Carts->get_cart_by_id($data['Confirmation']['cart_id']);
+	    	$cart = $Carts->get_cart_by_id($cart_id);
 			
 			//Berechen Seitenbelegung mit Produkte
 			$this->request->data['Pages'] = $Carts->calcPageLoad($cart, 5, 1);
@@ -283,7 +285,8 @@ class BillingsController extends AppController {
 		
 		$data = $this->Billing->findById($id);
 		
-		$this->generateData($data);
+		$delivery = $this->Delivery->findById($data['Confirmation']['delivery_id']);
+		$this->generateData($data, $delivery['Delivery']['cart_id']);
 		
 		$calc = $Confirmations->calcPrice($this->request->data);
 		

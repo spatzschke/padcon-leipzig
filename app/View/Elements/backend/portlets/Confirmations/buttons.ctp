@@ -60,6 +60,19 @@
 	
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
 	
+	$id_createPartDelivery = 'createPartDelivery';
+	echo $this->element('backend/helper/sheetButtonHelper', array(
+		"id" => $id_createPartDelivery,
+		"icon" => "file",
+		"text" => "Teil-Lieferung erstellen"));		
+
+	echo $this->element('backend/helper/modalHelper', array(
+		"id" => $id_createPartDelivery,
+		"url" => "\/admin\/".$nextSheet."\/convertPart\/".$dataId,
+		"redirect" => ""));	
+	
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
+		
 	$id_print = 'print';
 	echo $this->element('backend/helper/sheetButtonHelper', array(
 		"id" => $id_print,

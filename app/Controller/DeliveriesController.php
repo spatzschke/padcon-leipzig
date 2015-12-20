@@ -76,6 +76,7 @@ class DeliveriesController extends AppController {
 				
 				$delivery['Delivery']['status'] = 'open';
 				$delivery['Delivery']['confirmation_id'] = $confirmation['Confirmation']['id'];
+				$delivery['Delivery']['delivery_date'] = time();
 				
 				//Gernerierung der Auftragsbestätigungsnummer
 				$delivery['Delivery']['delivery_number'] = $this->generateDeliveryNumber();
@@ -84,6 +85,9 @@ class DeliveriesController extends AppController {
 				$Addresses = new AddressesController(); 
 				$address = $Addresses->getAddressByType($confirmation, 3, TRUE);
 				$delivery['Delivery']['address_id'] = $address['Address']['id'];
+				
+				//Cart von Ab an  Lieferschein übertragen
+				$delivery['Delivery']['cart_id'] = $confirmation['Confirmation']['cart_id'];
 				
 				$this->Delivery->save($delivery);
 				
@@ -129,7 +133,33 @@ class DeliveriesController extends AppController {
 		}
 	}
 
-	function admin_settings($id = null) {
+	public function admin_convertPart($confirmation_id = null, $edit = false) {
+		$this->layout = 'ajax';
+		
+		$confirmation = $this->Confirmation->findById($confirmation_id);
+		$cart = $this->Cart->findById($confirmation['Cart']['id']);
+		
+		if($edit) {
+			debug($this->data);
+			
+			$newCart = array();
+			
+			foreach($this->data as $key => $item) {
+				debug($item);
+			}
+			
+			$this->redirect(array('action' => 'convert', $confirmation_id));
+		}
+		
+		$this->request->data = $confirmation;
+		$this->request->data['CartProduct'] = $cart['CartProduct'];
+		
+		$controller_name = 'Deliveries'; 
+		$controller_id = $confirmation_id;
+		$this->set(compact('controller_id', 'controller_name'));
+	}
+
+	function admin_settings($id = null) {
 		
 		$this->layout = 'ajax';
 
@@ -207,18 +237,18 @@ Lieferzeit: ca. 3-4 Wochen
 	function generateDeliveryNumber() {
 	
 		// Lieferschein Nr.: 01711/478
-		// 017 = laufende Anzahl im Monat
+		// 017 = laufende Anzahl im Monat - dreistellig
 		// 11 = aktueller Monat
-		// 478 = laufende Anzahl im Jahr
+		// 478 = laufende Anzahl im Jahr - dreistellig
 		
-		// 017 = laufende Anzahl im Monat
+		// 017 = laufende Anzahl im Monat - dreistellig
 		$countMonthDeliveries = count($this->Delivery->find('all',array('conditions' => array('Delivery.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))))+1;
-		$countMonthDeliveries = str_pad($countMonthDeliveries, 2, "0", STR_PAD_LEFT);
+		$countMonthDeliveries = str_pad($countMonthDeliveries, 3, "0", STR_PAD_LEFT);
 		// 11 = aktueller Monat
 		$month = date('m');
-		// 017 = laufende Anzahl im Jahr
+		// 017 = laufende Anzahl im Jahr - dreistellig
 		$countYearDeliveries = count($this->Delivery->find('all',array('conditions' => array('Delivery.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))))+1;
-		$countYearDeliveries = str_pad($countYearDeliveries, 2, "0", STR_PAD_LEFT);
+		$countYearDeliveries = str_pad($countYearDeliveries, 3, "0", STR_PAD_LEFT);
 		
 		// Lieferschein Nr.: 01711/478
 		return $countMonthDeliveries.$month.'/'.$countYearDeliveries;
@@ -240,7 +270,7 @@ Lieferzeit: ca. 3-4 Wochen
 		
 		if(!empty($data)) {
 			
-	    	$cart = $Carts->get_cart_by_id($data['Confirmation']['cart_id']);
+	    	$cart = $Carts->get_cart_by_id($data['Delivery']['cart_id']);
 			
 			//Berechen Seitenbelegung mit Produkte
 			$this->request->data['Pages'] = $Carts->calcPageLoad($cart, 0, 1);

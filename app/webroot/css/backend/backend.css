@@ -1149,4 +1149,13 @@ article.sheet {
     width: 34px !important
 } 
 
+.convertPartPortlet #add {
+	 width: 40px;
+}
+
+#DeliveryAdminConvertPartForm {
+    position: absolute;
+    right: 0;
+    top: 15px;
+}
 

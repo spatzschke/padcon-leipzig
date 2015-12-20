@@ -88,7 +88,8 @@ class ConfirmationsController extends AppController {
 			$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
 			$confirmation['Confirmation']['customer_id'] = '';
 			$confirmation['Confirmation']['cart_id'] = $cart['Cart']['id'];
-			//$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
+			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
+			$confirmation['Confirmation']['order_date'] = date('Y-m-d');
 			
 			//Default settings
 			$confirmation['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
@@ -183,6 +184,7 @@ class ConfirmationsController extends AppController {
 				$confirmation['Confirmation']['delivery_cost'] = $confirmation['Offer']['delivery_cost'];
 				$confirmation['Confirmation']['vat'] = $confirmation['Offer']['vat'];
 				$confirmation['Confirmation']['confirmation_price'] = $confirmation['Offer']['offer_price'];
+				$confirmation['Confirmation']['order_date'] = date('Y-m-d');
 				
 				//Gernerierung der Auftragsbestätigungsnummer
 				$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
@@ -594,13 +596,13 @@ class ConfirmationsController extends AppController {
 	function generateConfirmationNumber() {
 		
 		// Auftragsbestätigung Nr.: 019/11/14
-		// 019 = Anzahl der AB im Monat
+		// 019 = Anzahl der AB im Monat - dreistellig
 		// 11 = aktueller Monat
 		// 14 = aktuelles Jahr
 		
-		// 019 = Anzahl der AB im Monat
+		// 019 = Anzahl der AB im Monat - dreistellig
 		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))));
-		$countMonthConfirmations = str_pad($countMonthConfirmations, 2, "0", STR_PAD_LEFT);
+		$countMonthConfirmations = str_pad($countMonthConfirmations, 3, "0", STR_PAD_LEFT);
 		// 11 = aktueller Monat
 		$month = date('m');
 		// 14 = aktuelles Jahr

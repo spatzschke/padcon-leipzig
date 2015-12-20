@@ -40,7 +40,7 @@
 						<?php if(empty($item['Billing']['billing_number'])) {
 							 echo '-'; 
 							} else {
-								
+								echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'view', $item['Billing']['id']), array('escape' => false));
 								echo '&nbsp;&nbsp;&nbsp;';
 								echo $item['Billing']['billing_number'];	
 							
