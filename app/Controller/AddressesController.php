@@ -321,14 +321,11 @@ class AddressesController extends AppController {
 
 	function getAddressByType($data = null , $type = null, $first = FALSE)
 	{
-		
-				
+						
 		if($data['Customer']['id'] != null) {
 
 			$customerId = $data['Customer']['id'];
 			$addresses = null;
-			
-			
 
 			if($first) {
 				$addresses = $this->AddressAddresstype->find('first', array('conditions' => array('customer_id' => $customerId, 'type_id' => $type)));

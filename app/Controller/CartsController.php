@@ -376,7 +376,7 @@ class CartsController extends AppController {
 				$features = $Products->seperatFeatureList($value['product_id']);
 				$featureCount += count($features)+$standardProductRow; // 5 Standardzeile
 								
-				if($featureCount > $rowPerPage - 5 || count($cartProducts) == 1) {
+				if($featureCount > $rowPerPage - 5 || (count($cartProducts) == 1 && $pages > 1)) {
 					$page[$j] = $prodArr;
 					$featureCount = 0;
 					$prodArr = array();

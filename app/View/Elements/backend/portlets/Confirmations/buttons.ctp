@@ -63,7 +63,7 @@
 	$id_createPartDelivery = 'createPartDelivery';
 	echo $this->element('backend/helper/sheetButtonHelper', array(
 		"id" => $id_createPartDelivery,
-		"icon" => "file",
+		"icon" => "duplicate",
 		"text" => "Teil-Lieferung erstellen"));		
 
 	echo $this->element('backend/helper/modalHelper', array(
