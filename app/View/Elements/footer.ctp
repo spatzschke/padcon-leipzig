@@ -11,5 +11,5 @@
 	echo $this->Html->link(
 		'Kontakt', '/Kontakt');
 	
-	echo '<div class="copyright">padcon Leipzig © 2014</div>';
+	echo '<div class="copyright">padcon Leipzig © 2016</div>';
 ?>	

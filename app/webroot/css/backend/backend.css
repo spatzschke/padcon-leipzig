@@ -1044,7 +1044,7 @@ article.sheet {
 	margin: 10px auto;
     position: relative;
     width: 550px;
-    padding: 0 50px;
+    padding: 0 50px 50px 100px;
     height: 923px;
     overflow: hidden
 }
