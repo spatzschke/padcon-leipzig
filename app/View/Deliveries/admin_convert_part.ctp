@@ -38,8 +38,16 @@
 		});
 		
 		$('#add').on('click', function(){			
-			$('#originalCart').find('p input:checked').each(function( index ) {
-					$('#partCart').append($(this).parent());		
+			$('#originalCart').find('div.item input:checked').each(function( index ) {
+				
+					var amount = $(this).parent().find('.amount').val()
+					if(amount < $(this).parent().find('.amount').attr('origAmount')) {
+					//	$('#originalCart').append($(this).parent());
+						//$(this).parent().remove();
+						$('#partCart').add($(this));
+					} else {
+						$('#partCart').append($(this).parent());
+					}	
 			})	
 		return false;
 		})	
@@ -57,24 +65,23 @@
 					<div class="col-md-12">
 						<div class="panel panel-info" >
                     		<div class="panel-body" >
-								<div id="originalCart" class="col-md-5"  style="height: 100px">
+								<div id="originalCart" class="col-md-5">
 									<?php 
 									
 									foreach($this->data['CartProduct'] as $key => $value) {
 											
 										$product = $this->requestAction('Products/getProduct/'.$value['product_id']);
 											
-										echo '<p>'.
-												$this->Form->input('Product]['.$key.'][product_id]', array(
-												'label' => false,
-												'div' => false,
-												'type' => 'checkbox',
-												'value' => $value['product_id']
-											)).
+										echo '<div class="item col-md-12">'.
+												
 											$this->Form->input('Product]['.$key.'][amount]', array(
 												'label' => false,
 												'div' => false,
-												'value' => $value['amount']
+												'value' => $value['amount'],
+												'origAmount' => $value['amount'],
+												'type' => 'number',
+												'class' => 'form-control col-md-2 amount',
+												'style' => 'display: none;'
 											)).
 											$this->Form->input('Product]['.$key.'][color_id]', array(
 												'label' => false,
@@ -82,7 +89,14 @@
 												'value' => $value['color_id'],
 												'style' => 'display: none;'
 											)).
-											$product['Product']['product_number'].' - '.$product['Product']['name'].'</p>';
+											'<p class="text col-md-11">'.$value['amount'].'x - '.$product['Product']['product_number'].' - '.$product['Product']['name'].'</p>'.
+											$this->Form->input('Product]['.$key.'][product_id]', array(
+												'label' => false,
+												'div' => false,
+												'type' => 'checkbox',
+												'value' => $value['product_id']
+											)).
+											'</div>';
 									}
 									
 									?>
@@ -92,7 +106,7 @@
 	                             <button id="add" class="btn btn-default" type="button">></button>
 	                            </div> 
 	                            <?php echo $this->Form->create('Delivery', array('class' => 'col-md-5'));?>
-								<div id="partCart" class="col-md-5"  style="height: 100px">
+								<div id="partCart" class="col-md-12">
 									
 								</div>
 								</form>
