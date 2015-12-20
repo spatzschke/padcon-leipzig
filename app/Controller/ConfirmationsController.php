@@ -350,7 +350,7 @@ class ConfirmationsController extends AppController {
 					'order' => array('Confirmation.id' => 'desc'),
 			        'conditions' => array('Customer.id' => $confirmation['Customer']['id'])
 			    ));
-				$this->request->data['Customer']['last_discount'] = $lastOfferByCustomer[1]['Confirmation']['discount'];
+//				$this->request->data['Customer']['last_discount'] = $lastOfferByCustomer[1]['Confirmation']['discount'];
 				
 			    // Use data from serialized form
 

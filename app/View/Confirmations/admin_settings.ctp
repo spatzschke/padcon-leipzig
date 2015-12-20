@@ -40,8 +40,10 @@
 			state: <?php 
 				if($this->data['Confirmation']['delivery_cost'] == Configure::read('padcon.delivery_cost.paket')) {
 					echo "true";
+					$delivery = Configure::read('padcon.delivery_cost.paeckchen');
 				} else {
 					echo "false";
+					$delivery = Configure::read('padcon.delivery_cost.paket');
 				}
 			
 			?>,
@@ -61,7 +63,41 @@
 				res = str.replace('<?php echo Configure::read('padcon.delivery_cost.paeckchen');?>,00', '<?php echo Configure::read('padcon.delivery_cost.paket');?>,00')	
 			}
 			$('#ConfirmationAdditionalText').html(res);			
-			return event.isDefaultPrevented();
+			return event.isDefaultPrevented();
+			}
+		});
+		
+		$("[name='deliveryfree-cb']").bootstrapSwitch({
+			size: "large",
+			onText: "Ja", 
+			offText: "Nein",
+			handleWidth: "70px",
+			state: <?php 
+				$string = $this->data['Confirmation']['additional_text'];
+				if(strpos($string,"frei Haus.")!==false) {
+					echo "true";
+					$delivery = Configure::read('padcon.delivery_cost.frei');
+				} else {
+					echo "false";
+				}
+			
+			?>,
+			onInit: function(event, state) {},
+			onSwitchChange: function(event, state) {
+				console.log(state);
+				if(state) {
+					//Versandkostenfrei
+					res = '<?php echo Configure::read('padcon.Auftragsbestaetigung.additional_text.deliveryFree');?>'
+					$('#ConfirmationAdditionalText').html(res);
+					$("#deliveryCost").attr('value','<?php echo Configure::read('padcon.delivery_cost.frei');?>')
+				} else {
+					$("[name='delivery-cb']").bootstrapSwitch('state', true);
+					var res = '<?php echo Configure::read('padcon.Auftragsbestaetigung.additional_text.default');?>'
+					$('#ConfirmationAdditionalText').html(res);
+					console.log(res)
+					$("#deliveryCost").attr('value','<?php echo Configure::read('padcon.delivery_cost.paket');?>')
+				}	
+				return event.isDefaultPrevented();
 			}
 		});
 		
@@ -105,7 +141,6 @@
 								   
 								<script type="text/javascript">
 									    $('.date').datepicker({
-									    startDate: 'd',
 									    format: "dd.mm.yyyy",
 									    language: "de",
 									    calendarWeeks: true,
@@ -137,6 +172,17 @@
 			    						'max' => 100,
 										'default' => 0));
 									?>                                     
+	                             </div>
+	                             
+	                             <!-- Versandkostenfrei -->
+	                             <label class="col-md-6">Versandkostenfrei</label>
+	                             <div class="input-group">
+	                                <input type="checkbox" name="deliveryfree-cb" checked>    
+	                                <?php echo $this->Form->input('deliveryFree', array(
+									    'hidden' => true,
+										'id' => "deliveryFree",
+										'label' => false));
+									?>                                 
 	                             </div>
 	                             
 	                             <!-- PAKET/PÄCKCHEN -->
@@ -192,7 +238,7 @@
 	                             <div class="input-group">
 	                                <?php echo $this->Form->input('additional_text', array(
 									    'label' => array(
-									    	'text' => 'Angebotstext',
+									    	'text' => 'Zusatztext',
 									    	'class' => 'col-md-12',
 									    ),
 									    'cols' => 41

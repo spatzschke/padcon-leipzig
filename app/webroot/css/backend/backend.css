@@ -1052,8 +1052,7 @@ article.sheet {
 /* Bootstrap Customn */
 
 .row { margin: 0; padding: 0}
-.col-md-2, .col-md-4,
-.col-md-6, .col-md-8 {padding: 0}
+.col-md-2, .col-md-4, .col-md-6, .col-md-8, .col-md-12 {padding: 0}
 .row > .alert { padding: 10px;}
 .alert-dismissable .close, .alert-dismissible .close { right: 0}
 .input-group {margin-bottom: 10px}
@@ -1158,4 +1157,8 @@ article.sheet {
     right: 0;
     top: 15px;
 }
+
+/*Cake Generic*/
+
+form .input { color: #666 !important}
 
