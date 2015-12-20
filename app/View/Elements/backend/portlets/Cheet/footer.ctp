@@ -22,7 +22,7 @@
 				IBAN: DE40860555921100518130<br />
 				<br />
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-2">
 				St.-Nr. 235 255/01558<br />
 				USt-IdNr. DE227327400<br />
 				<br />

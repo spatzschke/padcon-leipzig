@@ -111,7 +111,7 @@
 article.sheet {
     position: relative;
     width: 779px;
-    height: 1100px;
+    height: 1091px;
     padding-top: 50px;
 }
 
@@ -135,12 +135,12 @@ article.sheet {
 
 .offerHeader div {float: left;}
 
-.sheetItem { width: 100%; clear: both; margin-bottom: 0px; padding-bottom: 10px; float: left;}
+.sheetItem { width: 100%; clear: both; margin-bottom: 0px; padding-bottom: 5px; float: left;}
 .sheetItem > div, .sheetItem .content > div{float: left;}
 
 .offerMiddle .content { 
 	float: right;
-    width: 430px;
+    width: 405px;
     margin-right: 15px;
 }
 
@@ -200,7 +200,7 @@ article.sheet {
 
 .offerMiddle .number {
 	text-align: left;
-	width: 100px;
+	width: 75px;
 }
 
 .offerMiddle .number .productNumber {
@@ -216,16 +216,16 @@ article.sheet {
 
 .offerMiddle .size { width: 100% }
 .offerMiddle .price { width: 75px; margin-left: 195px; }
-.offerHeader .number { width: 132px;}
+.offerHeader .number { width: 94px;}
 .offerHeader .content { width: 133px; margin: 0;}
 .offerHeader .price { width: 45px;}
 
-.offerFooter { float: left; width: 100%; margin: 0; border-top: 1px dotted black; padding-top: 10px}
+.offerFooter { float: left; width: 100%; margin: 0; border-top: 1px dotted black; padding-top: 5px}
 .offerFooter div {float: right; width: 100%; height: 20px;}
 .offerFooter label { 
 	float: left;
     font-size: 14px;
-    width: 80%;	
+    width: 79%;	
 }
 .offerFooter p { 
 	float: right;
@@ -257,11 +257,11 @@ article.sheet {
     line-height: 12px;
     padding-top: 10px;
     position: absolute;
-    width: 678px;
+    width: 627px;
 }
 
 .pages .sheetFooter .col-md-3 {
-	width: 27%;
+	width: 28%;
 }
 
 .pages .sheetFooter .col-md-4{ 

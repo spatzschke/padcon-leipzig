@@ -370,23 +370,25 @@ class CartsController extends AppController {
 		} else {
 			$pages = $featureCountMax/$rowPerPage;
 		}
-		
-		
-		
+					
 		for($j = 0; $j < $pages; $j++) {
 			foreach ($cartProducts as $key => $value) {
 				$features = $Products->seperatFeatureList($value['product_id']);
 				$featureCount += count($features)+$standardProductRow; // 5 Standardzeile
-				array_push($prodArr, array('product' => $value , 'count' => count($features)+$standardProductRow));
-				unset($cartProducts[$key]);
-				if($featureCount > $rowPerPage - 5) {
+								
+				if($featureCount > $rowPerPage - 5 || (count($cartProducts) == 1 && $pages > 1)) {
 					$page[$j] = $prodArr;
 					$featureCount = 0;
 					$prodArr = array();
+					array_push($prodArr, array('product' => $value , 'count' => count($features)+$standardProductRow));
+					unset($cartProducts[$key]);
 				} else {
+					array_push($prodArr, array('product' => $value , 'count' => count($features)+$standardProductRow));
+					unset($cartProducts[$key]);
 					continue;
 				}
-			}
+			}			
+			
 			//auf die letzte Seite die restlichten Produkte packen
 			if($j == $pages - 1) {
 				$addProdArr = array();

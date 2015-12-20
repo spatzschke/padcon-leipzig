@@ -1044,7 +1044,7 @@ article.sheet {
 	margin: 10px auto;
     position: relative;
     width: 550px;
-    padding: 0 50px;
+    padding: 0 50px 50px 100px;
     height: 923px;
     overflow: hidden
 }
@@ -1052,8 +1052,7 @@ article.sheet {
 /* Bootstrap Customn */
 
 .row { margin: 0; padding: 0}
-.col-md-2, .col-md-4,
-.col-md-6, .col-md-8 {padding: 0}
+.col-md-2, .col-md-4, .col-md-6, .col-md-8, .col-md-12 {padding: 0}
 .row > .alert { padding: 10px;}
 .alert-dismissable .close, .alert-dismissible .close { right: 0}
 .input-group {margin-bottom: 10px}
@@ -1149,13 +1148,45 @@ article.sheet {
     width: 34px !important
 } 
 
-.convertPartPortlet #add {
-	 width: 40px;
+/* Teil Lieferschein */
+
+#originalCart, #partCart{
+	border: 1px solid black;
+    height: 250px;
+    overflow: auto;
+    padding: 0 5px;
 }
+
+
+.convertPartPortlet #add {
+	margin-left: 37px;
+    margin-top: 105px;
+    width: 40px;
+}
+
+.convertPartPortlet .item { 
+	border-bottom: 1px solid black;
+	padding: 5px 0
+}
+.convertPartPortlet input[type="number"] { width: 55px; padding-left: 5px}
+.convertPartPortlet input[type="checkbox"] { 
+	float: right;
+    position: absolute;
+    top: 10px;
+}
+.convertPartPortlet #partCart input[type="checkbox"] { 
+	display: none;
+}
+
+.convertPartPortlet .item p{ padding-top: 6px}
 
 #DeliveryAdminConvertPartForm {
     position: absolute;
     right: 0;
     top: 15px;
 }
+
+/*Cake Generic*/
+
+form .input { color: #666 !important}
 

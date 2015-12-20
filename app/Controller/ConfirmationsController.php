@@ -144,6 +144,7 @@ class ConfirmationsController extends AppController {
 		$this->set('pdf', null);
 		$this->render('admin_add'); 
 		
+		
 	}
 
 /**
@@ -350,7 +351,7 @@ class ConfirmationsController extends AppController {
 					'order' => array('Confirmation.id' => 'desc'),
 			        'conditions' => array('Customer.id' => $confirmation['Customer']['id'])
 			    ));
-				$this->request->data['Customer']['last_discount'] = $lastOfferByCustomer[1]['Confirmation']['discount'];
+//				$this->request->data['Customer']['last_discount'] = $lastOfferByCustomer[1]['Confirmation']['discount'];
 				
 			    // Use data from serialized form
 
@@ -380,27 +381,31 @@ class ConfirmationsController extends AppController {
 		$this->render('/Elements/backend/portlets/Product/settingsProductTable');
 	}
 	
-	function admin_update($id = null, $confirmation = null, $address = null) {
+	function admin_update($id = null, $confirmation_id = null, $address = null) {
 		$this->layout="ajax";
 		
 		$Addresses = new AddressesController();
 
-		$confirmation = $this->Confirmation->findById($confirmation);				
+		$confirmation = $this->Confirmation->findById($confirmation_id);					
 		
 		if($confirmation) {
-			
 			if(!is_null($address)) {
 				$address = $this->Address->findById($address);
 				$confirmation['Confirmation']['address_id'] = $address['Address']['id'];
 				$confirmation['Confirmation']['Address'] = $address['Address'];
 			} else {
 			//Suche erste Adresse
+				if(is_null($confirmation['Customer']['id'])) {
+					$customer = $this->Customer->findById($id);
+					$confirmation['Customer'] = $customer['Customer'];
+					$confirmation['Confirmation']['customer_id'] =  $customer['Customer']['id'];
+				}
+			
 				$confirmation = $Addresses->getAddressByType($confirmation, 2, TRUE);	
-				$confirmation['Confirmation']['address_id'] = $confirmation['Address']['id'];
-				
+				$confirmation['Confirmation']['address_id'] = $confirmation['Address']['id'];				
 			}
 			
-			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber($id, $confirmation);
+			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
 			$confirmation['Confirmation']['customer_id'] = $id;
 			
 			
@@ -411,8 +416,8 @@ class ConfirmationsController extends AppController {
 			}
 		} else {
 			$confirmation['Confirmation']['stat'] = 'error';
-		}	
-		
+		}
+		$this->Confirmation->save($confirmation);
 		
 		$this->request->data = $confirmation;
 		$this->autoRender = false;

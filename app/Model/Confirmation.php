@@ -26,6 +26,13 @@ class Confirmation extends AppModel {
  *
  * @var array
  */
+ 	public $hasMany = array(
+		'ConfirmationDelivery' => array(
+			'className' => 'ConfirmationDelivery',
+			'foreignKey' => 'confirmation_id',
+		)
+	);
+ 
 	public $belongsTo = array(
 		'Cart' => array(
 			'className' => 'Cart',

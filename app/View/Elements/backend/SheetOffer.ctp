@@ -14,17 +14,19 @@ if(empty($this->data['Pages'])) {
 ?>
 
 <article class="module width_full sheet business noInput">		
-		<?php 
+		<?php 		
 			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $page+1, 'maxPage' => count($pages), 'logo' => true)); 			
-			if($this->data['Offer']['request_date'] != '0000-00-00') {
-				if($this->data['Offer']['request_number'] != '' || $this->data['Offer']['request_number'] != null) {
-					echo '<p class="offerText">Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format($this->data['Offer']['request_date'], '%d.%m.%Y').' mit der Nummer '.$this->data['Offer']['request_number'].' unterbreiten wir Ihnen folgendes Angebot:</p>';
-				} else {
-					echo '<p class="offerText">Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format($this->data['Offer']['request_date'], '%d.%m.%Y').' unterbreiten wir Ihnen folgendes Angebot:</p>';
-				}	
-				} else {
-				if(!empty($this->data['Pages'])) {
-					echo '<p class="offerText"><input type="text" class="text" value="Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format(time(), '%d.%m.%Y').' unterbreiten wir Ihnen folgendes Angebot:" /> </p>';
+			if($page == 0) {
+				if($this->data['Offer']['request_date'] != '0000-00-00') {
+					if($this->data['Offer']['request_number'] != '' || $this->data['Offer']['request_number'] != null) {
+						echo '<p class="offerText">Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format($this->data['Offer']['request_date'], '%d.%m.%Y').' mit der Nummer '.$this->data['Offer']['request_number'].' unterbreiten wir Ihnen folgendes Angebot:</p>';
+					} else {
+						echo '<p class="offerText">Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format($this->data['Offer']['request_date'], '%d.%m.%Y').' unterbreiten wir Ihnen folgendes Angebot:</p>';
+					}	
+					} else {
+					if(!empty($this->data['Pages'])) {
+						echo '<p class="offerText"><input type="text" class="text" value="Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format(time(), '%d.%m.%Y').' unterbreiten wir Ihnen folgendes Angebot:" /> </p>';
+					}
 				}
 			}
 			

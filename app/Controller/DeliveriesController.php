@@ -12,7 +12,7 @@ App::uses('AppController', 'Controller');
  */
 class DeliveriesController extends AppController {
 
-	public $uses = array('Delivery', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Billing');
+	public $uses = array('Delivery', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Billing', 'ConfirmationDelivery');
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			$this->Auth->deny('*');
@@ -53,8 +53,8 @@ class DeliveriesController extends AppController {
 		if (!$this->Delivery->exists($id)) {
 			throw new NotFoundException(__('Invalid delivery'));
 		}
-		$options = array('conditions' => array('Delivery.' . $this->Delivery->primaryKey => $id));
-		$data = $this->Delivery->find('first', $options);	
+		
+		$data = $this->ConfirmationDelivery->findByDeliveryId($id);	
 		
 		$this->generateData($data);
 		$controller_name = 'Deliveries'; 
@@ -63,15 +63,17 @@ class DeliveriesController extends AppController {
 		$this->set('pdf', null);
 	}
 
-	public function admin_convert($confirmation_id = null) {
+	public function admin_convert($confirmation_id = null, $cart_id = null) {
 		$this->layout = 'admin';		
 		if($confirmation_id) {
 				
 			$confirmation = $this->Confirmation->findById($confirmation_id);
 			$delivery = array();
 			
+			
+			
 			if(empty($confirmation['Confirmation']['delivery_id'])) {
-				
+							
 				$this->Delivery->create();
 				
 				$delivery['Delivery']['status'] = 'open';
@@ -85,13 +87,33 @@ class DeliveriesController extends AppController {
 				$Addresses = new AddressesController(); 
 				$address = $Addresses->getAddressByType($confirmation, 3, TRUE);
 				$delivery['Delivery']['address_id'] = $address['Address']['id'];
+								
+				if($cart_id) {
+					//Cart des Teillieferscheins an Lieferschein übertragen
+					$delivery['Delivery']['cart_id'] = $cart_id;
+				} else {
+					//Cart von AB an  Lieferschein übertragen
+					$delivery['Delivery']['cart_id'] = $confirmation['Confirmation']['cart_id'];
+				}
 				
-				//Cart von Ab an  Lieferschein übertragen
-				$delivery['Delivery']['cart_id'] = $confirmation['Confirmation']['cart_id'];
 				
 				$this->Delivery->save($delivery);
 				
 				$currDeliveryId = $this->Delivery->getLastInsertId();
+				
+				//Neue ConfirmationDelivery erzeugen und Cart übertagen
+				$this->ConfirmationDelivery->create();
+				if($cart_id) {
+					$cd['ConfirmationDelivery']['type'] = 'part';
+					$cd['ConfirmationDelivery']['cart_id'] = $cart_id;
+				} else {
+					$cd['ConfirmationDelivery']['type'] = 'full';
+					$cd['ConfirmationDelivery']['cart_id'] = $confirmation['Confirmation']['cart_id'];
+				}
+				
+				$cd['ConfirmationDelivery']['delivery_id'] = $currDeliveryId;
+				$cd['ConfirmationDelivery']['confirmation_id'] = $confirmation['Confirmation']['id'];
+				$this->ConfirmationDelivery->save($cd);
 				
 				// Generate Hash für Offer
 				$delivery['Delivery']['hash'] =  Security::hash($currDeliveryId, 'md5', true);
@@ -101,9 +123,9 @@ class DeliveriesController extends AppController {
 				$confirmation['Confirmation']['delivery_id'] = $currDeliveryId;
 				
 				$this->Confirmation->save($confirmation);
-				
+
 				$this->generateData($this->Delivery->findById($currDeliveryId));
-				
+								
 				$this->set('pdf', null);
 				
 				$controller_name = 'Deliveries'; 
@@ -140,15 +162,25 @@ class DeliveriesController extends AppController {
 		$cart = $this->Cart->findById($confirmation['Cart']['id']);
 		
 		if($edit) {
-			debug($this->data);
-			
+			//Erzeuge neuen Cart
+			$this->Cart->create();
+			$this->Cart->save();
+			$cart_id = $this->Cart->getLastInsertId();
+
 			$newCart = array();
-			
-			foreach($this->data as $key => $item) {
-				debug($item);
+
+			foreach($this->data['Product'] as $key => $item) {
+				
+				$this->CartProduct->create();
+				$cartProduct['CartProduct']['cart_id'] = $cart_id;
+				$cartProduct['CartProduct']['product_id'] = $item['product_id'];
+				$cartProduct['CartProduct']['amount'] = $item['amount'];
+				$cartProduct['CartProduct']['color_id'] = $item['color_id'];
+				$this->CartProduct->save($cartProduct);
 			}
 			
-			$this->redirect(array('action' => 'convert', $confirmation_id));
+			echo $cart_id;
+			$this->render(false);
 		}
 		
 		$this->request->data = $confirmation;
@@ -260,12 +292,13 @@ Lieferzeit: ca. 3-4 Wochen
 		$Carts = new CartsController();
 		$Confirmations = new ConfirmationsController();
 	
+		
 
-		if(!$data) {
-			$confirmation_id = $data['Delivery']['confirmation_id'];
+		if(!$data || !isset($data['Confirmation'])) {
+			$confirmation_id = $data['ConfirmationDelivery']['confirmation_id'];
 			$data = $this->Confirmation->findById($confirmation_id);		
 		} 
-			
+				
 	    $this->request->data = $data;
 		
 		if(!empty($data)) {
@@ -292,6 +325,7 @@ Lieferzeit: ca. 3-4 Wochen
 			$this->request->data = $Addresses->getAddressByType($this->request->data, 3, TRUE);
 		}
 		$a = $Addresses->splitAddressData($this->request->data);
+		
 		$this->request->data['Address'] += $a['Address'];
 		
 		$confirmation = $Confirmations->calcPrice($this->request->data);		

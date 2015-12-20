@@ -154,19 +154,23 @@ article.sheet {
 .sheet .col-md-4{width: 260px !important; float: left;}
 
 .sheet.business {
-	padding: 30px 30px 0;
+	padding: 50px 50px 50px 100px;
 }
+
+.sheet.business .sheetHeader {width: 644px !important}
+.sheet.business .sheetHeader .col-md-8 {width: 400px !important}
+.sheet.business .sheetHeader .logo {width: 335px; padding: 0; float: right}
 
 .sheet.business .sheetHeader,
 .sheet.business .customerData {width: 780px !important}
 .sheet.business .customerData {margin-top: 55px !important}
-.sheet.business .customerData .col-md-6 {width: 358px !important; padding-left: 0px !important}
+.sheet.business .customerData .col-md-6 {width: 313px !important; padding-left: 0px !important}
 .sheet.business .customerData .col-md-6 .col-md-12 {padding-left: 0px !important}
 
 .sheet.business .row-fluid .offerInfo label { width: 110px !important}
 
-.sheet.business .offerMiddle .content {width: 470px !important}
+.sheet.business .offerMiddle .content {width: 420px !important}
 
-.sheet.business .sheetFooter  {width: 720px !important; bottom: -20px !important}
-.sheet.business .sheetFooter .col-md-2 {width: 150px !important; float: left !important;}
-.sheet.business .sheetFooter .col-md-3 {width: 190px !important; float: left !important;}
+.sheet.business .sheetFooter  {width: 626px !important; bottom: 5px !important}
+.sheet.business .sheetFooter .col-md-2 {width: 138px !important; float: left !important;}
+.sheet.business .sheetFooter .col-md-3 {width: 175px !important; float: left !important;}

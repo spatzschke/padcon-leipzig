@@ -6,7 +6,7 @@ foreach ($products as $product):?>
 					<?php					
 					echo '<td>';
 						echo $this->Html->link('', array('admin' => true, 'controller' => 'Carts', 'action' => 'addToCart', $product['Product']['id']), array('escape' => false, 'class' => 'addToCart'));
-						echo $this->Html->div('addToCart', '<i class="glyphicon glyphicon-open"></i>', array(
+						echo $this->Html->div('addToCart', '<i class="glyphicon glyphicon-plus"></i>', array(
 						 	'pdid' => $product['Product']['id'],
 						 	'caid' => $cart_id,
 						 	'cid' => $controller_id,

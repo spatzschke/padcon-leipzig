@@ -80,14 +80,17 @@
 			?>,
 			onInit: function(event, state) {},
 			onSwitchChange: function(event, state) {
+				
 				if(state) {
 					//Versandkostenfrei
 					res = '<?php echo Configure::read('padcon.Angebot.additional_text.deliveryFree');?>'
 					$('#OfferAdditionalText').html(res);
 					$("#deliveryCost").attr('value','<?php echo Configure::read('padcon.delivery_cost.frei');?>')
 				} else {
-					var res = '<?php echo $this->data['Offer']['additional_text'];?>'
+					$("[name='delivery-cb']").bootstrapSwitch('state', true);
+					var res = '<?php echo Configure::read('padcon.Angebot.additional_text.default');?>'
 					$('#OfferAdditionalText').html(res);
+					$("#deliveryCost").attr('value','<?php echo Configure::read('padcon.delivery_cost.paket');?>')
 				}	
 				return event.isDefaultPrevented();
 			}
@@ -135,7 +138,6 @@
 								   
 								<script type="text/javascript">
 									    $('.date').datepicker({
-									    startDate: '-3m',
 									    format: "dd.mm.yyyy",
 									    language: "de",
 									    calendarWeeks: true,

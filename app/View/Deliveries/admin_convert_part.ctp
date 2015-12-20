@@ -9,24 +9,25 @@
 		$('#saveCart').on('click', function(){
 			
 			<?php 
-			
 				$data = $this->Js->get('#DeliveryAdminConvertPartForm')->serializeForm(array('isForm' => true, 'inline' => true)); 
 			?>
-			
+						
 			var xhr = null,
 			obj = $(this);			
 			obj.addClass('loading');
-			console.log("load");
 				xhr = $.ajax({
 					 type: 'POST',
 					 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/Deliveries/convertPart/<?php echo $controller_id;?>/1',
 					 data: <?php echo $data ?>,
 					 success:function (data, textStatus) {
 					 	
+					 	
+					 	
 					 	//obj.removeClass('loading');
 					 	
 						//$("#settings_modal .modal-body").html(data);
 						//$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/<?php echo $controller_name;?>/reloadSheet/<?php echo $controller_id;?>');
+						window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/Deliveries/convert/<?php echo $controller_id;?>/'+data;
 					 } 
 				 }); 
 				
@@ -36,22 +37,20 @@
 			return false;
 		});
 		
-		$('#add').on('click', function(){
-			
-			console.log('add');
-			
-			$('#originalCart').find('p input:checked').each(function( index ) {
+		$('#add').on('click', function(){			
+			$('#originalCart').find('div.item input:checked').each(function( index ) {
 				
-					console.log( index + ": " + $( this ).parent().text() );
-					$('#partCart').append($(this).parent());
- 				
-			})
-			
+					var amount = $(this).parent().find('.amount').val()
+					if(amount < $(this).parent().find('.amount').attr('origAmount')) {
+					//	$('#originalCart').append($(this).parent());
+						//$(this).parent().remove();
+						$('#partCart').add($(this));
+					} else {
+						$('#partCart').append($(this).parent());
+					}	
+			})	
 		return false;
-		})
-		
-		 
-		
+		})	
 	});
 
 </script>
@@ -63,22 +62,41 @@
 		<?php echo $this->Session->flash(); ?>
 		
 		<div class="module_content row-fluid">
-					
-					
-	
 					<div class="col-md-12">
 						<div class="panel panel-info" >
                     		<div class="panel-body" >
-								<div id="originalCart" class="col-md-5"  style="height: 100px">
+								<div id="originalCart" class="col-md-5">
 									<?php 
 									
 									foreach($this->data['CartProduct'] as $key => $value) {
-										echo '<p>'.$this->Form->input('Product'.$key, array(
+											
+										$product = $this->requestAction('Products/getProduct/'.$value['product_id']);
+											
+										echo '<div class="item col-md-12">'.
+												
+											$this->Form->input('Product]['.$key.'][amount]', array(
+												'label' => false,
+												'div' => false,
+												'value' => $value['amount'],
+												'origAmount' => $value['amount'],
+												'type' => 'number',
+												'class' => 'form-control col-md-2 amount',
+												'style' => 'display: none;'
+											)).
+											$this->Form->input('Product]['.$key.'][color_id]', array(
+												'label' => false,
+												'div' => false,
+												'value' => $value['color_id'],
+												'style' => 'display: none;'
+											)).
+											'<p class="text col-md-11">'.$value['amount'].'x - '.$product['Product']['product_number'].' - '.$product['Product']['name'].'</p>'.
+											$this->Form->input('Product]['.$key.'][product_id]', array(
 												'label' => false,
 												'div' => false,
 												'type' => 'checkbox',
-												'value' => $value['id']
-											)).$value['id'].'</p>';
+												'value' => $value['product_id']
+											)).
+											'</div>';
 									}
 									
 									?>
@@ -88,7 +106,7 @@
 	                             <button id="add" class="btn btn-default" type="button">></button>
 	                            </div> 
 	                            <?php echo $this->Form->create('Delivery', array('class' => 'col-md-5'));?>
-								<div id="partCart" class="col-md-5"  style="height: 100px">
+								<div id="partCart" class="col-md-12">
 									
 								</div>
 								</form>
