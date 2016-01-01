@@ -251,13 +251,14 @@ article.sheet {
 }
 
 .pages .sheetFooter { 
-	border-top: 1px solid black;
+    border-top: 1px solid black;
     bottom: 20px;
     font-size: 9px;
+    left: 40px;
     line-height: 12px;
     padding-top: 10px;
     position: absolute;
-    width: 627px;
+    width: 687px;
 }
 
 .pages .sheetFooter .col-md-3 {
