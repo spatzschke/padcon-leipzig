@@ -217,12 +217,12 @@ class BillingsController extends AppController {
 	function generateBillingNumber() {
 	
 		// Rechnung Nr.: 427/14
-		// 427 = laufende Rechnung im Jahr
+		// 427 = laufende Rechnung im Jahr - dreistellig
 		// 14 = laufendes Jahr
 	
 		// 427 = laufende Rechnung im Jahr
 		$countYearBillings = count($this->Billing->find('all',array('conditions' => array('Billing.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))))+1;
-		$countYearBillings = str_pad($countYearBillings, 2, "0", STR_PAD_LEFT);
+		$countYearBillings = str_pad($countYearBillings, 3, "0", STR_PAD_LEFT);
 		// 14 = aktuelles Jahr
 		$year = date('y');
 		
