@@ -13,11 +13,11 @@
 	Configure::write('padcon.lieferzeit.min', 2);
 	Configure::write('padcon.lieferzeit.max', 3);
 	
-	if(date('W')+3 > 52) {
+	if(date('W')+3 > 53) {
 		$kw = (date('W')+3)-52; 
 		
 		Configure::write('padcon.lieferzeit.week', date('W', '01.01')+$kw-1);
-		Configure::write('padcon.lieferzeit.year', date('Y')+1);
+		Configure::write('padcon.lieferzeit.year', date('Y'));
 	} else {
 		Configure::write('padcon.lieferzeit.week', date('W')+3);
 		Configure::write('padcon.lieferzeit.year', date('Y'));
