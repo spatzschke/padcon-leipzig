@@ -31,7 +31,7 @@
 		
 
 		echo $this->Html->css('reset');
-		echo $this->Html->css('backend/bootstrap_new');
+		echo $this->Html->css('backend/bootstrap');
 		echo $this->Html->css('cms');
 		echo $this->Html->css('cake.generic');
 		
