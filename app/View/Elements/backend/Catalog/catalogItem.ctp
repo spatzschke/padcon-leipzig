@@ -5,6 +5,7 @@
     	</div>
     	<div class="catalogItemContent col-md-6"> 
 	        <div class="catalogItemName"><?php echo $product['Product']['name'];?></div>
+			<div class="catalogItemCore"><?php echo $product['Product']['core_name'];?> </div>
 			<div class="catalogItemFeatures">
 	        	<ul>
 	            	<?php echo $product['Product']['featurelist'];?>

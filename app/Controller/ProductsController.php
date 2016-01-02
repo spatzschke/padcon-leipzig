@@ -2,7 +2,7 @@
 class ProductsController extends AppController {
 
 	var $name = 'Products';
-	public $uses = array('Cart', 'Product', 'Material', 'Color', 'Image', 'Category', 'Core', 'ProductCore');
+	public $uses = array('Cart', 'Product', 'Material', 'Color', 'Image', 'Category', 'Core', 'ProductCore', 'ProductCategory');
 	var $components = array('RequestHandler', 'Auth', 'Session');
 	var $helpers = array('Html', 'Js');
 	
@@ -43,7 +43,12 @@ class ProductsController extends AppController {
 			$this->redirect(array('controller' => 'Categories', 'action' => 'overview'));
 		} 
 		
+		$category = $this->Category->findByShort($id);
 		$products = $this->getProducts($id);
+		
+		foreach ($products as $i => $value) {
+			$products[$i]['Category'] = $category['Category'];
+		}
 		
 		$this->set(compact('products'));
 		$this->set('title_for_layout','Produkte: '.$products[0]['Category']['name']);
@@ -51,13 +56,26 @@ class ProductsController extends AppController {
 	
 	function getProducts($categoryID = null){
 		
+		$products = array();
+		
 		if($categoryID  == null) {
 			$con = array('Product.active' => '1');
+			$products = $this->Product->find('all',array('conditions' =>  $con,'order' => array('Product.product_number ASC'), 'group' =>  array('Product.product_number')));
+		
 		} else {
-			$con = array('Product.active' => '1', 'Category.short' => $categoryID);
+			$this->ProductCategory->recursive = 0;
+			$catId = $this->Category->findByShort($categoryID);
+			$prodCat = $this->ProductCategory->findAllByCategoryId($catId['Category']['id']);
+			
+			foreach($prodCat as $product) {
+				$query = $this->Product->findById($product['Product']['id']);
+				//Nur akitve Produkte hinzufügen
+				if($query['Product']['active'] == 1) {
+					array_push($products, $query);
+				}
+			}	
 		}
 		
-		$products = $this->Product->find('all',array('conditions' =>  $con,'order' => array('Product.product_number ASC'), 'group' =>  array('Product.product_number')));
 		
 		return $products;
 	}
@@ -377,7 +395,7 @@ class ProductsController extends AppController {
 				if($multi) {
 									
 					foreach($number as $i=>$product) {
-						foreach($categories as $category) {
+						
 							$newProduct['Product']['number'] = $number[$i];
 							$newProduct['Product']['name'] = $name;
 							
@@ -402,10 +420,10 @@ class ProductsController extends AppController {
 							} else {
 								$newProduct['Product']['custom'] = '';
 							}
-							$newProduct['Product']['category_id'] = $category;
+							$newProduct['Product']['categories'] = $categories;
 							
 							array_push($newProducts, $newProduct);
-						}
+						
 					}
 				} else {
 					if(empty($categories)) {
@@ -415,7 +433,6 @@ class ProductsController extends AppController {
 						 array_push($errors['prod-cat'], $error);
 					}
 										
-					foreach($categories as $category) {
 						$newProduct['Product']['number'] = $number;
 						$newProduct['Product']['name'] = $name;
 		
@@ -441,10 +458,10 @@ class ProductsController extends AppController {
 						} else {
 							$newProduct['Product']['custom'] = '';
 						}
-						$newProduct['Product']['category_id'] = $category;
+						$newProduct['Product']['categories'] = $categories;
 						
 						array_push($newProducts, $newProduct);
-					}
+					
 				}
 				$this->request->data['Products'] = $newProducts;
 				}					
@@ -455,25 +472,31 @@ class ProductsController extends AppController {
 				
 				foreach($data as $i=>$prod) {
 					$errors['prod'.$i] = array();
-					$check = $this->Product->find('count', array('conditions' => array('product_number' => $prod['Product']['product_number'], 
-																						'category_id' => $prod['Product']['category_id'])));																				
-						
+					$check = $this->Product->find('count', array('conditions' => array('product_number' => $prod['Product']['product_number'])));																				
+											
 					$this->Product->create();
 					if ($check == 0 && $this->Product->save($prod)) {
 
 						$currId = $this->Product->getLastInsertId();
-						
+
+						//Kerne abspeichern
+						$this->ProductCore->create();
 						$prodCore = array();
-						
 						foreach ($prod['Product']['cores'] as $i => $core) {
 							$prodCore[$i]['ProductCore']['product_id'] = $currId;
 							$prodCore[$i]['ProductCore']['core_id'] = $core;
 						}						
-						
-						$this->ProductCore->create();
-						if ($this->ProductCore->saveAll($prodCore)) {
+
+						//Kategorien abspeichern
+						$this->ProductCategory->create();
+						$prodCat = array();
+						foreach ($prod['Product']['categories'] as $i => $category) {
+							$prodCat[$i]['ProductCategory']['product_id'] = $currId;
+							$prodCat[$i]['ProductCategory']['category_id'] = $category;
+						}						
+						if ($this->ProductCore->saveAll($prodCore) && $this->ProductCategory->saveAll($prodCat)) {
 							$this->Session->setFlash(__('Produkt wurde angelegt!', true));
-						}
+						} 
 						
 					} else {
 						
