@@ -245,12 +245,13 @@ class ProductsController extends AppController {
 					}
 	
 					//Bezug
+					
 					$val = $value;
 					if (strpos($val, 'Bezug:') !== FALSE) {
 	
 						$val = explode(', Farbe',trim($val));
 						$val = str_ireplace('Bezug:', '', trim($val[0]));
-						
+												
 						$bezug = $this->Product->Material->findByName(trim($val));
 						if(empty($bezug)) { $bezug = ""; }
 						
@@ -362,6 +363,8 @@ class ProductsController extends AppController {
 							$newProduct['Product']['producerName'] = $producerName;
 							$newProduct['Product']['producerNumber'] = $producerNumber;
 		
+							debug($bezug['Material']['id']);
+		
 					 		$newProduct['Product']['material'] = $bezug['Material']['id'];
 					 		$newProduct['Product']['feature'] = $features;
 							$newProduct['Product']['maße'] = $maße[$i];
@@ -396,7 +399,7 @@ class ProductsController extends AppController {
 						$newProduct['Product']['producerName'] = $producerName;
 						$newProduct['Product']['producerNumber'] = $producerNumber;
 		
-						if($bezug ='') {
+						if($bezug != '') {
 					 		$newProduct['Product']['material'] = $bezug['Material']['id'];
 					 	} else {
 					 		$newProduct['Product']['material'] = 0;
@@ -418,8 +421,6 @@ class ProductsController extends AppController {
 						array_push($newProducts, $newProduct);
 					}
 				}
-
-
 				$this->request->data['Products'] = $newProducts;
 				}					
 			} else {				
