@@ -16,7 +16,7 @@
 			echo $this->Html->script('http://html5shim.googlecode.com/svn/trunk/html5.js');	
 		echo '<![endif]-->';
 		
-		echo $this->Html->script('jquery-2.1.1.min');
+		echo $this->Html->script('jquery-2.1.4.min');
 		echo $this->Html->script('jquery.lazyload.min');		
 		
 		echo $scripts_for_layout;		
