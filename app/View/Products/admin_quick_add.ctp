@@ -257,7 +257,7 @@ $product = $product['Product'];
 						?> 
 					</div>
 					<div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-scale"></i></span>
                         <?php echo $this->Form->input('size', array(
 							'label' => false,
 							'class' => 'form-control',
