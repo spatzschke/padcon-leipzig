@@ -78,7 +78,7 @@ function loadCustomProductNumber() {
 								?>                                     
                              </div>
                              <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
                                 <?php echo $this->Form->input('name', array(
 									'label' => false,
 									'class' => 'form-control',
@@ -91,7 +91,7 @@ function loadCustomProductNumber() {
 								?>                                      
                              </div>
                              <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
                                 <?php echo $this->Form->input('category_id', array(
 									'label' => false,
 									'class' => 'form-control',
@@ -104,9 +104,11 @@ function loadCustomProductNumber() {
 								));
 								?>                                      
                              </div>
+                            
+                            
                              
                              <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
                                 <?php echo $this->Form->input('material_id', array(
 									'label' => false,
 									'class' => 'form-control',
@@ -119,8 +121,11 @@ function loadCustomProductNumber() {
 								));
 								?> 
 							</div>
+							
+							
+							
 							<div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-scale"></i></span>
                                 <?php echo $this->Form->input('size', array(
 									'label' => false,
 									'class' => 'form-control',
@@ -167,7 +172,71 @@ function loadCustomProductNumber() {
 		                             </div>
 		                         </div>
                              </div> 
-                             <div class="row">
+                              
+						</div>
+						
+						 <!-- Mitte -->
+						<div class="col-md-4">
+							<div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
+                                <?php echo $this->Form->input('core_name', array(
+									'label' => false,
+									'type' => 'text',
+									'class' => 'form-control',
+									'data-model' => 'Product',
+									'placeholder' => 'Kern',
+									'data-field' => 'core_name', 
+									'autoComplete' => true,
+									'disabled' => 'disabled'
+								));
+								?> 
+							</div>							
+							<div class="input-group">
+	                                <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+	                                <?php echo $this->Form->input('featurelist', array(
+										'label' => false,
+										'class' => 'form-control',
+										'data-model' => 'Product',
+										'placeholder' => 'Featurliste',
+										'data-field' => 'featurelist', 
+										'autoComplete' => true,
+										'type' => 'textarea',
+										'disabled' => 'disabled',
+										'style' => 'height:122px',
+									));
+									?>                                      
+	                        </div>
+	                        <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon glyphicon-briefcase"></i></span>
+                        <div class="row">
+                        <?php echo $this->Form->input('producerName', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Product',
+							'placeholder' => 'Herstellername',
+							'data-field' => 'producerName', 
+							'autoComplete' => true,
+							'div' => array(
+						        'class' => 'col-md-6',
+						    ),
+						    'disabled' => 'disabled'
+						));
+						?>
+						<?php echo $this->Form->input('producerNumber', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Product',
+							'placeholder' => 'Herstellernummer',
+							'data-field' => 'producerNumber', 
+							'autoComplete' => true,
+							'div' => array(
+						        'class' => 'col-md-6',
+						    ), 
+							'disabled' => 'disabled'
+						));
+						?>  </div>                                         
+                     </div>
+	                        <div class="row">
                             	<div class="col-md-4">
 		                             <div class="input-group">
 		                                <span class="input-group-addon">
@@ -219,45 +288,12 @@ function loadCustomProductNumber() {
 		                                <input type="text" class="form-control" value="Sonder" readonly="readonly">                                    
 		                             </div>
 								</div>
-							</div> 
-						</div>
-						
-						 <!-- Mitte -->
-						<div class="col-md-4">
-							<div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-                                <?php echo $this->Form->input('description', array(
-									'label' => false,
-									'class' => 'form-control',
-									'data-model' => 'Product',
-									'placeholder' => 'Beschreibung',
-									'data-field' => 'description', 
-									'autoComplete' => true,
-									'type' => 'textarea',
-									'disabled' => 'disabled'
-								));
-								?> 
 							</div>
-							
-							<div class="input-group">
-	                                <span class="input-group-addon"><i class="glyphicon glyphicon-road"></i></span>
-	                                <?php echo $this->Form->input('featurelist', array(
-										'label' => false,
-										'class' => 'form-control',
-										'data-model' => 'Product',
-										'placeholder' => 'Featurliste',
-										'data-field' => 'featurelist', 
-										'autoComplete' => true,
-										'type' => 'textarea',
-										'disabled' => 'disabled'
-									));
-									?>                                      
-	                        </div>
                         </div>
                         
                          <!-- Rechts -->
                         <div class="col-md-4">
-				         	<?php echo $this->Html->image($this->data['Image'][0]['path'].'t.jpg', array('alt' => 'CakePHP')); ?>
+				         	<?php echo $this->Html->image($this->data['Image'][0]['path'].'.jpg', array('alt' => $this->data['Product']['name'], 'height' => '254')); ?>
                         </div>
                         </div>
                         <div style="margin-top:10px" class="form-group">

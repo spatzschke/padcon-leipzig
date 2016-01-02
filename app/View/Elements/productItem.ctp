@@ -1,3 +1,5 @@
+<?php  ?>
+
 <div id="p<?php echo $product['Product']['product_number'];?>" class="productListItem productListItem-<?php echo $product['Category']['short'];?>">
 	<div class="productItemHeader"></div>
     <div class="productItemCenter">

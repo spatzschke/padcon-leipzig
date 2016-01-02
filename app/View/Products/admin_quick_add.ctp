@@ -145,7 +145,8 @@ if(!empty($this->data['Products'])) {
  
  <?php
  echo $this->Form->create('Product', array(
-					'class' => 'form-horizontal'
+					'class' => 'form-horizontal' ,
+					'style' => 'width: 100%'
 				));  
 				
 foreach($this->data['Products'] as $i => $product){
@@ -160,7 +161,7 @@ $product = $product['Product'];
                 
             </div>
 
-            <div class="panel-body" >
+            <div class="panel-body form-horizontal" >
 
                	<?php 
                		if(isset($errors)) {
@@ -227,50 +228,23 @@ $product = $product['Product'];
                      </div>
                      <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                        <?php echo $this->Form->input('category_id', array(
+                        <?php  echo $this->Form->input('categories', array(
 							'label' => false,
 							'class' => 'form-control',
 							'data-model' => 'Product',
 							'placeholder' => 'Kategorie',
-							'data-field' => 'category_id', 
+							'data-field' => 'categories', 
 							'autoComplete' => true,
-							'empty' => 'Bitte Kategorie wählen',
-							'value' => $product['category_id'], 
-							'name' => 'data['.$i.'][Product][category_id]'
+							'value' => $product['categories'], 
+							'name' => 'data['.$i.'][Product][categories]',
+							'multiple' => 'multiple',
+  							'type' => 'select',
+  							'style' => 'height: 185px',
+  							'default' => $product['categories']
 						));
 						?>                                      
                      </div>
-                                        
-                     <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
-                        <?php echo $this->Form->input('material_id', array(
-							'label' => false,
-							'class' => 'form-control',
-							'data-model' => 'Product',
-							'placeholder' => 'Bezug',
-							'data-field' => 'material_id', 
-							'autoComplete' => true,
-							'empty' => 'Bitte Bezug wählen',
-							'value' => $product['material'], 
-							'name' => 'data['.$i.'][Product][material_id]'
-						));
-						?> 
-					</div>
-					<div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
-                        <?php echo $this->Form->input('size', array(
-							'label' => false,
-							'class' => 'form-control',
-							'data-model' => 'Product',
-							'placeholder' => 'Größe',
-							'data-field' => 'size', 
-							'autoComplete' => true, 
-							'type' => 'text',
-							'value' => $product['maße'], 
-							'name' => 'data['.$i.'][Product][size]'
-						));
-						?>                                      
-                     </div>
+            
                     <div class="row">
                     	<div class="col-md-6">
                     	<div class="input-group">
@@ -325,10 +299,41 @@ $product = $product['Product'];
 								'type' => 'textarea',
 								'rows' => '7',
 								'value' => $product['feature'], 
-								'name' => 'data['.$i.'][Product][featurelist]'
+								'name' => 'data['.$i.'][Product][featurelist]',
+								'style' => 'height: 141px',
 							));
 							?>                                      
                     </div>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
+                        <?php echo $this->Form->input('material_id', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Product',
+							'placeholder' => 'Bezug',
+							'data-field' => 'material_id', 
+							'autoComplete' => true,
+							'empty' => 'Bitte Bezug wählen',
+							'value' => $product['material'], 
+							'name' => 'data['.$i.'][Product][material_id]'
+						));
+						?> 
+					</div>
+					<div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-scale"></i></span>
+                        <?php echo $this->Form->input('size', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Product',
+							'placeholder' => 'Größe',
+							'data-field' => 'size', 
+							'autoComplete' => true, 
+							'type' => 'text',
+							'value' => $product['maße'], 
+							'name' => 'data['.$i.'][Product][size]'
+						));
+						?>                                      
+                     </div>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon glyphicon-briefcase"></i></span>
                         <div class="row">
@@ -387,7 +392,7 @@ $product = $product['Product'];
                                 <input type="text" class="form-control" value="Aktiv" readonly="readonly">                                    
                              </div>
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-3" style="width: 105px; padding-left: 0">
                              <div class="input-group">
                                 <span class="input-group-addon">
 									<?php echo $this->Form->input('new', array(
@@ -398,14 +403,14 @@ $product = $product['Product'];
 										'autoComplete' => true,
 										'div' => false,
 										'name' => 'data['.$i.'][Product][new]',
-										$product['new']
+										$product['new'], 
 									));
 									?>  
 								</span>
                                 <input type="text" class="form-control" value="Neu" readonly="readonly">                                    
                              </div>
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-5" style="width: 134px; padding: 0">
                              <div class="input-group">
                                 <span class="input-group-addon">
                                 	<?php 
@@ -425,7 +430,7 @@ $product = $product['Product'];
 										'div' => false,
 										'name' => 'data['.$i.'][Product][custom]',
 										$readonlyCustom,
-										$product['custom']
+										$product['custom'],
 									));
 									?>  
 								</span>
@@ -459,13 +464,14 @@ $product = $product['Product'];
                         echo $this->Form->input('cores', array(
                         	'multiple' => 'multiple',
   							'type' => 'select',
+  							'style' => 'height: 273px',
 							'label' => false,
 							'class' => 'form-control',
 							'data-model' => 'Core',
 							'placeholder' => 'Kern',
 							'data-field' => 'cores', 
 							'autoComplete' => true,
-							'style' => 'height: 215px',
+							
 							
 							//'value' => $product['core_name'], 
 							'name' => 'data['.$i.'][Product][cores]',
@@ -475,7 +481,9 @@ $product = $product['Product'];
 						?> 
 					</div>  
           	</div>
-		</div>                         
+          	
+		</div> 
+		                        
 	</div> 
  
 

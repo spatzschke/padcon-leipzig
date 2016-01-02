@@ -1,11 +1,11 @@
 <head>
 		<title><?php echo $title_for_layout; ?></title>
 	 <?php
-		echo $this->Html->css('backend/bootstrap_new');
+		echo $this->Html->css('backend/bootstrap');
 		echo $this->Html->css('backend/page');
 		echo $this->Html->css('backend/pdf');
 		 
-		echo $this->Html->script('jquery-2.1.1.min');
+		echo $this->Html->script('jquery-2.1.4.min');
 		?>
 <?php
 	if($this->request['controller'] == "Catalogs") {	

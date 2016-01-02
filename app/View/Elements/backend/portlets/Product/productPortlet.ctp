@@ -71,7 +71,7 @@ $(document).ready(function() {
 					<th><?php echo('Name');?></th>
 				<!--<th><?php __('Beschreibung');?></th>
 					<th><?php __('Featurelist');?></th>-->
-					<th><?php echo('Kategorie');?></th>
+				<!-- <th><?php echo('Kategorie');?></th> -->
 					<th><?php echo('Material');?></th>
 					<th><?php echo('Größe');?></th>
 				<!--<th><?php __('Preis');?></th>
