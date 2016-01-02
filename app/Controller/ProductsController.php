@@ -426,6 +426,8 @@ class ProductsController extends AppController {
 						
 					}
 				} else {
+					
+					
 					if(empty($categories)) {
 						
 						$errors['prod-cat'] = array();
@@ -466,48 +468,55 @@ class ProductsController extends AppController {
 				$this->request->data['Products'] = $newProducts;
 				}					
 			} else {				
-				$data = $this->data;
-				$errors = array();
-				
-				
-				foreach($data as $i=>$prod) {
-					$errors['prod'.$i] = array();
-																							
-											
-					$this->Product->create();
-					if ($this->Product->save($prod)) {
-
-						$currId = $this->Product->getLastInsertId();
-
-						//Kerne abspeichern
-						$this->ProductCore->create();
-						$prodCore = array();
-						foreach ($prod['Product']['cores'] as $i => $core) {
-							$prodCore[$i]['ProductCore']['product_id'] = $currId;
-							$prodCore[$i]['ProductCore']['core_id'] = $core;
-						}						
-
-						//Kategorien abspeichern
-						$this->ProductCategory->create();
-						$prodCat = array();
-						foreach ($prod['Product']['categories'] as $i => $category) {
-							$prodCat[$i]['ProductCategory']['product_id'] = $currId;
-							$prodCat[$i]['ProductCategory']['category_id'] = $category;
-						}						
-						if ($this->ProductCore->saveAll($prodCore) && $this->ProductCategory->saveAll($prodCat)) {
-							$this->Session->setFlash(__('Produkt wurde angelegt!', true));
-						} 
-						
-					} else {
-						
-						 // $cat = $this->Category->findById($prod['Product']['category_id']);	
-// 
-						 // $error = "Produkt <b>".$prod['Product']['product_number']."</b> in Kategorie <b>".$cat['Category']['name']."</b> ist bereits vorhanden. Bitte prüfen!";
-						 // array_push($errors['prod'.$i], $error);					
-						 
-						 $errors = $this->Product->invalidFields();
-						 $this->set(compact("errors"));
-					}			 
+				if(isset($this->data['Product']['product_number']) || isset($this->data[0]['Product']['product_number'])) {			
+					$data = $this->data;
+					$errors = array();
+					
+					
+					foreach($data as $i=>$prod) {
+						$errors['prod'.$i] = array();
+																								
+												
+						$this->Product->create();
+						if ($this->Product->save($prod)) {
+	
+							$currId = $this->Product->getLastInsertId();
+							
+							debug($currId);
+	
+							//Kerne abspeichern
+							$this->ProductCore->create();
+							$prodCore = array();
+							foreach ($prod['Product']['cores'] as $i => $core) {
+								$prodCore[$i]['ProductCore']['product_id'] = $currId;
+								$prodCore[$i]['ProductCore']['core_id'] = $core;
+							}						
+	
+							//Kategorien abspeichern
+							$this->ProductCategory->create();
+							$prodCat = array();
+							foreach ($prod['Product']['categories'] as $i => $category) {
+								$prodCat[$i]['ProductCategory']['product_id'] = $currId;
+								$prodCat[$i]['ProductCategory']['category_id'] = $category;
+							}						
+							if ($this->ProductCore->saveAll($prodCore) && $this->ProductCategory->saveAll($prodCat)) {
+								$this->Session->setFlash(__('Produkt wurde angelegt!', true));
+							} 
+							
+						} else {
+							
+							 // $cat = $this->Category->findById($prod['Product']['category_id']);	
+	// 
+							 // $error = "Produkt <b>".$prod['Product']['product_number']."</b> in Kategorie <b>".$cat['Category']['name']."</b> ist bereits vorhanden. Bitte prüfen!";
+							 // array_push($errors['prod'.$i], $error);					
+							 
+							 $errors = $this->Product->invalidFields();
+							 $this->set(compact("errors"));
+						}			 
+					}
+				} else {
+					$errors['prod3'][0] = "Die Beschreibung muss gefüllt sein!";
+					 $this->set(compact("errors"));	
 				}
 				
 				//$this->redirect(array('action' => 'edit', $lastId));
