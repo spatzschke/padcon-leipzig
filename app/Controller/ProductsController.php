@@ -472,10 +472,11 @@ class ProductsController extends AppController {
 				
 				foreach($data as $i=>$prod) {
 					$errors['prod'.$i] = array();
-					$check = $this->Product->find('count', array('conditions' => array('product_number' => $prod['Product']['product_number'])));																				
+					
+																								
 											
 					$this->Product->create();
-					if ($check == 0 && $this->Product->save($prod)) {
+					if ($this->Product->save($prod)) {
 
 						$currId = $this->Product->getLastInsertId();
 
