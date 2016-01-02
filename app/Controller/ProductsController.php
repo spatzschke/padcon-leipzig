@@ -2,7 +2,7 @@
 class ProductsController extends AppController {
 
 	var $name = 'Products';
-	public $uses = array('Cart', 'Product', 'Material', 'Color', 'Image', 'Category');
+	public $uses = array('Cart', 'Product', 'Material', 'Color', 'Image', 'Category', 'Core', 'ProductCore');
 	var $components = array('RequestHandler', 'Auth', 'Session');
 	var $helpers = array('Html', 'Js');
 	
@@ -197,6 +197,8 @@ class ProductsController extends AppController {
 				$producerName = array();
 				$producerNumber = array();
 				$categories = array();
+				$cores_arr = array();
+				$core_name = "";
 				
 				foreach( $input as $key => $value ) {
       				if( $value == ' ' || $value == '' ) {unset($input[$key]);}
@@ -228,21 +230,40 @@ class ProductsController extends AppController {
 						continue;
 				    }
 					
-					//Feature Schaum
+					//Feature Schaum - Kern
 					$val = $value;
 					if (strpos($val, 'Fa. padcon') !== FALSE) {
 						$val = explode('	',trim($val));
-						
+											
 						//Sonderfall: Im Feature steht der Bezug
 						if (strpos($val[1], 'Bezug:') !== FALSE) {
 							$t = explode('Bezug:', trim($val[1]));
 							$bezug = explode(', ', $t[1]);		
 							$bezug = $this->Product->Material->findByName(trim($bezug[0]));
 						} else {
-							array_push($features, trim($val[1]));
+							if (strpos($val[1], 'Kern:') !== FALSE) {
+								$val = $val[1];
+								$t = explode('Kern: ', trim($val));
+								$val = $t[1];								
+								$split = split("/", $val);
+								
+								foreach($split as $item) {
+									$entry = $this->Core->findByName($item);
+									array_push($cores_arr, $entry['Core']['id']);	
+									if(end($split) !== $item){
+									    $core_name = $core_name.$item.' / ';
+									} else {
+										$core_name = $core_name.$item;
+									}									
+								}								
+							} else {
+								array_push($features, trim($val[1]));
+							}
 						}
 						continue;	
 					}
+					
+					
 	
 					//Bezug
 					
@@ -366,6 +387,8 @@ class ProductsController extends AppController {
 							debug($bezug['Material']['id']);
 		
 					 		$newProduct['Product']['material'] = $bezug['Material']['id'];
+							$newProduct['Product']['core_name'] = $core_name;
+							$newProduct['Product']['cores'] = $cores_arr;
 					 		$newProduct['Product']['feature'] = $features;
 							$newProduct['Product']['maße'] = $maße[$i];
 							$p = str_replace(',', '.', str_replace(' €', '', $ek));
@@ -404,6 +427,8 @@ class ProductsController extends AppController {
 					 	} else {
 					 		$newProduct['Product']['material'] = 0;
 					 	}
+						$newProduct['Product']['core_name'] = $core_name;
+						$newProduct['Product']['cores'] = $cores_arr;
 					 	$newProduct['Product']['feature'] = $features;
 						$newProduct['Product']['maße'] = $maße;
 						$newProduct['Product']['ek'] = str_replace(',', '.', str_replace(' €', '', $ek));
@@ -426,6 +451,8 @@ class ProductsController extends AppController {
 			} else {				
 				$data = $this->data;
 				$errors = array();
+				
+				
 				foreach($data as $i=>$prod) {
 					$errors['prod'.$i] = array();
 					$check = $this->Product->find('count', array('conditions' => array('product_number' => $prod['Product']['product_number'], 
@@ -433,7 +460,21 @@ class ProductsController extends AppController {
 						
 					$this->Product->create();
 					if ($check == 0 && $this->Product->save($prod)) {
-						$this->Session->setFlash(__('Produkt wurde angelegt!', true));
+
+						$currId = $this->Product->getLastInsertId();
+						
+						$prodCore = array();
+						
+						foreach ($prod['Product']['cores'] as $i => $core) {
+							$prodCore[$i]['ProductCore']['product_id'] = $currId;
+							$prodCore[$i]['ProductCore']['core_id'] = $core;
+						}						
+						
+						$this->ProductCore->create();
+						if ($this->ProductCore->saveAll($prodCore)) {
+							$this->Session->setFlash(__('Produkt wurde angelegt!', true));
+						}
+						
 					} else {
 						
 						 $cat = $this->Category->findById($prod['Product']['category_id']);	
@@ -443,9 +484,6 @@ class ProductsController extends AppController {
 					}			 
 				}
 				
-				
-				
-							
 				//$this->redirect(array('action' => 'edit', $lastId));
 			}
 		}
@@ -458,7 +496,8 @@ class ProductsController extends AppController {
 		$categories = $this->Product->Category->find('list');
 		$materials = $this->Product->Material->find('list');
 		$carts = $this->Product->Cart->find('list');
-		$this->set(compact('categories', 'materials', 'carts'));
+		$cores = $this->Core->find('list');
+		$this->set(compact('categories', 'materials', 'carts', 'cores'));
 		$this->set('primary_button', 'Anlegen');
 		$this->set('title_for_panel', 'Produkt anlegen');
 		//$this->render('/Elements/backend/portlets/Product/productDetailPortlet');

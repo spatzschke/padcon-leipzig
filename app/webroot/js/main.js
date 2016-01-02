@@ -4,8 +4,6 @@ $(document).ready(function() {
 
 	$('.addToCart').bind('click', function() {
 		
-		console.log("test");
-		
 		addToCart($(this));
 		return false;
 	})
@@ -21,7 +19,6 @@ function addToCart(obj) {
 
 	
 	obj.addClass('loading');
-	console.log(obj.attr('href'))
 
 		
 		xhr = $.ajax({
