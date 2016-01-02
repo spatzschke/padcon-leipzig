@@ -39,7 +39,7 @@ class Product extends AppModel {
 			),
 			'alphaNumeric' => array(
 				'rule' => array('alphaNumeric'),
-				'message' => 'Es sind nur Zahlen und Buchstaben erlaubt!',
+				'message' => 'In der Produktnummer sind nur Zahlen und Buchstaben erlaubt!',
 				//'allowEmpty' => false,
 				
 			),

@@ -472,8 +472,7 @@ class ProductsController extends AppController {
 				
 				foreach($data as $i=>$prod) {
 					$errors['prod'.$i] = array();
-					
-																								
+																							
 											
 					$this->Product->create();
 					if ($this->Product->save($prod)) {
@@ -501,10 +500,13 @@ class ProductsController extends AppController {
 						
 					} else {
 						
-						 $cat = $this->Category->findById($prod['Product']['category_id']);	
-
-						 $error = "Produkt <b>".$prod['Product']['product_number']."</b> in Kategorie <b>".$cat['Category']['name']."</b> ist bereits vorhanden. Bitte prüfen!";
-						 array_push($errors['prod'.$i], $error);					
+						 // $cat = $this->Category->findById($prod['Product']['category_id']);	
+// 
+						 // $error = "Produkt <b>".$prod['Product']['product_number']."</b> in Kategorie <b>".$cat['Category']['name']."</b> ist bereits vorhanden. Bitte prüfen!";
+						 // array_push($errors['prod'.$i], $error);					
+						 
+						 $errors = $this->Product->invalidFields();
+						 $this->set(compact("errors"));
 					}			 
 				}
 				
