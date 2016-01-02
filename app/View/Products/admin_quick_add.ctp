@@ -235,10 +235,10 @@ $product = $product['Product'];
 							'label' => false,
 							'class' => 'form-control',
 							'data-model' => 'Product',
-							'placeholder' => 'Material',
+							'placeholder' => 'Berzug',
 							'data-field' => 'material_id', 
 							'autoComplete' => true,
-							'empty' => 'Bitte Material wählen',
+							'empty' => 'Bitte Bezug wählen',
 							'value' => $product['material'], 
 							'name' => 'data['.$i.'][Product][material_id]'
 						));
