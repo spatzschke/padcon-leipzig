@@ -116,7 +116,7 @@ class ProductsController extends AppController {
         $Number = $view->loadHelper('Number');
 
 		$product = $this->Product->read(null, $id);
-		$product['Product']['product_number'] = 'pd-'.$product['Product']['product_number'];
+		$product['Product']['product_number'] = $product['Product']['product_number'];
 		$product['Product']['retail_price_string'] = $Number->currency($product['Product']['retail_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));
 		$product['Product']['featurelist'] = str_replace('<li>', '', $product['Product']['featurelist']);
 		$product['Product']['featurelist'] = str_replace('</li>', '', $product['Product']['featurelist']);

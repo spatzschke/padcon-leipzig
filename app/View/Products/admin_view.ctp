@@ -104,6 +104,21 @@ function loadCustomProductNumber() {
 								));
 								?>                                      
                              </div>
+                            
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
+                                <?php echo $this->Form->input('core_name', array(
+									'label' => false,
+									'type' => 'text',
+									'class' => 'form-control',
+									'data-model' => 'Product',
+									'placeholder' => 'Kern',
+									'data-field' => 'core_name', 
+									'autoComplete' => true,
+									'disabled' => 'disabled'
+								));
+								?> 
+							</div>
                              
                              <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
@@ -119,6 +134,9 @@ function loadCustomProductNumber() {
 								));
 								?> 
 							</div>
+							
+							
+							
 							<div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
                                 <?php echo $this->Form->input('size', array(
