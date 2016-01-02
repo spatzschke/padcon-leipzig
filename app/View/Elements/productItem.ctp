@@ -13,14 +13,21 @@
     	<div class="productItemContent">
             <div class="productItemNumber"><?php //echo Configure::read('padcon.product.number.präfix'); ?><?php echo $product['Product']['product_number'];?></div>
             <div class="productItemName"><?php echo $product['Product']['name'];?></div>
+            <?php if(!empty($product['Product']['core_name'])) {?>
+	            <div class="productItemCore">
+					<label><?php echo Configure::read('padcon.product.core.präfix');?>:</label> 
+					<?php echo $product['Product']['core_name'];?></div>			
+			<?php }?>
             <?php if(!empty($product['Material']['name'])) {?>
 	            <div class="productItemMaterial">
 					<label><?php echo Configure::read('padcon.product.material.präfix');?>:</label> 
 					<?php echo $product['Material']['name'];?></div>
+	            <?php if($product['Material']['name'] != "ohne Bezug") {?>
 	            <div class="productItemColor">
 					<label class="color"><?php echo Configure::read('padcon.product.color.präfix');?>:</label>
 					<?php echo $this->element('productItemColorSlider', array('product' => $product)); ?>	
 				</div>
+				<?php }?>				
 			<?php }?>
             <div class="productItemSize">
 				<label><?php echo Configure::read('padcon.product.size.präfix')?>:</label>

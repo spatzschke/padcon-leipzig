@@ -39,8 +39,11 @@
 	Configure::write('padcon.Rechnung.additional_text.default','Zahlungsbedingung: '.Configure::read('padcon.zahlungsbedingung.skonto.tage').' Tage '.Configure::read('padcon.zahlungsbedingung.skonto.wert').'% Skonto oder '.Configure::read('padcon.zahlungsbedingung.netto.tage').' Tage Netto.');
 	
 //Product
+	Configure::write('padcon.product.producer.padcon', 'Fa. padcon');
 	Configure::write('padcon.product.number.präfix', 'PD-');
 	Configure::write('padcon.product.material.präfix', 'Bezug');
+	Configure::write('padcon.product.material.noMaterial', 'ohne Bezug');
+	Configure::write('padcon.product.core.präfix', 'Kern');
 	Configure::write('padcon.product.color.präfix', 'Farbe');
 	Configure::write('padcon.product.size.präfix', 'Maße');
 	Configure::write('padcon.product.size.suffix', 'cm');

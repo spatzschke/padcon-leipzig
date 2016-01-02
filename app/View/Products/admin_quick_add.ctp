@@ -96,6 +96,18 @@ $(document).ready(function() {
 		
 		
 	});
+	
+	$('#ProductCores').bind('click', function() {
+		var list = $( this ).find('Option:selected')
+		  .map( function() {
+		    return this.text;
+		  })
+		  .get()
+		  .join( " / " );
+		$("#ProductCoreName").val(list)
+		
+		
+	});
 			
 });
 
@@ -228,14 +240,14 @@ $product = $product['Product'];
 						));
 						?>                                      
                      </div>
-                     
+                                        
                      <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
                         <?php echo $this->Form->input('material_id', array(
 							'label' => false,
 							'class' => 'form-control',
 							'data-model' => 'Product',
-							'placeholder' => 'Berzug',
+							'placeholder' => 'Bezug',
 							'data-field' => 'material_id', 
 							'autoComplete' => true,
 							'empty' => 'Bitte Bezug wählen',
@@ -245,7 +257,7 @@ $product = $product['Product'];
 						?> 
 					</div>
 					<div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-resize-vertical"></i></span>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
                         <?php echo $this->Form->input('size', array(
 							'label' => false,
 							'class' => 'form-control',
@@ -424,11 +436,44 @@ $product = $product['Product'];
                 </div>
                 
                  <!-- Rechts -->
-                <div class="col-md-4">
-		         	<div class="productItemImage">	
-			        	<?php echo '<img class="lazy"  width="340" src="'.$this->webroot.'img/no_pic.png" alt="'.$product['name'].'" />'; ?>
-			        </div>
-                </div>    
+                 <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon  glyphicon-screenshot"></i></span>
+                    <?php echo $this->Form->input('core_name', array(
+						'label' => false,
+						'class' => 'form-control',
+						'data-model' => 'Product',
+						'placeholder' => 'Kernbezeichnung',
+						'data-field' => 'core_name', 
+						'autoComplete' => true, 
+						'type' => 'text',
+						'value' => $product['core_name'], 
+						'name' => 'data['.$i.'][Product][core_name]',
+						'readonly' => 'readonly'
+					));
+					?>                                      
+                 </div>
+                <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
+                        <?php                         
+                        
+                        echo $this->Form->input('cores', array(
+                        	'multiple' => 'multiple',
+  							'type' => 'select',
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Core',
+							'placeholder' => 'Kern',
+							'data-field' => 'cores', 
+							'autoComplete' => true,
+							'style' => 'height: 215px',
+							
+							//'value' => $product['core_name'], 
+							'name' => 'data['.$i.'][Product][cores]',
+							'default' => $product['cores'],
+						));
+												
+						?> 
+					</div>  
           	</div>
 		</div>                         
 	</div> 
