@@ -201,8 +201,13 @@ class ProductsController extends AppController {
 							
 			
 				$multi = false;
+				$multiCount = substr_count($string, 'PD');
+				
+				if (strpos($string, ' PD') !== FALSE) {
+				 $multiCount = $multiCount-1;	
+				}
 				$parts = false;
-				if(substr_count($string, 'PD') > 1) {$multi = true;}
+				if($multiCount > 1) {$multi = true;}
 				if(substr_count($string, 'Maße') > 1 && !$multi) {$parts = true;}
 				
 				$input = explode(PHP_EOL, $string);
@@ -267,7 +272,7 @@ class ProductsController extends AppController {
 								
 								foreach($split as $item) {
 									$entry = $this->Core->findByName($item);
-									array_push($cores_arr, $entry['Core']['id']);	
+									if(!empty($entry)) {	array_push($cores_arr, $entry['Core']['id']); }
 									if(end($split) !== $item){
 									    $core_name = $core_name.$item.' / ';
 									} else {
@@ -286,7 +291,7 @@ class ProductsController extends AppController {
 					//Bezug
 					
 					$val = $value;
-					if (strpos($val, 'Bezug:') !== FALSE) {
+					if (strpos($val, 'Bezug:') !== FALSE && strpos($val, '-Bezug:') == FALSE) {
 	
 						$val = explode(', Farbe',trim($val));
 						$val = str_ireplace('Bezug:', '', trim($val[0]));
@@ -441,7 +446,7 @@ class ProductsController extends AppController {
 						$newProduct['Product']['producerName'] = $producerName;
 						$newProduct['Product']['producerNumber'] = $producerNumber;
 		
-						if($bezug != '') {
+						if(!empty($bezug) && $bezug != '') {
 					 		$newProduct['Product']['material'] = $bezug['Material']['id'];
 					 	} else {
 					 		$newProduct['Product']['material'] = 0;
