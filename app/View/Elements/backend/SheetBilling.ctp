@@ -24,7 +24,7 @@ if(empty($this->data['Pages'])) {
 				
 				
 				if($this->data['Confirmation']['order_number'] != '' || $this->data['Confirmation']['order_number'] != null) {
-					echo '<p class="offerText">Ihre Bestellung Nr.: '.$this->data['Confirmation']['order_number'].' vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' lieferten wir mit dem Lieferschein Nr.: '.$this->data['Delivery']['delivery_number'].' vom '.$this->Time->format($this->data['Delivery']['delivery_date'], '%d.%m.%Y').'. Wir berechnen wie folgt:</p>';
+					echo '<p class="offerText">Ihre Bestellung Nr.: '.$this->data['Confirmation']['order_number'].' vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' lieferten wir mit dem Lieferschein Nr.: '.$this->data['Delivery']['delivery_number'].' vom '.$this->Time->format($this->data['Delivery']['modified'], '%d.%m.%Y').'. Wir berechnen wie folgt:</p>';
 				} else {
 					echo '<p class="offerText">Ihre Bestellung vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' lieferten wir mit dem Lieferschein Nr.: '.$this->data['Delivery']['delivery_number'].' vom '.$this->Time->format($this->data['Delivery']['created'], '%d.%m.%Y').'. Wir berechnen wie folgt:</p>';
 				}

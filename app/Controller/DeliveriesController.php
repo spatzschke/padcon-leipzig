@@ -254,9 +254,8 @@ Lieferzeit: ca. 3-4 Wochen
 		
 		$data = $this->Delivery->findById($id);
 		
-		$this->generateData($data);
-		
-				
+		$this->generateData($data);		
+					
 		$title = "Lieferschein_".str_replace('/', '-', $data['Delivery']['delivery_number']);
 		$this->set('title_for_layout', $title);
 		
@@ -291,8 +290,6 @@ Lieferzeit: ca. 3-4 Wochen
 		$Addresses = new AddressesController();	
 		$Carts = new CartsController();
 		$Confirmations = new ConfirmationsController();
-	
-		
 
 		if(!$data || !isset($data['Confirmation'])) {
 			$confirmation_id = $data['ConfirmationDelivery']['confirmation_id'];
@@ -320,10 +317,14 @@ Lieferzeit: ca. 3-4 Wochen
 		$this->Customer->recursive = 0;
 		$this->request->data += $this->Customer->findById($this->request->data['Confirmation']['customer_id']);
 		
-		
-		if(empty($this->request->data['Address'])) {
+		$addressDelivery = array();
+		if(isset($this->request->data['Address']) && ($this->request->data['Address']['id'] != $this->request->data['Delivery']['address_id']) ) {
+			$addressDelivery = $this->Address->findById($this->request->data['Delivery']['address_id']);
+			$this->request->data['Address'] = $addressDelivery['Address'];
+		} else {
 			$this->request->data = $Addresses->getAddressByType($this->request->data, 3, TRUE);
 		}
+		
 		$a = $Addresses->splitAddressData($this->request->data);
 		
 		$this->request->data['Address'] += $a['Address'];
@@ -331,6 +332,7 @@ Lieferzeit: ca. 3-4 Wochen
 		$confirmation = $Confirmations->calcPrice($this->request->data);		
 		$this->request->data['Confirmation'] += $confirmation;		
 
+		
 		return $Confirmations->calcPrice($this->request->data);
 
 	}	
