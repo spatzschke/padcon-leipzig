@@ -257,7 +257,11 @@ class BillingsController extends AppController {
 		$this->Customer->recursive = 0;
 		$this->request->data += $this->Customer->findById($this->request->data['Confirmation']['customer_id']);
 		
-		if(!isset($this->request->data['Address']['id'])) {
+		$addressDelivery = array();
+		if(isset($this->request->data['Address']) && ($this->request->data['Address']['id'] != $this->request->data['Billing']['address_id']) ) {
+			$addressDelivery = $this->Address->findById($this->request->data['Billing']['address_id']);
+			$this->request->data['Address'] = $addressDelivery['Address'];
+		} else {
 			$this->request->data = $Addresses->getAddressByType($this->request->data, 4, TRUE);
 		}
 		
