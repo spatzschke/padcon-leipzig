@@ -288,6 +288,7 @@ class ConfirmationsController extends AppController {
 								
 				$confirmation['Confirmation']['delivery_cost'] = $this->request->data['Confirmation']['deliveryCost'];
 				
+				debug($confirmation['Confirmation']['delivery_cost']);
 				
 				if($this->Confirmation->save($confirmation)){
 					$this->Session->setFlash(__('Speicherung erfolgreich', true));
@@ -553,6 +554,9 @@ class ConfirmationsController extends AppController {
 		$this->request->data['Address']['count'] = $this->AddressAddresstype->find('count', array('conditions' => array(
 			'customer_id' => $confirmation['Confirmation']['customer_id'],
 			'type_id' => 1)));
+			
+		debug($this->request->data['Confirmation']);
+		debug($this->calcPrice($this->request->data));
 
 		$this->request->data['Confirmation'] += $this->calcPrice($this->request->data);
 		
@@ -569,7 +573,7 @@ class ConfirmationsController extends AppController {
 		$vat_price = $data['Confirmation']['vat'] * $part_price / 100;
 		$data_price = floatval($part_price + $vat_price);
 		
-		if($data['Cart']['sum_retail_price'] > Configure::read('padcon.delivery_cost.versandkostenfrei_ab')) {
+		if($data['Cart']['sum_retail_price'] > Configure::read('padcon.delivery_cost.versandkostenfrei_ab') || strpos($data['Confirmation']['additional_text'],"frei Haus.")!==false) {
 			$delivery_cost = Configure::read('padcon.delivery_cost.frei');
 		} else {
 			if($data['Confirmation']['delivery_cost'] != Configure::read('padcon.delivery_cost.paeckchen')) {
