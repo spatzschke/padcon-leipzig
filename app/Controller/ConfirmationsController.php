@@ -404,7 +404,9 @@ class ConfirmationsController extends AppController {
 				$confirmation['Confirmation']['address_id'] = $confirmation['Address']['id'];				
 			}
 			
-			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
+			if(empty($confirmation['Confirmation']['confirmation_number'])) {
+				$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
+			}
 			$confirmation['Confirmation']['customer_id'] = $id;
 			
 			
