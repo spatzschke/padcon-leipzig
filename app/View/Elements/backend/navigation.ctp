@@ -1,6 +1,6 @@
 <aside id="sidebar" class="column">
 		<ul class="toggle">
-			<li class="icn_add_user"><?php echo $this->Html->link('Dashboard', '/admin/Users/dashboard'); ?></li>
+			<li class="icn_add_user"><?php echo $this->Html->link('Dashboard', '/admin/Pages/dashboard'); ?></li>
 		</ul>
 		<!--<h3>Dokumente erstellen</h3>
 		<ul class="toggle">

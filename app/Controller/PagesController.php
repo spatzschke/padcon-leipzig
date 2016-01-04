@@ -36,8 +36,8 @@ class PagesController extends AppController {
  *
  * @var array
  */
-	public $uses = array();
-
+ 	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'AddressAddresstype');
+	
 /**
  * Displays a view
  *
@@ -83,6 +83,11 @@ class PagesController extends AppController {
 		$this->set(compact('page', 'subpage', 'title_for_layout'));
 		$this->render(implode('/', $path));
 	}
+	
+	function admin_dashboard() {
+		$this->layout = 'admin';
+	
+	} 
 
 }
 

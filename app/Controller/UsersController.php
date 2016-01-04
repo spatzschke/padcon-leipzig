@@ -127,10 +127,6 @@ class UsersController extends AppController {
 
 	//admin
 	
-	function admin_dashboard() {
-		$this->layout = 'admin';
-	}
-	
 	function admin_index() {
 		$this->layout = 'admin';
 		$this->User->recursive = 0;
