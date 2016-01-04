@@ -83,6 +83,23 @@ class ProductsController extends AppController {
 	function getProduct($id = null){
 		
 		$product = $this->Product->findById($id);
+		
+		//Kerne hinzufügen
+		$core_arr = array();
+		$cores = $this->ProductCore->findAllByProductId($id);
+		foreach ($cores as $i => $core) {
+			array_push($core_arr, $core['ProductCore']['core_id']);
+		}
+		$product['Product']['cores'] = $core_arr;
+		
+		//Kategorien hinzufügen
+		$cat_arr = array();
+		$cats = $this->ProductCategory->findAllByProductId($id);
+		foreach ($cats as $i => $cat) {
+			array_push($cat_arr, $cat['ProductCategory']['category_id']);
+		}
+		$product['Product']['categories'] = $cat_arr;
+		
 		$color = $this->Material->findById($product['Material']['id']);
 		
 		return $product+$color;
@@ -183,6 +200,8 @@ class ProductsController extends AppController {
 	function admin_quickAdd() {
 		$this->layout = 'admin';
 		$errors = array();
+		
+
 				
 		if (!empty($this->data)) {
 			 
@@ -401,23 +420,21 @@ class ProductsController extends AppController {
 									
 					foreach($number as $i=>$product) {
 						
-							$newProduct['Product']['number'] = $number[$i];
+							$newProduct['Product']['product_number'] = $number[$i];
 							$newProduct['Product']['name'] = $name;
 							
-							$newProduct['Product']['producerName'] = $producerName;
-							$newProduct['Product']['producerNumber'] = $producerNumber;
+							$newProduct['Product']['producer_name'] = $producerName;
+							$newProduct['Product']['producer_number'] = $producerNumber;
 		
-							debug($bezug['Material']['id']);
-		
-					 		$newProduct['Product']['material'] = $bezug['Material']['id'];
+					 		$newProduct['Product']['material_id'] = $bezug['Material']['id'];
 							$newProduct['Product']['core_name'] = $core_name;
 							$newProduct['Product']['cores'] = $cores_arr;
-					 		$newProduct['Product']['feature'] = $features;
-							$newProduct['Product']['maße'] = $maße[$i];
+					 		$newProduct['Product']['featurelist'] = $features;
+							$newProduct['Product']['size'] = $maße[$i];
 							$p = str_replace(',', '.', str_replace(' €', '', $ek));
-							$newProduct['Product']['ek'] = $p[$i];
+							$newProduct['Product']['price'] = $p[$i];
 							$r = str_replace(',', '.', str_replace(' €', '', $vk));
-							$newProduct['Product']['vk'] = $r[$i];
+							$newProduct['Product']['retail_price'] = $r[$i];
 							$newProduct['Product']['active'] = 'checked';
 							$newProduct['Product']['new'] = '';
 							if (strpos($number[$i], 'Z') !== FALSE) {
@@ -440,23 +457,23 @@ class ProductsController extends AppController {
 						 array_push($errors['prod-cat'], $error);
 					}
 										
-						$newProduct['Product']['number'] = $number;
+						$newProduct['Product']['product_number'] = $number;
 						$newProduct['Product']['name'] = $name;
 		
-						$newProduct['Product']['producerName'] = $producerName;
-						$newProduct['Product']['producerNumber'] = $producerNumber;
+						$newProduct['Product']['producer_name'] = $producerName;
+						$newProduct['Product']['producer_number'] = $producerNumber;
 		
 						if(!empty($bezug) && $bezug != '') {
-					 		$newProduct['Product']['material'] = $bezug['Material']['id'];
+					 		$newProduct['Product']['material_id'] = $bezug['Material']['id'];
 					 	} else {
-					 		$newProduct['Product']['material'] = 0;
+					 		$newProduct['Product']['material_id'] = 0;
 					 	}
 						$newProduct['Product']['core_name'] = $core_name;
 						$newProduct['Product']['cores'] = $cores_arr;
-					 	$newProduct['Product']['feature'] = $features;
-						$newProduct['Product']['maße'] = $maße;
-						$newProduct['Product']['ek'] = str_replace(',', '.', str_replace(' €', '', $ek));
-						$newProduct['Product']['vk'] = str_replace(',', '.', str_replace(' €', '', $vk));
+					 	$newProduct['Product']['featurelist'] = $features;
+						$newProduct['Product']['size'] = $maße;
+						$newProduct['Product']['price'] = str_replace(',', '.', str_replace(' €', '', $ek));
+						$newProduct['Product']['retail_price'] = str_replace(',', '.', str_replace(' €', '', $vk));
 						$newProduct['Product']['active'] = 'checked';
 						$newProduct['Product']['new'] = '';	
 										
@@ -486,21 +503,19 @@ class ProductsController extends AppController {
 						if ($this->Product->save($prod)) {
 	
 							$currId = $this->Product->getLastInsertId();
-							
-							debug($currId);
-	
+								
 							//Kerne abspeichern
 							$this->ProductCore->create();
 							$prodCore = array();
-							foreach ($prod['Product']['cores'] as $i => $core) {
+							foreach ($prod['cores'] as $i => $core) {
 								$prodCore[$i]['ProductCore']['product_id'] = $currId;
 								$prodCore[$i]['ProductCore']['core_id'] = $core;
-							}						
+							}					
 	
 							//Kategorien abspeichern
 							$this->ProductCategory->create();
 							$prodCat = array();
-							foreach ($prod['Product']['categories'] as $i => $category) {
+							foreach ($prod['categories'] as $i => $category) {
 								$prodCat[$i]['ProductCategory']['product_id'] = $currId;
 								$prodCat[$i]['ProductCategory']['category_id'] = $category;
 							}						
@@ -587,17 +602,83 @@ class ProductsController extends AppController {
 		
 	}
 	
-
-	function edit($id = null) {
+	function admin_edit($id = null) {
+		
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash(__('Invalid product', true));
 			$this->redirect(array('action' => 'index'));
 		}
 		
 		$data = $this->data;
-		unset($data['Product']['product_number']);
-
+		//unset($data['Product']['product_number']);
 		if (!empty($data)) {
+			
+			$product = $this->getProduct($id);
+			
+			//Kerne Updaten
+			$cores = $this->ProductCore->findAllByProductId($id);
+
+			if(count($data['Product']['cores']) <= count($cores)) {
+				//Wenn alte Kerne mehr 
+				foreach ($cores as $i => $value) {
+					if($i < count($data['Product']['cores'])) {
+						$tmpProdCore['ProductCore']['core_id'] = $data['Product']['cores'][$i];
+						$this->ProductCore->id = $value['ProductCore']['id'];
+						$this->ProductCore->save($tmpProdCore);
+					} else {
+						$this->ProductCore->delete($value['ProductCore']['id']);
+					}
+				}
+			} else {
+			//Wenn neue Kerne mehr 
+				foreach ($data['Product']['cores'] as $i => $value) {
+					if($i < count($cores)) {
+						$coresTmp = $this->ProductCore->findAllByProductId($id);
+						$tmpProdCore['ProductCore']['core_id'] = $data['Product']['cores'][$i];
+						$this->ProductCore->id = $coresTmp[$i]['ProductCore']['id'];
+						$this->ProductCore->save($tmpProdCore);
+					} else {
+						$tmpProdCore['ProductCore']['product_id'] = $data['Product']['id'];
+						$tmpProdCore['ProductCore']['core_id'] = $data['Product']['cores'][$i];
+						$this->ProductCore->create();
+						$this->ProductCore->save($tmpProdCore);
+					}
+				}
+			}		
+			
+			//Kategorien Updaten
+			$cats = $this->ProductCategory->findAllByProductId($id);
+			
+			
+
+			if(count($data['Product']['categories']) <= count($cats)) {
+				//Wenn alte Cats mehr 
+				foreach ($cats as $i => $value) {
+					if($i < count($data['Product']['categories'])) {
+						$tmpProdCat['ProductCore']['category_id'] = $data['Product']['categories'][$i];
+						$this->ProductCategory->id = $value['ProductCategory']['id'];
+						$this->ProductCategory->save($tmpProdCat);
+					} else {
+						$this->ProductCategory->delete($value['ProductCategory']['id']);
+					}
+				}
+			} else {
+			//Wenn neue Cats mehr 
+				foreach ($data['Product']['categories'] as $i => $value) {
+					if($i < count($cats)) {
+						$catsTmp = $this->ProductCategory->findAllByProductId($id);
+						$tmpProdCat['ProductCategory']['category_id'] = $data['Product']['categories'][$i];
+						$this->ProductCategory->id = $catsTmp[$i]['ProductCategory']['id'];
+						$this->ProductCategory->save($tmpProdCat);
+					} else {
+						$tmpProdCat['ProductCategory']['product_id'] = $data['Product']['id'];
+						$tmpProdCat['ProductCategory']['category_id'] = $data['Product']['categories'][$i];
+						$this->ProductCategory->create();
+						$this->ProductCategory->save($tmpProdCat);
+					}
+				}
+			}			
+			
 			if ($this->Product->save($data)) {
 				$this->Session->setFlash(__('Das Produkt wurde gespeichert', true));
 				
@@ -607,19 +688,15 @@ class ProductsController extends AppController {
 			
 		}
 		if (empty($this->data)) {
-			$this->data = $this->Product->read(null, $id);
-			$colors = $this->Color->find('list',array('conditions' => array('Color.material_id' => ($this->data['Material']['id'])), 'fields' => array('Color.name')));
-			
+			$this->data = $this->getProduct($id);
+			$colors = $this->Color->find('list',array('conditions' => array('Color.material_id' => ($this->data['Material']['id'])), 'fields' => array('Color.name')));			
 		}
 		$categories = $this->Product->Category->find('list');
 		$materials = $this->Product->Material->find('list');
+		$cores = $this->Core->find('list');
 		
 		$carts = $this->Product->Cart->find('list');
-		$this->set(compact('categories', 'materials', 'carts', 'colors'));
-	}
-	
-	function admin_edit($id = null) {
-		$this->edit($id);
+		$this->set(compact('categories', 'materials', 'carts', 'colors', 'cores'));
 		$this->layout = 'admin';
 		$this->set('title_for_panel', 'Produkt bearbeiten');
 		$this->set('primary_button', 'Speichern');

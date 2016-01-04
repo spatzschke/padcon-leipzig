@@ -356,7 +356,7 @@ class CartsController extends AppController {
 		
 		//Holen maximale Zeilen
 		foreach ($cart['CartProduct'] as $key => $value) {
-			$features = $Products->seperatFeatureList($value['product_id']);
+			$features = $Products->seperatFeatureList($value['product_id']);		
 			$featureCountMax += count($features)+$standardProductRow; // 5 Standardzeile
 		}
 		
@@ -364,33 +364,37 @@ class CartsController extends AppController {
 			if($featureCountMax < $rowPerPage) {
 				$pages = 1;
 			} else {
-				$pages = ($featureCountMax - ($featureCountMax % $rowPerPage))/$rowPerPage +1;
+				$pages = ($featureCountMax - ($featureCountMax % $rowPerPage))/$rowPerPage + 1;
 			}
 			
 		} else {
 			$pages = $featureCountMax/$rowPerPage;
 		}
+		
 					
-		for($j = 0; $j < $pages; $j++) {
+		for($j = 0; $j <= $pages; $j++) {
 			foreach ($cartProducts as $key => $value) {
 				$features = $Products->seperatFeatureList($value['product_id']);
 				$featureCount += count($features)+$standardProductRow; // 5 Standardzeile
+				
+				
 								
-				if($featureCount > $rowPerPage - 5 || (count($cartProducts) == 1 && $pages > 1)) {
+				if($featureCount > $rowPerPage -5 || (count($cartProducts) == 1 && $pages > 1)) {
 					$page[$j] = $prodArr;
 					$featureCount = 0;
 					$prodArr = array();
 					array_push($prodArr, array('product' => $value , 'count' => count($features)+$standardProductRow));
 					unset($cartProducts[$key]);
+					$j++;
 				} else {
 					array_push($prodArr, array('product' => $value , 'count' => count($features)+$standardProductRow));
 					unset($cartProducts[$key]);
 					continue;
 				}
-			}			
+			}	
 			
 			//auf die letzte Seite die restlichten Produkte packen
-			if($j == $pages - 1) {
+			if($j == $pages) {
 				$addProdArr = array();
 				
 				if($calcRow > 0 ) {

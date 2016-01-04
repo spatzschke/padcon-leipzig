@@ -394,8 +394,9 @@ class OffersController extends AppController {
 				$offer = $Addresses->getAddressByType($offer, 1, TRUE);	
 				$offer['Offer']['address_id'] = $offer['Address']['id'];
 			}
-
-			$offer['Offer']['offer_number'] = $this->generateOfferNumber($customer);
+			if(empty($confirmation['Offer']['offer_number'])) {
+				$offer['Offer']['offer_number'] = $this->generateOfferNumber($customer);
+			}
 			$offer['Offer']['status'] = 'open';
 			
 			if($this->Offer->save($offer)){
@@ -621,6 +622,7 @@ class OffersController extends AppController {
 				$j = 0;
 				foreach ($cart['CartProduct'] as $cartProd) {
 					$product = $Products->getProduct($cartProd['product_id']);
+					
 					unset($product['Cart']);
 					unset($product['Category']);
 					unset($product['Material']);

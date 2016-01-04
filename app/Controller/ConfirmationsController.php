@@ -288,8 +288,6 @@ class ConfirmationsController extends AppController {
 								
 				$confirmation['Confirmation']['delivery_cost'] = $this->request->data['Confirmation']['deliveryCost'];
 				
-				debug($confirmation['Confirmation']['delivery_cost']);
-				
 				if($this->Confirmation->save($confirmation)){
 					$this->Session->setFlash(__('Speicherung erfolgreich', true));
 				} else {
@@ -406,7 +404,9 @@ class ConfirmationsController extends AppController {
 				$confirmation['Confirmation']['address_id'] = $confirmation['Address']['id'];				
 			}
 			
-			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
+			if(empty($confirmation['Confirmation']['confirmation_number'])) {
+				$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
+			}
 			$confirmation['Confirmation']['customer_id'] = $id;
 			
 			
@@ -554,9 +554,6 @@ class ConfirmationsController extends AppController {
 		$this->request->data['Address']['count'] = $this->AddressAddresstype->find('count', array('conditions' => array(
 			'customer_id' => $confirmation['Confirmation']['customer_id'],
 			'type_id' => 1)));
-			
-		debug($this->request->data['Confirmation']);
-		debug($this->calcPrice($this->request->data));
 
 		$this->request->data['Confirmation'] += $this->calcPrice($this->request->data);
 		
@@ -610,7 +607,7 @@ class ConfirmationsController extends AppController {
 		// 14 = aktuelles Jahr
 		
 		// 019 = Anzahl der AB im Monat - dreistellig
-		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))));
+		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d')), ))));
 		$countMonthConfirmations = str_pad($countMonthConfirmations, 3, "0", STR_PAD_LEFT);
 		// 11 = aktueller Monat
 		$month = date('m');
