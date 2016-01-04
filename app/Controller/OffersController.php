@@ -621,6 +621,7 @@ class OffersController extends AppController {
 				$j = 0;
 				foreach ($cart['CartProduct'] as $cartProd) {
 					$product = $Products->getProduct($cartProd['product_id']);
+					
 					unset($product['Cart']);
 					unset($product['Category']);
 					unset($product['Material']);
