@@ -1,3 +1,5 @@
+<?php ?>
+
 <div class="mainbox col-md-12 col-md-offset-0 col-sm-8 col-sm-offset-2">                    
         <div class="panel panel-info" >
             <div class="panel-heading">
@@ -51,6 +53,7 @@
 							'data-field' => 'product_number', 
 							'autoComplete' => true,
 							'value' => $data['Product']['product_number'], 
+							'readonly' => $readonly
 						));
 						?>                                     
                      </div>
@@ -248,6 +251,13 @@
 						<div class="col-md-5" style="width: 134px; padding: 0">
                              <div class="input-group">
                                 <span class="input-group-addon">
+                                	<?php 			
+									if($this->request->params['action'] == "admin_edit") {
+										$readonly = "disabled";
+									} else {
+										$readonly = "";
+									}
+									?>   
 									<?php echo $this->Form->input('custom', array(
 										'label' => false,
 										'type' => 'checkbox',
@@ -256,7 +266,7 @@
 										'data-field' => 'custom', 
 										'autoComplete' => true,
 										'div' => false,
-										$data['Product']['custom'], 
+										$data['Product']['custom']
 									));
 									?>  
 								</span>

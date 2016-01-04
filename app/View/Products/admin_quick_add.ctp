@@ -150,11 +150,11 @@ if(!empty($this->data['Products'])) {
 				));  
 				
 foreach($this->data['Products'] as $i => $product){
-$product = $product['Product'];
+$product = $product;
 	
 ?>
 
-<?php echo $this->element('backend/portlets/Product/productDetailPortlet', array('data' => $this->data)); ?>    
+<?php echo $this->element('backend/portlets/Product/productDetailPortlet', array('data' => $product)); ?>    
 
     
 <?php 
