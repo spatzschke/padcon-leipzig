@@ -5,36 +5,7 @@
 ?>
 				<tr>
 					<td>
-					<?php 
-						if($item['Billing']['status'] == "open") {
-							echo '<i class="glyphicon glyphicon-open"  style="color: grey; cursor: pointer"
-								 data-toggle="popover"
-								 data-content="Offen"
-								 data-trigger="hover"
-							></i>';
-						} 
-						elseif($item['Billing']['status'] == "close") {
-							echo '<i class="glyphicon glyphicon-lock" style="color: lightgrey; cursor: pointer"
-								 data-toggle="popover"
-								 data-content="Abgeschlossen"
-								 data-trigger="hover"
-							></i>';
-						}
-						elseif($item['Billing']['status'] == "active") {
-							echo '<i class="glyphicon glyphicon-open"  style="color: grey; cursor: pointer"
-								 data-toggle="popover"
-								 data-content="Aktiv"
-								 data-trigger="hover"
-							></i>';
-						}elseif($item['Billing']['status'] == "") {
-							echo '<i class="glyphicon glyphicon-ban-circle" style="color: lightgrey; cursor: pointer"
-								 data-toggle="popover"
-								 data-content="Unvollständig"
-								 data-trigger="hover"
-							></i>';
-						}
-					?>
-						
+						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Billing']['status']));	?>
 					</td>
 					<td>
 						<?php if(empty($item['Billing']['billing_number'])) {
@@ -103,7 +74,7 @@
 					</td>
 					<td>
 						<?php 
-						if($item['Billing']['payment_target'] == '0000-00-00' || empty($item['Billing']['payment_target'])) {
+						if($item['Billing']['payment_target'] == '0000-00-00' || $item['Billing']['payment_target'] == '1970-01-01' || empty($item['Billing']['payment_target'])) {
 							echo '-';
 						} else {
 							echo $this->Time->format($item['Billing']['payment_target'], '%d.%m.%Y'); 
@@ -113,7 +84,8 @@
 					<td>
 						<?php 
 						if($item['Billing']['payment_date'] == '0000-00-00' || empty($item['Billing']['payment_date'])) {
-							echo '-';
+							echo $this->Html->link('Gezahlt', array('controller' => 'Billings', 'action' => 'payed', 'admin' =>'true', $item['Billing']['id']),
+																array('class' => 'btn btn-default')); 	
 						} else {
 							echo $this->Time->format($item['Billing']['payment_date'], '%d.%m.%Y'); 
 						}
@@ -169,6 +141,8 @@
 							
 							if(!empty($item['Billing']['hash']))
 								echo $this->Html->link('<i class="glyphicon glyphicon-link"></i>', '/Rechnung/'.$item['Billing']['hash'], array('escape' => false, 'target' => '_blank'));
+							
+							echo $this->Html->link('<i id="tableSetting_btn" class="glyphicon glyphicon-cog"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'table_setting', $item['Billing']['id']), array('escape' => false));
 							
 							
 							echo '</td>';

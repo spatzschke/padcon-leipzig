@@ -6,36 +6,7 @@
 ?>
 				<tr>
 					<td>
-					<?php 
-						if($item['Offer']['status'] == "open") {
-							echo '<i class="glyphicon glyphicon-open"  style="color: grey; cursor: pointer"
-								 data-toggle="popover"
-								 data-content="Offen"
-								 data-trigger="hover"
-							></i>';
-						} 
-						elseif($item['Offer']['status'] == "close") {
-							echo '<i class="glyphicon glyphicon-lock" style="color: lightgrey; cursor: pointer"
-								 data-toggle="popover"
-								 data-content="Abgeschlossen"
-								 data-trigger="hover"
-							></i>';
-						}
-						elseif($item['Offer']['status'] == "active") {
-							echo '<i class="glyphicon glyphicon-asterisk" style="color: green; font-size: 20px; margin-left: -3px; cursor: pointer"
-								 data-toggle="popover"
-								 data-content="Aktiv"
-								 data-trigger="hover"
-							></i>';
-						}elseif($item['Offer']['status'] == "") {
-							echo '<i class="glyphicon glyphicon-ban-circle" style="color: lightgrey; cursor: pointer"
-								 data-toggle="popover"
-								 data-content="Unvollständig"
-								 data-trigger="hover"
-							></i>';
-						}
-					?>
-						
+						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Offer']['status']));	?>
 					</td>
 					<td>
 						<?php if(empty($item['Offer']['offer_number'])) {

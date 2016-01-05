@@ -264,6 +264,30 @@ class ConfirmationsController extends AppController {
 		
 	}
 
+	function admin_table_setting($id = null) {
+		
+		$this->layout = 'ajax';
+		
+
+		if ($this->request->is('ajax')) {
+			if(!empty($this->request->data)) {
+				
+				$this->Confirmation->id = $this->request->data['Confirmation']['id'];
+				$this->Confirmation->save($this->request->data);
+							
+			} else {
+				$confirmation = $this->Confirmation->findById($id);
+				$this->request->data = $confirmation;
+				
+			}
+		}
+		
+		$controller_name = 'Confirmations'; 
+		$controller_id = $confirmation['Confirmation']['id'];
+		
+		$this->set(compact('controller_id', 'controller_name'));
+	}
+
 	function admin_settings($id = null) {
 		
 		$this->layout = 'ajax';
@@ -608,6 +632,7 @@ class ConfirmationsController extends AppController {
 		
 		// 019 = Anzahl der AB im Monat - dreistellig
 		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d')), ))));
+		$countMonthConfirmations++;
 		$countMonthConfirmations = str_pad($countMonthConfirmations, 3, "0", STR_PAD_LEFT);
 		// 11 = aktueller Monat
 		$month = date('m');
