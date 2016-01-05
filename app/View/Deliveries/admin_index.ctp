@@ -18,20 +18,39 @@ $(document).ready(function() {
 		$('.glyphicon').popover({
             html:true
         });
+        
+        <?php
+		 $id = "tableSetting";
+		 $modalSize = "modal-md";
+		 $backdrop = "true";
+		?>
+	
+		$('#<?php echo $id;?>_btn').parent('a').on('click',function() {
+			$('#<?php echo $id;?>_modal .modal-body').load($('#<?php echo $id;?>_btn').parent('a').attr('href'));
+			$('#<?php echo $id;?>_modal').modal('show');
+			return false;
+		})
+	
+		$("#<?php echo $id;?>_modal").on("hidden.bs.modal", function(){ 
+			$(this).removeData("modal");
+			window.location = '';
+		});
 });
 
 </script>
 
-
-
-<article class="module width_full offersIndex">
-		<div class="modal fade" id="product_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" style="display: none;">
-			<div class="modal-dialog modal-sm">
-			 	<div class="modal-content">
-					<div class="modal-body"></div>
-				</div>
+<div class="modal" id="<?php echo $id;?>_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" data-backdrop="<?php echo (isset($backdrop) ? $backdrop : "true");?>">
+	<div class="modal-dialog <?php echo (isset($modalSize) ? $modalSize : "modal-lg");?> offer-dialog">
+	 	<div class="modal-content">
+			<div class="modal-body">
+				<?php echo $this->element('backend/helper/loadingHelper', array("size" => "large")); ?>	
 			</div>
 		</div>
+	</div>
+</div>
+
+<article class="module width_full offersIndex">
+		
 		<header>
 			<?php
 				if($this->request->is('ajax')) {

@@ -48,32 +48,6 @@
 
 <script>
 
-	// $('#<?php echo $id_addAdditionalAddress;?>_btn a').addClass('disabled');
-	// $('#<?php echo $id_createConfirmation;?>_btn a').addClass('disabled');
-	// $('#<?php echo $id_settings;?>_btn a').addClass('disabled');
-	// $('#<?php echo $id_print;?>_btn a').addClass('disabled');
 	
-	<?php if(!empty($this->data['Address']['street'])) { ?>
-		$('#<?php echo $id_addProduct;?>_btn a').removeClass('disabled');
-		$('#<?php echo $id_settings;?>_btn a').removeClass('disabled');
-		
-		$('#<?php echo $id_addCustomer;?>_btn .input-group-addon').css('backgroundColor','lightgreen');	
-		
-		<?php if($this->data['Address']['count'] > 1) {?>			
-			$('#<?php echo $id_addAdditionalAddress;?>_btn a').removeClass('disabled');	
-		<?php } ?>			
-	<?php } ?>
-	
-	<?php if(!empty($this->data['CartProduct'])) { ?>	
-		$('#<?php echo $id_addProduct;?>_btn .input-group-addon').css('backgroundColor','lightgreen');	
-	<?php } ?>
-	// <?php if(!empty($this->data[$controller]['additional_text'])) { ?>	
-		// $('#<?php echo $id_settings;?>_btn .input-group-addon').css('backgroundColor','lightgreen');
-	// <?php } ?>
-	<?php 
-	if(((!empty($this->data[$controller]['additional_text'])) && (!empty($this->data['CartProduct']))) || $this->request->params['action'] == 'admin_view') { ?>	
-		$('#<?php echo $id_createConfirmation;?>_btn a').removeClass('disabled');
-		$('#<?php echo $id_print;?>_btn a').removeClass('disabled');
-	<?php } ?>
 	
 </script>

@@ -121,6 +121,7 @@ class DeliveriesController extends AppController {
 				
 				//Neue Lieferschein-ID in AUftragsbestäätigung speichern 
 				$confirmation['Confirmation']['delivery_id'] = $currDeliveryId;
+				$confirmation['Confirmation']['status'] = 'close';
 				
 				$this->Confirmation->save($confirmation);
 
@@ -188,6 +189,30 @@ class DeliveriesController extends AppController {
 		
 		$controller_name = 'Deliveries'; 
 		$controller_id = $confirmation_id;
+		$this->set(compact('controller_id', 'controller_name'));
+	}
+
+	function admin_table_setting($id = null) {
+		
+		$this->layout = 'ajax';
+		
+
+		if ($this->request->is('ajax')) {
+			if(!empty($this->request->data)) {
+				
+				$this->Delivery->id = $this->request->data['Delivery']['id'];
+				$this->Delivery->save($this->request->data);
+							
+			} else {
+				$data = $this->Delivery->findById($id);
+				$this->request->data = $data;
+				
+			}
+		}
+		
+		$controller_name = 'Deliveries'; 
+		$controller_id = $data['Delivery']['id'];
+		
 		$this->set(compact('controller_id', 'controller_name'));
 	}
 
@@ -363,6 +388,9 @@ Lieferzeit: ca. 3-4 Wochen
 		
 		// for($i=0; $i<=10;$i++) {
 		foreach ($data as $item) {
+			if(empty($item['Confirmation']['customer_id'])) {
+				$item += $this->Confirmation->findById($item['ConfirmationDelivery']['confirmation_id']);
+			}
 
 			//Load Customer for the Delivery
 			$customer= $this->Customer->findById($item['Confirmation']['customer_id']);

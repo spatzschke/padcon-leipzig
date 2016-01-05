@@ -5,36 +5,7 @@
 ?>
 				<tr>
 					<td>
-					<?php 
-						if($item['Confirmation']['status'] == "open") {
-							echo '<i class="glyphicon glyphicon-open"  style="color: grey; cursor: pointer"
-								 data-toggle="popover"
-								 data-content="Offen"
-								 data-trigger="hover"
-							></i>';
-						} 
-						elseif($item['Confirmation']['status'] == "close") {
-							echo '<i class="glyphicon glyphicon-lock" style="color: lightgrey; cursor: pointer"
-								 data-toggle="popover"
-								 data-content="Abgeschlossen"
-								 data-trigger="hover"
-							></i>';
-						}
-						elseif($item['Confirmation']['status'] == "active") {
-							echo '<i class="glyphicon glyphicon-open"  style="color: grey; cursor: pointer"
-								 data-toggle="popover"
-								 data-content="Aktiv"
-								 data-trigger="hover"
-							></i>';
-						}elseif($item['Confirmation']['status'] == "") {
-							echo '<i class="glyphicon glyphicon-ban-circle" style="color: lightgrey; cursor: pointer"
-								 data-toggle="popover"
-								 data-content="Unvollständig"
-								 data-trigger="hover"
-							></i>';
-						}
-					?>
-						
+						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Confirmation']['status']));	?>	
 					</td>
 					<td>
 						<?php if(empty($item['Confirmation']['confirmation_number'])) {
@@ -193,6 +164,8 @@
 							
 							if(!empty($item['Confirmation']['hash']))
 								echo $this->Html->link('<i class="glyphicon glyphicon-envelope"></i>', '/Auftrag/'.$item['Confirmation']['hash'], array('class' => 'mail', 'escape' => false, 'target' => '_blank'));
+							
+							echo $this->Html->link('<i id="tableSetting_btn" class="glyphicon glyphicon-cog"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'table_setting', $item['Confirmation']['id']), array('escape' => false));
 							
 							
 							echo '</td>';

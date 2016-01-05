@@ -112,6 +112,7 @@ class BillingsController extends AppController {
 				$this->Confirmation->save($confirmation);
 				
 				$delivery = $this->Delivery->findById($confirmation['Confirmation']['delivery_id']);
+								
 				$this->generateData($this->Billing->findById($currBillingId), $delivery['Delivery']['cart_id']);
 				
 				$this->set('pdf', null);
@@ -141,6 +142,41 @@ class BillingsController extends AppController {
 			}
 			$this->set('title_for_panel', 'Rechnung aus Auftragsbestätigung erstellen');
 		}
+	}
+
+	function admin_table_setting($id = null) {
+		
+		$this->layout = 'ajax';
+		
+		$data = $this->Billing->findById($id);
+		if ($this->request->is('ajax')) {
+			if(!empty($this->request->data)) {
+				
+				if(isset($this->request->data['Billing']['payment_date'])) {
+					$this->request->data['Billing']['payment_date'] = date('Y-m-d',strtotime($this->request->data['Billing']['payment_date']));
+					if(!strcmp($data['Billing']['status'],'cancel')) {
+						$this->request->data['Billing']['status'] = 'close'; 
+					}
+				}
+				if(isset($this->request->data['Billing']['payment_target'])) {
+					$this->request->data['Billing']['payment_target'] = date('Y-m-d',strtotime($this->request->data['Billing']['payment_target']));
+				}
+				$this->Billing->id = $this->request->data['Billing']['id'];
+				$this->Billing->save($this->request->data);
+							
+			} else {
+				
+				$data['Billing']['payment_target'] = date('d.m.Y',strtotime($data['Billing']['payment_target']));
+				$data['Billing']['payment_date'] = date('d.m.Y',strtotime($data['Billing']['payment_date']));
+				$this->request->data = $data;
+				
+			}
+		}
+		
+		$controller_name = 'Billings'; 
+		$controller_id = $data['Billing']['id'];
+		
+		$this->set(compact('controller_id', 'controller_name'));
 	}
 
 	function admin_settings($id = null) {
@@ -212,6 +248,19 @@ class BillingsController extends AppController {
 		$this->set(compact('data','pdf'));
       	$this->render('admin_view'); 
 	    
+	}
+
+	function admin_payed($id = null) {
+		$data['Billing']['id'] = $id;
+		
+		$data['Billing']['payment_date'] = date("y-m-d");
+		$data['Billing']['status'] = "close";
+		
+		$this->Billing->id = $id;
+		$this->Billing->save($data);
+		
+		$this->redirect('index');
+		
 	}
 
 	function generateBillingNumber() {
