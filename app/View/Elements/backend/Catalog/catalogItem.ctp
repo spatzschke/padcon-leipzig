@@ -43,7 +43,7 @@
         	if(empty($product["Image"])) {
 				echo '<img src="'.$this->webroot.'img/no_pic.png" alt="'.$product['Product']['name'].'"  style="border-color: #'.$product['Category']['color'].'"/>';
 			} else {
-				echo '<img src="'.$product["Image"][0]["path"].'t.'.$product["Image"][0]["ext"].'" alt="'.$product['Product']['name'].'" style="border-color: #'.$product['Category']['color'].'" />'; 
+				echo '<img src="'.$product["Image"]["path"].'t.'.$product["Image"]["ext"].'" alt="'.$product['Product']['name'].'" style="border-color: #'.$product['Category']['color'].'" />'; 
 			} ?>
         	
         	</div>

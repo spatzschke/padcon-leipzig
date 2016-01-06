@@ -9,13 +9,17 @@ if(empty($this->data['Pages'])) {
 			$cartTemp['CartProduct'] = array('empty');	
 		}
 	
-		foreach ($pages as $page => $carti) {	
+		foreach ($pages as $page => $carti) {
+	
+		$pageCur = $page;
+		if(count($pages) > 1)
+			$pageCur = $page + 1;	
 		
 ?>
 
 <article class="module width_full sheet business noInput">	
 		<?php 
-			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $page+1, 'maxPage' => count($pages), 'logo' => true)); 				
+			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $pageCur, 'maxPage' => count($pages), 'logo' => true)); 				
 			
 			if($this->data['Confirmation']['order_date']) {
 				
