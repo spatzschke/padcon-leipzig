@@ -96,4 +96,31 @@ class ImagesController extends AppController {
 		$this->Session->setFlash(__('Image was not deleted', true));
 		$this->redirect(array('action' => 'index'));
 	}
+	
+	function admin_findProductToImage() {
+		
+		$this->layout = 'admin';
+		
+		$imageArr = array();
+		$images = $this->Image->find('all');
+		foreach ($images as $key => $image) {
+			$path = $image['Image']['path'];
+			$number = split("http://media.padcon-leipzig.de/media/image/product/", $path);
+			$number = split("_", $number[1]);
+			$product = $this->Product->findByProductNumber('PD'.$number[0]);
+			if(isset($product['Product'])) {
+				$image['Image']['product_id'] = $product['Product']['id'];
+				$imageUpdate['product_id'] = $image['Image']['product_id'];
+				$imageUpdate['id'] = $image['Image']['id'];
+				$this->Image->id = $image['Image']['id'];
+				if($this->Image->save($imageUpdate)) {
+					$this->Session->setFlash(__('Images aktualsiert', true));
+				} else {			
+					$this->Session->setFlash(__('Images not update', true));
+				}
+			}
+		}
+		
+		$this->redirect(array('controller' => 'pages', 'action' => 'setting'));
+	}
 }

@@ -19,7 +19,7 @@ clear: both;
 height: 20px;
 }
 
-a:link, a:visited {
+a {
 color: #77BACE;
 text-decoration: none;
 }

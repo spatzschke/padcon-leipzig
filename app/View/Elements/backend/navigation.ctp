@@ -76,13 +76,14 @@
 		<ul class="toggle">	
 			<li class="icn_add_user"><?php echo $this->Html->link('Neues Kundekonto', '/admin/users/add'); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle Kundenkonten anzeigen', '/admin/users/index'); ?></li>
-		</ul>
+		</ul>-->
 		<h3>Admin</h3>
 		<ul class="toggle">
-			<li class="icn_settings"><a href="#">Options</a></li>
+			<li class="icn_settings"><?php echo $this->Html->link('Einstellungen', '/admin/pages/setting'); ?></li><!-- 
 			<li class="icn_security"><a href="#">Security</a></li>
-			<li class="icn_jump_back"><a href="#">Logout</a></li>
-		</ul>-->
+			<li class="icn_jump_back"><a href="#">Logout</a></li> -->
+		</ul>
+		
 		
 		<footer>
 			<hr />

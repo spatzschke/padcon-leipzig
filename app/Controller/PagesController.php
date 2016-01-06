@@ -87,7 +87,12 @@ class PagesController extends AppController {
 	function admin_dashboard() {
 		$this->layout = 'admin';
 	
-	} 
+	}
+	
+	function admin_setting() {
+		$this->layout = 'admin';
+	
+	}  
 
 }
 

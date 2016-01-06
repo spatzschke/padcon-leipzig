@@ -1,5 +1,82 @@
 <?php ?>
 
+<script>
+$(document).ready(function() {
+	$('.imageBox select').on('change', function() {
+		var str = "";
+	    $(".imageBox select option:selected").each(function () {
+	            str = $(this).val();
+	            
+	            if(str == '') {
+		            str = '99';
+	            }
+	          });
+	          
+	          console.log(str);
+	          
+	    loadIframe('ProductImageUpload', updateURL($('#ProductImageUpload').attr('src'), 'c', str))
+	});
+});
+
+function saveImageInDb(response) {
+				 
+	 var data = {
+		    data: {
+				product_number : response['data']['product_number'],
+				color : response['data']['color'],
+				path : response['data']['path'],
+				ext : response['data']['ext']
+			}
+     };
+     
+     
+	 
+	 $.ajax({
+		 type: 'POST',
+		 url:'<?php echo FULL_BASE_URL.$this->base;?>\/Images\/add\/',
+		 data: response,
+		 success:function (data, textStatus) {
+				$('.imageBox').find('img').attr('src',response['data']['path']+'t.'+response['data']['ext']+'?'+new Date().getTime());
+				//$.colorbox.close();
+		 } 
+		 
+		
+	 }); 
+	 
+}
+			
+function loadIframe(iframeName, url) {
+    var $iframe = $('#' + iframeName);
+    if ( $iframe.length ) {
+        $iframe.attr('src',url);   
+        return false;
+    }
+    return true;
+}
+function updateURL(currUrl, param, paramVal){
+    var url = currUrl
+    var newAdditionalURL = "";
+    var tempArray = url.split("?");
+    var baseURL = tempArray[0];
+    var aditionalURL = tempArray[1]; 
+    var temp = "";
+    if(aditionalURL)
+    {
+        var tempArray = aditionalURL.split("&");
+        for ( i=0; i<tempArray.length; i++ ){
+            if( tempArray[i].split('=')[0] != param ){
+                newAdditionalURL += temp+tempArray[i];
+                temp = "&";
+            }
+        }
+    }
+    var rows_txt = temp+""+param+"="+paramVal;
+    var finalURL = baseURL+"?"+newAdditionalURL+rows_txt;
+    return finalURL;
+}
+
+</script>
+
 <div class="mainbox col-md-12 col-md-offset-0 col-sm-8 col-sm-offset-2">                    
         <div class="panel panel-info" >
             <div class="panel-heading">
@@ -87,7 +164,22 @@
 						));
 						?>                                      
                      </div>
-            
+            		<div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                            <?php echo $this->Form->input('featurelist', array(
+								'label' => false,
+								'class' => 'form-control',
+								'data-model' => 'Product',
+								'placeholder' => 'Featurliste',
+								'data-field' => 'featurelist', 
+								'autoComplete' => true,
+								'type' => 'textarea',
+								'rows' => '7',
+								'value' => $data['Product']['featurelist'], 
+								'style' => 'height: 141px',
+							));
+							?>                                      
+                    </div>
                     <div class="row">
                     	<div class="col-md-6">
                     	<div class="input-group">
@@ -121,90 +213,7 @@
 								?>                                      
                              </div>
                          </div>
-                     </div> 
-                      
-				</div>
-				
-				 <!-- Mitte -->
-				<div class="col-md-4">
-												
-					<div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
-                            <?php echo $this->Form->input('featurelist', array(
-								'label' => false,
-								'class' => 'form-control',
-								'data-model' => 'Product',
-								'placeholder' => 'Featurliste',
-								'data-field' => 'featurelist', 
-								'autoComplete' => true,
-								'type' => 'textarea',
-								'rows' => '7',
-								'value' => $data['Product']['featurelist'], 
-								'style' => 'height: 141px',
-							));
-							?>                                      
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
-                        <?php echo $this->Form->input('material_id', array(
-							'label' => false,
-							'class' => 'form-control',
-							'data-model' => 'Product',
-							'placeholder' => 'Bezug',
-							'data-field' => 'material_id', 
-							'autoComplete' => true,
-							'empty' => 'Bitte Bezug wählen',
-							'value' => $data['Product']['material_id'], 
-						));
-						?> 
-					</div>
-					<div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-scale"></i></span>
-                        <?php echo $this->Form->input('size', array(
-							'label' => false,
-							'class' => 'form-control',
-							'data-model' => 'Product',
-							'placeholder' => 'Größe',
-							'data-field' => 'size', 
-							'autoComplete' => true, 
-							'type' => 'text',
-							'value' => $data['Product']['size'], 
-						));
-						?>                                      
-                     </div>
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon glyphicon-briefcase"></i></span>
-                        <div class="row">
-                        <?php echo $this->Form->input('producer_name', array(
-							'label' => false,
-							'class' => 'form-control',
-							'type' => 'text',
-							'data-model' => 'Product',
-							'placeholder' => 'Herstellername',
-							'data-field' => 'producerName', 
-							'autoComplete' => true,
-							'value' => $data['Product']['producer_name'],
-							'div' => array(
-						        'class' => 'col-md-6',
-						    ), 
-						));
-						?>
-						<?php echo $this->Form->input('producer_number', array(
-							'label' => false,
-							'class' => 'form-control',
-							'type' => 'text',
-							'data-model' => 'Product',
-							'placeholder' => 'Herstellernummer',
-							'data-field' => 'producerNumber', 
-							'autoComplete' => true,
-							'value' => $data['Product']['producer_number'],
-							'div' => array(
-						        'class' => 'col-md-6',
-						    ), 
-						));
-						?>  </div>                                         
-                     </div>
-                     	
+                	</div> 
                     <div class="row">
                     	<div class="col-md-4">
                              <div class="input-group">
@@ -273,11 +282,42 @@
                                 <input type="text" class="form-control" value="Sonder" readonly="readonly">                                    
                              </div>
 						</div>
+					</div>  
+				</div>
+				
+				 <!-- Mitte -->
+				<div class="col-md-4">
+												
+					
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
+                        <?php echo $this->Form->input('material_id', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Product',
+							'placeholder' => 'Bezug',
+							'data-field' => 'material_id', 
+							'autoComplete' => true,
+							'empty' => 'Bitte Bezug wählen',
+							'value' => $data['Product']['material_id'], 
+						));
+						?> 
 					</div>
-                </div>
-                
-                 <!-- Rechts -->
-                 <div class="input-group">
+					<div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-scale"></i></span>
+                        <?php echo $this->Form->input('size', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Product',
+							'placeholder' => 'Größe',
+							'data-field' => 'size', 
+							'autoComplete' => true, 
+							'type' => 'text',
+							'value' => $data['Product']['size'], 
+						));
+						?>                                      
+                     </div>
+                     <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon  glyphicon-screenshot"></i></span>
                     <?php echo $this->Form->input('core_name', array(
 						'label' => false,
@@ -299,7 +339,7 @@
                         echo $this->Form->input('cores', array(
                         	'multiple' => 'multiple',
   							'type' => 'select',
-  							'style' => 'height: 273px',
+  							'style' => 'height: 292px',
 							'label' => false,
 							'class' => 'form-control',
 							'data-model' => 'Core',
@@ -310,7 +350,100 @@
 						));
 												
 						?> 
-					</div>  
+				</div> 
+                     <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-transfer"></i></span>
+                        <?php echo $this->Form->input('reference', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Product',
+							'placeholder' => 'Referenz',
+							'data-field' => 'reference', 
+							'autoComplete' => true, 
+							'type' => 'text',
+							'value' => $data['Product']['reference'], 
+						));
+						?>                                      
+                     </div>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon glyphicon-briefcase"></i></span>
+                        <div class="row">
+                        <?php echo $this->Form->input('producer_name', array(
+							'label' => false,
+							'class' => 'form-control',
+							'type' => 'text',
+							'data-model' => 'Product',
+							'placeholder' => 'Herstellername',
+							'data-field' => 'producerName', 
+							'autoComplete' => true,
+							'value' => $data['Product']['producer_name'],
+							'div' => array(
+						        'class' => 'col-md-6',
+						    ), 
+						));
+						?>
+						<?php echo $this->Form->input('producer_number', array(
+							'label' => false,
+							'class' => 'form-control',
+							'type' => 'text',
+							'data-model' => 'Product',
+							'placeholder' => 'Herstellernummer',
+							'data-field' => 'producerNumber', 
+							'autoComplete' => true,
+							'value' => $data['Product']['producer_number'],
+							'div' => array(
+						        'class' => 'col-md-6',
+						    ), 
+						));
+						?>  </div>                                         
+                     </div>
+                     	
+                    
+                </div>
+                
+                 <!-- Rechts -->
+                 <div class="col-md-4">
+                 	<div class="panel panel-default">
+  						<div class="panel-body">
+  							
+		                 	<?php 	
+								if(!empty($this->data['Image'])) {
+								?>
+									<img width="188" src="<?php echo $this->data['Image'][0]['path'].'t.'.$this->data['Image'][0]['ext']; ?>" />
+								<?php
+								}
+							?>
+						</div>
+					</div>
+					<div class="panel panel-default">
+  						<div class="panel-body imageBox">
+							<?php 	
+							if(!empty($this->data['Product']['product_number'])) {
+							?>
+								<label for="ProductImageUpload">Neues Bild hochladen</label>
+								<iframe id="ProductImageUpload" class="iframe" width="324" height="220" frameborder="0" src="<?php echo FULL_BASE_URL; ?>/media/index.php?p=<?php echo $this->data['Product']['product_number'];?>&c=99"></iframe>
+							<?php
+							}
+							?>
+							<?php 	
+								if(!empty($this->data['Material']))
+									echo $this->Form->input('colors', array(
+										'label' => false,
+										'class' => 'form-control',
+										'data-model' => 'Color',
+										'placeholder' => 'Farbe',
+										'data-field' => 'color', 
+										'autoComplete' => true,
+										'div' => array(
+									        'class' => 'col-md-12',
+									    ), 
+									    'value' => $colors
+									));
+									
+							?>
+						</div>
+                 	</div>
+                 </div>
           	</div>
           	
 		</div> 
