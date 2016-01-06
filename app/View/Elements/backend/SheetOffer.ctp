@@ -10,12 +10,15 @@ if(empty($this->data['Pages'])) {
 		}
 		
 		foreach ($pages as $page => $carti) {	
-				
+		
+		$pageCur = $page;
+		if(count($pages) > 1)
+			$pageCur = $page + 1;			
 ?>
 
 <article class="module width_full sheet business noInput">		
 		<?php 		
-			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $page+1, 'maxPage' => count($pages), 'logo' => true)); 			
+			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $page, 'maxPage' => count($pages), 'logo' => true)); 			
 			if($page == 0) {
 				if($this->data['Offer']['request_date'] != '0000-00-00') {
 					if($this->data['Offer']['request_number'] != '' || $this->data['Offer']['request_number'] != null) {
