@@ -138,7 +138,7 @@
 .sheet.sonderseite.color .materialBox.mat4{top: 225px; left:0}
 .sheet.sonderseite.color .materialBox.mat5{top: 730px; left:0}
 .sheet.sonderseite.color .materialBox.mat6{top: 225px; right:0}
-.sheet.sonderseite.color .materialBox.mat7{top: 225px; right:0}
+.sheet.sonderseite.color .materialBox.mat7{top: 225px; right:0; display: none}
 .sheet.sonderseite.color .materialBox.mat8{top: 685px; right:0}
 
 .sheet.sonderseite.color .materialBox .header{
@@ -209,4 +209,6 @@
 .sheet.priceList .material{ width: 130px }
 .sheet.priceList .size{ width: 106px }
 .sheet.priceList .price{ text-align: right; width: 70px; padding-right: 5px }
+
+article.sheet.priceList {padding-left: 35px}
 

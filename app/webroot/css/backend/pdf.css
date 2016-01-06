@@ -106,6 +106,7 @@ article.sheet {
 .pages .sheetFooter {margin-bottom: 0px !important}
 
 .sheetContent { padding: 0 40px !important}
+.priceList .sheetContent { padding: 0 0px !important}
 .waschanleitung  .sheetHeader {top: 50px}
 
 .sheet.sonderseite.color .materialBox.mat3,

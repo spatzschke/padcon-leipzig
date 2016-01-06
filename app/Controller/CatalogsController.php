@@ -9,7 +9,7 @@ class CatalogsController extends AppController {
 	
 	var $components = array('RequestHandler', 'Auth', 'Session');
 	
-	public $uses = array('Catalog', 'Category', 'Product', 'Material', 'Color', 'SiteContent', 'ProductCategory');
+	public $uses = array('Catalog', 'Category', 'Product', 'Material', 'Color', 'SiteContent', 'ProductCategory', 'Image');
 	
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
@@ -93,7 +93,7 @@ class CatalogsController extends AppController {
 		
 		if(isset($this->request->data['Categories'])) {
 			$id = $this->request->data['Categories']['id'];
-			$this->request->data['month'] = $this->data['Categories']['month'];	
+			$this->request->data['month'] = $this->request->data['Categories']['month'];	
 		}
 		
 		if(isset($id)) {
@@ -127,11 +127,15 @@ class CatalogsController extends AppController {
 					unset($material['Product']);
 					$product['Material'] = $material['Material'];
 
+					$image = $this->Image->findByProductId($product['Product']['id']);
+					unset($image['Product']);
+					$product['Image'] = $image['Image'];
+
 					array_push($products, $product);
 				}					
 					
 				$data['Catalogs'][0]['Products'] = $products;
-				$this->request->data = $data;			
+				$this->request->data += $data;			
 			} else {
 				// Gesamtkatalog				
 				if($id == '0')
@@ -179,25 +183,31 @@ class CatalogsController extends AppController {
 					$data = array();
 					
 					foreach ($catalogs as $catalog) {
-						$catalog['Catalog']['count'] = $this->Product->find('count', array('conditions' => array('Product.category_id' => $catalog['Category']['id'])));
+						$catalog['Catalog']['count'] = $this->ProductCategory->find('count', array('conditions' => array('ProductCategory.category_id' => $catalog['Category']['id'])));
 						
 						$this->Product->unbindModel(array('hasAndBelongsToMany' => array('Cart')));
-						$this->Product->unbindModel(array('hasMany' => array('Image')));
 							
 						$query = $this->ProductCategory->find('all', array(
 							'conditions' => array('ProductCategory.category_id' => $catalog['Category']['id']),	
-							'order' => array('Product.product_number' => 'ASC')));		
+							'order' => array('Product.product_number' => 'ASC')));	
+							
 						$products = array();
 						foreach ($query as $i => $product) {
 							$material = $this->Material->findById($product['Product']['material_id']);
 							unset($material['Product']);
 							$product['Material'] = $material['Material'];
+							
+							$image = $this->Image->findByProductId($product['Product']['id']);
+							unset($image['Product']);
+							$product['Image'] = $image['Image'];
+									
 		
 							array_push($products, $product);
 						}
-						$catalog['Products'] = $products;	
-							
-					
+
+						
+
+						$catalog['Products'] = $products;
 						array_push($data, $catalog);				
 					}
 					
@@ -243,7 +253,9 @@ class CatalogsController extends AppController {
 			
 		} else {
 			$this->request->data['Categories'] = $this->Catalog->Category->find('list');
-			$this->request->data['Categories'][99] = 'Gesamt';
+			
+			//Gesamtkatalog mit 99 generieren
+			//$this->request->data['Categories'][99] = 'Gesamt';
 
 			ksort($this->request->data['Categories']);
 			$this->request->data['Catalogs'] = array();
@@ -266,15 +278,32 @@ class CatalogsController extends AppController {
 		$this->layout = 'pdf';
 		if($id != 99) {
 			$this->request->data['Catalogs'][0] = $this->Catalog->find('first', array('conditions' => array('Catalog.category_id' => $id)));
-			$this->request->data['Catalogs'][0]['Catalog']['count'] = $this->Product->find('count', array('conditions' => array('Product.category_id' => $id)));
-			$this->request->data['Catalogs'][0]['Products'] = $this->Product->find('all', array(
-					'conditions' => array(
-						'Product.category_id' => $this->request->data['Catalogs'][0]['Category']['id'],
-						'Product.custom' => 0,
-						'Product.active' => 1
-					),
-					'fields' => array('Product.*', 'Material.*'), 
-					'order' => array('Product.product_number' => 'ASC')));
+			$this->request->data['Catalogs'][0]['Catalog']['count'] = $this->ProductCategory->find('count', array('conditions' => array('ProductCategory.category_id' => $id)));
+			$products = array();				
+				
+			$this->Product->unbindModel(array('hasAndBelongsToMany' => array('Cart')));	
+			$query = $this->ProductCategory->find('all', array(
+				'conditions' => array(
+					'ProductCategory.category_id' => $id,
+					'Product.custom' => 0,
+					'Product.active' => 1
+				),
+				'fields' => array('Product.*'), 
+				'order' => array('Product.product_number' => 'ASC')));	
+					
+			foreach ($query as $i => $product) {
+				$material = $this->Material->findById($product['Product']['material_id']);
+				unset($material['Product']);
+				$product['Material'] = $material['Material'];
+
+				$image = $this->Image->findByProductId($product['Product']['id']);
+				unset($image['Product']);
+				$product['Image'] = $image['Image'];
+
+				array_push($products, $product);
+			}					
+				
+			$this->request->data['Catalogs'][0]['Products'] = $products;
 			$priceSuffix = "";
 			if($priceFlag) { $priceSuffix = Configure::read('padcon.catalog.price.suffix');	}
 			
