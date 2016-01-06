@@ -241,6 +241,7 @@ class ProductsController extends AppController {
 				$categories = array();
 				$cores_arr = array();
 				$core_name = "";
+				$referenz = "";
 				
 				foreach( $input as $key => $value ) {
       				if( $value == ' ' || $value == '' ) {unset($input[$key]);}
@@ -305,7 +306,17 @@ class ProductsController extends AppController {
 						continue;	
 					}
 					
-					
+					//Referenz					
+					$val = $value;
+					if (strpos($val, 'Alt:') !== FALSE) {
+	
+						$val = explode('Alt:',trim($val));
+												
+						$referenz = trim($val[1]);
+						if(empty($referenz)) { $referenz = ""; }
+						
+						continue;
+					}
 	
 					//Bezug
 					
@@ -429,6 +440,7 @@ class ProductsController extends AppController {
 					 		$newProduct['Product']['material_id'] = $bezug['Material']['id'];
 							$newProduct['Product']['core_name'] = $core_name;
 							$newProduct['Product']['cores'] = $cores_arr;
+							$newProduct['Product']['reference'] = $referenz;
 					 		$newProduct['Product']['featurelist'] = $features;
 							$newProduct['Product']['size'] = $maße[$i];
 							$p = str_replace(',', '.', str_replace(' €', '', $ek));
@@ -468,6 +480,7 @@ class ProductsController extends AppController {
 					 	} else {
 					 		$newProduct['Product']['material_id'] = 0;
 					 	}
+						$newProduct['Product']['reference'] = $referenz;
 						$newProduct['Product']['core_name'] = $core_name;
 						$newProduct['Product']['cores'] = $cores_arr;
 					 	$newProduct['Product']['featurelist'] = $features;

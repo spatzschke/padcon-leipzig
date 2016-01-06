@@ -12,8 +12,6 @@ $(document).ready(function() {
 	            }
 	          });
 	          
-	          console.log(str);
-	          
 	    loadIframe('ProductImageUpload', updateURL($('#ProductImageUpload').attr('src'), 'c', str))
 	});
 });
@@ -405,12 +403,10 @@ function updateURL(currUrl, param, paramVal){
                  <div class="col-md-4">
                  	<div class="panel panel-default">
   						<div class="panel-body">
-  							
-		                 	<?php 	
-								if(!empty($this->data['Image'])) {
-								?>
-									<img width="188" src="<?php echo $this->data['Image'][0]['path'].'t.'.$this->data['Image'][0]['ext']; ?>" />
-								<?php
+  							<?php if(empty($this->data['Image'])) {
+										echo '<img class="lazy" width="188" src="'.$this->webroot.'img/no_pic.png" alt="'.$this->data['Product']['name'].'" />';
+								} else {
+										echo'<img width="188" src="'.$this->data['Image'][0]['path'].'t.'.$this->data['Image'][0]['ext'].'" />';
 								}
 							?>
 						</div>
