@@ -337,7 +337,7 @@ function updateURL(currUrl, param, paramVal){
                         echo $this->Form->input('cores', array(
                         	'multiple' => 'multiple',
   							'type' => 'select',
-  							'style' => 'height: 292px',
+  							'style' => 'height: 248px',
 							'label' => false,
 							'class' => 'form-control',
 							'data-model' => 'Core',
@@ -360,6 +360,20 @@ function updateURL(currUrl, param, paramVal){
 							'autoComplete' => true, 
 							'type' => 'text',
 							'value' => $data['Product']['reference'], 
+						));
+						?>                                      
+                     </div>
+                      <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-tags"></i></span>
+                        <?php echo $this->Form->input('company', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Product',
+							'placeholder' => 'Firma',
+							'data-field' => 'company', 
+							'autoComplete' => true, 
+							'type' => 'text',
+							'value' => $data['Product']['company'], 
 						));
 						?>                                      
                      </div>
@@ -403,8 +417,8 @@ function updateURL(currUrl, param, paramVal){
                  <div class="col-md-4">
                  	<div class="panel panel-default">
   						<div class="panel-body">
-  							<?php if(empty($this->data['Image'])) {
-										echo '<img class="lazy" width="188" src="'.$this->webroot.'img/no_pic.png" alt="'.$this->data['Product']['name'].'" />';
+  							<?php if(empty($data['Image'])) {
+										echo '<img class="lazy" width="188" src="'.$this->webroot.'img/no_pic.png" alt="'.$data['Product']['name'].'" />';
 								} else {
 										echo'<img width="188" src="'.$this->data['Image'][0]['path'].'t.'.$this->data['Image'][0]['ext'].'" />';
 								}

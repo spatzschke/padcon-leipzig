@@ -242,6 +242,7 @@ class ProductsController extends AppController {
 				$cores_arr = array();
 				$core_name = "";
 				$referenz = "";
+				$company = "";
 				
 				foreach( $input as $key => $value ) {
       				if( $value == ' ' || $value == '' ) {unset($input[$key]);}
@@ -257,53 +258,78 @@ class ProductsController extends AppController {
 					if($i == 0) {
 				    	$val = trim($val);
 						$val = explode('	',trim($val));
-						if (
-							strpos($val[0], 'PD') !== FALSE ||
-							strpos($val[0], 'SB') !== FALSE ||
-							strpos($val[0], 'Z') !== FALSE
-						) {
+						
 					    	$number = str_ireplace('-xx', '', trim($val[0]));
 							//$number = str_ireplace('pd ', '', trim($number));
 							$number = str_ireplace('(alt)', '', trim($number));
 							
 							$name = trim($val[1]);
-						} else {
-							$name = trim($val[0]);
-						}
+						
 						continue;
 				    }
 					
-					//Feature Schaum - Kern
-					$val = $value;
-					if (strpos($val, 'Fa. padcon') !== FALSE) {
+					//Firma aus 2. Zeile auslesen
+					if($i == 1) {
+				    	$val = trim($val);
 						$val = explode('	',trim($val));
-											
-						//Sonderfall: Im Feature steht der Bezug
-						if (strpos($val[1], 'Bezug:') !== FALSE) {
-							$t = explode('Bezug:', trim($val[1]));
-							$bezug = explode(', ', $t[1]);		
-							$bezug = $this->Product->Material->findByName(trim($bezug[0]));
-						} else {
-							if (strpos($val[1], 'Kern:') !== FALSE) {
-								$val = $val[1];
-								$t = explode('Kern: ', trim($val));
-								$val = $t[1];								
-								$split = split("/", $val);
-								
-								foreach($split as $item) {
-									$entry = $this->Core->findByName($item);
-									if(!empty($entry)) {	array_push($cores_arr, $entry['Core']['id']); }
-									if(end($split) !== $item){
-									    $core_name = $core_name.$item.' / ';
-									} else {
-										$core_name = $core_name.$item;
-									}									
-								}								
-							} else {
-								array_push($features, trim($val[1]));
+						$company = trim($val[0]);
+						if(strcmp($company ,'Fa. padcon')) {
+							$producerNumber = $number;
+						}
+						
+						
+						if (strpos(trim($val[1]), 'Kern:') !== FALSE) {
+							$val = $val[1];
+							$t = explode('Kern: ', trim($val));
+							$val = $t[1];								
+							$split = split("/", $val);
+							
+							foreach($split as $item) {
+								$entry = $this->Core->findByName($item);
+								if(!empty($entry)) {	array_push($cores_arr, $entry['Core']['id']); }
+								if(end($split) !== $item){
+								    $core_name = $core_name.$item.' / ';
+								} else {
+									$core_name = $core_name.$item;
+								}									
 							}
 						}
-						continue;	
+						
+						
+						continue;
+				    }
+					
+					//Kern					
+					$val = $value;
+					if (strpos($val, 'Kern:') !== FALSE) {
+						$val = explode('	',trim($val));
+						$val = $val[1];
+						$t = explode('Kern: ', trim($val));
+						$val = $t[1];								
+						$split = split("/", $val);
+						
+						foreach($split as $item) {
+							$entry = $this->Core->findByName($item);
+							if(!empty($entry)) {	array_push($cores_arr, $entry['Core']['id']); }
+							if(end($split) !== $item){
+							    $core_name = $core_name.$item.' / ';
+							} else {
+								$core_name = $core_name.$item;
+							}									
+						}
+						
+						continue;
+					}
+					
+					//Bezug					
+					$val = $value;
+					if (strpos($val, 'Alt:') !== FALSE) {
+						$val = explode('	',trim($val));
+						$t = explode('Bezug:', trim($val[1]));
+						$bezug = explode(', ', $t[1]);		
+						$bezug = $this->Product->Material->findByName(trim($bezug[0]));
+						
+						continue;
 					}
 					
 					//Referenz					
@@ -440,7 +466,8 @@ class ProductsController extends AppController {
 					 		$newProduct['Product']['material_id'] = $bezug['Material']['id'];
 							$newProduct['Product']['core_name'] = $core_name;
 							$newProduct['Product']['cores'] = $cores_arr;
-							$newProduct['Product']['reference'] = $referenz;
+							$newProduct['Product']['reference'] = $referenz;							
+							$newProduct['Product']['company'] = $company;
 					 		$newProduct['Product']['featurelist'] = $features;
 							$newProduct['Product']['size'] = $maße[$i];
 							$p = str_replace(',', '.', str_replace(' €', '', $ek));
@@ -449,7 +476,10 @@ class ProductsController extends AppController {
 							$newProduct['Product']['retail_price'] = $r[$i];
 							$newProduct['Product']['active'] = 'checked';
 							$newProduct['Product']['new'] = '';
-							if (strpos($number[$i], 'Z') !== FALSE) {
+							
+							debug(strcmp($company, 'Fa. padcon'));
+							
+							if (strpos($number, 'Z') !== FALSE || strcmp($company, 'Fa. padcon') < 0) {
 								$newProduct['Product']['custom'] = 'checked';
 							} else {
 								$newProduct['Product']['custom'] = '';
@@ -481,6 +511,7 @@ class ProductsController extends AppController {
 					 		$newProduct['Product']['material_id'] = 0;
 					 	}
 						$newProduct['Product']['reference'] = $referenz;
+						$newProduct['Product']['company'] = $company;
 						$newProduct['Product']['core_name'] = $core_name;
 						$newProduct['Product']['cores'] = $cores_arr;
 					 	$newProduct['Product']['featurelist'] = $features;
@@ -490,7 +521,7 @@ class ProductsController extends AppController {
 						$newProduct['Product']['active'] = 'checked';
 						$newProduct['Product']['new'] = '';	
 										
-						if (strpos($number, 'Z') !== FALSE) {
+						if (strpos($number, 'Z') !== FALSE || strcmp($company, 'Fa. padcon') < 0) {
 							$newProduct['Product']['custom'] = 'checked';
 						} else {
 							$newProduct['Product']['custom'] = '';

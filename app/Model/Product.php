@@ -52,16 +52,6 @@ class Product extends AppModel {
 			  	'message' => 'Die Produktnummer muss mindestens 5 Zeichen haben!'
 			  ),
 		),
-		'featurelist' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
-				'message' => 'Featureliste darf nicht leer sein!',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
 		'material_id' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),

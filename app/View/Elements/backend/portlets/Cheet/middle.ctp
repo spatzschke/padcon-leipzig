@@ -24,7 +24,7 @@
 							<div class="pos">'.($j+1).'</div>
 							<div class="amount">'.$cartProduct['amount'].'</div>
 							<div class="number">
-								<p class=""><span class="productNumber">'.$product['Product']['product_number'].'-'.$color['Color']['code'].'</span></br>'.Configure::read('padcon.product.producer.padcon').'</p>
+								<p class=""><span class="productNumber">'.$product['Product']['product_number'].'-'.$color['Color']['code'].'</span></br>'.$product['Product']['company'].'</p>
 							</div>
 							<div class="content">
 								<p class="productName col-md-12"><span >'.$product['Product']['name'].'</span></p>';

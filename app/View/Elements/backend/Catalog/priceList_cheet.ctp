@@ -89,7 +89,7 @@
 							?>
 							<div class="tableEntry">
 						<!--<td><?php echo $product['Product']['id']; ?>&nbsp;</td> -->
-							<div class="number">PD-<?php echo $product['Product']['product_number']; ?>&nbsp;</div>
+							<div class="number"><?php echo $product['Product']['product_number']; ?>&nbsp;</div>
 							<div class="name"><?php echo $product['Product']['name']; ?>&nbsp;</div>
 						<!--<td><?php echo $product['Product']['description']; ?>&nbsp;</td>
 							<td><?php echo $product['Product']['featurelist']; ?>&nbsp;</td>-->

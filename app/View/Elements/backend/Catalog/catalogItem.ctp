@@ -32,7 +32,7 @@
 	        </div>
 	        </div>
 	        <div class="catalogItemNumber">
-	    		<b><?php echo Configure::read('padcon.product.number.präfix');?><?php echo $product['Product']['product_number'];?></b>-xx
+	    		<b><?php echo $product['Product']['product_number'];?></b>-xx
 	    	</div>
         </div>
         
