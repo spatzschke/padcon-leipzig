@@ -111,6 +111,45 @@ class ConfirmationsController extends AppController {
 		$this->set(compact('controller_id', 'controller_name','confirmation'));
 	}
 
+	public function admin_add_individual($id = null) {
+		
+		$this->layout = "admin";
+		$this->set('pdf', null);
+		
+		if (!empty($this->data)) {
+			$confirmation = null;	
+			$cart = $this->requestAction('/admin/carts/add/');
+					
+			$this->Confirmation->create();
+			
+			$confirmation['Confirmation']['status'] = 'open';
+			$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
+			$confirmation['Confirmation']['customer_id'] = '';
+			$confirmation['Confirmation']['cart_id'] = $cart['Cart']['id'];
+			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
+			$confirmation['Confirmation']['order_date'] = date('Y-m-d');
+			
+			//Default settings
+			$confirmation['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
+			
+			$this->Confirmation->save($confirmation);
+			$id = $this->Confirmation->id;
+			
+			// Generate Hash für Offer
+			$confirmation['Confirmation']['hash'] =  Security::hash($id, 'md5', true);
+			$this->Confirmation->save($confirmation);
+
+			$this->redirect(array('action'=>'add', $id));
+		}
+		
+		
+		$this->set('primary_button', 'Anlegen');
+		$this->set('title_for_panel', 'Individuelle Auftragsbestätigung anlegen');		
+		$controller_name = 'Confirmations'; 
+		$controller_id = $id;
+		$this->set(compact('controller_id', 'controller_name','confirmation'));
+	}
+
 /**
  * admin_edit method
  *
