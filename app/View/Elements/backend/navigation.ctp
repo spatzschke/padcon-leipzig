@@ -18,6 +18,9 @@
 		<h3>Auftragsbestätigung</h3>
 		<ul class="toggle">
 			<li class="icn_add_user"><?php echo $this->Html->link('Neue AB erstellen', '/admin/confirmations/add'); ?></li>
+			<?php if (Configure::read('debug') > 0) { ?>
+			<li class="icn_add_user"><?php echo $this->Html->link('Individual AB erstellen', '/admin/confirmations/add_individual'); ?></li>
+			<?php } ?>
 			<!-- <li class="icn_add_user"><?php echo $this->Html->link('AB aus Angebot erstellen', '/admin/confirmations/convert'); ?></li> -->
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle ABs anzeigen', '/admin/confirmations/index'); ?></li>
 		</ul>
