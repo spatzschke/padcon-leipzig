@@ -60,17 +60,18 @@
 	
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
 	
-	$id_createPartDelivery = 'createPartDelivery';
-	echo $this->element('backend/helper/sheetButtonHelper', array(
-		"id" => $id_createPartDelivery,
-		"icon" => "duplicate",
-		"text" => "Teil-Lieferung erstellen"));		
-
-	echo $this->element('backend/helper/modalHelper', array(
-		"id" => $id_createPartDelivery,
-		"url" => "\/admin\/".$nextSheet."\/convertPart\/".$dataId,
-		"redirect" => ""));	
+	if (Configure::read('debug') > 0) {
+		$id_createPartDelivery = 'createPartDelivery';
+		echo $this->element('backend/helper/sheetButtonHelper', array(
+			"id" => $id_createPartDelivery,
+			"icon" => "duplicate",
+			"text" => "Teil-Lieferung erstellen"));		
 	
+		echo $this->element('backend/helper/modalHelper', array(
+			"id" => $id_createPartDelivery,
+			"url" => "\/admin\/".$nextSheet."\/convertPart\/".$dataId,
+			"redirect" => ""));	
+		}
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
 		
 	$id_print = 'print';
