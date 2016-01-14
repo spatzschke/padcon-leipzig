@@ -25,8 +25,8 @@ $(document).ready(function() {
 		 $backdrop = "true";
 		?>
 	
-		$('#<?php echo $id;?>_btn').parent('a').on('click',function() {
-			$('#<?php echo $id;?>_modal .modal-body').load($('#<?php echo $id;?>_btn').parent('a').attr('href'));
+		$('.<?php echo $id;?>_btn').parent('a').on('click',function() {
+			$('#<?php echo $id;?>_modal .modal-body').load($(this).attr('href'));
 			$('#<?php echo $id;?>_modal').modal('show');
 			return false;
 		})

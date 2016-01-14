@@ -62,13 +62,13 @@ function saveAndReloadOfferHeader(id) {
 				echo '</div>';
 				echo '<div class="controls col-md-12">';
 				
-					echo '<label for="OfferModified" class="col-md-4">Datum:</label>';
+					echo '<label for="OfferCreated" class="col-md-4">Datum:</label>';
 					
 					if(isset($this->data['Offer'])) {		
-						$this->request->data['Offer']['modified'] = $this->Time->format($this->data['Offer']['modified'], '%d.%m.%Y');
+						$this->request->data['Offer']['created'] = $this->Time->format($this->data['Offer']['created'], '%d.%m.%Y');
 					}
 					
-					echo $this->Form->input('modified', array('type' => 'text', 'label' => false, 'data-model' => 'Offer', 'data-field' => 'modified', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));
+					echo $this->Form->input('created', array('type' => 'text', 'label' => false, 'data-model' => 'Offer', 'data-field' => 'created', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));
 				
 				echo '</div>';
 				echo '<div class="controls col-md-12">';

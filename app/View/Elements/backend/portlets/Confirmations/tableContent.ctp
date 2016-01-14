@@ -152,7 +152,7 @@
 							  
 						 ?>
 					</td>
-					<td><?php echo $this->Time->format($item['Confirmation']['modified'], '%d.%m.%Y'); ?></td>
+					<td><?php echo $this->Time->format($item['Confirmation']['created'], '%d.%m.%Y'); ?></td>
 					<!-- <td><?php echo $item['Confirmation']['modified']; ?>&nbsp;</td> -->
 					
 					
@@ -169,7 +169,7 @@
 							if(!empty($item['Confirmation']['hash']))
 								echo $this->Html->link('<i class="glyphicon glyphicon-envelope"></i>', '/Auftrag/'.$item['Confirmation']['hash'], array('class' => 'mail', 'escape' => false, 'target' => '_blank'));
 							
-							echo $this->Html->link('<i id="tableSetting_btn" class="glyphicon glyphicon-cog"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'table_setting', $item['Confirmation']['id']), array('escape' => false));
+							echo $this->Html->link('<i class="tableSetting_btn glyphicon glyphicon-cog"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'table_setting', $item['Confirmation']['id']), array('escape' => false));
 							
 							
 							echo '</td>';

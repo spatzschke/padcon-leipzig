@@ -117,7 +117,7 @@
 							if(!empty($item['Delivery']['hash']))
 								echo $this->Html->link('<i class="glyphicon glyphicon-link"></i>', '/Lieferung/'.$item['Delivery']['hash'], array('escape' => false, 'target' => '_blank'));
 							
-							echo $this->Html->link('<i id="tableSetting_btn" class="glyphicon glyphicon-cog"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'table_setting', $item['Confirmation']['id']), array('escape' => false));
+							echo $this->Html->link('<i class="tableSetting_btn glyphicon glyphicon-cog"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'table_setting', $item['Delivery']['id']), array('escape' => false));
 							
 							
 							echo '</td>';

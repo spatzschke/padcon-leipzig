@@ -161,11 +161,16 @@ class BillingsController extends AppController {
 				if(isset($this->request->data['Billing']['payment_target'])) {
 					$this->request->data['Billing']['payment_target'] = date('Y-m-d',strtotime($this->request->data['Billing']['payment_target']));
 				}
+
+				$this->request->data['Billing']['created'] = date('Y-m-d',strtotime($this->request->data['Billing']['created']));
+
 				$this->Billing->id = $this->request->data['Billing']['id'];
 				$this->Billing->save($this->request->data);
 							
 			} else {
 				
+				$date = date_create_from_format('Y-m-d h:i:s', $data['Billing']['created']);				
+				$data['Billing']['created'] = date_format($date, 'd.m.Y');
 				$data['Billing']['payment_target'] = date('d.m.Y',strtotime($data['Billing']['payment_target']));
 				$data['Billing']['payment_date'] = date('d.m.Y',strtotime($data['Billing']['payment_date']));
 				$this->request->data = $data;
