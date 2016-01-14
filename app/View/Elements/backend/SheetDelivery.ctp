@@ -12,7 +12,6 @@ if(empty($this->data['CartProduct'])) {
 }
 
 foreach ($pages as $page => $carti) {
-	
 		$pageCur = $page;
 		if(count($pages) > 1)
 			$pageCur = $page + 1;		
@@ -21,7 +20,7 @@ foreach ($pages as $page => $carti) {
 
 <article class="module width_full sheet business noInput">	
 		<?php 
-			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $page, 'maxPage' => count($pages), 'logo' => true)); 
+			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $pageCur, 'maxPage' => count($pages), 'logo' => true)); 
 			if($this->data['Confirmation']['order_date']) {
 				
 				if($this->data['Confirmation']['order_number'] != '' || $this->data['Confirmation']['order_number'] != null) {
