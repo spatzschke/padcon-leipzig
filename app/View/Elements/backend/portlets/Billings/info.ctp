@@ -63,13 +63,13 @@ function saveAndReloadBillingHeader(id) {
 				echo '</div>';
 				echo '<div class="controls col-md-12">';
 				
-					echo '<label for="BillingModified" class="col-md-4">Datum:</label>';
+					echo '<label for="BillingCreated" class="col-md-4">Datum:</label>';
 					
 					if(isset($this->data['Billing'])) {		
-						$this->request->data['Billing']['modified'] = $this->Time->format($this->data['Billing']['modified'], '%d.%m.%Y');
+						$this->request->data['Billing']['created'] = $this->Time->format($this->data['Billing']['created'], '%d.%m.%Y');
 					}
 					
-					echo $this->Form->input('modified', array('value' => $this->request->data['Billing']['modified'], 'type' => 'text', 'label' => false, 'data-model' => 'Billing', 'data-field' => 'modified', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));
+					echo $this->Form->input('created', array('value' => $this->request->data['Billing']['created'], 'type' => 'text', 'label' => false, 'data-model' => 'Billing', 'data-field' => 'modified', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));
 				
 				echo '</div>';
 				echo '<div class="controls col-md-12">';

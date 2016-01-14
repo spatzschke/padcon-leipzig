@@ -344,17 +344,23 @@ class ConfirmationsController extends AppController {
 	function admin_table_setting($id = null) {
 		
 		$this->layout = 'ajax';
-		
 
 		if ($this->request->is('ajax')) {
 			if(!empty($this->request->data)) {
 				
+				$this->request->data['Confirmation']['created'] = date('Y-m-d',strtotime($this->request->data['Confirmation']['created']));
+				
 				$this->Confirmation->id = $this->request->data['Confirmation']['id'];
 				$this->Confirmation->save($this->request->data);
+				        
 							
 			} else {
-				$confirmation = $this->Confirmation->findById($id);
-				$this->request->data = $confirmation;
+				$data = $this->Confirmation->findById($id);
+				
+				$date = date_create_from_format('Y-m-d', $data['Confirmation']['created']);
+				$data['Confirmation']['created'] = date_format($date, 'd.m.Y');
+				
+				$this->request->data = $data;
 				
 			}
 		}
@@ -428,10 +434,7 @@ class ConfirmationsController extends AppController {
 				if(empty($confirmation['Confirmation']['additional_text'])) {
 					$confirmation['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
 				} 
-				
-				
-				
-				
+								
 				$confirmation['CartProducts'] = $this->getSettingCartProducts($confirmation);
 				
 				$cart = $this->Cart->findById($confirmation['Confirmation']['cart_id']);
@@ -638,8 +641,7 @@ class ConfirmationsController extends AppController {
 	    	$cart = $Carts->get_cart_by_id($confirmation['Cart']['id']);
 			
 			//Berechen Seitenbelegung mit Produkte
-			$this->request->data['Pages'] = $Carts->calcPageLoad($cart);
-			
+			$this->request->data['Pages'] = $Carts->calcPageLoad($cart);			
 			$this->request->data += $cart;
 		}
 

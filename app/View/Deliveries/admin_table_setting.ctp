@@ -72,6 +72,26 @@
 									
 									?> 	
 								</div>
+								<label class="col-md-6">Lieferschein-Datum</label>
+                               	<div class="input-group date">     	
+			                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+			                        <?php echo $this->Form->input('created', array(
+									    'label' => false,
+									    'div' => false,
+									    'type' => 'text',
+										'class' => 'form-control span12'));
+									
+									?> 						 	
+								</div>								   
+								<script type="text/javascript">
+									    $('.date').datepicker({
+									    format: "dd.mm.yyyy",
+									    language: "de",
+									    calendarWeeks: true,
+									    autoclose: true,
+									    todayHighlight: true
+									    });
+								</script> 
 							</div>
 						</div>
 					</div>						

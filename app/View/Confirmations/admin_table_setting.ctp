@@ -17,10 +17,8 @@
 				 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/table_setting/<?php echo $this->data['Confirmation']['id'];?>',
 				 data: <?php echo $data ?>,
 				 success:function (data, textStatus) {
-				 	
 				 	obj.removeClass('loading');
-				 	
-					window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/index/';
+				 	window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/index/';
 				 } 
 			 }); 
 			
@@ -72,6 +70,26 @@
 									
 									?> 	
 								</div>
+								<label class="col-md-6">AB-Datum</label>
+                               	<div class="input-group date">     	
+			                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+			                        <?php echo $this->Form->input('created', array(
+									    'label' => false,
+									    'div' => false,
+									    'type' => 'text',
+										'class' => 'form-control span12'));
+									
+									?> 						 	
+								</div>								   
+								<script type="text/javascript">
+									    $('.date').datepicker({
+									    format: "dd.mm.yyyy",
+									    language: "de",
+									    calendarWeeks: true,
+									    autoclose: true,
+									    todayHighlight: true
+									    });
+								</script> 
 							</div>
 						</div>
 					</div>						

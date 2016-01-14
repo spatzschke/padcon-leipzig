@@ -63,13 +63,13 @@ function saveAndReloadDeliveryHeader(id) {
 				echo '</div>';
 				echo '<div class="controls col-md-12">';
 				
-					echo '<label for="DeliveryModified" class="col-md-4">Datum:</label>';
+					echo '<label for="DeliveryCreated" class="col-md-4">Datum:</label>';
 					
 					if(isset($this->data['Delivery'])) {		
-						$this->request->data['Delivery']['modified'] = $this->Time->format($this->data['Delivery']['modified'], '%d.%m.%Y');
+						$this->request->data['Delivery']['created'] = $this->Time->format($this->data['Delivery']['created'], '%d.%m.%Y');
 					}
 					
-					echo $this->Form->input('modified', array('type' => 'text', 'label' => false, 'data-model' => 'Delivery', 'data-field' => 'modified', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));
+					echo $this->Form->input('created', array('type' => 'text', 'label' => false, 'data-model' => 'Delivery', 'data-field' => 'created', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));
 				
 				echo '</div>';
 				echo '<div class="controls col-md-12">';

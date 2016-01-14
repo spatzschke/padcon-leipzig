@@ -200,11 +200,17 @@ class DeliveriesController extends AppController {
 		if ($this->request->is('ajax')) {
 			if(!empty($this->request->data)) {
 				
+				$this->request->data['Delivery']['created'] = date('Y-m-d',strtotime($this->request->data['Delivery']['created']));
+				
 				$this->Delivery->id = $this->request->data['Delivery']['id'];
 				$this->Delivery->save($this->request->data);
 							
 			} else {
 				$data = $this->Delivery->findById($id);
+				
+				$date = date_create_from_format('Y-m-d h:i:s', $data['Delivery']['created']);
+				$data['Delivery']['created'] = date_format($date, 'd.m.Y');
+				
 				$this->request->data = $data;
 				
 			}

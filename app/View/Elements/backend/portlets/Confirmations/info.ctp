@@ -63,13 +63,13 @@ function saveAndReloadConfirmationHeader(id) {
 				echo '</div>';
 				echo '<div class="controls col-md-12">';
 				
-					echo '<label for="ConfirmationModified" class="col-md-4">Datum:</label>';
+					echo '<label for="ConfirmationCreated" class="col-md-4">Datum:</label>';
 					
 					if(isset($this->data['Confirmation'])) {		
-						$this->request->data['Confirmation']['modified'] = $this->Time->format($this->data['Confirmation']['modified'], '%d.%m.%Y');
+						$this->request->data['Confirmation']['created'] = $this->Time->format($this->data['Confirmation']['created'], '%d.%m.%Y');
 					}
 					
-					echo $this->Form->input('modified', array('type' => 'text', 'label' => false, 'data-model' => 'Confirmation', 'data-field' => 'modified', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));
+					echo $this->Form->input('created', array('type' => 'text', 'label' => false, 'data-model' => 'Confirmation', 'data-field' => 'created', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));
 				
 				echo '</div>';
 				echo '<div class="controls col-md-12">';
