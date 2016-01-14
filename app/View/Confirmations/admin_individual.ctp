@@ -166,45 +166,17 @@ $(document).ready(function() {
                     
            		<?php echo $this->Form->input('id');?>   
                 
-				<?php 			
-				if($this->request->params['action'] == "admin_edit") {
-					$readonly = "readonly";
-				} else {
-					$readonly = "";
-				}
-				?>   
+				 
 				<!-- Links -->
 			
 				<div class="col-md-4">
-                    <div class="input-group">
+				<?php if($this->request->params['action'] == "admin_edit_individual") {
+					$readonly = "readonly";
+				} else {
+					$readonly = "";
+				} ?>
+					<div class="input-group">
                         <span class="input-group-addon"><b>#</b></span>
-                        <?php echo $this->Form->input('customer_name', array(
-							'label' => false,
-							'class' => 'form-control',
-							'data-model' => 'Confirmation',
-							'placeholder' => 'Kunde',
-							'data-field' => 'customer_id', 
-							'autoComplete' => true
-						));
-						echo $this->Form->input('customer_id', array('type' => 'hidden'));
-						?>                                     
-                     </div>
-                     <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                        <?php echo $this->Form->input('address', array(
-							'label' => false,
-							'class' => 'form-control',
-							'data-model' => 'Confirmation',
-							'placeholder' => 'Adresse',
-							'data-field' => 'name', 
-							'autoComplete' => true,
-							'type' => 'textarea'
-						));
-						echo $this->Form->input('address_id', array('type' => 'hidden'));
-						?>                                      
-                     </div>
-                     <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
                         <?php  echo $this->Form->input('confirmation_number', array(
 							'label' => false,
 							'class' => 'form-control',
@@ -213,13 +185,35 @@ $(document).ready(function() {
 							'data-field' => 'confirmation_number', 
 							'autoComplete' => true,
   							'type' => 'text',
+  							'readonly' => $readonly
 						));
 						?>                                      
-                    </div>  
-                    <label class="col-md-6">Bestelldatum</label>
+                    </div> 
+                    
+    
+	
+		
+	
+                
+                <?php if($this->request->params['action'] == "admin_edit_individual") { ?>   
+                  
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <?php echo $this->Form->input('customer_id', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Confirmation',
+							'placeholder' => 'Kunde',
+							'data-field' => 'customer_id', 
+							'autoComplete' => true,
+							'type' => 'text',
+						));
+						?>              
+                     </div>
+                    
                    	<div class="input-group date">     	
                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        <?php echo $this->Form->input('order_date', array(
+                        <?php echo $this->Form->input('created', array(
 						    'label' => false,
 						    'div' => false,
 						    'type' => 'text',
@@ -238,24 +232,8 @@ $(document).ready(function() {
 						    });
 					</script> 				
 					
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
-                        <?php echo $this->Form->input('discount', array(
-							'label' => false,
-							'class' => 'form-control',
-							'data-model' => 'Confirmation',
-							'placeholder' => 'Rabatt',
-							'data-field' => 'discount', 
-							'autoComplete' => true,
-						));
-						?> 
-					</div>
-				</div>
-				
-				 <!-- Mitte -->
-				<div class="col-md-4">
 					
-					 <!-- Versandkostenfrei -->
+					<!-- Versandkostenfrei -->
                      <label class="col-md-6">Versandkostenfrei</label>
                      <div class="input-group">
                         <input type="checkbox" name="deliveryfree-cb" checked>    
@@ -276,6 +254,23 @@ $(document).ready(function() {
 							'label' => false));
 						?>                                 
                      </div>
+				</div>
+				
+				 <!-- Mitte -->
+				<div class="col-md-4">
+					<div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
+                        <?php echo $this->Form->input('discount', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Confirmation',
+							'placeholder' => 'Rabatt',
+							'data-field' => 'discount', 
+							'autoComplete' => true,
+						));
+						?> 
+					</div>
+					 
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
                         <?php  echo $this->Form->input('confirmation_price', array(
@@ -302,6 +297,7 @@ $(document).ready(function() {
 						));
 						?>                                      
 	                 </div>
+	          <?php } ?>   
                      
                 </div>
                 

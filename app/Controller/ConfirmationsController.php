@@ -39,7 +39,7 @@ class ConfirmationsController extends AppController {
 		$this->layout = 'admin';
 	
 		$this->Confirmation->recursive = 0;
-		$data = $this->Confirmation->find('all', array('order' => array('Confirmation.created DESC', 'Confirmation.id DESC'), 'limit' => 100));
+		$data = $this->Confirmation->find('all', array('order' => array('Confirmation.created DESC', 'Confirmation.id DESC')));
 			
 		$this->set('data', $this->fillIndexData($data));
 	}
@@ -117,37 +117,75 @@ class ConfirmationsController extends AppController {
 		$this->set('pdf', null);
 		
 		if (!empty($this->data)) {
-			$confirmation = null;	
-			$cart = $this->requestAction('/admin/carts/add/');
-					
+						$confirmation = null;						
 			$this->Confirmation->create();
 			
-			$confirmation['Confirmation']['status'] = 'open';
-			$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
-			$confirmation['Confirmation']['customer_id'] = '';
-			$confirmation['Confirmation']['cart_id'] = $cart['Cart']['id'];
-			$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
-			$confirmation['Confirmation']['order_date'] = date('Y-m-d');
+			$confirmation = $this->data;
 			
-			//Default settings
-			$confirmation['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
+			$confirmation['Confirmation']['status'] = 'custom_open';
+			$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
+			$confirmation['Confirmation']['confirmation_number'] = $this->data['Confirmation']['confirmation_number'];
 			
 			$this->Confirmation->save($confirmation);
 			$id = $this->Confirmation->id;
 			
 			// Generate Hash für Offer
+			$confirmation['Confirmation']['id'] =  $id;
 			$confirmation['Confirmation']['hash'] =  Security::hash($id, 'md5', true);
 			$this->Confirmation->save($confirmation);
 
-			$this->redirect(array('action'=>'add', $id));
+			$this->redirect(array('action'=>'edit_individual', $id));
 		}
+		$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
 		
+		$this->request->data = $confirmation;
 		
 		$this->set('primary_button', 'Anlegen');
 		$this->set('title_for_panel', 'Individuelle Auftragsbestätigung anlegen');		
 		$controller_name = 'Confirmations'; 
 		$controller_id = $id;
 		$this->set(compact('controller_id', 'controller_name','confirmation'));
+		
+		$this->render('admin_individual');
+	}
+
+	public function admin_edit_individual($id = null) {
+		
+		$this->layout = "admin";
+		$this->set('pdf', null);
+		
+		$data = $this->Confirmation->findById($id);
+		
+		if (!empty($this->data)) {
+			$confirmation = null;			
+			
+			$data = $this->data;
+			$data['Confirmation']['created'] = date('Y-m-d',strtotime($data['Confirmation']['created']));
+			$data['Confirmation']['modified'] = date('Y-m-d',strtotime($data['Confirmation']['created']));
+			$data['Confirmation']['id'] = $id;
+
+			$this->Confirmation->save($data);
+
+
+		$this->redirect(array('action'=>'index'));
+		}
+		if(empty($data['Confirmation']['additional_text'])) {
+			$data['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
+		}
+		
+		if(strcmp($data['Confirmation']['additional_text'],Configure::read('padcon.Auftragsbestaetigung.additional_text.default'))>=0) {
+			$data['Confirmation']['created'] = date('d.m.Y',strtotime($data['Confirmation']['created']));
+			$data['Confirmation']['modified'] = date('d.m.Y',strtotime($data['Confirmation']['created']));
+		}
+		$this->request->data = $data;
+		
+		$this->set('primary_button', 'Speichern');
+		$this->set('title_for_panel', 'Individuelle Auftragsbestätigung anlegen');		
+		$controller_name = 'Confirmations'; 
+		$controller_id = $id;
+		$this->set(compact('controller_id', 'controller_name','confirmation'));
+		
+		$this->render('admin_individual');
 	}
 
 /**

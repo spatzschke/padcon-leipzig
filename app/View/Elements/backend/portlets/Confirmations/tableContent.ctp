@@ -1,7 +1,7 @@
 <?php	
 	foreach ($data as $item):
 	
-		if($item['Confirmation']['cart_id'] != 0) {				
+		if($item['Confirmation']['customer_id'] != 0) {				
 ?>
 				<tr>
 					<td>
@@ -23,26 +23,25 @@
 						?>
 					</td>
 					<td>
-						<?php 	
-										
-						if(!is_null($item['Customer']['id'])) {
+						<?php 						
 							
 							if(empty($item['Confirmation']['customer_id'])) { echo '-'; } else {
 							
 								echo $item['Confirmation']['customer_id'];	
 								echo '&nbsp;';
-								echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
-									 data-toggle="popover"
-									 data-content="';
-									 	echo $item['Address']['organisation'].'<br>';
-										echo $item['Address']['department'].'<br>';
-									 	echo $item['Customer']['name'].'<br>'.
-									 '"
-									 data-trigger="hover"
-								
-								></i>';
+								if(!is_null($item['Customer']['id'])) {
+									echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
+										 data-toggle="popover"
+										 data-content="';
+										 	echo $item['Address']['organisation'].'<br>';
+											echo $item['Address']['department'].'<br>';
+										 	echo $item['Customer']['name'].'<br>'.
+										 '"
+										 data-trigger="hover"
+									
+									></i>';
+								}
 							}
-						} else { echo '-'; } 
 						 ?>
 					</td>
 					<td>
@@ -56,22 +55,24 @@
 					</td>
 					<td>
 						<?php 
-						$cartProducts = "";
-						foreach ($item['Cart']['CartProduct'] as $cartProduct) {
-							$cartProducts = $cartProducts . $cartProduct['amount'].'x '. $cartProduct['Information']['Product']['name'] . ' ( '.$cartProduct['Information']['Product']['product_number'].' )<br>';
-						}						
-						if(empty($item['Cart']['count'])) { echo '-'; } else {
-							echo $item['Cart']['count'];	
-							echo '&nbsp;';
-							echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
-								 data-toggle="popover" 
-								 data-content="'.
-								 	$cartProducts.
-								 '"
-								 data-trigger="hover"
-							
-							></i>';
-						} ?>
+						if($item['Confirmation']['cart_id'] != 0) {	
+							$cartProducts = "";
+							foreach ($item['Cart']['CartProduct'] as $cartProduct) {
+								$cartProducts = $cartProducts . $cartProduct['amount'].'x '. $cartProduct['Information']['Product']['name'] . ' ( '.$cartProduct['Information']['Product']['product_number'].' )<br>';
+							}						
+							if(empty($item['Cart']['count'])) { echo '-'; } else {
+								echo $item['Cart']['count'];	
+								echo '&nbsp;';
+								echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
+									 data-toggle="popover" 
+									 data-content="'.
+									 	$cartProducts.
+									 '"
+									 data-trigger="hover"
+								
+								></i>';
+							} 
+						} else { echo '-'; }?>
 					</td>
 					<!--<td><?php echo $item['Confirmation']['discount']; ?>&nbsp;</td>
 					<td><?php echo $item['Confirmation']['delivery_cost']; ?>&nbsp;</td>-->
@@ -84,18 +85,21 @@
 									 'Zwischensumme: '.$this->Number->currency($item['Confirmation']['part_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 									 '+'.$item['Confirmation']['vat'].'% Mehrwertsteuer: '.$this->Number->currency($item['Confirmation']['vat_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 									 'Auftragswert: '.$this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));					
-						if(empty($item['Cart']['count'])) { echo '-'; } else {
+						
 							echo $this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
-							echo '&nbsp;';
-							echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
-								 data-toggle="popover" 
-								 data-content="'.
-								 	$priceInfo.
-								 '"
-								 data-trigger="hover"
 							
-							></i>';
-						} ?>	
+							if(empty($item['Cart']['count'])) { echo '-'; } else {
+								echo '&nbsp;';
+								echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
+									 data-toggle="popover" 
+									 data-content="'.
+									 	$priceInfo.
+									 '"
+									 data-trigger="hover"
+								
+								></i>';
+							}
+						 ?>	
 					</td>
 					<td> 
 						<?php if(!isset($item['Confirmation']['offer_number'])) {
@@ -148,7 +152,7 @@
 							  
 						 ?>
 					</td>
-					<td><?php echo $this->Time->format($item['Confirmation']['created'], '%d.%m.%Y'); ?></td>
+					<td><?php echo $this->Time->format($item['Confirmation']['modified'], '%d.%m.%Y'); ?></td>
 					<!-- <td><?php echo $item['Confirmation']['modified']; ?>&nbsp;</td> -->
 					
 					
