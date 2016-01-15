@@ -30,7 +30,7 @@ if(empty($this->data['Pages'])) {
 					}	
 					} else {
 					if(!empty($this->data['Pages'])) {
-						echo '<p class="offerText"><input type="text" class="text" value="Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format(time(), '%d.%m.%Y').' unterbreiten wir Ihnen folgendes Angebot:" /> </p>';
+						echo '<p class="offerText">Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format(time(), '%d.%m.%Y').' unterbreiten wir Ihnen folgendes Angebot:</p>';
 					}
 				}
 			}

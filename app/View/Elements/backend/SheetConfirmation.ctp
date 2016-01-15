@@ -28,7 +28,7 @@ if(empty($this->data['Pages'])) {
 				if($this->data['Confirmation']['order_number'] != '' || $this->data['Confirmation']['order_number'] != null) {
 					echo '<p class="offerText"><input type="text" class="text" value="Ihre Bestellung Nr.: '.$this->data['Confirmation']['order_number'].' vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' bestätige ich wie folgt:" /> </p>';
 				} else {
-					echo '<p class="offerText"><input type="text" class="text" value="Ihre Bestellung vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' bestätige ich wie folgt:" /> </p>';
+					echo '<p class="offerText">Ihre Bestellung vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' bestätige ich wie folgt:</p>';
 				}
 			}
 			
