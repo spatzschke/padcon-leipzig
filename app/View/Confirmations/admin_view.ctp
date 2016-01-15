@@ -19,5 +19,22 @@
 			 ?>
 	</div>
 	
-	<?php echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons'); ?>
+	<?php 
+
+		$dataId = $this->data['Confirmation']['id'];
+		$redirectURL = FULL_BASE_URL.$this->base."\/admin\/".ucfirst($this->request->params['controller'])."\/edit\/".$dataId;
+		$cartId = $this->data['Confirmation']['cart_id'];
+		$nextSheet = "Deliveries";
+		$controller = "Confirmation";
+
+		echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/buttons', array(
+			"redirectURL" => $redirectURL,
+			"cartId" => $cartId,
+			"dataId" => $dataId,
+			"nextSheet" =>$nextSheet,
+			"controller" => $controller,
+			"addressType" => "2"
+		)); 
+
+	?>
 </div>
