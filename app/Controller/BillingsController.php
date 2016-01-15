@@ -152,14 +152,26 @@ class BillingsController extends AppController {
 		if ($this->request->is('ajax')) {
 			if(!empty($this->request->data)) {
 				
-				if(isset($this->request->data['Billing']['payment_date'])) {
+				$date = new DateTime($this->request->data['Billing']['payment_target']);
+				$payment_date = $date->format('Y-m-d');
+				if(!empty($this->request->data['Billing']['payment_date']) && strcmp('1970-01-01', $payment_date) != 0) {
 					$this->request->data['Billing']['payment_date'] = date('Y-m-d',strtotime($this->request->data['Billing']['payment_date']));
-					if(!strcmp($data['Billing']['status'],'cancel')) {
+					if(strcmp($data['Billing']['status'],'cancel') != 0) {
 						$this->request->data['Billing']['status'] = 'close'; 
 					}
+				} else {
+					$this->request->data['Billing']['payment_date'] = null;
+					if(strcmp($this->request->data['Billing']['status'],'cancel') != 0) {
+						$this->request->data['Billing']['status'] = 'open'; 
+					}
 				}
-				if(isset($this->request->data['Billing']['payment_target'])) {
-					$this->request->data['Billing']['payment_target'] = date('Y-m-d',strtotime($this->request->data['Billing']['payment_target']));
+				
+				$date = new DateTime($this->request->data['Billing']['payment_target']);
+				$payment_target = $date->format('Y-m-d');
+				if(!empty($this->request->data['Billing']['payment_target']) && strcmp('1970-01-01', $payment_target) != 0) {
+					$this->request->data['Billing']['payment_target'] = date('Y-m-d',strtotime($this->request->data['Billing']['payment_target']));	
+				} else {
+					$this->request->data['Billing']['payment_target'] = null;
 				}
 
 				$this->request->data['Billing']['created'] = date('Y-m-d',strtotime($this->request->data['Billing']['created']));
@@ -168,11 +180,25 @@ class BillingsController extends AppController {
 				$this->Billing->save($this->request->data);
 							
 			} else {
-				
 				$date = date_create_from_format('Y-m-d h:i:s', $data['Billing']['created']);				
 				$data['Billing']['created'] = date_format($date, 'd.m.Y');
-				$data['Billing']['payment_target'] = date('d.m.Y',strtotime($data['Billing']['payment_target']));
-				$data['Billing']['payment_date'] = date('d.m.Y',strtotime($data['Billing']['payment_date']));
+				
+				$date = new DateTime($data['Billing']['payment_target']);
+				$payment_target = $date->format('Y-m-d');
+				if(!is_null($data['Billing']['payment_target']) && strcmp('1970-01-01', $payment_target) != 0) {
+					$data['Billing']['payment_target'] = date('d.m.Y',strtotime($data['Billing']['payment_target']));
+				} else {
+					$data['Billing']['payment_target'] = null;
+				}
+				
+				$date = new DateTime($data['Billing']['payment_date']);
+				$payment_date = $date->format('Y-m-d');
+				if(!is_null($data['Billing']['payment_date']) && strcmp('1970-01-01', $payment_date) != 0) {
+					$data['Billing']['payment_date'] = date('d.m.Y',strtotime($data['Billing']['payment_date']));
+				} else {
+					$data['Billing']['payment_date'] = null;
+				}
+				
 				$this->request->data = $data;
 				
 			}
@@ -297,7 +323,7 @@ class BillingsController extends AppController {
 	    	$cart = $Carts->get_cart_by_id($cart_id);
 			
 			//Berechen Seitenbelegung mit Produkte
-			$this->request->data['Pages'] = $Carts->calcPageLoad($cart, 5, 1);
+			$this->request->data['Pages'] = $Carts->calcPageLoad($cart, 7, 5);
 	
 			$cart = $Carts->calcSumPrice($cart);
 			
