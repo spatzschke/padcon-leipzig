@@ -1,7 +1,13 @@
 <?php	
 	foreach ($data as $item):
 	
-		if($item['Confirmation']['cart_id'] != 0) {				
+		if($item['Confirmation']['cart_id'] != 0) {
+			
+		$datetime1 = new DateTime();
+		$datetime2 = new DateTime($item['Billing']['payment_target']);
+		$interval = $datetime1->diff($datetime2);		
+		
+			
 ?>
 				<tr>
 					<td>
@@ -77,6 +83,26 @@
 						if($item['Billing']['payment_target'] == '0000-00-00' || $item['Billing']['payment_target'] == '1970-01-01' || empty($item['Billing']['payment_target'])) {
 							echo '-';
 						} else {
+							//Zahlungsziel nähert sich an
+							if(strcmp($interval->format('%R'),'+') == 0 && $interval->format('%a') < 7 && $item['Billing']['status'] == 'open') {							
+								echo '<i class="glyphicon glyphicon-exclamation-sign" style="color: orange; cursor: pointer"
+									 data-toggle="popover" 
+									 data-content="Zahlungsziel in '.$interval->format('%a').' Tag(en) erreicht!"
+									 data-trigger="hover"
+								
+								></i>';
+							}
+							//Zahlungsziel überschritten
+							if(strcmp($interval->format('%R'),'-') == 0 && $item['Billing']['status'] == 'open') {
+								
+								echo '<i class="glyphicon glyphicon-alert" style="color: red; cursor: pointer"
+									 data-toggle="popover" 
+									 data-content="Zahlungsziel um '.$interval->format('%a').' Tag(e) überschritten! Mahnen?"
+									 data-trigger="hover"
+								
+								></i>';
+							}
+							echo '&nbsp;';							
 							echo $this->Time->format($item['Billing']['payment_target'], '%d.%m.%Y'); 
 						}
 						?>

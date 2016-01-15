@@ -574,7 +574,7 @@ float: left;
 #offerSettigs_modal .modal-footer {border: none}
 #offerSettigs_modal .productTable .panel-body { padding: 0}
 
-.offersIndex .tablesorter td, .offersIndex .tablesorter th { text-align: center}  
+.offersIndex .tablesorter td, .offersIndex .tablesorter th { text-align: center; vertical-align: baseline}  
 
 #addAddress_modal .modal-content {
 	background: 0 none; 

@@ -98,9 +98,12 @@ class BillingsController extends AppController {
 				$billing['Billing']['additional_text'] = Configure::read('padcon.Rechnung.additional_text.default');
 		
 				
-				//Gernerierung der Auftragsbestätigungsnummer
+				//Gernerierung der REchnungsnummer
 				$billing['Billing']['billing_number'] = $this->generateBillingNumber();
 				$billing['Billing']['additional_text'] = Configure::read('padcon.Rechnung.additional_text.default');
+				
+				//Zahlungsziel anhand des Standardtextes bestimmen
+				$billing['Billing']['payment_target'] = date('Y-m-d', strtotime("+30 days"));;
 				
 				//Erste AB-Adresse zum Kunden finden
 				$Addresses = new AddressesController(); 
@@ -246,9 +249,6 @@ class BillingsController extends AppController {
 				$data['Billing']['billing_number'] = $this->generateBillingNumber();
 			}
 			$data['Confirmation']['customer_id'] = $customer_id;
-			
-			debug($data);
-			
 			$this->Billing->save($data);
 		} else {
 			
@@ -271,6 +271,13 @@ class BillingsController extends AppController {
 				$data = $this->Billing->findById($id);
 				
 				$data['Billing']['additional_text'] = $this->request->data['Billing']['additional_text'];
+				
+				//Filtere Zahlungsziel aus Text heraus
+				$text = $this->request->data['Billing']['additional_text'];
+				
+				$plus = explode('% Skonto oder', $text);
+				$plus = explode('Tage', $plus[1]);
+				$data['Billing']['payment_target'] = date('Y-m-d', strtotime($data['Billing']['created']." +".trim($plus[0])." days"));
 					
 				if($this->Billing->save($data)){
 					$this->Session->setFlash(__('Speicherung erfolgreich', true));
@@ -350,10 +357,12 @@ class BillingsController extends AppController {
 		// 14 = laufendes Jahr
 	
 		// 427 = laufende Rechnung im Jahr
-		$countYearBillings = count($this->Billing->find('all',array('conditions' => array('Billing.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))))+1;
+		$countYearBillings = count($this->Billing->find('all',array('conditions' => array('Billing.created BETWEEN ? AND ?' => array(date('Y-01-01 00:00:01'), date('Y-m-d 23:59:59'))))))+1;
 		$countYearBillings = str_pad($countYearBillings, 3, "0", STR_PAD_LEFT);
 		// 14 = aktuelles Jahr
 		$year = date('y');
+		
+		debug($countYearBillings);
 		
 		// Rechnung Nr.: 427/14
 		return $countYearBillings.'/'.$year;
