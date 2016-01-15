@@ -19,9 +19,6 @@ if(empty($this->data['Pages'])) {
 		<?php 
 			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $pageCur, 'maxPage' => count($pages), 'logo' => true)); 
 			
-			//debug($this->data['Confirmation']);
-				
-			
 			if($this->data['Confirmation']['order_date']) {
 				
 				
