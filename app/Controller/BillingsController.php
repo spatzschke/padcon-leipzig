@@ -277,7 +277,7 @@ class BillingsController extends AppController {
 				
 				$plus = explode('% Skonto oder', $text);
 				$plus = explode('Tage', $plus[1]);
-				$data['Billing']['payment_target'] = date('Y-m-d', strtotime("+".trim($plus[0])." days"));
+				$data['Billing']['payment_target'] = date('Y-m-d', strtotime($data['Billing']['created']." +".trim($plus[0])." days"));
 					
 				if($this->Billing->save($data)){
 					$this->Session->setFlash(__('Speicherung erfolgreich', true));
