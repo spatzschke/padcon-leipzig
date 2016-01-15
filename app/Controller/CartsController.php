@@ -340,11 +340,12 @@ class CartsController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 	
-	function calcPageLoad($cart = null, $cRow = 5, $tRow = 5) {
+	function calcPageLoad($cart = null, $cRow = 7, $tRow = 6) {
 		$Products = new ProductsController();
 		
 		$rowPerPage = 30;
 		$standardProductRow = 5;
+		$rowMinus = 5;
 		$calcRow = $cRow;
 		$textRow = $tRow;
 		$featureCount = 0;
@@ -379,7 +380,7 @@ class CartsController extends AppController {
 				
 				
 								
-				if($featureCount > $rowPerPage -5 || (count($cartProducts) == 1 && $pages > 1)) {
+				if($featureCount > $rowPerPage -$rowMinus  || (count($cartProducts) == 1 && $pages > 1)) {
 					$page[$j] = $prodArr;
 					$featureCount = 0;
 					$prodArr = array();

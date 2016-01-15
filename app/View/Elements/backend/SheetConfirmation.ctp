@@ -4,13 +4,15 @@ if(empty($this->data['Pages'])) {
 } else {
 	$pages = $this->data['Pages'];
 }	
-		$cartTemp = $this->data;
-		if(empty($this->data['CartProduct'])) {
-			$cartTemp['CartProduct'] = array('empty');	
-		}
+	$cartTemp = $this->data;
+	if(empty($this->data['CartProduct'])) {
+		$cartTemp['CartProduct'] = array('empty');	
+	}
 	
-		foreach ($pages as $page => $carti) {
-	
+	$productCount = 0;
+	foreach ($pages as $page => $carti) {
+		
+		
 		$pageCur = $page;
 		if(count($pages) > 1)
 			$pageCur = $page + 1;	
@@ -31,7 +33,7 @@ if(empty($this->data['Pages'])) {
 			}
 			
 			if(!empty($this->data['Pages'])) {
-				echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'page' => $page, 'pagePrice' => true)); 
+				echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'page' => $page, 'pagePrice' => true, 'productCount' => $productCount)); 
 			}
 			
 			if(!empty($this->data['Pages']) && in_array("C", $carti)){ 
@@ -51,7 +53,9 @@ if(empty($this->data['Pages'])) {
 	</article>
 
 <?php 
-		}
+		
+	$productCount += count($carti);	
+}
 
 ?>
 

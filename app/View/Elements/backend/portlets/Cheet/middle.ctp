@@ -5,12 +5,14 @@
 					
 					foreach ($carti as $j => $item) {
 						
+					if($page < 1) { $prodCount = $j+1; }
+					else {$prodCount = $j+$productCount+1;}						
+						
 					if(!empty($carti[$j]['product'])) {
 											
 					
 						$cartProduct = $carti[$j]['product'];
-
-
+						
 						$product = $this->requestAction('Products/getProduct/'.$cartProduct['product_id']);
 						$color = $this->requestAction('Colors/getColor/'.$cartProduct['color_id']);
 						$material = $this->requestAction('Materials/getMaterial/'.$product['Product']['material_id']);
@@ -21,7 +23,7 @@
 
 						echo '
 						<div class="sheetItem">
-							<div class="pos">'.($j+1).'</div>
+							<div class="pos">'.($prodCount).'</div>
 							<div class="amount">'.$cartProduct['amount'].'</div>
 							<div class="number">
 								<p class=""><span class="productNumber">'.$product['Product']['product_number'].'-'.$color['Color']['code'].'</span></br>'.$product['Product']['company'].'</p>
