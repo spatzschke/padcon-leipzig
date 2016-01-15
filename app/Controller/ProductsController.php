@@ -240,6 +240,7 @@ class ProductsController extends AppController {
 				$producerNumber = array();
 				$categories = array();
 				$cores_arr = array();
+				$bezug = array();
 				$core_name = "";
 				$referenz = "";
 				$company = "";
@@ -271,15 +272,14 @@ class ProductsController extends AppController {
 					//Firma aus 2. Zeile auslesen
 					if($i == 1) {
 				    	$val = trim($val);
-						$val = explode('	',trim($val));
-						$company = trim($val[0]);
+						$string = explode('	',trim($val));
+						$company = trim($string[0]);
 						if(strcmp($company ,'Fa. padcon')) {
 							$producerNumber = $number;
-						}
+						}					
 						
-						
-						if (strpos(trim($val[1]), 'Kern:') !== FALSE) {
-							$val = $val[1];
+						if (strpos(trim($string[1]), 'Kern:') !== FALSE) {
+							$val = $string[1];
 							$t = explode('Kern: ', trim($val));
 							$val = $t[1];								
 							$split = split("/", $val);
@@ -293,6 +293,12 @@ class ProductsController extends AppController {
 									$core_name = $core_name.$item;
 								}									
 							}
+						}
+						
+						if (strpos(trim($string[1]), 'Bezug:') !== FALSE) {
+							$t = explode('Bezug:', trim($string[1]));
+							$bezug = explode(', ', $t[1]);		
+							$bezug = $this->Product->Material->findByName(trim($bezug[0]));
 						}
 						
 						
@@ -320,18 +326,7 @@ class ProductsController extends AppController {
 						
 						continue;
 					}
-					
-					//Bezug					
-					$val = $value;
-					if (strpos($val, 'Alt:') !== FALSE) {
-						$val = explode('	',trim($val));
-						$t = explode('Bezug:', trim($val[1]));
-						$bezug = explode(', ', $t[1]);		
-						$bezug = $this->Product->Material->findByName(trim($bezug[0]));
-						
-						continue;
-					}
-					
+										
 					//Referenz					
 					$val = $value;
 					if (strpos($val, 'Alt:') !== FALSE) {
@@ -344,8 +339,7 @@ class ProductsController extends AppController {
 						continue;
 					}
 	
-					//Bezug
-					
+					//Bezug					
 					$val = $value;
 					if (strpos($val, 'Bezug:') !== FALSE && strpos($val, '-Bezug:') == FALSE) {
 	
