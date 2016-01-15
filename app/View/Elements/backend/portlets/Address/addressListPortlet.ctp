@@ -24,12 +24,8 @@ $(document).ready(function() {
 					 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name; ?>/update/'+customerID+'/'+offerID+'/'+addressID,
 					 success:function (data, textStatus) {
 					 	
-					 	$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/Offers/reloadSheet/<?php echo $controller_id;?>');
-					 	
 					 	window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/edit/<?php echo $controller_id;?>';
-					 	
-					 	// obj.removeClass('loading');				 	
-					 	// $('#additional_address_modal').modal('hide')
+
 					 }
 				}); 
 				

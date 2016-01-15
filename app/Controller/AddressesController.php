@@ -124,6 +124,7 @@ class AddressesController extends AppController {
 		}
 		if($controller_name == "Deliveries") {
 			$data = $this->Delivery->findById($controller_id); 
+			$data = $this->Confirmation->findByDeliveryId($data['Delivery']['id']);			
 			$customer_id = $data['Confirmation']['customer_id'];
 		}
 		if($controller_name == "Billings") {
