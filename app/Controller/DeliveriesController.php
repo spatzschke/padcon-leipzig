@@ -62,6 +62,11 @@ class DeliveriesController extends AppController {
 		$this->set(compact('controller_id', 'controller_name'));
 		$this->set('pdf', null);
 	}
+	
+	public function admin_edit($id = null) {
+		$this->admin_view($id);
+		$this->render('admin_view');
+	}
 
 	public function admin_convert($confirmation_id = null, $cart_id = null) {
 		$this->layout = 'admin';		
@@ -222,6 +227,51 @@ class DeliveriesController extends AppController {
 		$this->set(compact('controller_id', 'controller_name'));
 	}
 
+	function admin_update($customer_id = null, $data_id = null, $address = null) {
+		$this->layout="ajax";
+		
+		$Addresses = new AddressesController();
+
+		$data = $this->Delivery->findById($data_id);					
+		
+		if($data) {
+			if(!is_null($address)) {
+				$address = $this->Address->findById($address);
+				$data['Delivery']['address_id'] = $address['Address']['id'];
+				$data['Delivery']['Address'] = $address['Address'];
+			} else {
+			//Suche erste Adresse
+				if(is_null($data['Customer']['id'])) {
+					$customer = $this->Customer->findById($customer_id);
+					$data['Customer'] = $customer['Customer'];
+					$data['Confirmation']['customer_id'] =  $customer['Customer']['id'];
+				}
+			
+				$data = $Addresses->getAddressByType($data, 2, TRUE);	
+				$data['Delivery']['address_id'] = $data['Address']['id'];				
+			}
+			
+			if(empty($data['Delivery']['delivery_number'])) {
+				$data['Delivery']['delivery_number'] = $this->generateDeliveryNumber();
+			}
+			$data['Confirmation']['customer_id'] = $customer_id;
+			
+			
+			if($this->Delivery->save($data)){
+				$data['Delivery']['stat'] = 'saved';
+			} else {
+				$data['Delivery']['stat'] = 'not saved';
+			}
+		} else {
+			$data['Delivery']['stat'] = 'error';
+		}
+		$this->Delivery->save($data);
+		
+		$this->request->data = $data;
+		$this->autoRender = false;
+		$this->layout = 'admin';
+	}
+
 	function admin_settings($id = null) {
 		
 		$this->layout = 'ajax';
@@ -353,7 +403,12 @@ Lieferzeit: ca. 3-4 Wochen
 			$addressDelivery = $this->Address->findById($this->request->data['Delivery']['address_id']);
 			$this->request->data['Address'] = $addressDelivery['Address'];
 		} else {
-			$this->request->data = $Addresses->getAddressByType($this->request->data, 3, TRUE);
+			if(isset($this->request->data['Delivery']['address_id'])) {
+				$addressDelivery = $this->Address->findById($this->request->data['Delivery']['address_id']);
+				$this->request->data['Address'] = $addressDelivery['Address'];
+			} else {
+				$this->request->data = $Addresses->getAddressByType($this->request->data, 3, TRUE);
+			}
 		}
 		
 		$a = $Addresses->splitAddressData($this->request->data);

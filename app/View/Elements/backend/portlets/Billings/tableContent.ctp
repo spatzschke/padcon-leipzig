@@ -83,11 +83,15 @@
 					</td>
 					<td>
 						<?php 
-						if($item['Billing']['payment_date'] == '0000-00-00' || empty($item['Billing']['payment_date'])) {
+						if($item['Billing']['payment_date'] == '0000-00-00' || empty($item['Billing']['payment_date']) && $item['Billing']['status'] != 'cancel') {
 							echo $this->Html->link('Gezahlt', array('controller' => 'Billings', 'action' => 'payed', 'admin' =>'true', $item['Billing']['id']),
 																array('class' => 'btn btn-default')); 	
 						} else {
-							echo $this->Time->format($item['Billing']['payment_date'], '%d.%m.%Y'); 
+							if($item['Billing']['payment_date'] == '0000-00-00' || $item['Billing']['payment_date'] == '1970-01-01' || empty($item['Billing']['payment_date'])) {
+								echo '-';
+							} else {
+								echo $this->Time->format($item['Billing']['payment_date'], '%d.%m.%Y'); 
+							}
 						}
 						?>
 					</td>

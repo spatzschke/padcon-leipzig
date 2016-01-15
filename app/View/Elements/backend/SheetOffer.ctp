@@ -4,22 +4,24 @@ if(empty($this->data['Pages'])) {
 } else {
 	$pages = $this->data['Pages'];
 }	
-		$cartTemp = $this->data;
-		if(empty($this->data['CartProduct'])) {
-			$cartTemp['CartProduct'] = array('empty');	
-		}
+	$cartTemp = $this->data;
+	if(empty($this->data['CartProduct'])) {
+		$cartTemp['CartProduct'] = array('empty');	
+	}
+	$productCount = 0;
+	
+	foreach ($pages as $page => $carti) {
+	
+	$pageCur = $page;
 		
-		foreach ($pages as $page => $carti) {	
-		
-		$pageCur = $page;
-		if(count($pages) > 1)
-			$pageCur = $page + 1;			
+	if(count($pages) > 1)
+		$pageCur = $page + 1;			
 ?>
 
 <article class="module width_full sheet business noInput">		
 		<?php 		
 			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $pageCur, 'maxPage' => count($pages), 'logo' => true)); 			
-			if($page == 0) {
+			if($page == 1) {
 				if($this->data['Offer']['request_date'] != '0000-00-00') {
 					if($this->data['Offer']['request_number'] != '' || $this->data['Offer']['request_number'] != null) {
 						echo '<p class="offerText">Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format($this->data['Offer']['request_date'], '%d.%m.%Y').' mit der Nummer '.$this->data['Offer']['request_number'].' unterbreiten wir Ihnen folgendes Angebot:</p>';
@@ -34,7 +36,7 @@ if(empty($this->data['Pages'])) {
 			}
 			
 			if(!empty($this->data['Pages'])) {
-				echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'page' => $page, 'pagePrice' => true)); 
+				echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'page' => $page, 'pagePrice' => true, 'productCount' => $productCount)); 
 			}
 								
 			if(!empty($this->data['Pages']) && in_array("C", $carti)){ 
@@ -55,7 +57,8 @@ if(empty($this->data['Pages'])) {
 
 <?php 
 		
-	}
+	$productCount += count($carti);	
+}
 ?>
 <?php
 	

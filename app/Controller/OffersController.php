@@ -542,7 +542,7 @@ class OffersController extends AppController {
 		// 204 = Fortlaufende Nummer im Jahr
 		// 09 = laufende Nummer im Monat
 		// 11 = Monat November
-		// 04 = Anzahl der gemachten Angebote für den Kunden im laufendem Jahrr
+		// 04 = Anzahl der gemachten Angebote für den Kunden im laufendem Jahr
 		
 		// 204 = Fortlaufende Nummer im Jahr
 		$countYearOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-01-01'), date('Y-m-d'))))));

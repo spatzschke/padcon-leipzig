@@ -61,11 +61,19 @@ class BillingsController extends AppController {
 		
 		$delivery = $this->Delivery->findById($data['Confirmation']['delivery_id']);
 		$this->generateData($data, $delivery['Delivery']['cart_id']);
+
+		
 		$controller_name = 'Deliveries'; 
 		$controller_id = $id;
 		$this->set(compact('controller_id', 'controller_name'));
 		$this->set('pdf', null);
 	}
+	
+	public function admin_edit($id = null) {
+		$this->admin_view($id);
+		$this->render('admin_view');
+	}
+	
 
 /**
  * admin_add method
@@ -152,14 +160,26 @@ class BillingsController extends AppController {
 		if ($this->request->is('ajax')) {
 			if(!empty($this->request->data)) {
 				
-				if(isset($this->request->data['Billing']['payment_date'])) {
+				$date = new DateTime($this->request->data['Billing']['payment_target']);
+				$payment_date = $date->format('Y-m-d');
+				if(!empty($this->request->data['Billing']['payment_date']) && strcmp('1970-01-01', $payment_date) != 0) {
 					$this->request->data['Billing']['payment_date'] = date('Y-m-d',strtotime($this->request->data['Billing']['payment_date']));
-					if(!strcmp($data['Billing']['status'],'cancel')) {
+					if(strcmp($data['Billing']['status'],'cancel') != 0) {
 						$this->request->data['Billing']['status'] = 'close'; 
 					}
+				} else {
+					$this->request->data['Billing']['payment_date'] = null;
+					if(strcmp($this->request->data['Billing']['status'],'cancel') != 0) {
+						$this->request->data['Billing']['status'] = 'open'; 
+					}
 				}
-				if(isset($this->request->data['Billing']['payment_target'])) {
-					$this->request->data['Billing']['payment_target'] = date('Y-m-d',strtotime($this->request->data['Billing']['payment_target']));
+				
+				$date = new DateTime($this->request->data['Billing']['payment_target']);
+				$payment_target = $date->format('Y-m-d');
+				if(!empty($this->request->data['Billing']['payment_target']) && strcmp('1970-01-01', $payment_target) != 0) {
+					$this->request->data['Billing']['payment_target'] = date('Y-m-d',strtotime($this->request->data['Billing']['payment_target']));	
+				} else {
+					$this->request->data['Billing']['payment_target'] = null;
 				}
 
 				$this->request->data['Billing']['created'] = date('Y-m-d',strtotime($this->request->data['Billing']['created']));
@@ -168,11 +188,25 @@ class BillingsController extends AppController {
 				$this->Billing->save($this->request->data);
 							
 			} else {
-				
 				$date = date_create_from_format('Y-m-d h:i:s', $data['Billing']['created']);				
 				$data['Billing']['created'] = date_format($date, 'd.m.Y');
-				$data['Billing']['payment_target'] = date('d.m.Y',strtotime($data['Billing']['payment_target']));
-				$data['Billing']['payment_date'] = date('d.m.Y',strtotime($data['Billing']['payment_date']));
+				
+				$date = new DateTime($data['Billing']['payment_target']);
+				$payment_target = $date->format('Y-m-d');
+				if(!is_null($data['Billing']['payment_target']) && strcmp('1970-01-01', $payment_target) != 0) {
+					$data['Billing']['payment_target'] = date('d.m.Y',strtotime($data['Billing']['payment_target']));
+				} else {
+					$data['Billing']['payment_target'] = null;
+				}
+				
+				$date = new DateTime($data['Billing']['payment_date']);
+				$payment_date = $date->format('Y-m-d');
+				if(!is_null($data['Billing']['payment_date']) && strcmp('1970-01-01', $payment_date) != 0) {
+					$data['Billing']['payment_date'] = date('d.m.Y',strtotime($data['Billing']['payment_date']));
+				} else {
+					$data['Billing']['payment_date'] = null;
+				}
+				
 				$this->request->data = $data;
 				
 			}
@@ -182,6 +216,47 @@ class BillingsController extends AppController {
 		$controller_id = $data['Billing']['id'];
 		
 		$this->set(compact('controller_id', 'controller_name'));
+	}
+
+	function admin_update($customer_id = null, $data_id = null, $address = null) {
+		$this->layout="ajax";
+		
+		$Addresses = new AddressesController();
+
+		$data = $this->Billing->findById($data_id);					
+		
+		if($data) {
+			if(!is_null($address)) {
+				$address = $this->Address->findById($address);
+				$data['Billing']['address_id'] = $address['Address']['id'];
+				$data['Billing']['Address'] = $address['Address'];
+			} else {
+			//Suche erste Adresse
+				if(is_null($data['Customer']['id'])) {
+					$customer = $this->Customer->findById($customer_id);
+					$data['Customer'] = $customer['Customer'];
+					$data['Confirmation']['customer_id'] =  $customer['Customer']['id'];
+				}
+			
+				$data = $Addresses->getAddressByType($data, 2, TRUE);	
+				$data['Billing']['address_id'] = $data['Address']['id'];				
+			}
+			
+			if(empty($data['Billing']['billing_number'])) {
+				$data['Billing']['billing_number'] = $this->generateBillingNumber();
+			}
+			$data['Confirmation']['customer_id'] = $customer_id;
+			
+			debug($data);
+			
+			$this->Billing->save($data);
+		} else {
+			
+		}
+		
+		$this->request->data = $data;
+		$this->autoRender = false;
+		$this->layout = 'admin';
 	}
 
 	function admin_settings($id = null) {
@@ -297,7 +372,7 @@ class BillingsController extends AppController {
 	    	$cart = $Carts->get_cart_by_id($cart_id);
 			
 			//Berechen Seitenbelegung mit Produkte
-			$this->request->data['Pages'] = $Carts->calcPageLoad($cart, 5, 1);
+			$this->request->data['Pages'] = $Carts->calcPageLoad($cart, 7, 5);
 	
 			$cart = $Carts->calcSumPrice($cart);
 			
@@ -311,12 +386,18 @@ class BillingsController extends AppController {
 		$this->Customer->recursive = 0;
 		$this->request->data += $this->Customer->findById($this->request->data['Confirmation']['customer_id']);
 		
+	
 		$addressDelivery = array();
 		if(isset($this->request->data['Address']) && ($this->request->data['Address']['id'] != $this->request->data['Billing']['address_id']) ) {
 			$addressDelivery = $this->Address->findById($this->request->data['Billing']['address_id']);
 			$this->request->data['Address'] = $addressDelivery['Address'];
 		} else {
-			$this->request->data = $Addresses->getAddressByType($this->request->data, 4, TRUE);
+			if(isset($this->request->data['Billing']['address_id'])) {
+				$addressDelivery = $this->Address->findById($this->request->data['Billing']['address_id']);
+				$this->request->data['Address'] = $addressDelivery['Address'];
+			} else {
+				$this->request->data = $Addresses->getAddressByType($this->request->data, 4, TRUE);
+			}
 		}
 		
 		if(!is_null($this->request->data['Address'])) {
