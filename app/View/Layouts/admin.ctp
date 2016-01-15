@@ -45,7 +45,9 @@
 		    });
 		}, 5000);
 		 
-		
+		$('.glyphicon').popover({
+            html:true
+        });
 		 
 		});
 		//-->

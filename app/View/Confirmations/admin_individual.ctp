@@ -75,9 +75,8 @@ $(document).ready(function() {
 				}
 			
 			?>,
-			onInit: function(event, state) {},
+			onInit: function(event, state) { state = true},
 			onSwitchChange: function(event, state) {
-				console.log(state);
 				if(state) {
 					//Versandkostenfrei
 					res = '<?php echo Configure::read('padcon.Auftragsbestaetigung.additional_text.deliveryFree');?>'
@@ -176,7 +175,9 @@ $(document).ready(function() {
 					$readonly = "";
 				} ?>
 					<div class="input-group">
-                        <span class="input-group-addon"><b>#</b></span>
+						<span class="input-group-addon"><b class="glyphicon" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
+									 data-content="AB-Nummer">#</b>
+						</span>
                         <?php  echo $this->Form->input('confirmation_number', array(
 							'label' => false,
 							'class' => 'form-control',
@@ -198,7 +199,9 @@ $(document).ready(function() {
                 <?php if($this->request->params['action'] == "admin_edit_individual") { ?>   
                   
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
+									 data-content="Kundennummer"></i>
+						</span>
                         <?php echo $this->Form->input('customer_id', array(
 							'label' => false,
 							'class' => 'form-control',
@@ -211,9 +214,11 @@ $(document).ready(function() {
 						?>              
                      </div>
                     
-                   	<div class="input-group date">     	
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        <?php echo $this->Form->input('created', array(
+                   	<div class="input-group date">    
+                   		<span class="input-group-addon"><i class="glyphicon glyphicon-calendar" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
+									 data-content="Bestellung vom"></i>
+						</span>
+                        <?php echo $this->Form->input('order_date', array(
 						    'label' => false,
 						    'div' => false,
 						    'type' => 'text',
@@ -259,7 +264,10 @@ $(document).ready(function() {
 				 <!-- Mitte -->
 				<div class="col-md-4">
 					<div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-th-large"></i></span>
+						<span class="input-group-addon"><i class="glyphicon glyphicon-glyphicon glyphicon-gift" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
+									 data-content="Rabatt"></i>
+						</span>
+                        
                         <?php echo $this->Form->input('discount', array(
 							'label' => false,
 							'class' => 'form-control',
@@ -269,10 +277,13 @@ $(document).ready(function() {
 							'autoComplete' => true,
 						));
 						?> 
+						<span class="input-group-addon"><b>%</b></span>    
 					</div>
 					 
                       <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-piggy-bank" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
+									 data-content="AB-Gesamtsumme"></i>
+						</span>
                         <?php  echo $this->Form->input('confirmation_price', array(
 							'label' => false,
 							'class' => 'form-control',
@@ -282,10 +293,13 @@ $(document).ready(function() {
 							'autoComplete' => true,
   							'type' => 'text',
 						));
-						?>                                      
+						?>  
+						<span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>                                    
                     </div>  
                      <div class="input-group">
-	                    <span class="input-group-addon"><i class="glyphicon  glyphicon-screenshot"></i></span>
+	                    <span class="input-group-addon"><i class="glyphicon glyphicon-align-left" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
+									 data-content="Zusatztext"></i>
+						</span>
 	                    <?php echo $this->Form->input('additional_text', array(
 							'label' => false,
 							'class' => 'form-control',

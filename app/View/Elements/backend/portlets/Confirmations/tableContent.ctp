@@ -12,7 +12,12 @@
 							 echo '-'; 
 							} else {
 								if(empty($item['Confirmation']['delivery_id'])) {
-									echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit', $item['Confirmation']['id']), array('escape' => false));
+									if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
+										echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit_individual', $item['Confirmation']['id']), array('escape' => false));
+									} else {
+										echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit', $item['Confirmation']['id']), array('escape' => false));	
+									}
+									
 								} else {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['id']), array('escape' => false));
 								}
@@ -86,18 +91,21 @@
 									 '+'.$item['Confirmation']['vat'].'% Mehrwertsteuer: '.$this->Number->currency($item['Confirmation']['vat_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 									 'Auftragswert: '.$this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));					
 						
-							echo $this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
-							
-							if(empty($item['Cart']['count'])) { echo '-'; } else {
-								echo '&nbsp;';
-								echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
-									 data-toggle="popover" 
-									 data-content="'.
-									 	$priceInfo.
-									 '"
-									 data-trigger="hover"
-								
-								></i>';
+							if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
+								echo $this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
+							} else {
+								if(is_null($item['Confirmation']['confirmation_price'])) { echo '-'; } else {
+									echo $this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
+									echo '&nbsp;';
+									echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
+										 data-toggle="popover" 
+										 data-content="'.
+										 	$priceInfo.
+										 '"
+										 data-trigger="hover"
+									
+									></i>';
+								}
 							}
 						 ?>	
 					</td>
@@ -159,15 +167,16 @@
 					<?php
 						
 							echo '<td class="actions">';
+							if(strpos($item['Confirmation']['status'], 'custom') === FALSE){
+								if(!empty($item['Confirmation']['offer_number']))
+									echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'createPdf', $item['Confirmation']['id']), array('escape' => false, 'target' => '_blank'));
+								
+								if(!empty($item['Confirmation']['hash']))
+									echo $this->Html->link('<i class="glyphicon glyphicon-link" ></i>', '/Auftrag/'.$item['Confirmation']['hash'], array('class' => 'clipboard', 'escape' => false, 'target' => '_blank'));
 							
-							if(!empty($item['Confirmation']['offer_number']))
-								echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'createPdf', $item['Confirmation']['id']), array('escape' => false, 'target' => '_blank'));
-							
-							if(!empty($item['Confirmation']['hash']))
-								echo $this->Html->link('<i class="glyphicon glyphicon-link" ></i>', '/Auftrag/'.$item['Confirmation']['hash'], array('class' => 'clipboard', 'escape' => false, 'target' => '_blank'));
-							
-							if(!empty($item['Confirmation']['hash']))
-								echo $this->Html->link('<i class="glyphicon glyphicon-envelope"></i>', '/Auftrag/'.$item['Confirmation']['hash'], array('class' => 'mail', 'escape' => false, 'target' => '_blank'));
+								if(!empty($item['Confirmation']['hash']))
+									echo $this->Html->link('<i class="glyphicon glyphicon-envelope"></i>', '/Auftrag/'.$item['Confirmation']['hash'], array('class' => 'mail', 'escape' => false, 'target' => '_blank'));
+							}
 							
 							echo $this->Html->link('<i class="tableSetting_btn glyphicon glyphicon-cog"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'table_setting', $item['Confirmation']['id']), array('escape' => false));
 							

@@ -88,8 +88,7 @@
 								echo '<i class="glyphicon glyphicon-exclamation-sign" style="color: orange; cursor: pointer"
 									 data-toggle="popover" 
 									 data-content="Zahlungsziel in '.$interval->format('%a').' Tag(en) erreicht!"
-									 data-trigger="hover"
-								
+									 data-trigger="hover"								
 								></i>';
 							}
 							//Zahlungsziel überschritten
