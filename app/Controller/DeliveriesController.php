@@ -36,7 +36,9 @@ class DeliveriesController extends AppController {
 		$this->layout = 'admin';
 	
 		$this->Delivery->recursive = 0;
-		$data = $this->Delivery->find('all', array('order' => array('Delivery.created DESC', 'Delivery.id DESC'), 'limit' => 100));
+		$data = $this->Delivery->find('all', array('order' => array('Delivery.id DESC'), 'limit' => 100));
+		
+		$this->set('title_for_panel', 'Alle Lieferscheine');	
 			
 		$this->set('data', $this->fillIndexData($data));
 	}
@@ -66,6 +68,93 @@ class DeliveriesController extends AppController {
 	public function admin_edit($id = null) {
 		$this->admin_view($id);
 		$this->render('admin_view');
+	}
+	
+	public function admin_add_individual($id = null) {
+		
+		$this->layout = "admin";
+		$this->set('pdf', null);
+		
+		if (!empty($this->data)) {
+			$data = null;	
+											
+			$this->Delivery->create();
+			
+			$data = $this->data;
+			
+			$data['Delivery']['status'] = 'custom_open';
+			$data['Delivery']['delivery_number'] = $this->data['Delivery']['delivery_number'];
+			
+			$this->Delivery->save($data);
+			$dev_id = $this->Delivery->id;
+			
+			// Lierschein in AB eintragen
+			$confirmation['Confirmation']['id'] =  $id;
+			$confirmation['Confirmation']['delivery_id'] =  $dev_id;
+			$this->Confirmation->save($confirmation);
+			
+			// Generate Hash für AB
+			$data['Delivery']['id'] =  $dev_id;
+			$data['Delivery']['hash'] =  Security::hash($id, 'md5', true);
+			$this->Delivery->save($data);
+
+			$this->redirect(array('action'=>'edit_individual', $dev_id));
+		} 
+		
+		// Wenn es noch eine leere AB (ohen Kunden) gibt, dann nimm die
+		// $emptyData = $this->Confirmation->find('first', array('conditions' => array('customer_id' => NULL, 'Confirmation.cart_id' => 0)));
+		// if(!empty($emptyData)) {
+			// $this->Session->setFlash(__('Eine leere individuelle AB wurde gefunden! Bitte diese Ausfüllen.'));
+			// $this->redirect(array('action'=>'edit_individual', $emptyData['Delivery']['id']));
+		// }
+		
+		$data['Delivery']['delivery_number'] = $this->generateDeliveryNumber();
+		
+		$this->request->data = $data;
+		
+		$this->set('primary_button', 'Anlegen');
+		$this->set('title_for_panel', 'Individuellen Lieferschein anlegen');		
+		$controller_name = 'Deliveries'; 
+		$controller_id = $id;
+		$this->set(compact('controller_id', 'controller_name','data'));
+		
+		$this->render('admin_individual');
+	}
+
+	public function admin_edit_individual($id = null) {
+		
+		$this->layout = "admin";
+		$this->set('pdf', null);
+		
+		$data = $this->Confirmation->findByDeliveryId($id);
+		
+		if (!empty($this->data)) {
+			$confirmation = null;			
+			
+			$data = $this->data;
+			$data['Delivery']['created'] = date('Y-m-d',strtotime($data['Delivery']['created']));
+			$data['Delivery']['id'] = $id;
+			
+			if($this->Delivery->save($data)) {
+				$this->Session->setFlash(__('Lierschein wurde gespeichert.'));
+				$this->redirect(array('action'=>'index'));
+			} else {
+				$this->Session->setFlash(__('Es trat ein Fehler beim speichern des Lieferscheins auf. Bitte versuchen Sie es noch einmal.'));
+			}
+
+		} else {
+			
+			$data['Delivery']['created'] = date('d.m.Y',strtotime($data['Delivery']['created']));			
+			$this->request->data = $data;
+			
+			$this->set('primary_button', 'Speichern');
+			$this->set('title_for_panel', 'Individuellen Lieferschein bearbeiten');		
+			$controller_name = 'Deliveries'; 
+			$controller_id = $id;
+			$this->set(compact('controller_id', 'controller_name','data'));
+			
+			$this->render('admin_individual');
+		}
 	}
 
 	public function admin_convert($confirmation_id = null, $cart_id = null) {
@@ -205,7 +294,29 @@ class DeliveriesController extends AppController {
 		if ($this->request->is('ajax')) {
 			if(!empty($this->request->data)) {
 				
-				$this->request->data['Delivery']['created'] = date('Y-m-d',strtotime($this->request->data['Delivery']['created']));
+				$this->request->data['Delivery']['created'] = date('Y-m-d h:i:s',strtotime($this->request->data['Delivery']['created']));
+				$this->request->data['Delivery']['send_date'] = date('Y-m-d',strtotime($this->request->data['Delivery']['send_date']));
+				
+				
+				if(!empty($this->request->data['Delivery']['deliver_date']) && strcmp('1970-01-01', $this->request->data['Delivery']['deliver_date']) != 0 && strcmp('0000-00-00', $this->request->data['Delivery']['deliver_date']) != 0) {
+					$this->request->data['Delivery']['deliver_date'] = date('Y-m-d',strtotime($this->request->data['Delivery']['deliver_date']));
+					if(strpos($data['Delivery']['status'], 'cancel') !== FALSE) {
+						if(strpos($this->request->data['Delivery']['status'], 'custom') !== FALSE){
+							$this->request->data['Delivery']['status'] = "custom_close";
+						} else {
+							$this->request->data['Delivery']['status'] = "close";
+						}
+					}
+				} else {
+					$this->request->data['Delivery']['deliver_date'] = null;
+					if(strpos($data['Delivery']['status'], 'cancel') !== FALSE) {
+						if(strpos($this->request->data['Delivery']['status'], 'custom') !== FALSE){
+							$this->request->data['Delivery']['status'] = "custom_open";
+						} else {
+							$this->request->data['Delivery']['status'] = "open";
+						}
+					}
+				}
 				
 				$this->Delivery->id = $this->request->data['Delivery']['id'];
 				$this->Delivery->save($this->request->data);
@@ -213,9 +324,20 @@ class DeliveriesController extends AppController {
 			} else {
 				$data = $this->Delivery->findById($id);
 				
-				$date = date_create_from_format('Y-m-d h:i:s', $data['Delivery']['created']);
-				$data['Delivery']['created'] = date_format($date, 'd.m.Y');
 				
+				if(!empty($data['Delivery']['send_date']) && strcmp('1970-01-01', $data['Delivery']['send_date']) != 0 && strcmp('0000-00-00', $data['Delivery']['send_date']) != 0) {
+					$data['Delivery']['send_date'] = date('d.m.Y',strtotime($data['Delivery']['send_date']));
+				} else {
+					$data['Delivery']['send_date'] = null;
+				}
+				
+				if(!empty($data['Delivery']['deliver_date']) && strcmp('1970-01-01', $data['Delivery']['deliver_date']) != 0 && strcmp('0000-00-00', $data['Delivery']['deliver_date']) != 0) {
+					$data['Delivery']['deliver_date'] = date('d.m.Y',strtotime($data['Delivery']['deliver_date']));
+				} else {
+					$data['Delivery']['deliver_date'] = null;
+				}
+				
+				$data['Delivery']['created'] = date('d.m.Y',strtotime($data['Delivery']['created']));				
 				$this->request->data = $data;
 				
 			}
@@ -346,6 +468,53 @@ Lieferzeit: ca. 3-4 Wochen
 	    
 	}
 
+	function admin_sended($id = null) {
+		$data['Delivery']['id'] = $id;
+		$data['Delivery']['send_date'] = date("y-m-d");
+		
+		if(!empty($this->data['Delivery']['trackingcode']))
+			$data['Delivery']['trackingcode'] = $this->data['Delivery']['trackingcode'];
+						
+		$this->Delivery->id = $id;
+		$this->Delivery->save($data);
+		
+		$this->redirect('index');
+		
+	}
+	
+	function admin_delivered($id = null) {
+		$data['Delivery']['id'] = $id;
+		$data['Delivery']['deliver_date'] = date("y-m-d");
+		
+		$delivery = $this->Delivery->findById($id);
+		
+		if(strpos($delivery['Delivery']['status'], 'custom') !== FALSE){
+			$data['Delivery']['status'] = "custom_close";
+		} else {
+			$data['Delivery']['status'] = "close";
+		}
+	
+				
+		$this->Delivery->id = $id;
+		$this->Delivery->save($data);
+		
+		$this->redirect('index');
+		
+	}
+	
+	function admin_trackingcode($id = null) {
+			$this->layout = 'ajax';
+		
+		
+		$this->request->data = $this->Delivery->findById($id);
+		$this->request->data['Delivery']['send_date'] = date("d.m.Y");
+		
+		$controller_name = 'Deliveries'; 
+		$controller_id = $this->request->data['Delivery']['id'];
+		$this->set(compact('controller_id', 'controller_name'));
+				
+	}
+
 	function generateDeliveryNumber() {
 	
 		// Lieferschein Nr.: 01711/478
@@ -354,7 +523,7 @@ Lieferzeit: ca. 3-4 Wochen
 		// 478 = laufende Anzahl im Jahr - dreistellig
 		
 		// 017 = laufende Anzahl im Monat - dreistellig
-		$countMonthDeliveries = count($this->Delivery->find('all',array('conditions' => array('Delivery.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d'))))))+1;
+		$countMonthDeliveries = count($this->Delivery->find('all',array('conditions' => array('Delivery.created BETWEEN ? AND ?' => array(date('Y-m-01 00:00:01'), date('Y-m-d 23:59:59'))))))+1;
 		$countMonthDeliveries = str_pad($countMonthDeliveries, 3, "0", STR_PAD_LEFT);
 		// 11 = aktueller Monat
 		$month = date('m');
@@ -449,38 +618,42 @@ Lieferzeit: ca. 3-4 Wochen
 		
 		// for($i=0; $i<=10;$i++) {
 		foreach ($data as $item) {
-			if(empty($item['Confirmation']['customer_id'])) {
-				$item += $this->Confirmation->findById($item['ConfirmationDelivery']['confirmation_id']);
+						
+			if(!isset($item['Confirmation'])) {
+				$item += $this->Confirmation->findByDeliveryId($item['Delivery']['id']);
 			}
 
 			//Load Customer for the Delivery
-			$customer= $this->Customer->findById($item['Confirmation']['customer_id']);
-			$address = $this->Address->findById($item['Delivery']['address_id']);
-			$customer['Address'] = $address['Address'];
-			$item['Customer'] = $customer['Customer'];
+			if($item['Confirmation']['cart_id'] != 0) {
+				$customer= $this->Customer->findById($item['Confirmation']['customer_id']);
+				$address = $this->Address->findById($item['Delivery']['address_id']);
+				$customer['Address'] = $address['Address'];
+				$item['Customer'] = $customer['Customer'];
 			
-			if($Customers->splitCustomerData($customer)) {
-				$item['Address'] = $Customers->splitCustomerData($customer);
-			}			
-
-			$cart = $Carts->get_cart_by_id($item['Confirmation']['cart_id']);
+				if($Customers->splitCustomerData($customer)) {
+					$item['Address'] = $Customers->splitCustomerData($customer);
+				}	
 			
-			$item += $cart;
+				$cart = $Carts->get_cart_by_id($item['Confirmation']['cart_id']);
+				$item += $cart;
 			
-			if(!empty($cart['CartProduct'])) {
-				$j = 0;
-				$item['Cart']['CartProduct'] = $item['CartProduct'];
-				foreach ($cart['CartProduct'] as $cartProd) {
-					$product = $Products->getProduct($cartProd['product_id']);
-					unset($product['Cart']);
-					unset($product['Category']);
-					unset($product['Material']);
-					$item['Cart']['CartProduct'][$j]['Information'] = $product;
-					$j++;
+			
+				if(!empty($cart['CartProduct'])) {
+					$j = 0;
+					$item['Cart']['CartProduct'] = $item['CartProduct'];
+					foreach ($cart['CartProduct'] as $cartProd) {
+						$product = $Products->getProduct($cartProd['product_id']);
+						unset($product['Cart']);
+						unset($product['Category']);
+						unset($product['Material']);
+						$item['Cart']['CartProduct'][$j]['Information'] = $product;
+						$j++;
+					}
 				}
+				$item['Delivery'] += $Confirmations->calcPrice($item);
 			}
-
-			$item['Delivery'] += $Confirmations->calcPrice($item);
+			
+			
 			
 			//Finde Offernumber
 			if(!isset($item['Delivery']['confirmation_id'])) {

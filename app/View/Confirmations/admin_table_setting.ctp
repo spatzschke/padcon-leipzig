@@ -96,14 +96,14 @@
 					
 					<div class="modal-footer">
 						<?php
-							if($this->data['Confirmation']['status'] != 'cancel') {
-								echo '<button type="button" id="status" class="btn btn-danger pull-left" data-status="cancel" data-dismiss="modal">Stornieren</button>';
-							} else {
+							if(strpos($this->data['Confirmation']['status'], 'cancel') !== FALSE){
 								if(!empty($this->data['Confirmation']['delivery_id'])) {
 									echo '<button type="button" id="status" class="btn btn-success pull-left" data-status="close" data-dismiss="modal">Reaktivieren</button>';
 								} else {
 									echo '<button type="button" id="status" class="btn btn-success pull-left" data-status="open" data-dismiss="modal">Reaktivieren</button>';
 								}
+							} else {
+								echo '<button type="button" id="status" class="btn btn-danger pull-left" data-status="cancel" data-dismiss="modal">Stornieren</button>';
 							}
 						?>
 				        <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>

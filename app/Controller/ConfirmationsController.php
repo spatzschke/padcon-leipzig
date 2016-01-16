@@ -38,9 +38,11 @@ class ConfirmationsController extends AppController {
 	function admin_index() {
 		$this->layout = 'admin';
 	
-		$this->Confirmation->recursive = 0;
-		$data = $this->Confirmation->find('all', array('order' => array('Confirmation.created DESC', 'Confirmation.id DESC')));
+		//$this->Confirmation->recursive = 0;
+		$data = $this->Confirmation->find('all', array('order' => array('Confirmation.id DESC')));
 			
+		$this->set('title_for_panel', 'Alle Auftragsbestätigungen');	
+		
 		$this->set('data', $this->fillIndexData($data));
 	}
 
@@ -80,6 +82,14 @@ class ConfirmationsController extends AppController {
 		
 		if(!$id) {
 			$confirmation = null;	
+			
+			// Wenn es noch eine leere AB (ohen Kunden) gibt, dann nimm die
+			$emptyConfirmation = $this->Confirmation->find('first', array('conditions' => array('customer_id' => NULL, 'not' => array('Confirmation.cart_id' => 0))));
+			if(!empty($emptyConfirmation)) {
+				$this->Session->setFlash(__('Eine leere AB wurde gefunden! Bitte diese Ausfüllen.'));
+				$this->redirect(array('action'=>'add', $emptyConfirmation['Confirmation']['id']));
+			}
+						
 			$cart = $this->requestAction('/admin/carts/add/');
 					
 			$this->Confirmation->create();
@@ -117,7 +127,8 @@ class ConfirmationsController extends AppController {
 		$this->set('pdf', null);
 		
 		if (!empty($this->data)) {
-						$confirmation = null;						
+			$confirmation = null;	
+											
 			$this->Confirmation->create();
 			
 			$confirmation = $this->data;
@@ -129,13 +140,21 @@ class ConfirmationsController extends AppController {
 			$this->Confirmation->save($confirmation);
 			$id = $this->Confirmation->id;
 			
-			// Generate Hash für Offer
+			// Generate Hash für AB
 			$confirmation['Confirmation']['id'] =  $id;
 			$confirmation['Confirmation']['hash'] =  Security::hash($id, 'md5', true);
 			$this->Confirmation->save($confirmation);
 
 			$this->redirect(array('action'=>'edit_individual', $id));
+		} 
+		
+		// Wenn es noch eine leere AB (ohen Kunden) gibt, dann nimm die
+		$emptyConfirmation = $this->Confirmation->find('first', array('conditions' => array('customer_id' => NULL, 'Confirmation.cart_id' => 0)));
+		if(!empty($emptyConfirmation)) {
+			$this->Session->setFlash(__('Eine leere individuelle AB wurde gefunden! Bitte diese Ausfüllen.'));
+			$this->redirect(array('action'=>'edit_individual', $emptyConfirmation['Confirmation']['id']));
 		}
+		
 		$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
 		
 		$this->request->data = $confirmation;
@@ -160,32 +179,44 @@ class ConfirmationsController extends AppController {
 			$confirmation = null;			
 			
 			$data = $this->data;
-			$data['Confirmation']['created'] = date('Y-m-d',strtotime($data['Confirmation']['created']));
-			$data['Confirmation']['modified'] = date('Y-m-d',strtotime($data['Confirmation']['created']));
+			$data['Confirmation']['order_date'] = date('Y-m-d',strtotime($data['Confirmation']['order_date']));
+			// $data['Confirmation']['created'] = date('Y-m-d',strtotime($data['Confirmation']['created']));
+			// $data['Confirmation']['modified'] = date('Y-m-d',strtotime($data['Confirmation']['created']));
 			$data['Confirmation']['id'] = $id;
+			
+			if($this->Confirmation->save($data)) {
+				$this->Session->setFlash(__('The confirmation has been saved.'));
+				$this->redirect(array('action'=>'index'));
+			} else {
+				$this->Session->setFlash(__('The confirmation has been saved.'));
+			}
 
-			$this->Confirmation->save($data);
-
-
-		$this->redirect(array('action'=>'index'));
+		} else {
+			if(empty($data['Confirmation']['additional_text'])) {
+				$data['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
+			}
+			
+			if(strcmp($data['Confirmation']['additional_text'],Configure::read('padcon.Auftragsbestaetigung.additional_text.default'))>=0) {
+				$data['Confirmation']['order_date'] = date('d.m.Y',strtotime($data['Confirmation']['order_date']));	
+				$data['Confirmation']['created'] = date('d.m.Y',strtotime($data['Confirmation']['created']));
+				$data['Confirmation']['modified'] = date('d.m.Y',strtotime($data['Confirmation']['created']));
+			}
+			$data['Confirmation']['order_date'] = date('d.m.Y');
+			if($data['Confirmation']['discount'] == 0)
+				$data['Confirmation']['discount'] = null;
+			
+			if($data['Confirmation']['confirmation_price'] == 0)
+				$data['Confirmation']['confirmation_price'] = null;
+			$this->request->data = $data;
+			
+			$this->set('primary_button', 'Speichern');
+			$this->set('title_for_panel', 'Individuelle Auftragsbestätigung anlegen');		
+			$controller_name = 'Confirmations'; 
+			$controller_id = $id;
+			$this->set(compact('controller_id', 'controller_name','confirmation'));
+			
+			$this->render('admin_individual');
 		}
-		if(empty($data['Confirmation']['additional_text'])) {
-			$data['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
-		}
-		
-		if(strcmp($data['Confirmation']['additional_text'],Configure::read('padcon.Auftragsbestaetigung.additional_text.default'))>=0) {
-			$data['Confirmation']['created'] = date('d.m.Y',strtotime($data['Confirmation']['created']));
-			$data['Confirmation']['modified'] = date('d.m.Y',strtotime($data['Confirmation']['created']));
-		}
-		$this->request->data = $data;
-		
-		$this->set('primary_button', 'Speichern');
-		$this->set('title_for_panel', 'Individuelle Auftragsbestätigung anlegen');		
-		$controller_name = 'Confirmations'; 
-		$controller_id = $id;
-		$this->set(compact('controller_id', 'controller_name','confirmation'));
-		
-		$this->render('admin_individual');
 	}
 
 /**
@@ -338,7 +369,7 @@ class ConfirmationsController extends AppController {
 			}
 			$this->set('title_for_panel', 'Auftragsbestätigung aus Angebot erstellen');
 		}
-		
+	
 	}
 
 	function admin_table_setting($id = null) {
@@ -347,6 +378,12 @@ class ConfirmationsController extends AppController {
 
 		if ($this->request->is('ajax')) {
 			if(!empty($this->request->data)) {
+				
+				$data = $this->Confirmation->findById($id);
+				
+				if(strpos($data['Confirmation']['status'], 'custom') !== FALSE){
+					$this->request->data['Confirmation']['status'] = 'custom_'.$this->request->data['Confirmation']['status'];
+				}
 				
 				$this->request->data['Confirmation']['created'] = date('Y-m-d',strtotime($this->request->data['Confirmation']['created']));
 				
@@ -366,7 +403,7 @@ class ConfirmationsController extends AppController {
 		}
 		
 		$controller_name = 'Confirmations'; 
-		$controller_id = $confirmation['Confirmation']['id'];
+		$controller_id = $data['Confirmation']['id'];
 		
 		$this->set(compact('controller_id', 'controller_name'));
 	}
@@ -690,7 +727,11 @@ class ConfirmationsController extends AppController {
 		$arr_data['Confirmation']['part_price'] = $part_price;
 		
 		if($data['Cart']['sum_retail_price'] == 0) {
-			$arr_data['Confirmation']['confirmation_price'] = 0;
+			if(strpos($data['Confirmation']['status'], 'custom') !== FALSE){
+				$arr_data['Confirmation']['confirmation_price'] = $data['Confirmation']['confirmation_price'];
+			} else {
+				$arr_data['Confirmation']['confirmation_price'] = 0;
+			}			
 		} else {
 			$arr_data['Confirmation']['confirmation_price'] = $data_price;
 		}	
@@ -710,7 +751,7 @@ class ConfirmationsController extends AppController {
 		// 14 = aktuelles Jahr
 		
 		// 019 = Anzahl der AB im Monat - dreistellig
-		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d')), ))));
+		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01 00:00:01'), date('Y-m-d 23:59:59')), ))));
 		$countMonthConfirmations++;
 		$countMonthConfirmations = str_pad($countMonthConfirmations, 3, "0", STR_PAD_LEFT);
 		// 11 = aktueller Monat
@@ -752,9 +793,8 @@ class ConfirmationsController extends AppController {
 					$j++;
 				}
 			}
-
 			$item['Confirmation'] += $this->calcPrice($item);
-			
+						
 			//Finde Offernumber
 			if($item['Confirmation']['offer_id'] != 0) {
 				$offer = $this->Offer->findById($item['Confirmation']['offer_id']);

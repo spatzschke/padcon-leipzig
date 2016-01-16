@@ -23,7 +23,9 @@ class OffersController extends AppController {
 	
 		$this->Offer->recursive = 0;
 		$offers = $this->Offer->find('all', array('order' => array('Offer.created DESC', 'Offer.id DESC')));
-			
+		
+		$this->set('title_for_panel', 'Alle Angebote');	
+		
 		$this->set('offers', $this->fillIndexData($offers));
 	}
 

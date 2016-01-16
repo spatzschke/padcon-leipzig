@@ -70,6 +70,7 @@ $(document).ready(function() {
 			</div>
 		</div>
 		<header>
+			<div class="panel-title"><?php echo $title_for_panel; ?></div>
 			<?php
 				if($this->request->is('ajax')) {
 					echo '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>';
