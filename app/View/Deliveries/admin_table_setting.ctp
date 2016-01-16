@@ -92,6 +92,57 @@
 									    todayHighlight: true
 									    });
 								</script> 
+								<label class="col-md-6">Versendet am</label>
+                               	<div class="input-group date">     	
+			                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+			                        <?php echo $this->Form->input('send_date', array(
+									    'label' => false,
+									    'div' => false,
+									    'type' => 'text',
+										'class' => 'form-control span12'));
+									
+									?> 						 	
+								</div>								   
+								<script type="text/javascript">
+									    $('.date').datepicker({
+									    format: "dd.mm.yyyy",
+									    language: "de",
+									    calendarWeeks: true,
+									    autoclose: true,
+									    todayHighlight: true
+									    });
+								</script> 
+								<label class="col-md-6">Trackingcode</label>
+                               	<div class="input-group number">     	
+	                                <span class="input-group-addon"><i class="glyphicon glyphicon-qrcode"></i></span>
+	                                <?php echo $this->Form->input('trackingcode', array(
+									    'label' => false,
+									    'div' => false,
+									    'type' => 'text',
+										'class' => 'form-control span12'));
+									
+									?> 	
+								</div>
+								<label class="col-md-6">Zugestellt am</label>
+                               	<div class="input-group date">     	
+			                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+			                        <?php echo $this->Form->input('deliver_date', array(
+									    'label' => false,
+									    'div' => false,
+									    'type' => 'text',
+										'class' => 'form-control span12'));
+									
+									?> 						 	
+								</div>								   
+								<script type="text/javascript">
+									    $('.date').datepicker({
+									    format: "dd.mm.yyyy",
+									    language: "de",
+									    calendarWeeks: true,
+									    autoclose: true,
+									    todayHighlight: true
+									    });
+								</script> 
 							</div>
 						</div>
 					</div>						

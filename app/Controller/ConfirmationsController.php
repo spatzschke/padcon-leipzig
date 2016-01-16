@@ -41,6 +41,8 @@ class ConfirmationsController extends AppController {
 		//$this->Confirmation->recursive = 0;
 		$data = $this->Confirmation->find('all', array('order' => array('Confirmation.id DESC')));
 			
+		$this->set('title_for_panel', 'Alle Auftragsbestätigungen');	
+		
 		$this->set('data', $this->fillIndexData($data));
 	}
 
@@ -749,7 +751,7 @@ class ConfirmationsController extends AppController {
 		// 14 = aktuelles Jahr
 		
 		// 019 = Anzahl der AB im Monat - dreistellig
-		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01'), date('Y-m-d')), ))));
+		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01 00:00:01'), date('Y-m-d 23:59:59')), ))));
 		$countMonthConfirmations++;
 		$countMonthConfirmations = str_pad($countMonthConfirmations, 3, "0", STR_PAD_LEFT);
 		// 11 = aktueller Monat

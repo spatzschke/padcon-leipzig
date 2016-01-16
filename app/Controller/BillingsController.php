@@ -37,6 +37,8 @@ class BillingsController extends AppController {
 		
 		$this->layout = "admin";
 		$data = $this->Billing->find('all', array('order' => array('Billing.id DESC'), 'limit' => 100));
+		
+		$this->set('title_for_panel', 'Alle Rechnungen');	
 			
 		$this->set('data', $this->fillIndexData($data));
 	}

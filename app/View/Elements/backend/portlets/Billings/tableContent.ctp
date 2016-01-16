@@ -42,7 +42,7 @@
 								echo $item['Confirmation']['customer_id'];	
 								if(!is_null($item['Billing']['address_id']) && $item['Billing']['address_id'] != 0) {
 									echo '&nbsp;';
-									echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
+									echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
 										 data-toggle="popover"
 										 data-content="';
 										 	echo $item['Address']['organisation'].'<br>';
@@ -87,7 +87,7 @@
 							
 							echo $this->Number->currency($item['Billing']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
 							echo '&nbsp;';
-							echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
+							echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
 								 data-toggle="popover" 
 								 data-content="'.
 								 	$cartProducts.'

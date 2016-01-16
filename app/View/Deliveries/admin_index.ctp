@@ -21,6 +21,7 @@ $(document).ready(function() {
         
         <?php
 		 $id = "tableSetting";
+		 $id_tc = "trackingcode";
 		 $modalSize = "modal-md";
 		 $backdrop = "true";
 		?>
@@ -32,6 +33,17 @@ $(document).ready(function() {
 		})
 	
 		$("#<?php echo $id;?>_modal").on("hidden.bs.modal", function(){ 
+			$(this).removeData("modal");
+			window.location = '';
+		});
+	
+		$('.<?php echo $id_tc;?>_btn').on('click',function() {
+			$('#<?php echo $id_tc;?>_modal .modal-body').load($(this).attr('href'));
+			$('#<?php echo $id_tc;?>_modal').modal('show');
+			return false;
+		})
+	
+		$("#<?php echo $id_tc;?>_modal").on("hidden.bs.modal", function(){ 
 			$(this).removeData("modal");
 			window.location = '';
 		});
@@ -49,9 +61,20 @@ $(document).ready(function() {
 	</div>
 </div>
 
+<div class="modal" id="<?php echo $id_tc;?>_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" data-backdrop="<?php echo (isset($backdrop) ? $backdrop : "true");?>">
+	<div class="modal-dialog <?php echo (isset($modalSize) ? $modalSize : "modal-lg");?> offer-dialog">
+	 	<div class="modal-content">
+			<div class="modal-body">
+				<?php echo $this->element('backend/helper/loadingHelper', array("size" => "large")); ?>	
+			</div>
+		</div>
+	</div>
+</div>
+
 <article class="module width_full offersIndex">
 		
 		<header>
+			<div class="panel-title"><?php echo $title_for_panel; ?></div>
 			<?php
 				if($this->request->is('ajax')) {
 					echo '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>';
@@ -76,8 +99,9 @@ $(document).ready(function() {
 					<th><?php echo('Kunde');?></th>
 					<!-- <th><?php echo('Lieferschein vom');?></th> -->
 					<th><?php echo('Produkt');?></th>
+					<th><?php echo('Versendet am');?></th>
+					<th><?php echo('Zugestellt am');?></th>
 					<th><?php echo('AB-Nr');?></th>
-					<!-- <th><?php echo('RE-Nr');?></th> -->
 					<th><?php echo('RE-Nr');?></th>
 					<th><?php echo('Erstellt');?></th>
 					<!-- <th><?php echo('Bearbeitungsdatum');?></th> -->

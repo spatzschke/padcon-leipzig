@@ -37,6 +37,8 @@ class DeliveriesController extends AppController {
 	
 		$this->Delivery->recursive = 0;
 		$data = $this->Delivery->find('all', array('order' => array('Delivery.id DESC'), 'limit' => 100));
+		
+		$this->set('title_for_panel', 'Alle Lieferscheine');	
 			
 		$this->set('data', $this->fillIndexData($data));
 	}
@@ -292,7 +294,29 @@ class DeliveriesController extends AppController {
 		if ($this->request->is('ajax')) {
 			if(!empty($this->request->data)) {
 				
-				$this->request->data['Delivery']['created'] = date('Y-m-d',strtotime($this->request->data['Delivery']['created']));
+				$this->request->data['Delivery']['created'] = date('Y-m-d h:i:s',strtotime($this->request->data['Delivery']['created']));
+				$this->request->data['Delivery']['send_date'] = date('Y-m-d',strtotime($this->request->data['Delivery']['send_date']));
+				
+				
+				if(!empty($this->request->data['Delivery']['deliver_date']) && strcmp('1970-01-01', $this->request->data['Delivery']['deliver_date']) != 0 && strcmp('0000-00-00', $this->request->data['Delivery']['deliver_date']) != 0) {
+					$this->request->data['Delivery']['deliver_date'] = date('Y-m-d',strtotime($this->request->data['Delivery']['deliver_date']));
+					if(strpos($data['Delivery']['status'], 'cancel') !== FALSE) {
+						if(strpos($this->request->data['Delivery']['status'], 'custom') !== FALSE){
+							$this->request->data['Delivery']['status'] = "custom_close";
+						} else {
+							$this->request->data['Delivery']['status'] = "close";
+						}
+					}
+				} else {
+					$this->request->data['Delivery']['deliver_date'] = null;
+					if(strpos($data['Delivery']['status'], 'cancel') !== FALSE) {
+						if(strpos($this->request->data['Delivery']['status'], 'custom') !== FALSE){
+							$this->request->data['Delivery']['status'] = "custom_open";
+						} else {
+							$this->request->data['Delivery']['status'] = "open";
+						}
+					}
+				}
 				
 				$this->Delivery->id = $this->request->data['Delivery']['id'];
 				$this->Delivery->save($this->request->data);
@@ -300,9 +324,20 @@ class DeliveriesController extends AppController {
 			} else {
 				$data = $this->Delivery->findById($id);
 				
-				$date = date_create_from_format('Y-m-d h:i:s', $data['Delivery']['created']);
-				$data['Delivery']['created'] = date_format($date, 'd.m.Y');
 				
+				if(!empty($data['Delivery']['send_date']) && strcmp('1970-01-01', $data['Delivery']['send_date']) != 0 && strcmp('0000-00-00', $data['Delivery']['send_date']) != 0) {
+					$data['Delivery']['send_date'] = date('d.m.Y',strtotime($data['Delivery']['send_date']));
+				} else {
+					$data['Delivery']['send_date'] = null;
+				}
+				
+				if(!empty($data['Delivery']['deliver_date']) && strcmp('1970-01-01', $data['Delivery']['deliver_date']) != 0 && strcmp('0000-00-00', $data['Delivery']['deliver_date']) != 0) {
+					$data['Delivery']['deliver_date'] = date('d.m.Y',strtotime($data['Delivery']['deliver_date']));
+				} else {
+					$data['Delivery']['deliver_date'] = null;
+				}
+				
+				$data['Delivery']['created'] = date('d.m.Y',strtotime($data['Delivery']['created']));				
 				$this->request->data = $data;
 				
 			}
@@ -431,6 +466,53 @@ Lieferzeit: ca. 3-4 Wochen
 		$this->set(compact('data','pdf'));
       	$this->render('admin_view'); 
 	    
+	}
+
+	function admin_sended($id = null) {
+		$data['Delivery']['id'] = $id;
+		$data['Delivery']['send_date'] = date("y-m-d");
+		
+		if(!empty($this->data['Delivery']['trackingcode']))
+			$data['Delivery']['trackingcode'] = $this->data['Delivery']['trackingcode'];
+						
+		$this->Delivery->id = $id;
+		$this->Delivery->save($data);
+		
+		$this->redirect('index');
+		
+	}
+	
+	function admin_delivered($id = null) {
+		$data['Delivery']['id'] = $id;
+		$data['Delivery']['deliver_date'] = date("y-m-d");
+		
+		$delivery = $this->Delivery->findById($id);
+		
+		if(strpos($delivery['Delivery']['status'], 'custom') !== FALSE){
+			$data['Delivery']['status'] = "custom_close";
+		} else {
+			$data['Delivery']['status'] = "close";
+		}
+	
+				
+		$this->Delivery->id = $id;
+		$this->Delivery->save($data);
+		
+		$this->redirect('index');
+		
+	}
+	
+	function admin_trackingcode($id = null) {
+			$this->layout = 'ajax';
+		
+		
+		$this->request->data = $this->Delivery->findById($id);
+		$this->request->data['Delivery']['send_date'] = date("d.m.Y");
+		
+		$controller_name = 'Deliveries'; 
+		$controller_id = $this->request->data['Delivery']['id'];
+		$this->set(compact('controller_id', 'controller_name'));
+				
 	}
 
 	function generateDeliveryNumber() {

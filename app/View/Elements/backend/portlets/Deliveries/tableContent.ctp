@@ -31,7 +31,7 @@
 								echo $item['Confirmation']['customer_id'];	
 								if(!is_null($item['Delivery']['address_id'])) {
 									echo '&nbsp;';
-									echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
+									echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
 										 data-toggle="popover"
 										 data-content="';
 										 	echo $item['Address']['organisation'].'<br>';
@@ -67,7 +67,7 @@
 							}
 							echo $item['Cart']['count'];	
 							echo '&nbsp;';
-							echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
+							echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
 								 data-toggle="popover" 
 								 data-content="'.
 								 	$cartProducts.
@@ -77,8 +77,56 @@
 							></i>';
 						} ?>
 					</td>
-					<!--<td><?php echo $item['Delivery']['discount']; ?>&nbsp;</td>
-					<td><?php echo $item['Delivery']['delivery_cost']; ?>&nbsp;</td>-->
+					
+					<td>
+						
+						
+						<?php 
+						if($item['Confirmation']['delivery_cost'] != '0' && $item['Delivery']['send_date'] == '0000-00-00' || empty($item['Delivery']['send_date']) && $item['Delivery']['status'] != 'cancel') {
+							echo $this->Html->link('Verschickt?', array('controller' => 'Deliveries', 'action' => 'trackingcode', 'admin' =>'true', $item['Delivery']['id']),
+																array('class' => 'btn btn-default trackingcode_btn')); 	
+						} else {
+							if($item['Delivery']['send_date'] == '0000-00-00' || $item['Delivery']['send_date'] == '1970-01-01' || empty($item['Delivery']['send_date'])) {
+									
+								if($item['Confirmation']['delivery_cost'] == '0') {
+									echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer" data-toggle="popover" 
+									data-content="Selbst-Lieferung"
+									data-trigger="hover"></i>';
+									
+								} else {
+									echo '-';
+								}
+							} else {								
+								if(!empty($item['Delivery']['trackingcode'])) {
+									echo '<i class="glyphicon glyphicon-qrcode" style="color: teal; cursor: pointer"
+										 data-toggle="popover" 
+										 data-content="<u>Trackingcode:</u> <br>'.
+										 	$item['Delivery']['trackingcode'].
+										 '"
+										 data-trigger="hover"
+									
+									></i>';
+									echo '&nbsp;';
+								}
+								echo $this->Time->format($item['Delivery']['send_date'], '%d.%m.%Y'); 
+							}
+						}
+						?>
+					</td>
+					<td>
+						<?php 
+						if(($item['Delivery']['send_date'] != '0000-00-00'|| $item['Confirmation']['delivery_cost'] == '0') && $item['Delivery']['deliver_date'] == '0000-00-00' || empty($item['Delivery']['deliver_date']) && $item['Delivery']['status'] != 'cancel') {
+							echo $this->Html->link('Zugestellt?', array('controller' => 'Deliveries', 'action' => 'delivered', 'admin' =>'true', $item['Delivery']['id']),
+																array('class' => 'btn btn-default')); 	
+						} else {
+							if($item['Delivery']['deliver_date'] == '0000-00-00' || $item['Delivery']['deliver_date'] == '1970-01-01' || empty($item['Delivery']['deliver_date'])) {
+								echo '-';
+							} else {
+								echo $this->Time->format($item['Delivery']['deliver_date'], '%d.%m.%Y'); 
+							}
+						}
+						?>
+					</td>
 					<td> 
 						<?php if(!isset($item['Delivery']['confirmation_number'])) {
 							 echo '-'; 

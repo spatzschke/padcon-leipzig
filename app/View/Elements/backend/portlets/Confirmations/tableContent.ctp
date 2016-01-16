@@ -40,7 +40,7 @@
 								echo $item['Confirmation']['customer_id'];	
 								echo '&nbsp;';
 								if(!is_null($item['Address']['id'])) {
-									echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
+									echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
 										 data-toggle="popover"
 										 data-content="';
 										 	echo $item['Address']['organisation'].'<br>';
@@ -73,7 +73,7 @@
 							if(empty($item['Cart']['count'])) { echo '-'; } else {
 								echo $item['Cart']['count'];	
 								echo '&nbsp;';
-								echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
+								echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
 									 data-toggle="popover" 
 									 data-content="'.
 									 	$cartProducts.
@@ -102,7 +102,7 @@
 								if(is_null($item['Confirmation']['confirmation_price'])) { echo '-'; } else {
 									echo $this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
 									echo '&nbsp;';
-									echo '<i class="glyphicon glyphicon-info-sign" style="color: lightblue; cursor: pointer"
+									echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
 										 data-toggle="popover" 
 										 data-content="'.
 										 	$priceInfo.
