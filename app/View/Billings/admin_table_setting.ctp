@@ -131,13 +131,17 @@
 					
 					<div class="modal-footer">
 						<?php
-							if($this->data['Billing']['status'] != 'cancel') {
-								echo '<button type="button" id="status" class="btn btn-danger pull-left" data-status="cancel" data-dismiss="modal">Stornieren</button>';
+							$stat = '';
+							if(strpos($this->request->data['Billing']['status'], 'cancel') === FALSE) {
+								if(strpos($this->request->data['Billing']['status'], 'custom') !== FALSE){ $stat = 'custom_cancel';	} else { $stat = 'cancel'; }
+								echo '<button type="button" id="status" class="btn btn-danger pull-left" data-status="'.$stat.'" data-dismiss="modal">Stornieren</button>';
 							} else {
 								if(!empty($this->data['Billing']['delivery_id'])) {
-									echo '<button type="button" id="status" class="btn btn-success pull-left" data-status="close" data-dismiss="modal">Reaktivieren</button>';
+									if(strpos($this->request->data['Billing']['status'], 'custom') !== FALSE){ $stat = 'custom_close';	} else { $stat = 'close'; }
+									echo '<button type="button" id="status" class="btn btn-success pull-left" data-status="'.$stat.'" data-dismiss="modal">Reaktivieren</button>';
 								} else {
-									echo '<button type="button" id="status" class="btn btn-success pull-left" data-status="open" data-dismiss="modal">Reaktivieren</button>';
+									if(strpos($this->request->data['Billing']['status'], 'custom') !== FALSE){ $stat = 'custom_open';	} else { $stat = 'open'; }
+									echo '<button type="button" id="status" class="btn btn-success pull-left" data-status="'.$stat.'" data-dismiss="modal">Reaktivieren</button>';
 								}
 							}
 						?>

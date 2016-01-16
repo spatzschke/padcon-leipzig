@@ -30,16 +30,7 @@ $(document).ready(function() {
 			onText: "Paket", 
 			offText: "Päckchen",
 			handleWidth: "70px",
-			state: <?php 
-				if($this->data['Confirmation']['delivery_cost'] == Configure::read('padcon.delivery_cost.paket')) {
-					echo "true";
-					$delivery = Configure::read('padcon.delivery_cost.paeckchen');
-				} else {
-					echo "false";
-					$delivery = Configure::read('padcon.delivery_cost.paket');
-				}
-			
-			?>,
+			state: true,
 			onSwitchChange: function(event, state) {
 			if(state) {
 				//Packet 9,00€

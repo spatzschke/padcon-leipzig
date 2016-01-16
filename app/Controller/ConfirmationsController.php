@@ -138,7 +138,7 @@ class ConfirmationsController extends AppController {
 			$this->Confirmation->save($confirmation);
 			$id = $this->Confirmation->id;
 			
-			// Generate Hash für Offer
+			// Generate Hash für AB
 			$confirmation['Confirmation']['id'] =  $id;
 			$confirmation['Confirmation']['hash'] =  Security::hash($id, 'md5', true);
 			$this->Confirmation->save($confirmation);
@@ -200,9 +200,11 @@ class ConfirmationsController extends AppController {
 				$data['Confirmation']['modified'] = date('d.m.Y',strtotime($data['Confirmation']['created']));
 			}
 			$data['Confirmation']['order_date'] = date('d.m.Y');
-			$data['Confirmation']['discount'] = null;
-			$data['Confirmation']['confirmation_price'] = null;
+			if($data['Confirmation']['discount'] == 0)
+				$data['Confirmation']['discount'] = null;
 			
+			if($data['Confirmation']['confirmation_price'] == 0)
+				$data['Confirmation']['confirmation_price'] = null;
 			$this->request->data = $data;
 			
 			$this->set('primary_button', 'Speichern');

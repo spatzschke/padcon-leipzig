@@ -36,7 +36,7 @@ class BillingsController extends AppController {
 	public function admin_index() {
 		
 		$this->layout = "admin";
-		$data = $this->Billing->find('all', array('order' => array('Billing.created DESC', 'Billing.id DESC'), 'limit' => 100));
+		$data = $this->Billing->find('all', array('order' => array('Billing.id DESC'), 'limit' => 100));
 			
 		$this->set('data', $this->fillIndexData($data));
 	}
@@ -74,7 +74,93 @@ class BillingsController extends AppController {
 		$this->render('admin_view');
 	}
 	
+	public function admin_add_individual($id = null) {
+		
+		$this->layout = "admin";
+		$this->set('pdf', null);
+		
+		if (!empty($this->data)) {
+			$data = null;	
+											
+			$this->Billing->create();
+			
+			$data = $this->data;
+			
+			$data['Billing']['status'] = 'custom_open';
+			$data['Billing']['billing_number'] = $this->data['Billing']['billing_number'];
+			
+			$this->Billing->save($data);
+			$dev_id = $this->Billing->id;
+			
+			// Rechnung in AB eintragen
+			$confirmation['Confirmation']['id'] =  $id;
+			$confirmation['Confirmation']['billing_id'] =  $dev_id;
+			$this->Confirmation->save($confirmation);
+			
+			// Generate Hash für AB
+			$data['Billing']['id'] =  $dev_id;
+			$data['Billing']['hash'] =  Security::hash($id, 'md5', true);
+			$this->Billing->save($data);
 
+			$this->redirect(array('action'=>'edit_individual', $dev_id));
+		} 
+		
+		
+		$data['Billing']['billing_number'] = $this->generateBillingNumber();
+		
+		$this->request->data = $data;
+		
+		$this->set('primary_button', 'Anlegen');
+		$this->set('title_for_panel', 'Individuelle Rechnung anlegen');		
+		$controller_name = 'Billings'; 
+		$controller_id = $id;
+		$this->set(compact('controller_id', 'controller_name','data'));
+		
+		$this->render('admin_individual');
+	}
+
+	public function admin_edit_individual($id = null) {
+		
+		$this->layout = "admin";
+		$this->set('pdf', null);
+		
+		$data = $this->Confirmation->findByBillingId($id);
+		
+		if (!empty($this->data)) {
+			$confirmation = null;			
+			
+			$data = $this->data;
+			$data['Billing']['created'] = date('Y-m-d',strtotime($data['Billing']['created']));
+			$data['Billing']['id'] = $id;
+			
+			//Filtere Zahlungsziel aus Text heraus
+			$data['Billing']['payment_target'] = $this->findPaymentTarget($data);
+			
+			if($this->Billing->save($data)) {
+				$this->Session->setFlash(__('Rechnung wurde gespeichert.'));
+				$this->redirect(array('action'=>'index'));
+			} else {
+				$this->Session->setFlash(__('Es trat ein Fehler beim Speichern der Rechnung aus. Bitte versuchen Sie es erneut.'));
+			}
+
+		} else {
+			
+			if(empty($data['Billing']['additional_text'])) {
+				$data['Billing']['additional_text'] = Configure::read('padcon.Rechnung.additional_text.default');
+			}
+			
+			$data['Billing']['created'] = date('d.m.Y',strtotime($data['Billing']['created']));			
+			$this->request->data = $data;
+			
+			$this->set('primary_button', 'Speichern');
+			$this->set('title_for_panel', 'Individuelle Rechnung bearbeiten');		
+			$controller_name = 'Billings'; 
+			$controller_id = $id;
+			$this->set(compact('controller_id', 'controller_name','data'));
+			
+			$this->render('admin_individual');
+		}
+	}
 /**
  * admin_add method
  *
@@ -167,13 +253,21 @@ class BillingsController extends AppController {
 				$payment_date = $date->format('Y-m-d');
 				if(!empty($this->request->data['Billing']['payment_date']) && strcmp('1970-01-01', $payment_date) != 0) {
 					$this->request->data['Billing']['payment_date'] = date('Y-m-d',strtotime($this->request->data['Billing']['payment_date']));
-					if(strcmp($data['Billing']['status'],'cancel') != 0) {
-						$this->request->data['Billing']['status'] = 'close'; 
+					if(strpos($data['Billing']['status'], 'cancel') !== FALSE) {
+						if(strpos($this->request->data['Billing']['status'], 'custom') !== FALSE){
+							$this->request->data['Billing']['status'] = "custom_close";
+						} else {
+							$this->request->data['Billing']['status'] = "close";
+						}
 					}
 				} else {
 					$this->request->data['Billing']['payment_date'] = null;
-					if(strcmp($this->request->data['Billing']['status'],'cancel') != 0) {
-						$this->request->data['Billing']['status'] = 'open'; 
+					if(strpos($data['Billing']['status'], 'cancel') !== FALSE) {
+						if(strpos($this->request->data['Billing']['status'], 'custom') !== FALSE){
+							$this->request->data['Billing']['status'] = "custom_open";
+						} else {
+							$this->request->data['Billing']['status'] = "open";
+						}
 					}
 				}
 				
@@ -273,11 +367,7 @@ class BillingsController extends AppController {
 				$data['Billing']['additional_text'] = $this->request->data['Billing']['additional_text'];
 				
 				//Filtere Zahlungsziel aus Text heraus
-				$text = $this->request->data['Billing']['additional_text'];
-				
-				$plus = explode('% Skonto oder', $text);
-				$plus = explode('Tage', $plus[1]);
-				$data['Billing']['payment_target'] = date('Y-m-d', strtotime($data['Billing']['created']." +".trim($plus[0])." days"));
+				$data['Billing']['payment_target'] = $this->findPaymentTarget($this->request->data);
 					
 				if($this->Billing->save($data)){
 					$this->Session->setFlash(__('Speicherung erfolgreich', true));
@@ -339,10 +429,17 @@ class BillingsController extends AppController {
 
 	function admin_payed($id = null) {
 		$data['Billing']['id'] = $id;
-		
 		$data['Billing']['payment_date'] = date("y-m-d");
-		$data['Billing']['status'] = "close";
 		
+		$billing = $this->Billing->findById($id);
+		
+		if(strpos($billing['Billing']['status'], 'custom') !== FALSE){
+			$data['Billing']['status'] = "custom_close";
+		} else {
+			$data['Billing']['status'] = "close";
+		}
+	
+				
 		$this->Billing->id = $id;
 		$this->Billing->save($data);
 		
@@ -361,9 +458,6 @@ class BillingsController extends AppController {
 		$countYearBillings = str_pad($countYearBillings, 3, "0", STR_PAD_LEFT);
 		// 14 = aktuelles Jahr
 		$year = date('y');
-		
-		debug($countYearBillings);
-		
 		// Rechnung Nr.: 427/14
 		return $countYearBillings.'/'.$year;
 	}
@@ -455,32 +549,37 @@ class BillingsController extends AppController {
 		foreach ($data as $item) {
 						
 			//Load Customer for the Delivery
-			$customer= $this->Customer->findById($item['Confirmation']['customer_id']);
-			$address = $this->Address->findById($item['Billing']['address_id']);
-			$customer['Address'] = $address['Address'];
-
-			$item['Customer'] = $customer['Customer'];
-			
-			if($Customers->splitCustomerData($customer)) {
-				$item['Address'] = $Customers->splitCustomerData($customer);
-			}				
-			
-			$cart = $Carts->get_cart_by_id($item['Confirmation']['cart_id']);
-			$item['Cart'] = $cart['Cart'];
-			$item['Cart']['CartProduct'] = $cart['CartProduct'];
-			if(!empty($cart['CartProduct'])) {
-				$j = 0;
-				foreach ($cart['CartProduct'] as $cartProd) {
-					$product = $Products->getProduct($cartProd['product_id']);
-					unset($product['Cart']);
-					unset($product['Category']);
-					unset($product['Material']);
-					$item['Cart']['CartProduct'][$j]['Information'] = $product;
-					$j++;
+			if($item['Confirmation']['cart_id'] != 0) {
+				
+				$customer= $this->Customer->findById($item['Confirmation']['customer_id']);
+				$address = $this->Address->findById($item['Billing']['address_id']);
+				$customer['Address'] = $address['Address'];
+	
+				$item['Customer'] = $customer['Customer'];
+				
+				if($Customers->splitCustomerData($customer)) {
+					$item['Address'] = $Customers->splitCustomerData($customer);
+				}				
+				
+				$cart = $Carts->get_cart_by_id($item['Confirmation']['cart_id']);
+				$item['Cart'] = $cart['Cart'];
+				$item['Cart']['CartProduct'] = $cart['CartProduct'];
+				if(!empty($cart['CartProduct'])) {
+					$j = 0;
+					foreach ($cart['CartProduct'] as $cartProd) {
+						$product = $Products->getProduct($cartProd['product_id']);
+						unset($product['Cart']);
+						unset($product['Category']);
+						unset($product['Material']);
+						$item['Cart']['CartProduct'][$j]['Information'] = $product;
+						$j++;
+					}
 				}
+				
+				$item['Billing'] += $Confirmations->calcPrice($item);
 			}
 
-			$item['Billing'] += $Confirmations->calcPrice($item);
+			
 			
 			
 			//Auftragsbestätigung
@@ -497,5 +596,15 @@ class BillingsController extends AppController {
 		}	
 			
 		return $data_temp;
+	}
+
+	function findPaymentTarget($data = null) {
+		
+		//Filtere Zahlungsziel aus Text heraus
+		$text = $data['Billing']['additional_text'];
+		
+		$plus = explode('% Skonto oder', $text);
+		$plus = explode('Tage', $plus[1]);
+		return date('Y-m-d', strtotime($data['Billing']['created']." +".trim($plus[0])." days"));
 	}
 }
