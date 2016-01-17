@@ -45,7 +45,7 @@
 							if(empty($item['Confirmation']['customer_id'])) { echo '-'; } else {
 															
 								echo $item['Confirmation']['customer_id'];	
-								if(!is_null($item['Delivery']['address_id'] && $item['Delivery']['address_id'] != 0)) {
+								if(!is_null($item['Delivery']['address_id']) && $item['Delivery']['address_id'] != 0) {
 									echo '&nbsp;';
 									echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
 										 data-toggle="popover"
