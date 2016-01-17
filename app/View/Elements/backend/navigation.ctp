@@ -14,13 +14,13 @@
 		<h3><i class="glyphicon glyphicon-file" style="color: grey"></i>&nbsp;&nbsp;Angebote</h3>
 		<ul class="toggle">
 			<li><i class="glyphicon glyphicon-plus" style="color: grey"></i><?php echo $this->Html->link('Neues Angebot erstellen', '/admin/offers/add'); ?></li>
-			<!-- <li class="icn_view_users"><?php echo $this->Html->link('Aktives Angebot anzeigen', '/admin/offers/active'); ?></li> -->
+			<li><i class="glyphicon glyphicon-hand-right" style="color: grey"></i><?php echo $this->Html->link('Individuelles Angebot erstellen', '/admin/offers/add_individual'); ?></li>
 			<li><i class="glyphicon glyphicon-list" style="color: grey"></i><?php echo $this->Html->link('Alle Angebote anzeigen', '/admin/offers/index'); ?></li>
 		</ul>
 		<h3><i class="glyphicon glyphicon-check" style="color: grey"></i>&nbsp;&nbsp;Auftragsbestätigung</h3>
 		<ul class="toggle">
 			<li><i class="glyphicon glyphicon-plus" style="color: grey"></i><?php echo $this->Html->link('Neue AB erstellen', '/admin/confirmations/add'); ?></li>
-			<li><i class="glyphicon glyphicon-hand-right" style="color: grey"></i><?php echo $this->Html->link('Individual AB erstellen', '/admin/confirmations/add_individual'); ?></li>
+			<li><i class="glyphicon glyphicon-hand-right" style="color: grey"></i><?php echo $this->Html->link('Individuelle AB erstellen', '/admin/confirmations/add_individual'); ?></li>
 			<li><i class="glyphicon glyphicon-list" style="color: grey"></i><?php echo $this->Html->link('Alle ABs anzeigen', '/admin/confirmations/index'); ?></li>
 		</ul>
 		<h3><i class="glyphicon glyphicon-qrcode" style="color: grey"></i>&nbsp;&nbsp;Lieferschein</h3>

@@ -18,7 +18,7 @@ class ConfirmationsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'AddressAddresstype');
+	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Delivery', 'AddressAddresstype');
 	public $components = array('Auth', 'Session', 'Paginator');
 	
 	public function beforeFilter() {
@@ -128,42 +128,66 @@ class ConfirmationsController extends AppController {
 		
 		if (!empty($this->data)) {
 			$confirmation = null;	
+			
+			$offer_id = $id;
 											
 			$this->Confirmation->create();
 			
-			$confirmation = $this->data;
+			$data = $this->data;
 			
-			$confirmation['Confirmation']['status'] = 'custom_open';
-			$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
-			$confirmation['Confirmation']['confirmation_number'] = $this->data['Confirmation']['confirmation_number'];
+			$data['Confirmation']['status'] = 'open';
+			$data['Confirmation']['custom'] = '1';
+			$data['Confirmation']['agent'] = 'Ralf Patzschke';
+			$data['Confirmation']['confirmation_number'] = $this->data['Confirmation']['confirmation_number'];
 			
-			$this->Confirmation->save($confirmation);
+			
+			if(isset($offer_id)) {
+				$offer_id = $id;
+				$offer = $this->Offer->findById($offer_id);
+					
+				$data['Confirmation']['offer_id'] = $id;
+				$data['Confirmation']['customer_id'] = $offer['Offer']['customer_id'];
+				$data['Confirmation']['confirmation_price'] = $offer['Offer']['offer_price'];
+				$data['Confirmation']['discount'] = $offer['Offer']['discount'];
+			}
+			
+			$this->Confirmation->save($data);
 			$id = $this->Confirmation->id;
 			
 			// Generate Hash für AB
-			$confirmation['Confirmation']['id'] =  $id;
-			$confirmation['Confirmation']['hash'] =  Security::hash($id, 'md5', true);
-			$this->Confirmation->save($confirmation);
+			$data['Confirmation']['id'] =  $id;
+			$data['Confirmation']['hash'] =  Security::hash($id, 'md5', true);
+			$this->Confirmation->save($data);
+			
+			if(isset($offer_id)) {
+				// Trage AB-Nummer in Angebot ein
+				$offerArr['Offer']['id'] = $offer_id;
+				$offerArr['Offer']['confirmation_id'] =  $id;
+				$this->Offer->save($offerArr);
+			}
 
 			$this->redirect(array('action'=>'edit_individual', $id));
 		} 
 		
-		// Wenn es noch eine leere AB (ohen Kunden) gibt, dann nimm die
-		$emptyConfirmation = $this->Confirmation->find('first', array('conditions' => array('customer_id' => NULL, 'Confirmation.cart_id' => 0)));
-		if(!empty($emptyConfirmation)) {
-			$this->Session->setFlash(__('Eine leere individuelle AB wurde gefunden! Bitte diese Ausfüllen.'));
-			$this->redirect(array('action'=>'edit_individual', $emptyConfirmation['Confirmation']['id']));
+		if(!isset($id)){
+			// Wenn es noch eine leere AB (ohen Kunden) gibt, dann nimm die
+			$empty = $this->Confirmation->find('first', array('conditions' => array('customer_id' => NULL, 'Confirmation.cart_id' => 0)));
+			if(!empty($empty)) {
+				$this->Session->setFlash(__('Eine leere individuelle AB wurde gefunden! Bitte dieses ausfüllen.'));
+				$this->redirect(array('action'=>'edit_individual', $empty['Confirmation']['id']));
+			}
 		}
 		
-		$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
 		
-		$this->request->data = $confirmation;
+		$data['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
+		
+		$this->request->data = $data;
 		
 		$this->set('primary_button', 'Anlegen');
 		$this->set('title_for_panel', 'Individuelle Auftragsbestätigung anlegen');		
 		$controller_name = 'Confirmations'; 
 		$controller_id = $id;
-		$this->set(compact('controller_id', 'controller_name','confirmation'));
+		$this->set(compact('controller_id', 'controller_name','data'));
 		
 		$this->render('admin_individual');
 	}
@@ -175,8 +199,9 @@ class ConfirmationsController extends AppController {
 		
 		$data = $this->Confirmation->findById($id);
 		
+		
 		if (!empty($this->data)) {
-			$confirmation = null;			
+			$data = null;			
 			
 			$data = $this->data;
 			$data['Confirmation']['order_date'] = date('Y-m-d',strtotime($data['Confirmation']['order_date']));
@@ -294,6 +319,7 @@ class ConfirmationsController extends AppController {
 				$confirmation['Confirmation']['vat'] = $confirmation['Offer']['vat'];
 				$confirmation['Confirmation']['confirmation_price'] = $confirmation['Offer']['offer_price'];
 				$confirmation['Confirmation']['order_date'] = date('Y-m-d');
+				$confirmation['Confirmation']['custom'] = false;
 				
 				//Gernerierung der Auftragsbestätigungsnummer
 				$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
@@ -380,10 +406,6 @@ class ConfirmationsController extends AppController {
 			if(!empty($this->request->data)) {
 				
 				$data = $this->Confirmation->findById($id);
-				
-				if(strpos($data['Confirmation']['status'], 'custom') !== FALSE){
-					$this->request->data['Confirmation']['status'] = 'custom_'.$this->request->data['Confirmation']['status'];
-				}
 				
 				$this->request->data['Confirmation']['created'] = date('Y-m-d',strtotime($this->request->data['Confirmation']['created']));
 				
@@ -727,7 +749,7 @@ class ConfirmationsController extends AppController {
 		$arr_data['Confirmation']['part_price'] = $part_price;
 		
 		if($data['Cart']['sum_retail_price'] == 0) {
-			if(strpos($data['Confirmation']['status'], 'custom') !== FALSE){
+			if($data['Confirmation']['custom']){
 				$arr_data['Confirmation']['confirmation_price'] = $data['Confirmation']['confirmation_price'];
 			} else {
 				$arr_data['Confirmation']['confirmation_price'] = 0;
@@ -800,8 +822,18 @@ class ConfirmationsController extends AppController {
 				$offer = $this->Offer->findById($item['Confirmation']['offer_id']);
 				$item['Confirmation']['offer_number'] = $offer['Offer']['offer_number'];
 			}
+			
+			//Wenn Teillierferung dann alle Lierscheine laden
+			if(count($item['ConfirmationDelivery']) > 1) {
+				foreach($item['ConfirmationDelivery'] as $key => $conDel) {
+					$del = $this->Delivery->findById($item['ConfirmationDelivery'][$key]['delivery_id']);
+					$item['ConfirmationDelivery'][$key]['delivery_number'] = $del['Delivery']['delivery_number'];
+				}
+			}
 						
 			array_push($data_temp, $item);
+			
+			
 			
 		}	
 			

@@ -21,7 +21,7 @@
 					 data: <?php echo $data ?>,
 					 success:function (data, textStatus) {
 					 	
-					 	
+					 	console.log(data);
 					 	
 					 	//obj.removeClass('loading');
 					 	
@@ -41,10 +41,20 @@
 			$('#originalCart').find('div.item input:checked').each(function( index ) {
 				
 					var amount = $(this).parent().find('.amount').val()
-					if(amount < $(this).parent().find('.amount').attr('origAmount')) {
-					//	$('#originalCart').append($(this).parent());
-						//$(this).parent().remove();
-						$('#partCart').add($(this));
+					var amountMax = $(this).parent().find('.amount').attr('origAmount');
+					if(amount < amountMax) {
+						
+						
+						
+						// var item = $(this).parent().html();
+// 						
+						// $('#partCart').html($('#partCart').html()+item);
+						// $('#originalCart').html($('#originalCart').html());
+// 						
+						// console.log(item);
+						
+						$('#partCart').append($(this).parent());
+						
 					} else {
 						$('#partCart').append($(this).parent());
 					}	
@@ -72,7 +82,7 @@
 											
 										$product = $this->requestAction('Products/getProduct/'.$value['product_id']);
 											
-										echo '<div class="item col-md-12">'.
+										echo '<div class="item col-md-12 item-'.$product['Product']['product_number'].'">'.
 												
 											$this->Form->input('Product]['.$key.'][amount]', array(
 												'label' => false,
@@ -80,8 +90,7 @@
 												'value' => $value['amount'],
 												'origAmount' => $value['amount'],
 												'type' => 'number',
-												'class' => 'form-control col-md-2 amount',
-												'style' => 'display: none;'
+												'class' => 'form-control col-md-2 amount'
 											)).
 											$this->Form->input('Product]['.$key.'][color_id]', array(
 												'label' => false,
@@ -89,7 +98,7 @@
 												'value' => $value['color_id'],
 												'style' => 'display: none;'
 											)).
-											'<p class="text col-md-11">'.$value['amount'].'x - '.$product['Product']['product_number'].' - '.$product['Product']['name'].'</p>'.
+											'<p class="text col-md-11" style="width: 80%">'.$product['Product']['product_number'].' - '.$product['Product']['name'].'</p>'.
 											$this->Form->input('Product]['.$key.'][product_id]', array(
 												'label' => false,
 												'div' => false,

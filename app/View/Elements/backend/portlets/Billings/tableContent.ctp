@@ -11,14 +11,14 @@
 ?>
 				<tr>
 					<td>
-						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Billing']['status']));	?>
+						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Billing']['status'], 'custom' => $item['Billing']['custom']));	?>
 					</td>
 					<td>
 						<?php if(empty($item['Billing']['billing_number'])) {
 							 echo '-'; 
 							} else {
 								
-								if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
+								if($item['Billing']['status']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'edit_individual', $item['Billing']['id']), array('escape' => false));
 									echo '&nbsp;&nbsp;&nbsp;';
 									echo $item['Billing']['billing_number'];
@@ -66,7 +66,7 @@
 	
 						if(empty($item['Cart']['count'])) {
 							 
-							if(strpos($item['Billing']['status'], 'custom') !== FALSE){
+							if($item['Billing']['status']){
 								echo $this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
 							} else {
 								echo '-'; 							
@@ -103,8 +103,9 @@
 						if($item['Billing']['payment_target'] == '0000-00-00' || $item['Billing']['payment_target'] == '1970-01-01' || empty($item['Billing']['payment_target'])) {
 							echo '-';
 						} else {
+							
 							//Zahlungsziel nähert sich an
-							if(strcmp($interval->format('%R'),'+') == 0 && $interval->format('%a') < 7 && $item['Billing']['status'] == 'open') {							
+							if(strcmp($interval->format('%R'),'+') == 0 && $interval->format('%a') < 7 && strpos($item['Billing']['status'], 'open') !== FALSE) {							
 								echo '<i class="glyphicon glyphicon-exclamation-sign" style="color: orange; cursor: pointer"
 									 data-toggle="popover" 
 									 data-content="Zahlungsziel in '.$interval->format('%a').' Tag(en) erreicht!"
@@ -112,7 +113,7 @@
 								></i>';
 							}
 							//Zahlungsziel überschritten
-							if(strcmp($interval->format('%R'),'-') == 0 && $item['Billing']['status'] == 'open') {
+							if(strcmp($interval->format('%R'),'-') == 0 && strpos($item['Billing']['status'], 'open') !== FALSE) {
 								
 								echo '<i class="glyphicon glyphicon-alert" style="color: red; cursor: pointer"
 									 data-toggle="popover" 
@@ -151,7 +152,7 @@
 								echo '-';
 							} else {
 								
-								if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
+								if($item['Billing']['status']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									 data-content="'.$item['Confirmation']['confirmation_number'].'"
 									 data-trigger="hover"></i>', 
@@ -174,7 +175,7 @@
 								echo '-';
 							} else {
 								
-								if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
+								if($item['Billing']['status']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Billing']['delivery_number'].'"
 									data-trigger="hover"
@@ -203,7 +204,7 @@
 					<?php
 						
 							echo '<td class="actions">';
-							if(strpos($item['Confirmation']['status'], 'custom') === FALSE){
+							if(!$item['Billing']['status']){
 								echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'createPdf', $item['Confirmation']['id']), array('escape' => false, 'target' => '_blank'));
 								
 								if(!empty($item['Billing']['hash']))

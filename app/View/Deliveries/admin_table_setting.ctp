@@ -149,7 +149,7 @@
 					
 					<div class="modal-footer">
 						<?php
-							if($this->data['Delivery']['status'] != 'cancel') {
+							if(strpos($this->request->data['Delivery']['status'], 'cancel') === FALSE) {
 								echo '<button type="button" id="status" class="btn btn-danger pull-left" data-status="cancel" data-dismiss="modal">Stornieren</button>';
 							} else {
 								if(!empty($this->data['Delivery']['delivery_id'])) {

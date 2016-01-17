@@ -5,19 +5,35 @@
 ?>
 				<tr>
 					<td>
-						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Delivery']['status']));	?>
+						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Delivery']['status'], 'custom' => $item['Delivery']['custom']));	?>						
 					</td>
 					<td>
 						<?php if(empty($item['Delivery']['delivery_number'])) {
 							 echo '-'; 
 							} else {
-								if(strpos($item['Delivery']['status'], 'custom') !== FALSE){
+								if($item['Delivery']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'edit_individual', $item['Delivery']['id']), array('escape' => false));
 								} else {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Delivery']['id']), array('escape' => false));
 								}
-								echo '&nbsp;&nbsp;&nbsp;';
+								echo '&nbsp;&nbsp;';
 								echo $item['Delivery']['delivery_number'];	
+								if(strcmp($item['ConfirmationDelivery']['type'], 'full') == 0) {
+									echo '&nbsp;&nbsp;&nbsp;';
+									echo '<i class="Voll-Lieferschein"
+										 data-trigger="hover"
+									
+									></i>';
+								} else {
+									echo '&nbsp;&nbsp;';
+									echo '<i class="glyphicon glyphicon-duplicate" style="color: teal; cursor: pointer"
+										 data-toggle="popover"
+										 data-content="Teil-Lieferschein von AB: '.$item['Confirmation']['confirmation_number'].'""
+										 data-trigger="hover"
+									
+									></i>';
+								}
+								
 							
 							}
 						?>
@@ -83,7 +99,7 @@
 						
 						<?php 
 						if($item['Confirmation']['delivery_cost'] != '0' && $item['Delivery']['send_date'] == '0000-00-00' || empty($item['Delivery']['send_date']) && $item['Delivery']['status'] != 'cancel') {
-							echo $this->Html->link('Verschickt?', array('controller' => 'Deliveries', 'action' => 'trackingcode', 'admin' =>'true', $item['Delivery']['id']),
+							echo $this->Html->link('Verschickt', array('controller' => 'Deliveries', 'action' => 'trackingcode', 'admin' =>'true', $item['Delivery']['id']),
 																array('class' => 'btn btn-default trackingcode_btn')); 	
 						} else {
 							if($item['Delivery']['send_date'] == '0000-00-00' || $item['Delivery']['send_date'] == '1970-01-01' || empty($item['Delivery']['send_date'])) {
@@ -116,7 +132,7 @@
 					<td>
 						<?php 
 						if(($item['Delivery']['send_date'] != '0000-00-00'|| $item['Confirmation']['delivery_cost'] == '0') && $item['Delivery']['deliver_date'] == '0000-00-00' || empty($item['Delivery']['deliver_date']) && $item['Delivery']['status'] != 'cancel') {
-							echo $this->Html->link('Zugestellt?', array('controller' => 'Deliveries', 'action' => 'delivered', 'admin' =>'true', $item['Delivery']['id']),
+							echo $this->Html->link('Zugestellt', array('controller' => 'Deliveries', 'action' => 'delivered', 'admin' =>'true', $item['Delivery']['id']),
 																array('class' => 'btn btn-default')); 	
 						} else {
 							if($item['Delivery']['deliver_date'] == '0000-00-00' || $item['Delivery']['deliver_date'] == '1970-01-01' || empty($item['Delivery']['deliver_date'])) {
@@ -131,7 +147,7 @@
 						<?php if(!isset($item['Delivery']['confirmation_number'])) {
 							 echo '-'; 
 							} else {
-								if(strpos($item['Delivery']['status'], 'custom') !== FALSE){
+								if($item['Delivery']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Confirmation']['confirmation_number'].'"
 									data-trigger="hover"></i>',
@@ -149,7 +165,7 @@
 						<?php 
 							
 							if(empty($item['Confirmation']['billing_id'])) {
-								if(strpos($item['Delivery']['status'], 'custom') !== FALSE){
+								if($item['Delivery']['custom']){
 									echo $this->Html->link('Rechnung', array('controller' => 'Billings', 'action' => 'add_individual', 'admin' =>'true', $item['Confirmation']['id']),
 																array('class' => 'btn btn-default')); 	
 								} else {
@@ -178,7 +194,7 @@
 						
 							echo '<td class="actions">';
 							
-							if(strpos($item['Confirmation']['status'], 'custom') === FALSE){
+							if(!$item['Confirmation']['status']){
 								echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'createPdf', $item['Delivery']['id']), array('escape' => false, 'target' => '_blank'));
 								
 								if(!empty($item['Delivery']['hash']))

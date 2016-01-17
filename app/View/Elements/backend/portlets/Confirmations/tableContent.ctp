@@ -5,14 +5,14 @@
 ?>
 				<tr>
 					<td>
-						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Confirmation']['status']));	?>	
+						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Confirmation']['status'], 'custom' => $item['Confirmation']['custom']));	?>	
 					</td>
 					<td>
 						<?php if(empty($item['Confirmation']['confirmation_number'])) {
 							 echo '-'; 
 							} else {
 								if(empty($item['Confirmation']['delivery_id'])) {
-									if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
+									if($item['Confirmation']['custom']){
 										echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit_individual', $item['Confirmation']['id']), array('escape' => false));
 									} else {
 										echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit', $item['Confirmation']['id']), array('escape' => false));	
@@ -20,7 +20,7 @@
 									
 								} else {
 									
-									if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
+									if($item['Confirmation']['custom']){
 										echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit_individual', $item['Confirmation']['id']), array('escape' => false));
 									} else {		
 										echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['id']), array('escape' => false));
@@ -96,7 +96,7 @@
 									 '+'.$item['Confirmation']['vat'].'% Mehrwertsteuer: '.$this->Number->currency($item['Confirmation']['vat_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 									 'Auftragswert: '.$this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));					
 						
-							if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
+							if($item['Confirmation']['custom']){
 								echo $this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
 							} else {
 								if(is_null($item['Confirmation']['confirmation_price'])) { echo '-'; } else {
@@ -150,8 +150,8 @@
 							if($item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
 								echo '-';
 							} else {
-								if(empty($item['Confirmation']['delivery_id'])) {
-									if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
+								if(count($item['ConfirmationDelivery']) == 0) {
+									if($item['Confirmation']['custom']){
 										echo $this->Html->link('Lieferschein', array('controller' => 'Deliveries', 'action' => 'add_individual', 'admin' =>'true', $item['Confirmation']['id']),
 																	array('class' => 'btn btn-default')); 
 									} else {
@@ -159,17 +159,31 @@
 																	array('class' => 'btn btn-default')); 
 									}										
 								} else {
-									if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
-										echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
-										data-content="'.$item['Delivery']['delivery_number'].'"
-										data-trigger="hover"></i>', 
-										array('admin' => true, 'controller' => 'Deliveries', 'action' => 'edit_individual', $item['Confirmation']['delivery_id']), array('escape' => false));
+									if(count($item['ConfirmationDelivery']) > 1) {
+										
+										$deliveryNumbers = '';
+										foreach($item['ConfirmationDelivery'] as $key => $del) {
+											
+											$deliveryNumbers .= 'Teillieferschein: '.$del['delivery_number'].'<br>';
+										}
+										
+										echo '<i class="glyphicon glyphicon-duplicate" data-toggle="popover" 
+											data-content="Mehrere Teil-Lieferscheine vorhanden. <br>'.$deliveryNumbers.'"
+											data-trigger="hover"></i>';
 									} else {
-										echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
-										data-content="'.$item['Delivery']['delivery_number'].'"
-										data-trigger="hover"></i>', 
-										array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Confirmation']['delivery_id']), array('escape' => false));
-									}	
+										if($item['Confirmation']['custom']){
+											echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
+											data-content="'.$item['Delivery']['delivery_number'].'"
+											data-trigger="hover"></i>', 
+											array('admin' => true, 'controller' => 'Deliveries', 'action' => 'edit_individual', $item['Confirmation']['delivery_id']), array('escape' => false));
+										} else {
+											echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
+											data-content="'.$item['Delivery']['delivery_number'].'"
+											data-trigger="hover"></i>', 
+											array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Confirmation']['delivery_id']), array('escape' => false));
+										}	
+									}
+									
 									
 									
 								}
@@ -186,7 +200,7 @@
 					<?php
 						
 							echo '<td class="actions">';
-							if(strpos($item['Confirmation']['status'], 'custom') === FALSE){
+							if(!$item['Confirmation']['custom']){
 								if(!empty($item['Confirmation']['offer_number']))
 									echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'createPdf', $item['Confirmation']['id']), array('escape' => false, 'target' => '_blank'));
 								

@@ -2,20 +2,25 @@
 	
 	foreach ($offers as $item):
 	
-		if($item['Offer']['cart_id'] != 0) {	
+		if($item['Offer']['customer_id'] != 0) {		
 ?>
 				<tr>
 					<td>
-						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Offer']['status']));	?>
+						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Offer']['status'], 'custom' => $item['Offer']['custom']));	?>
 					</td>
 					<td>
 						<?php if(empty($item['Offer']['offer_number'])) {
 							 echo '-'; 
 							} else {
 								if(empty($item['Offer']['confirmation_id'])) {
-									echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'edit', $item['Offer']['id']), array('escape' => false));
+									if($item['Offer']['custom']){
+										echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'edit_individual', $item['Offer']['id']), array('escape' => false));
+									} else {
+										echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'edit', $item['Offer']['id']), array('escape' => false));	
+									}
+									
 								} else {
-									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'view', $item['Confirmation']['id']), array('escape' => false));
+									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'view', $item['Offer']['id']), array('escape' => false));
 								}
 								echo '&nbsp;&nbsp;&nbsp;';
 								echo $item['Offer']['offer_number'];	
@@ -24,11 +29,12 @@
 						?>
 					</td>
 					<td>
-						<?php 												
-						if(!is_null($item['Customer']['id'])) {
+						<?php 					
+						if(!is_null($item['Offer']['customer_id'])) {
 							
 							if(empty($item['Offer']['customer_id'])) { echo '-'; } else {
 								echo $item['Offer']['customer_id'];	
+								if(!is_null($item['Address']['id'])) {
 								echo '&nbsp;';
 								echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
 									 data-toggle="popover"
@@ -40,6 +46,7 @@
 									 data-trigger="hover"
 								
 								></i>';
+								}
 							}
 						} else { echo '-'; } 
 						 ?>
@@ -55,11 +62,12 @@
 					</td>
 					<td>
 						<?php 
-						$cartProducts = "";
-						foreach ($item['Cart']['CartProduct'] as $cartProduct) {
-							$cartProducts = $cartProducts . $cartProduct['amount'].'x '. $cartProduct['Information']['Product']['name'] . ' ( '.$cartProduct['Information']['Product']['product_number'].' )<br>';
-						}						
-						if(empty($item['Cart']['count'])) { echo '-'; } else {
+												
+						if(empty($item['Cart']['count']) || $item['Offer']['cart_id'] == 0) { echo '-'; } else {
+							$cartProducts = "";
+							foreach ($item['Cart']['CartProduct'] as $cartProduct) {
+								$cartProducts = $cartProducts . $cartProduct['amount'].'x '. $cartProduct['Information']['Product']['name'] . ' ( '.$cartProduct['Information']['Product']['product_number'].' )<br>';
+							}
 							echo $item['Cart']['count'];	
 							echo '&nbsp;';
 							echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
@@ -70,6 +78,7 @@
 								 data-trigger="hover"
 							
 							></i>';
+						
 						} ?>
 					</td>
 					<!--<td><?php echo $item['Offer']['discount']; ?>&nbsp;</td>
@@ -83,28 +92,39 @@
 									 'Zwischensumme: '.$this->Number->currency($item['Offer']['part_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 									 '+'.$item['Offer']['vat'].'% Mehrwertsteuer: '.$this->Number->currency($item['Offer']['vat_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 									 'Angebotswert: '.$this->Number->currency($item['Offer']['offer_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));					
-						if(empty($item['Cart']['count'])) { echo '-'; } else {
-							echo $this->Number->currency($item['Offer']['offer_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
-							echo '&nbsp;';
-							echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
-								 data-toggle="popover" 
-								 data-content="'.
-								 	$priceInfo.
-								 '"
-								 data-trigger="hover"
-							
-							></i>';
-						} ?>	
+						
+						if($item['Offer']['custom']){
+								echo $this->Number->currency($item['Offer']['offer_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
+							} else {
+							if(empty($item['Cart']['count'])) { echo '-'; } else {
+								echo $this->Number->currency($item['Offer']['offer_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
+								echo '&nbsp;';
+								echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
+									 data-toggle="popover" 
+									 data-content="'.
+									 	$priceInfo.
+									 '"
+									 data-trigger="hover"
+								
+								></i>';
+							} 
+							}?>	
+						
 					</td>
 					<td>
 						<?php 
 							
-							if(empty($item['Cart']['count'])  || empty($item['Offer']['customer_id']) || empty($item['Offer']['offer_number']) || empty($item['Offer']['offer_price'])) {
+							if(empty($item['Offer']['customer_id']) || empty($item['Offer']['offer_number']) || empty($item['Offer']['offer_price'])) {
 								echo '-';
 							} else {
 								if(empty($item['Offer']['confirmation_id'])) {
-									echo $this->Html->link('AB hinzufügen', array('controller' => 'Confirmations', 'action' => 'convert', 'admin' =>'true', $item['Offer']['id']),
-																	array('class' => 'btn btn-default')); 	
+									if($item['Offer']['custom']){
+										echo $this->Html->link('AB hinzufügen', array('controller' => 'Confirmations', 'action' => 'add_individual', 'admin' =>'true', $item['Offer']['id']),
+																	array('class' => 'btn btn-default')); 
+									} else {
+										echo $this->Html->link('AB hinzufügen', array('controller' => 'Confirmations', 'action' => 'convert', 'admin' =>'true', $item['Offer']['id']),
+																	array('class' => 'btn btn-default')); 
+									}	
 								} else {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Confirmation']['confirmation_number'].'"
@@ -124,12 +144,16 @@
 					<?php
 						
 							echo '<td class="actions">';
-							
+							if(!$item['Offer']['custom']){
 							if(!empty($item['Offer']['offer_number']))
 								echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'createPdf', $item['Offer']['id']), array('escape' => false, 'target' => '_blank'));
 							
 							if(!empty($item['Offer']['hash']))
 								echo $this->Html->link('<i class="glyphicon glyphicon-link"></i>', '/Angebot/'.$item['Offer']['hash'], array('escape' => false, 'target' => '_blank'));
+							}
+							
+							echo $this->Html->link('<i class="tableSetting_btn glyphicon glyphicon-cog"></i>', array('admin' => true, 'controller' => 'Offers', 'action' => 'table_setting', $item['Offer']['id']), array('escape' => false));
+							
 							
 							echo '</td>';
 						
