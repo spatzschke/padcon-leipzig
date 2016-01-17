@@ -11,14 +11,14 @@
 ?>
 				<tr>
 					<td>
-						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Billing']['status']));	?>
+						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Billing']['status'], 'custom' => $item['Billing']['custom']));	?>
 					</td>
 					<td>
 						<?php if(empty($item['Billing']['billing_number'])) {
 							 echo '-'; 
 							} else {
 								
-								if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
+								if($item['Billing']['status']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'edit_individual', $item['Billing']['id']), array('escape' => false));
 									echo '&nbsp;&nbsp;&nbsp;';
 									echo $item['Billing']['billing_number'];
@@ -66,7 +66,7 @@
 	
 						if(empty($item['Cart']['count'])) {
 							 
-							if(strpos($item['Billing']['status'], 'custom') !== FALSE){
+							if($item['Billing']['status']){
 								echo $this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
 							} else {
 								echo '-'; 							
@@ -152,7 +152,7 @@
 								echo '-';
 							} else {
 								
-								if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
+								if($item['Billing']['status']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									 data-content="'.$item['Confirmation']['confirmation_number'].'"
 									 data-trigger="hover"></i>', 
@@ -175,7 +175,7 @@
 								echo '-';
 							} else {
 								
-								if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
+								if($item['Billing']['status']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Billing']['delivery_number'].'"
 									data-trigger="hover"
@@ -204,7 +204,7 @@
 					<?php
 						
 							echo '<td class="actions">';
-							if(strpos($item['Confirmation']['status'], 'custom') === FALSE){
+							if(!$item['Billing']['status']){
 								echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'createPdf', $item['Confirmation']['id']), array('escape' => false, 'target' => '_blank'));
 								
 								if(!empty($item['Billing']['hash']))

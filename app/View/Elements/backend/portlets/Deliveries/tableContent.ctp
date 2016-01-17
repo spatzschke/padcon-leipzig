@@ -5,13 +5,13 @@
 ?>
 				<tr>
 					<td>
-						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Delivery']['status']));	?>
+						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Delivery']['status'], 'custom' => $item['Delivery']['custom']));	?>						
 					</td>
 					<td>
 						<?php if(empty($item['Delivery']['delivery_number'])) {
 							 echo '-'; 
 							} else {
-								if(strpos($item['Delivery']['status'], 'custom') !== FALSE){
+								if($item['Delivery']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'edit_individual', $item['Delivery']['id']), array('escape' => false));
 								} else {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Delivery']['id']), array('escape' => false));
@@ -147,7 +147,7 @@
 						<?php if(!isset($item['Delivery']['confirmation_number'])) {
 							 echo '-'; 
 							} else {
-								if(strpos($item['Delivery']['status'], 'custom') !== FALSE){
+								if($item['Delivery']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Confirmation']['confirmation_number'].'"
 									data-trigger="hover"></i>',
@@ -165,7 +165,7 @@
 						<?php 
 							
 							if(empty($item['Confirmation']['billing_id'])) {
-								if(strpos($item['Delivery']['status'], 'custom') !== FALSE){
+								if($item['Delivery']['custom']){
 									echo $this->Html->link('Rechnung', array('controller' => 'Billings', 'action' => 'add_individual', 'admin' =>'true', $item['Confirmation']['id']),
 																array('class' => 'btn btn-default')); 	
 								} else {
@@ -194,7 +194,7 @@
 						
 							echo '<td class="actions">';
 							
-							if(strpos($item['Confirmation']['status'], 'custom') === FALSE){
+							if(!$item['Confirmation']['status']){
 								echo $this->Html->link('<i class="glyphicon glyphicon-print"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'createPdf', $item['Delivery']['id']), array('escape' => false, 'target' => '_blank'));
 								
 								if(!empty($item['Delivery']['hash']))

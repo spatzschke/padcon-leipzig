@@ -88,7 +88,8 @@ class BillingsController extends AppController {
 			
 			$data = $this->data;
 			
-			$data['Billing']['status'] = 'custom_open';
+			$data['Billing']['status'] = 'open';
+			$data['Billing']['custom'] = '1';
 			$data['Billing']['billing_number'] = $this->data['Billing']['billing_number'];
 			
 			$this->Billing->save($data);
@@ -180,6 +181,7 @@ class BillingsController extends AppController {
 				$this->Billing->create();
 				
 				$billing['Billing']['status'] = 'open';
+				$billing['Billing']['custom'] = FALSE;
 				$billing['Billing']['confirmation_id'] = $confirmation['Confirmation']['id'];
 				
 				//Default Settings
@@ -258,22 +260,13 @@ class BillingsController extends AppController {
 				
 				if(!empty($this->request->data['Billing']['payment_date']) && strcmp('1970-01-01', $payment_date) != 0 && strcmp('0000-00-00', $payment_date) != 0) {
 					$this->request->data['Billing']['payment_date'] = date('Y-m-d',strtotime($this->request->data['Billing']['payment_date']));
-					if(strpos($data['Billing']['status'], 'cancel') !== FALSE) {
-						if(strpos($this->request->data['Billing']['status'], 'custom') !== FALSE){
-							$this->request->data['Billing']['status'] = "custom_close";
-						} else {
-							$this->request->data['Billing']['status'] = "close";
-						}
+					if(strpos($this->request->data['Billing']['status'], 'cancel') !== FALSE) {
+						$this->request->data['Billing']['status'] = "close";					
 					}
 				} else {
-					debug("hier");
 					$this->request->data['Billing']['payment_date'] = null;
-					if(strpos($data['Billing']['status'], 'cancel') === FALSE) {
-						if(strpos($this->request->data['Billing']['status'], 'custom') !== FALSE){
-							$this->request->data['Billing']['status'] = "custom_open";
-						} else {
-							$this->request->data['Billing']['status'] = "open";
-						}
+					if(strpos($this->request->data['Billing']['status'], 'cancel') === FALSE) {
+						$this->request->data['Billing']['status'] = "open";						
 					}
 				}
 				
@@ -288,6 +281,9 @@ class BillingsController extends AppController {
 				$this->request->data['Billing']['created'] = date('Y-m-d',strtotime($this->request->data['Billing']['created']));
 
 				$this->Billing->id = $this->request->data['Billing']['id'];
+				
+				debug($this->request->data);
+				
 				$this->Billing->save($this->request->data);
 							
 			} else {
@@ -438,13 +434,8 @@ class BillingsController extends AppController {
 		$data['Billing']['payment_date'] = date("y-m-d");
 		
 		$billing = $this->Billing->findById($id);
-		
-		if(strpos($billing['Billing']['status'], 'custom') !== FALSE){
-			$data['Billing']['status'] = "custom_close";
-		} else {
-			$data['Billing']['status'] = "close";
-		}
-	
+
+		$data['Billing']['status'] = "close";	
 				
 		$this->Billing->id = $id;
 		$this->Billing->save($data);

@@ -82,7 +82,8 @@ class DeliveriesController extends AppController {
 			
 			$data = $this->data;
 			
-			$data['Delivery']['status'] = 'custom_open';
+			$data['Delivery']['status'] = 'open';
+			$data['Delivery']['custom'] = '1';
 			$data['Delivery']['delivery_number'] = $this->data['Delivery']['delivery_number'];
 			
 			$this->Delivery->save($data);
@@ -94,12 +95,8 @@ class DeliveriesController extends AppController {
 			$confirmation['Confirmation']['id'] = $id;
 			$confirmation['Confirmation']['delivery_id'] =  $dev_id;
 						
-			if(strpos($conf['Confirmation']['status'], 'cancel') === FALSE) {
-				if(strpos($conf['Confirmation']['status'], 'custom') !== FALSE){
-					$confirmation['Confirmation']['status'] = "custom_close";
-				} else {
-					$confirmation['Confirmation']['status'] = "close";
-				}
+			if($conf['Confirmation']['status'] != 'cancel') {	
+				$confirmation['Confirmation']['status'] = "close";
 			}
 			
 			$this->Confirmation->save($confirmation);
@@ -193,6 +190,7 @@ class DeliveriesController extends AppController {
 				$this->Delivery->create();
 				
 				$delivery['Delivery']['status'] = 'open';
+				$delivery['Delivery']['custom'] = FALSE;
 				$delivery['Delivery']['confirmation_id'] = $confirmation['Confirmation']['id'];
 				$delivery['Delivery']['delivery_date'] = time();
 				
@@ -362,20 +360,12 @@ class DeliveriesController extends AppController {
 				if(!empty($this->request->data['Delivery']['deliver_date']) && strcmp('1970-01-01', $this->request->data['Delivery']['deliver_date']) != 0 && strcmp('0000-00-00', $this->request->data['Delivery']['deliver_date']) != 0) {
 					$this->request->data['Delivery']['deliver_date'] = date('Y-m-d',strtotime($this->request->data['Delivery']['deliver_date']));
 					if(strpos($data['Delivery']['status'], 'cancel') !== FALSE) {
-						if(strpos($this->request->data['Delivery']['status'], 'custom') !== FALSE){
-							$this->request->data['Delivery']['status'] = "custom_close";
-						} else {
-							$this->request->data['Delivery']['status'] = "close";
-						}
+						$this->request->data['Delivery']['status'] = "close";
 					}
 				} else {
 					$this->request->data['Delivery']['deliver_date'] = null;
-					if(strpos($data['Delivery']['status'], 'cancel') !== FALSE) {
-						if(strpos($this->request->data['Delivery']['status'], 'custom') !== FALSE){
-							$this->request->data['Delivery']['status'] = "custom_open";
-						} else {
-							$this->request->data['Delivery']['status'] = "open";
-						}
+					if(strpos($data['Delivery']['status'], 'cancel') !== FALSE) {		
+						$this->request->data['Delivery']['status'] = "open";
 					}
 				}
 				
@@ -548,14 +538,8 @@ Lieferzeit: ca. 3-4 Wochen
 		$data['Delivery']['deliver_date'] = date("y-m-d");
 		
 		$delivery = $this->Delivery->findById($id);
-		
-		if(strpos($delivery['Delivery']['status'], 'custom') !== FALSE){
-			$data['Delivery']['status'] = "custom_close";
-		} else {
-			$data['Delivery']['status'] = "close";
-		}
-	
-				
+		$data['Delivery']['status'] = "close";
+					
 		$this->Delivery->id = $id;
 		$this->Delivery->save($data);
 		

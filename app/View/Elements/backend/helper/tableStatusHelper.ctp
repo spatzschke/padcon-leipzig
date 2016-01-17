@@ -38,7 +38,7 @@
 		></i>';
 	}
 	
-	if(strpos($status, 'custom') !== FALSE){
+	if($custom){
 		echo '&nbsp; <i class="glyphicon glyphicon-hand-right" style="color: grey; cursor: default"
 			 data-toggle="popover"
 			 data-content="Individuell erstellt"

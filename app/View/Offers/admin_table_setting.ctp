@@ -6,7 +6,7 @@
 <script>
 	function save() {
 		<?php			
-			$data = $this->Js->get('#ConfirmationAdminTableSettingForm')->serializeForm(array('isForm' => true, 'inline' => true)); 
+			$data = $this->Js->get('#OfferAdminTableSettingForm')->serializeForm(array('isForm' => true, 'inline' => true)); 
 		?>
 		
 		var xhr = null,
@@ -34,7 +34,7 @@
 	
 		$('#status').on('click', function(){
 		
-			$('#ConfirmationStatus').val($(this).attr('data-status'));
+			$('#OfferStatus').val($(this).attr('data-status'));
 			save();
 			
 			return false;	
@@ -51,7 +51,7 @@
 		
 		<div class="module_content row-fluid">
 					
-					<?php echo $this->Form->create('Confirmation');?>
+					<?php echo $this->Form->create('Offer');?>
 					
 
 					<div class="col-md-12">
@@ -59,10 +59,10 @@
 						<?php echo $this->Form->input('status', array('type' => 'hidden'));?>
 						<div class="panel panel-info" >
                     		<div class="panel-body" >
-								<label class="col-md-6">AB-Nummer</label>
+								<label class="col-md-6">Angebotsnummer</label>
                                	<div class="input-group number">     	
 	                                <span class="input-group-addon"><i class="">#</i></span>
-	                                <?php echo $this->Form->input('confirmation_number', array(
+	                                <?php echo $this->Form->input('offer_number', array(
 									    'label' => false,
 									    'div' => false,
 									    'type' => 'text',
@@ -70,7 +70,7 @@
 									
 									?> 	
 								</div>
-								<label class="col-md-6">AB-Datum</label>
+								<label class="col-md-6">Angebotsdatum</label>
                                	<div class="input-group date">     	
 			                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 			                        <?php echo $this->Form->input('created', array(
@@ -96,10 +96,10 @@
 					
 					<div class="modal-footer">
 						<?php
-							if(strpos($this->request->data['Confirmation']['status'], 'cancel') === FALSE) {
+							if(strpos($this->request->data['Offer']['status'], 'cancel') === FALSE) {
 								echo '<button type="button" id="status" class="btn btn-danger pull-left" data-status="cancel" data-dismiss="modal">Stornieren</button>';
 							} else {
-								if(!empty($this->data['Confirmation']['delivery_id'])) {
+								if(!empty($this->data['Offer']['delivery_id'])) {
 									echo '<button type="button" id="status" class="btn btn-success pull-left" data-status="close" data-dismiss="modal">Reaktivieren</button>';
 								} else {
 									echo '<button type="button" id="status" class="btn btn-success pull-left" data-status="open" data-dismiss="modal">Reaktivieren</button>';
