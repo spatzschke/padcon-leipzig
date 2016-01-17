@@ -18,7 +18,7 @@ class ConfirmationsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'AddressAddresstype');
+	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Delivery', 'AddressAddresstype');
 	public $components = array('Auth', 'Session', 'Paginator');
 	
 	public function beforeFilter() {
@@ -800,8 +800,18 @@ class ConfirmationsController extends AppController {
 				$offer = $this->Offer->findById($item['Confirmation']['offer_id']);
 				$item['Confirmation']['offer_number'] = $offer['Offer']['offer_number'];
 			}
+			
+			//Wenn Teillierferung dann alle Lierscheine laden
+			if(count($item['ConfirmationDelivery']) > 1) {
+				foreach($item['ConfirmationDelivery'] as $key => $conDel) {
+					$del = $this->Delivery->findById($item['ConfirmationDelivery'][$key]['delivery_id']);
+					$item['ConfirmationDelivery'][$key]['delivery_number'] = $del['Delivery']['delivery_number'];
+				}
+			}
 						
 			array_push($data_temp, $item);
+			
+			
 			
 		}	
 			

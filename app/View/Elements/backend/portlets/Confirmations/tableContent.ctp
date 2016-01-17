@@ -150,7 +150,7 @@
 							if($item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
 								echo '-';
 							} else {
-								if(empty($item['Confirmation']['delivery_id'])) {
+								if(count($item['ConfirmationDelivery']) == 0) {
 									if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
 										echo $this->Html->link('Lieferschein', array('controller' => 'Deliveries', 'action' => 'add_individual', 'admin' =>'true', $item['Confirmation']['id']),
 																	array('class' => 'btn btn-default')); 
@@ -159,17 +159,31 @@
 																	array('class' => 'btn btn-default')); 
 									}										
 								} else {
-									if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
-										echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
-										data-content="'.$item['Delivery']['delivery_number'].'"
-										data-trigger="hover"></i>', 
-										array('admin' => true, 'controller' => 'Deliveries', 'action' => 'edit_individual', $item['Confirmation']['delivery_id']), array('escape' => false));
+									if(count($item['ConfirmationDelivery']) > 1) {
+										
+										$deliveryNumbers = '';
+										foreach($item['ConfirmationDelivery'] as $key => $del) {
+											
+											$deliveryNumbers .= 'Teillieferschein: '.$del['delivery_number'].'<br>';
+										}
+										
+										echo '<i class="glyphicon glyphicon-duplicate" data-toggle="popover" 
+											data-content="Mehrere Teil-Lieferscheine vorhanden. <br>'.$deliveryNumbers.'"
+											data-trigger="hover"></i>';
 									} else {
-										echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
-										data-content="'.$item['Delivery']['delivery_number'].'"
-										data-trigger="hover"></i>', 
-										array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Confirmation']['delivery_id']), array('escape' => false));
-									}	
+										if(strpos($item['Confirmation']['status'], 'custom') !== FALSE){
+											echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
+											data-content="'.$item['Delivery']['delivery_number'].'"
+											data-trigger="hover"></i>', 
+											array('admin' => true, 'controller' => 'Deliveries', 'action' => 'edit_individual', $item['Confirmation']['delivery_id']), array('escape' => false));
+										} else {
+											echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
+											data-content="'.$item['Delivery']['delivery_number'].'"
+											data-trigger="hover"></i>', 
+											array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Confirmation']['delivery_id']), array('escape' => false));
+										}	
+									}
+									
 									
 									
 								}

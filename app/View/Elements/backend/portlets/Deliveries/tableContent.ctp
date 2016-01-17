@@ -16,8 +16,24 @@
 								} else {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Delivery']['id']), array('escape' => false));
 								}
-								echo '&nbsp;&nbsp;&nbsp;';
+								echo '&nbsp;&nbsp;';
 								echo $item['Delivery']['delivery_number'];	
+								if(strcmp($item['ConfirmationDelivery']['type'], 'full') == 0) {
+									echo '&nbsp;&nbsp;&nbsp;';
+									echo '<i class="Voll-Lieferschein"
+										 data-trigger="hover"
+									
+									></i>';
+								} else {
+									echo '&nbsp;&nbsp;';
+									echo '<i class="glyphicon glyphicon-duplicate" style="color: teal; cursor: pointer"
+										 data-toggle="popover"
+										 data-content="Teil-Lieferschein von AB: '.$item['Confirmation']['confirmation_number'].'""
+										 data-trigger="hover"
+									
+									></i>';
+								}
+								
 							
 							}
 						?>
