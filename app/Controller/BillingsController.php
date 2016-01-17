@@ -253,7 +253,10 @@ class BillingsController extends AppController {
 				
 				$date = new DateTime($this->request->data['Billing']['payment_target']);
 				$payment_date = $date->format('Y-m-d');
-				if(!empty($this->request->data['Billing']['payment_date']) && strcmp('1970-01-01', $payment_date) != 0) {
+				
+				
+				
+				if(!empty($this->request->data['Billing']['payment_date']) && strcmp('1970-01-01', $payment_date) != 0 && strcmp('0000-00-00', $payment_date) != 0) {
 					$this->request->data['Billing']['payment_date'] = date('Y-m-d',strtotime($this->request->data['Billing']['payment_date']));
 					if(strpos($data['Billing']['status'], 'cancel') !== FALSE) {
 						if(strpos($this->request->data['Billing']['status'], 'custom') !== FALSE){
@@ -263,8 +266,9 @@ class BillingsController extends AppController {
 						}
 					}
 				} else {
+					debug("hier");
 					$this->request->data['Billing']['payment_date'] = null;
-					if(strpos($data['Billing']['status'], 'cancel') !== FALSE) {
+					if(strpos($data['Billing']['status'], 'cancel') === FALSE) {
 						if(strpos($this->request->data['Billing']['status'], 'custom') !== FALSE){
 							$this->request->data['Billing']['status'] = "custom_open";
 						} else {

@@ -103,8 +103,9 @@
 						if($item['Billing']['payment_target'] == '0000-00-00' || $item['Billing']['payment_target'] == '1970-01-01' || empty($item['Billing']['payment_target'])) {
 							echo '-';
 						} else {
+							
 							//Zahlungsziel nähert sich an
-							if(strcmp($interval->format('%R'),'+') == 0 && $interval->format('%a') < 7 && $item['Billing']['status'] == 'open') {							
+							if(strcmp($interval->format('%R'),'+') == 0 && $interval->format('%a') < 7 && strpos($item['Billing']['status'], 'open') !== FALSE) {							
 								echo '<i class="glyphicon glyphicon-exclamation-sign" style="color: orange; cursor: pointer"
 									 data-toggle="popover" 
 									 data-content="Zahlungsziel in '.$interval->format('%a').' Tag(en) erreicht!"
@@ -112,7 +113,7 @@
 								></i>';
 							}
 							//Zahlungsziel überschritten
-							if(strcmp($interval->format('%R'),'-') == 0 && $item['Billing']['status'] == 'open') {
+							if(strcmp($interval->format('%R'),'-') == 0 && strpos($item['Billing']['status'], 'open') !== FALSE) {
 								
 								echo '<i class="glyphicon glyphicon-alert" style="color: red; cursor: pointer"
 									 data-toggle="popover" 

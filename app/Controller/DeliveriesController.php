@@ -89,8 +89,19 @@ class DeliveriesController extends AppController {
 			$dev_id = $this->Delivery->id;
 			
 			// Lierschein in AB eintragen
-			$confirmation['Confirmation']['id'] =  $id;
+			
+			$conf = $this->Confirmation->findById($id);
+			$confirmation['Confirmation']['id'] = $id;
 			$confirmation['Confirmation']['delivery_id'] =  $dev_id;
+						
+			if(strpos($conf['Confirmation']['status'], 'cancel') === FALSE) {
+				if(strpos($conf['Confirmation']['status'], 'custom') !== FALSE){
+					$confirmation['Confirmation']['status'] = "custom_close";
+				} else {
+					$confirmation['Confirmation']['status'] = "close";
+				}
+			}
+			
 			$this->Confirmation->save($confirmation);
 			
 			
