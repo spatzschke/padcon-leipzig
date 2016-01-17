@@ -99,7 +99,7 @@
 						
 						<?php 
 						if($item['Confirmation']['delivery_cost'] != '0' && $item['Delivery']['send_date'] == '0000-00-00' || empty($item['Delivery']['send_date']) && $item['Delivery']['status'] != 'cancel') {
-							echo $this->Html->link('Verschickt?', array('controller' => 'Deliveries', 'action' => 'trackingcode', 'admin' =>'true', $item['Delivery']['id']),
+							echo $this->Html->link('Verschickt', array('controller' => 'Deliveries', 'action' => 'trackingcode', 'admin' =>'true', $item['Delivery']['id']),
 																array('class' => 'btn btn-default trackingcode_btn')); 	
 						} else {
 							if($item['Delivery']['send_date'] == '0000-00-00' || $item['Delivery']['send_date'] == '1970-01-01' || empty($item['Delivery']['send_date'])) {
@@ -132,7 +132,7 @@
 					<td>
 						<?php 
 						if(($item['Delivery']['send_date'] != '0000-00-00'|| $item['Confirmation']['delivery_cost'] == '0') && $item['Delivery']['deliver_date'] == '0000-00-00' || empty($item['Delivery']['deliver_date']) && $item['Delivery']['status'] != 'cancel') {
-							echo $this->Html->link('Zugestellt?', array('controller' => 'Deliveries', 'action' => 'delivered', 'admin' =>'true', $item['Delivery']['id']),
+							echo $this->Html->link('Zugestellt', array('controller' => 'Deliveries', 'action' => 'delivered', 'admin' =>'true', $item['Delivery']['id']),
 																array('class' => 'btn btn-default')); 	
 						} else {
 							if($item['Delivery']['deliver_date'] == '0000-00-00' || $item['Delivery']['deliver_date'] == '1970-01-01' || empty($item['Delivery']['deliver_date'])) {
