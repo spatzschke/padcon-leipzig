@@ -311,9 +311,7 @@ class AddressesController extends AppController {
 		
 		$arr_customer['Address']['street'] = trim($data['street']);
 		
-		if(count($data['postal_code']) < 5) {
-			$data['postal_code'] = "0".$data['postal_code'];
-		}
+		$data['postal_code'] = str_pad($data['postal_code'], 5, "0", STR_PAD_LEFT);
 		
 		$arr_customer['Address']['city_combination'] = trim($data['postal_code']).' '.trim($data['city']);
 			
