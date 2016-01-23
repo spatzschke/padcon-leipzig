@@ -89,7 +89,27 @@ $(document).ready(function() {
 						));
 						?>                                      
                     </div> 
-                    
+                    <?php if($this->request->params['action'] == "admin_add_individual"  && is_null($this->data['Billing']['check'])) { ?>
+                    <div class="input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-check" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
+									 data-content="Auftragsbestätigungs-Nummer"></i>
+						</span>
+                        <?php  echo $this->Form->input('confirmation_number', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Confirmation',
+							'placeholder' => 'Auftragsbestätigungs-Nummer',
+							'data-field' => 'confirmation_number', 
+							'autoComplete' => true,
+							'type'=>'text'
+							//'type'=>'select','options'=>$this->data['Delivery']['confirmation_numbers']
+						));
+						?>                                      
+                    </div> 
+                  	<?php } else {                   		
+                  		echo $this->Form->input('confirmation_number', array('type'=>'hidden'));
+					}
+                  	?>   
     
 	
 		

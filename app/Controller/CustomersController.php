@@ -135,7 +135,23 @@ class CustomersController extends AppController {
 
 	function admin_add($id = null) {
 		$this->layout = 'admin';
-		$this->add($id = null);
+		if (!empty($this->request->data)) {
+			$this->Customer->create();
+			if ($this->Customer->save($this->request->data)) {
+				
+				$lastId = $this->Customer->getLastInsertID();
+				$this->Session->setFlash(__('sads', true), 'flash_message', array('class' => 'alert-danger'));
+			
+					
+				//$this->redirect(array('action' => 'edit', $lastId));			
+			
+			} else {
+				$this->Session->setFlash(__('Kunde konnte nicht erstellt werden!. Bitte versuchen Sie es erneut.', true), 'flash_message', array('class' => 'alert-danger'));
+			}
+		}
+		$users = $this->Customer->find('list');
+		$this->set(compact('users'));
+		
 		$this->set('title_for_panel','Kunde anlegen');
 		$this->set('primary_button','Anlegen');
 		$this->render('/Elements/backend/portlets/Customer/customerDetailPortlet');

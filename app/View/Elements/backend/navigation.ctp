@@ -26,11 +26,13 @@
 		<h3><i class="glyphicon glyphicon-qrcode" style="color: grey"></i>&nbsp;&nbsp;Lieferschein</h3>
 		<ul class="toggle">
 			<!-- <li class="icn_add_user"><?php echo $this->Html->link('Lieferschein aus AB erstellen', '/admin/deliveries/convert', array('disabled' => 'disabled')); ?></li> -->
+			<li><i class="glyphicon glyphicon-hand-right" style="color: grey"></i><?php echo $this->Html->link('Individuellen Lieferschein erstellen', '/admin/deliveries/add_individual'); ?></li>
 			<li><i class="glyphicon glyphicon-list" style="color: grey"></i><?php echo $this->Html->link('Alle Lieferscheine anzeigen', '/admin/deliveries/index'); ?></li>
 		</ul>
 		<h3><i class="glyphicon glyphicon-euro" style="color: grey"></i>&nbsp;&nbsp;Rechnung</h3>
 		<ul class="toggle">
 			<!-- <li class="icn_add_user"><?php echo $this->Html->link('Rechnung aus AB erstellen', '/admin/billings/convert', array('disabled' => 'disabled')); ?></li> -->
+			<li><i class="glyphicon glyphicon-hand-right" style="color: grey"></i><?php echo $this->Html->link('Individuelle Rechnung erstellen', '/admin/billings/add_individual'); ?></li>
 			<li><i class="glyphicon glyphicon-list" style="color: grey"></i><?php echo $this->Html->link('Alle Rechnungen anzeigen', '/admin/billings/index'); ?></li>
 		</ul>
 		<!--<h3>Warenkorb</h3>

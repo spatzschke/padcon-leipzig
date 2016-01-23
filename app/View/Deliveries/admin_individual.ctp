@@ -20,8 +20,7 @@ $(document).ready(function() {
  echo $this->Form->create('Delivery', array(
 					'class' => 'form-horizontal' ,
 					'style' => 'width: 100%'
-				));  
-	
+				));  	
 ?>  
 
 <?php ?>
@@ -81,21 +80,39 @@ $(document).ready(function() {
                         <?php  echo $this->Form->input('delivery_number', array(
 							'label' => false,
 							'class' => 'form-control',
-							'data-model' => 'Confirmation',
+							'data-model' => 'Delivery',
 							'placeholder' => 'Lieferschein-Nummer',
-							'data-field' => 'confirmation_number', 
+							'data-field' => 'delivery_number', 
 							'autoComplete' => true,
   							'type' => 'text',
   							'readonly' => $readonly
 						));
 						?>                                      
                     </div> 
+                    <?php 
                     
-    
-	
-		
-	
-                
+                    if($this->request->params['action'] == "admin_add_individual" && is_null($this->data['Delivery']['check'])) { ?>
+                    <div class="input-group">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-check" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
+									 data-content="Auftragsbestätigungs-Nummer"></i>
+						</span>
+                        <?php  echo $this->Form->input('confirmation_number', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Confirmation',
+							'placeholder' => 'Auftragsbestätigungs-Nummer',
+							'data-field' => 'confirmation_number', 
+							'autoComplete' => true,
+							'type'=>'text'
+							//'type'=>'select','options'=>$this->data['Delivery']['confirmation_numbers']
+						));
+						?>                                      
+                    </div> 
+                  	<?php } else {                   		
+                  		echo $this->Form->input('confirmation_number', array('type'=>'hidden'));
+					}
+                  	?> 
+                    
                 <?php if($this->request->params['action'] == "admin_edit_individual") { ?>   
                   
                     <div class="input-group">

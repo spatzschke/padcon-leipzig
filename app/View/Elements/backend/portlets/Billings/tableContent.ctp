@@ -18,7 +18,7 @@
 							 echo '-'; 
 							} else {
 								
-								if($item['Billing']['status']){
+								if($item['Billing']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'edit_individual', $item['Billing']['id']), array('escape' => false));
 									echo '&nbsp;&nbsp;&nbsp;';
 									echo $item['Billing']['billing_number'];
@@ -27,10 +27,6 @@
 									echo '&nbsp;&nbsp;&nbsp;';
 									echo $item['Billing']['billing_number'];
 								}
-								
-								
-									
-							
 							}
 						?>
 					</td>
@@ -66,7 +62,7 @@
 	
 						if(empty($item['Cart']['count'])) {
 							 
-							if($item['Billing']['status']){
+							if($item['Billing']['status'] && !empty($item['Confirmation']['customer_id'])){
 								echo $this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
 							} else {
 								echo '-'; 							
@@ -129,11 +125,11 @@
 					</td>
 					<td>
 						<?php 
-						if($item['Billing']['payment_date'] == '0000-00-00' || empty($item['Billing']['payment_date']) && $item['Billing']['status'] != 'cancel') {
+						if($item['Billing']['payment_date'] == '0000-00-00' || empty($item['Billing']['payment_date']) && $item['Billing']['status'] != 'cancel' ) {
 							echo $this->Html->link('Gezahlt', array('controller' => 'Billings', 'action' => 'payed', 'admin' =>'true', $item['Billing']['id']),
 																array('class' => 'btn btn-default')); 	
 						} else {
-							if($item['Billing']['payment_date'] == '0000-00-00' || $item['Billing']['payment_date'] == '1970-01-01' || empty($item['Billing']['payment_date'])) {
+							if($item['Billing']['payment_date'] == '0000-00-00' || $item['Billing']['payment_date'] == '1970-01-01' || empty($item['Billing']['payment_date']) ) {
 								echo '-';
 							} else {
 								echo $this->Time->format($item['Billing']['payment_date'], '%d.%m.%Y'); 
@@ -197,7 +193,7 @@
 						 ?>
 					</td>
 					
-					<td><?php echo $this->Time->format($item['Confirmation']['created'], '%d.%m.%Y'); ?></td>
+					<td><?php echo $this->Time->format($item['Billing']['created'], '%d.%m.%Y'); ?></td>
 					<!-- <td><?php echo $item['Confirmation']['modified']; ?>&nbsp;</td> -->
 					
 					

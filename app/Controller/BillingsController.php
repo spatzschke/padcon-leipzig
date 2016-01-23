@@ -82,34 +82,58 @@ class BillingsController extends AppController {
 		$this->set('pdf', null);
 		
 		if (!empty($this->data)) {
-			$data = null;	
-											
-			$this->Billing->create();
 			
-			$data = $this->data;
+			$confirmation = array();
+			if(!empty($this->data['Billing']['confirmation_number'])) {
+				$confirmation = $this->Confirmation->findByConfirmationNumber($this->data['Billing']['confirmation_number']);
+			}
 			
-			$data['Billing']['status'] = 'open';
-			$data['Billing']['custom'] = '1';
-			$data['Billing']['billing_number'] = $this->data['Billing']['billing_number'];
-			
-			$this->Billing->save($data);
-			$dev_id = $this->Billing->id;
-			
-			// Rechnung in AB eintragen
-			$confirmation['Confirmation']['id'] =  $id;
-			$confirmation['Confirmation']['billing_id'] =  $dev_id;
-			$this->Confirmation->save($confirmation);
-			
-			// Generate Hash für AB
-			$data['Billing']['id'] =  $dev_id;
-			$data['Billing']['hash'] =  Security::hash($id, 'md5', true);
-			$this->Billing->save($data);
-
-			$this->redirect(array('action'=>'edit_individual', $dev_id));
+			if($this->data['Billing']['confirmation_number'] == "") {
+				$this->Session->setFlash(__('Bitte geben Sie eine Auftragsbestätigungs-Nummer ein!'), 'flash_message', array('class' => 'alert-danger'));
+				$data = $this->data;
+			} elseif(!isset($confirmation['Confirmation'])) {
+				$this->Session->setFlash(__('Auftragsbestätigung existiert nicht!'), 'flash_message', array('class' => 'alert-danger'));
+				$data = $this->data;
+			} else {	
+				$data = null;	
+												
+				$this->Billing->create();
+				
+				$data = $this->data;
+				
+				$data['Billing']['status'] = 'open';
+				$data['Billing']['custom'] = '1';
+				$data['Billing']['billing_number'] = $this->data['Billing']['billing_number'];
+				
+				$this->Billing->save($data);
+				$dev_id = $this->Billing->id;
+				
+				if(!$id) {
+					$id = $confirmation['Confirmation']['id'];
+				}
+				
+				// Rechnung in AB eintragen
+				$confirmation['Confirmation']['id'] =  $id;
+				$confirmation['Confirmation']['billing_id'] =  $dev_id;
+				$this->Confirmation->save($confirmation);
+				
+				
+				// Generate Hash für AB
+				$data['Billing']['id'] =  $dev_id;
+				$data['Billing']['hash'] =  Security::hash($dev_id, 'md5', true);
+				$this->Billing->save($data);
+	
+				$this->redirect(array('action'=>'edit_individual', $dev_id));
+			}
 		} 
 		
 		
 		$data['Billing']['billing_number'] = $this->generateBillingNumber();
+		
+		$con = $this->Confirmation->findById($id);
+		if(isset($con['Confirmation']))
+			$data['Billing']['confirmation_number'] = $con['Confirmation']['confirmation_number'];
+		$data['Billing']['check'] = $id;
 		
 		$this->request->data = $data;
 		
@@ -128,6 +152,9 @@ class BillingsController extends AppController {
 		$this->set('pdf', null);
 		
 		$data = $this->Confirmation->findByBillingId($id);
+		if(!isset($data['Confirmation'])) {
+			$data = $this->Billing->findById($id);		
+		}
 		
 		if (!empty($this->data)) {
 			$confirmation = null;			
@@ -151,8 +178,11 @@ class BillingsController extends AppController {
 			if(empty($data['Billing']['additional_text'])) {
 				$data['Billing']['additional_text'] = Configure::read('padcon.Rechnung.additional_text.default');
 			}
+
+			if(isset($data['Confirmation'])) {
+				$data['Billing']['created'] = date('d.m.Y',strtotime($data['Billing']['created']));			
+			}			
 			
-			$data['Billing']['created'] = date('d.m.Y',strtotime($data['Billing']['created']));			
 			$this->request->data = $data;
 			
 			$this->set('primary_button', 'Speichern');
@@ -163,6 +193,50 @@ class BillingsController extends AppController {
 			
 			$this->render('admin_individual');
 		}
+	}
+
+	public function admin_add_placeholder() {
+		
+		$this->layout = "admin";
+		$this->set('pdf', null);
+		
+		if (!empty($this->data)) {
+		
+				$data = null;	
+												
+				$this->Billing->create();
+				
+				$data = $this->data;
+				
+				$data['Billing']['status'] = 'open';
+				$data['Billing']['custom'] = '1';
+				$data['Billing']['billing_number'] = $this->data['Billing']['billing_number'];
+				$data['Billing']['additional_text'] = Configure::read('padcon.Rechnung.additional_text.default');
+				$data['Billing']['payment_target'] = $this->findPaymentTarget($data);
+				$data['Billing']['created'] = date('Y-m-d h:i:s');		
+				
+				$this->Billing->save($data);
+				$dev_id = $this->Billing->id;
+					
+				// Generate Hash für AB
+				$data['Billing']['id'] =  $dev_id;
+				$data['Billing']['hash'] =  Security::hash($dev_id, 'md5', true);
+				$this->Billing->save($data);
+	
+				$this->redirect(array('action'=>'index'));
+		} 
+		
+		
+		$data['Billing']['billing_number'] = $this->generateBillingNumber();
+		
+		$this->request->data = $data;
+		
+		$this->set('primary_button', 'Anlegen');
+		$this->set('title_for_panel', 'Platzhalter für eine Rechnung anlegen');		
+		$controller_name = 'Billings'; 
+		$this->set(compact('controller_name','data'));
+		
+		$this->render('admin_individual');
 	}
 /**
  * admin_add method
@@ -265,7 +339,7 @@ class BillingsController extends AppController {
 				
 				if(!empty($this->request->data['Billing']['payment_date']) && strcmp('1970-01-01', $payment_date) != 0 && strcmp('0000-00-00', $payment_date) != 0) {
 					$this->request->data['Billing']['payment_date'] = date('Y-m-d',strtotime($this->request->data['Billing']['payment_date']));
-					if(strpos($this->request->data['Billing']['status'], 'cancel') !== FALSE) {
+					if(strpos($this->request->data['Billing']['status'], 'cancel') === FALSE) {
 						$this->request->data['Billing']['status'] = "close";					
 					}
 				} else {
@@ -286,8 +360,6 @@ class BillingsController extends AppController {
 				$this->request->data['Billing']['created'] = date('Y-m-d',strtotime($this->request->data['Billing']['created']));
 
 				$this->Billing->id = $this->request->data['Billing']['id'];
-				
-				debug($this->request->data);
 				
 				$this->Billing->save($this->request->data);
 							
@@ -579,18 +651,18 @@ class BillingsController extends AppController {
 				}
 				
 				$item['Billing'] += $Confirmations->calcPrice($item);
+			}			
+			
+			if(isset($item['Confirmation']['customer_id'])) {
+			
+				//Auftragsbestätigung
+				$confirmation = $this->Confirmation->findByBillingId($item['Billing']['id']);
+				$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
+				
+				//Lieferschein
+				$delivery = $this->Delivery->findById($item['Confirmation']['delivery_id']);
+				$item['Billing']['delivery_number'] = $delivery['Delivery']['delivery_number'];
 			}
-
-			
-			
-			
-			//Auftragsbestätigung
-			$confirmation = $this->Confirmation->findByBillingId($item['Billing']['id']);
-			$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
-			
-			//Lieferschein
-			$delivery = $this->Delivery->findById($item['Confirmation']['delivery_id']);
-			$item['Billing']['delivery_number'] = $delivery['Delivery']['delivery_number'];
 
 						
 			array_push($data_temp, $item);

@@ -21,8 +21,6 @@ $(document).ready(function() {
 		} else {
 			$('#ConfirmationConfirmationNumber').val('');
 		}
-		
-		
 	});
 	
 	 $("[name='delivery-cb']").bootstrapSwitch({
