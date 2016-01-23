@@ -36,7 +36,7 @@ class DeliveriesController extends AppController {
 		$this->layout = 'admin';
 	
 		$this->Delivery->recursive = 0;
-		$data = $this->Delivery->find('all', array('order' => array('Delivery.id DESC'), 'limit' => 100));
+		$data = $this->Delivery->find('all', array('order' => array('Delivery.delivery_number DESC')));
 		
 		$this->set('title_for_panel', 'Alle Lieferscheine');	
 			

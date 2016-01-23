@@ -39,7 +39,7 @@ class ConfirmationsController extends AppController {
 		$this->layout = 'admin';
 	
 		//$this->Confirmation->recursive = 0;
-		$data = $this->Confirmation->find('all', array('order' => array('Confirmation.id DESC')));
+		$data = $this->Confirmation->find('all', array('order' => array('Confirmation.confirmation_number DESC')));
 			
 		$this->set('title_for_panel', 'Alle Auftragsbestätigungen');	
 		
