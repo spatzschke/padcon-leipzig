@@ -29,14 +29,14 @@ class BillingsController extends AppController {
 	public $components = array('Paginator');
 
 /**
- * admin_index method
+ * admin_index method
  *
  * @return void
  */
 	public function admin_index() {
 		
 		$this->layout = "admin";
-		$data = $this->Billing->find('all', array('order' => array('Billing.id DESC'), 'limit' => 100));
+		$data = $this->Billing->find('all', array('order' => array('Billing.billing_number DESC')));
 		
 		$this->set('title_for_panel', 'Alle Rechnungen');	
 			
