@@ -209,12 +209,27 @@ class ConfirmationsController extends AppController {
 			// $data['Confirmation']['modified'] = date('Y-m-d',strtotime($data['Confirmation']['created']));
 			$data['Confirmation']['id'] = $id;
 			
-			if($this->Confirmation->save($data)) {
-				$this->Session->setFlash(__('The confirmation has been saved.'));
-				$this->redirect(array('action'=>'index'));
+			
+			
+			if($data['Confirmation']['customer_id'] == "") {
+				$this->Session->setFlash(__('Bitte geben Sie einen Kunden ein!'), 'flash_message', array('class' => 'alert-danger'));
+			}elseif($data['Confirmation']['confirmation_price'] == "") {
+				$this->Session->setFlash(__('Bitte geben Sie eine AB-Gesamtsumme ein!'), 'flash_message', array('class' => 'alert-danger'));
 			} else {
-				$this->Session->setFlash(__('The confirmation has been saved.'));
+				if($this->Confirmation->save($data)) {
+					$this->Session->setFlash(__('The confirmation has been saved.'));
+					$this->redirect(array('action'=>'index'));
+				} else {
+					$this->Session->setFlash(__('Konnte nicht gespeichert werden'));
+				}
 			}
+
+			$this->request->data = $data;
+			
+			$this->set('primary_button', 'Speichern');
+			$this->set('title_for_panel', 'Individuelle Auftragsbestätigung anlegen');	
+			
+			$this->render('admin_individual');
 
 		} else {
 			if(empty($data['Confirmation']['additional_text'])) {

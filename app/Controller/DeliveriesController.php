@@ -76,48 +76,77 @@ class DeliveriesController extends AppController {
 		$this->set('pdf', null);
 			
 		if (!empty($this->data)) {
-			$data = null;	
-											
-			$this->Delivery->create();
-			
-			$data = $this->data;
-			
-			$data['Delivery']['status'] = 'open';
-			$data['Delivery']['custom'] = '1';
-			$data['Delivery']['delivery_number'] = $this->data['Delivery']['delivery_number'];
-			
-			$this->Delivery->save($data);
-			$dev_id = $this->Delivery->id;
-			
-			// Lierschein in AB eintragen
-			
-			$conf = $this->Confirmation->findById($id);
-			$confirmation['Confirmation']['id'] = $id;
-			$confirmation['Confirmation']['delivery_id'] =  $dev_id;
-						
-			if($conf['Confirmation']['status'] != 'cancel') {	
-				$confirmation['Confirmation']['status'] = "close";
+							
+			$confirmation = array();
+			if(!empty($this->data['Delivery']['confirmation_number'])) {
+				$confirmation = $this->Confirmation->findByConfirmationNumber($this->data['Delivery']['confirmation_number']);
 			}
 			
-			$this->Confirmation->save($confirmation);
-			
-			
-			
-			//Neue ConfirmationDeliver erstellen - Full
-			$confirmationDelivery['ConfirmationDelivery']['type'] =  'full';
-			$confirmationDelivery['ConfirmationDelivery']['delivery_id'] =  $dev_id;
-			$confirmationDelivery['ConfirmationDelivery']['confirmation_id'] =  $id;
-			
-			$this->ConfirmationDelivery->create();
-			$this->ConfirmationDelivery->save($confirmationDelivery);		
-			
-			
-			// Generate Hash für AB
-			$data['Delivery']['id'] =  $dev_id;
-			$data['Delivery']['hash'] =  Security::hash($id, 'md5', true);
-			$this->Delivery->save($data);
+			if($this->data['Delivery']['confirmation_number'] == "") {
+				$this->Session->setFlash(__('Bitte geben Sie eine Auftragsbestätigungs-Nummer ein!'), 'flash_message', array('class' => 'alert-danger'));
+				$data = $this->data;
+			} elseif(!isset($confirmation['Confirmation'])) {
+				$this->Session->setFlash(__('Auftragsbestätigung existiert nicht!'), 'flash_message', array('class' => 'alert-danger'));
+				$data = $this->data;
+			} else {				
+				$data = null;	
+												
+				$this->Delivery->create();				
+				$data = $this->data;
+				
+				$data['Delivery']['status'] = 'open';
+				$data['Delivery']['custom'] = '1';
+				$data['Delivery']['delivery_number'] = $this->data['Delivery']['delivery_number'];
+				$data['Delivery']['confirmation_number'] = $this->data['Delivery']['confirmation_number'];
+				
+				$this->Delivery->save($data);
+				$dev_id = $this->Delivery->id;
+				
+				if(!$id) {
+					$id = $confirmation['Confirmation']['id'];
+				}
+				// Lierschein in AB eintragen
+				
+				$conf = $this->Confirmation->findById($id);
+				$confirmation['Confirmation']['id'] = $id;
+				$confirmation['Confirmation']['delivery_id'] =  $dev_id;
+							
+				if($conf['Confirmation']['status'] != 'cancel') {	
+					$confirmation['Confirmation']['status'] = "close";
+				}
+				
+				$this->Confirmation->save($confirmation);
+				
+				
+		
+				//Neue ConfirmationDeliver erstellen - Full
+				$confirmationDelivery['ConfirmationDelivery']['type'] =  'full';
+				$confirmationDelivery['ConfirmationDelivery']['delivery_id'] =  $dev_id;
+				
+				if($id) {
+					$confirmationDelivery['ConfirmationDelivery']['confirmation_id'] =  $id;
+				} else {
+					$confirmationDelivery['ConfirmationDelivery']['confirmation_id'] = 0;
+				}
+				
+				$this->ConfirmationDelivery->create();
+				$this->ConfirmationDelivery->save($confirmationDelivery);		
+				
+				
+				// Generate Hash für AB
+				$data['Delivery']['id'] =  $dev_id;
+				$data['Delivery']['hash'] =  Security::hash($id, 'md5', true);
+				$this->Delivery->save($data);
+	
+				$this->redirect(array('action'=>'edit_individual', $dev_id));
+			}
 
-			$this->redirect(array('action'=>'edit_individual', $dev_id));
+			$this->request->data = $this->data;
+
+			$this->set('primary_button', 'Anlegen');
+			$this->set('title_for_panel', 'Individuellen Lieferschein anlegen');	
+			
+			
 		} 
 		
 		// Wenn es noch eine leere AB (ohen Kunden) gibt, dann nimm die
@@ -128,6 +157,11 @@ class DeliveriesController extends AppController {
 		// }
 		
 		$data['Delivery']['delivery_number'] = $this->generateDeliveryNumber();
+		
+		$con = $this->Confirmation->findById($id);
+		if(isset($con['Confirmation']))
+			$data['Delivery']['confirmation_number'] = $con['Confirmation']['confirmation_number'];
+		$data['Delivery']['check'] = $id;
 		
 		$this->request->data = $data;
 		
@@ -174,6 +208,57 @@ class DeliveriesController extends AppController {
 			
 			$this->render('admin_individual');
 		}
+	}
+
+	public function admin_add_placeholder() {
+		
+		$this->layout = "admin";
+		$this->set('pdf', null);
+		
+		if (!empty($this->data)) {
+		
+				$data = null;	
+												
+				$this->Delivery->create();
+				
+				$data = $this->data;
+				
+				$data['Delivery']['status'] = 'open';
+				$data['Delivery']['custom'] = '1';
+				$data['Delivery']['delivery_number'] = $this->data['Delivery']['delivery_number'];
+				$data['Delivery']['additional_text'] = Configure::read('padcon.Lieferschein.additional_text.default');
+				$data['Delivery']['created'] = date('Y-m-d h:i:s');		
+				
+				$this->Delivery->save($data);
+				$dev_id = $this->Delivery->id;
+					
+				// Generate Hash für AB
+				$data['Delivery']['id'] =  $dev_id;
+				$data['Delivery']['hash'] =  Security::hash($dev_id, 'md5', true);
+				$this->Delivery->save($data);
+				
+				//Neue ConfirmationDeliver erstellen - Full
+				$confirmationDelivery['ConfirmationDelivery']['type'] =  'full';
+				$confirmationDelivery['ConfirmationDelivery']['delivery_id'] =  $dev_id;
+				$confirmationDelivery['ConfirmationDelivery']['confirmation_id'] = 0;
+								
+				$this->ConfirmationDelivery->create();
+				$this->ConfirmationDelivery->save($confirmationDelivery);	
+	
+				$this->redirect(array('action'=>'index'));
+		} 
+		
+		
+		$data['Delivery']['delivery_number'] = $this->generateDeliveryNumber();
+		
+		$this->request->data = $data;
+		
+		$this->set('primary_button', 'Anlegen');
+		$this->set('title_for_panel', 'Platzhalter für einen Lieferschein anlegen');		
+		$controller_name = 'Deliveries'; 
+		$this->set(compact('controller_name','data'));
+		
+		$this->render('admin_individual');
 	}
 
 	public function admin_convert($confirmation_id = null, $cart_id = null) {
@@ -366,12 +451,12 @@ class DeliveriesController extends AppController {
 				
 				if(!empty($this->request->data['Delivery']['deliver_date']) && strcmp('1970-01-01', $this->request->data['Delivery']['deliver_date']) != 0 && strcmp('0000-00-00', $this->request->data['Delivery']['deliver_date']) != 0) {
 					$this->request->data['Delivery']['deliver_date'] = date('Y-m-d',strtotime($this->request->data['Delivery']['deliver_date']));
-					if(strpos($data['Delivery']['status'], 'cancel') !== FALSE) {
+					if(strpos($data['Delivery']['status'], 'cancel') === FALSE) {
 						$this->request->data['Delivery']['status'] = "close";
 					}
 				} else {
 					$this->request->data['Delivery']['deliver_date'] = null;
-					if(strpos($data['Delivery']['status'], 'cancel') !== FALSE) {		
+					if(strpos($data['Delivery']['status'], 'cancel') === FALSE) {		
 						$this->request->data['Delivery']['status'] = "open";
 					}
 				}

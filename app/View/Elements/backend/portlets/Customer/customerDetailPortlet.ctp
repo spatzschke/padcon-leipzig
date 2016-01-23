@@ -48,131 +48,41 @@ $(document).ready(function() {
 					)); ?> 
 					<!-- Links -->
 					<?php echo $this->Form->input('id');?> 
-					<div class="col-md-6">
-						<h5>Direkter Ansprechpartner</h2>
+					<div class="col-md-12">
+						<h5>Kundendaten</h2>
 						<div class="row">
-							<div class="col-md-6">
-								<div class="input-group">
-	                                <span class="input-group-addon"><i class="glyphicon glyphicon-minus"></i></span>
-	                                <?php echo $this->Form->select('salutation', array('Herr' => 'Herr', 'Frau' => 'Frau'), array(
-										'class' => 'form-control',
-										'label' => FALSE, 
-										'div' => FALSE,
-										'data-model' => 'Customer', 
-										'data-field' => 'salutation', 
-										'autoComplete' => true));
-									?>   
-								</div>                          
-                        	</div>
-                        	<div class="col-md-6">
+							<div class="col-md-4">
 	                            <div class="input-group">
-	                                <span class="input-group-addon"><i class="glyphicon glyphicon-minus"></i></span>
-	                                <?php echo $this->Form->input('title', array(
+	                                <span class="input-group-addon"><b>#</b></span>
+	                                <?php echo $this->Form->input('id', array(
 										'label' => false,
 										'class' => 'form-control',
 										'data-model' => 'Customer',
-										'placeholder' => 'Titel',
+										'placeholder' => 'Nummer',
 										'data-field' => 'title', 
-										'autoComplete' => true
+										'autoComplete' => true,
+										'type' => 'text'
+									));
+									?>                                      
+	                             </div>
+	                         </div>
+                        	<div class="col-md-8">
+	                            <div class="input-group">
+	                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+	                                <?php echo $this->Form->input('organisation', array(
+										'label' => false,
+										'class' => 'form-control',
+										'data-model' => 'Customer',
+										'placeholder' => 'Kundenname',
+										'data-field' => 'title', 
+										'autoComplete' => true,
+										'type' => 'text'
 									));
 									?>                                      
 	                             </div>
 	                         </div>
                          </div>
-                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <?php echo $this->Form->input('first_name', array(
-								'label' => false,
-								'class' => 'form-control',
-								'data-model' => 'Customer',
-								'placeholder' => 'Vorname',
-								'data-field' => 'first_name', 
-								'autoComplete' => true
-							));
-							?>                                      
-                         </div>
-                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <?php echo $this->Form->input('last_name', array(
-								'label' => false,
-								'class' => 'form-control',
-								'data-model' => 'Customer',
-								'placeholder' => 'Nachname',
-								'data-field' => 'last_name', 
-								'autoComplete' => true
-							));
-							?>                                      
-                         </div>
-                         
-                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-                            <?php echo $this->Form->input('organisation', array(
-								'label' => false,
-								'class' => 'form-control',
-								'data-model' => 'Customer',
-								'placeholder' => 'Organisation',
-								'data-field' => 'organisation', 
-								'autoComplete' => true,
-								'type' => 'textarea'
-							));
-							?> 
-						</div>
-                         
-                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-briefcase"></i></span>
-                            <?php echo $this->Form->input('department', array(
-								'label' => false,
-								'class' => 'form-control',
-								'data-model' => 'Customer',
-								'placeholder' => 'Abteilung',
-								'data-field' => 'department', 
-								'autoComplete' => true,
-								'type' => 'textarea',
-								'rows' => '3'
-							));
-							?> 
-						</div>
-                         
-                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                            <?php echo $this->Form->input('email', array(
-								'label' => false,
-								'class' => 'form-control',
-								'data-model' => 'Customer',
-								'placeholder' => 'Email',
-								'data-field' => 'email', 
-								'autoComplete' => true
-							));
-							?>                                      
-                         </div>
-                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
-                            <?php echo $this->Form->input('phone', array(
-								'label' => false,
-								'class' => 'form-control',
-								'data-model' => 'Customer',
-								'placeholder' => 'Telefon',
-								'data-field' => 'phone', 
-								'autoComplete' => true
-							));
-							?>                                      
-                         </div>
-                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-print"></i></span>
-                            <?php echo $this->Form->input('fax', array(
-								'label' => false,
-								'class' => 'form-control',
-								'data-model' => 'Customer',
-								'placeholder' => 'Fax',
-								'data-field' => 'fax', 
-								'autoComplete' => true,
-								'type' => 'text'
-							));
-							?>                                      
-                         </div>
-                         
-                         
-					</div>
+                         					</div>
 					<?php
 					if(isset($this->data['Customer'])) {
 					?>

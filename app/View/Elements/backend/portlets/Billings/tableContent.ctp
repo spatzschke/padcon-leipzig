@@ -18,7 +18,7 @@
 							 echo '-'; 
 							} else {
 								
-								if($item['Billing']['status']){
+								if($item['Billing']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'edit_individual', $item['Billing']['id']), array('escape' => false));
 									echo '&nbsp;&nbsp;&nbsp;';
 									echo $item['Billing']['billing_number'];
@@ -27,10 +27,6 @@
 									echo '&nbsp;&nbsp;&nbsp;';
 									echo $item['Billing']['billing_number'];
 								}
-								
-								
-									
-							
 							}
 						?>
 					</td>
@@ -66,8 +62,8 @@
 	
 						if(empty($item['Cart']['count'])) {
 							 
-							if($item['Billing']['status']){
-								echo $this->Number->currency($item['Confirmation']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
+							if($item['Billing']['status'] && !empty($item['Confirmation']['customer_id'])){
+								echo $this->Number->currency($item['Billing']['billing_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
 							} else {
 								echo '-'; 							
 							}
@@ -76,16 +72,21 @@
 							foreach ($item['Cart']['CartProduct'] as $cartProduct) {
 								$cartProducts = $cartProducts . $cartProduct['amount'].'x '. $cartProduct['Information']['Product']['name'] . ' ( '.$cartProduct['Information']['Product']['product_number'].' )<br>';
 							}					
+							$skonto = '';
+							if($item['Billing']['skonto_take']) {
+								$skonto = '-'.$item['Billing']['skonto'].'% Skonto: '.$this->Number->currency($item['Billing']['skonto_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>';
+							}
 	
 							$priceInfo = 'Gesamtpreis: '.$this->Number->currency($item['Cart']['sum_retail_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 										 $item['Confirmation']['discount'].'% Rabatt: '.$this->Number->currency($item['Billing']['discount_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 										 'Versandkostenvorteil: '.$this->Number->currency($item['Billing']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 										 'Zwischensumme: '.$this->Number->currency($item['Billing']['part_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 										 '+'.$item['Confirmation']['vat'].'% Mehrwertsteuer: '.$this->Number->currency($item['Billing']['vat_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
-										 'Rechnungswert: '.$this->Number->currency($item['Billing']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));					
+										 $skonto.
+										 '<b>Rechnungswert: '.$this->Number->currency($item['Billing']['billing_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'</b>';					
 							
 							
-							echo $this->Number->currency($item['Billing']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
+							echo $this->Number->currency($item['Billing']['billing_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));	
 							echo '&nbsp;';
 							echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
 								 data-toggle="popover" 
@@ -98,6 +99,26 @@
 							></i>';
 						} ?>
 					</td>
+					<td>
+						<?php 
+						if($item['Billing']['status'] && !empty($item['Billing']['skonto'])){
+								//Zahlungsziel nähert sich an
+								if($item['Billing']['skonto_take']) {							
+									echo '<i class="glyphicon glyphicon-ok-sign" style="color: green; cursor: pointer"
+										 data-toggle="popover" 
+										 data-content="'.$this->Number->toPercentage($item['Billing']['skonto'],0).' Skonto gezogen"
+										 data-trigger="hover"
+										 data-placement="top"								
+									></i>';
+								}
+								echo '&nbsp;';
+								echo $this->Number->toPercentage($item['Billing']['skonto'],0);	
+							} else {
+								echo '-'; 							
+							}
+						?>
+						
+					</td>					
 					<td>
 						<?php 
 						if($item['Billing']['payment_target'] == '0000-00-00' || $item['Billing']['payment_target'] == '1970-01-01' || empty($item['Billing']['payment_target'])) {
@@ -129,11 +150,11 @@
 					</td>
 					<td>
 						<?php 
-						if($item['Billing']['payment_date'] == '0000-00-00' || empty($item['Billing']['payment_date']) && $item['Billing']['status'] != 'cancel') {
+						if($item['Billing']['payment_date'] == '0000-00-00' || empty($item['Billing']['payment_date']) && $item['Billing']['status'] != 'cancel' ) {
 							echo $this->Html->link('Gezahlt', array('controller' => 'Billings', 'action' => 'payed', 'admin' =>'true', $item['Billing']['id']),
-																array('class' => 'btn btn-default')); 	
+																array('class' => 'payed_btn btn btn-default')); 	
 						} else {
-							if($item['Billing']['payment_date'] == '0000-00-00' || $item['Billing']['payment_date'] == '1970-01-01' || empty($item['Billing']['payment_date'])) {
+							if($item['Billing']['payment_date'] == '0000-00-00' || $item['Billing']['payment_date'] == '1970-01-01' || empty($item['Billing']['payment_date']) ) {
 								echo '-';
 							} else {
 								echo $this->Time->format($item['Billing']['payment_date'], '%d.%m.%Y'); 
@@ -197,7 +218,7 @@
 						 ?>
 					</td>
 					
-					<td><?php echo $this->Time->format($item['Confirmation']['created'], '%d.%m.%Y'); ?></td>
+					<td><?php echo $this->Time->format($item['Billing']['created'], '%d.%m.%Y'); ?></td>
 					<!-- <td><?php echo $item['Confirmation']['modified']; ?>&nbsp;</td> -->
 					
 					

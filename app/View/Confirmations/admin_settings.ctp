@@ -84,7 +84,6 @@
 			?>,
 			onInit: function(event, state) {},
 			onSwitchChange: function(event, state) {
-				console.log(state);
 				if(state) {
 					//Versandkostenfrei
 					res = '<?php echo Configure::read('padcon.Auftragsbestaetigung.additional_text.deliveryFree');?>'
