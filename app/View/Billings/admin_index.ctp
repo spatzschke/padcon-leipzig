@@ -34,11 +34,38 @@ $(document).ready(function() {
 			$(this).removeData("modal");
 			window.location = '';
 		});
+		
+		<?php
+		 $id_payed = "payed";
+		 $modalSize = "modal-md";
+		 $backdrop = "true";
+		?>
+	
+		$('.<?php echo $id_payed;?>_btn').on('click',function() {
+			$('#<?php echo $id_payed;?>_modal .modal-body').load($(this).attr('href'));
+			$('#<?php echo $id_payed;?>_modal').modal('show');
+			return false;
+		})
+	
+		$("#<?php echo $id_payed;?>_modal").on("hidden.bs.modal", function(){ 
+			$(this).removeData("modal");
+			window.location = '';
+		});
 });
 
 </script>
 
 <div class="modal" id="<?php echo $id;?>_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" data-backdrop="<?php echo (isset($backdrop) ? $backdrop : "true");?>">
+	<div class="modal-dialog <?php echo (isset($modalSize) ? $modalSize : "modal-lg");?> offer-dialog">
+	 	<div class="modal-content">
+			<div class="modal-body">
+				<?php echo $this->element('backend/helper/loadingHelper', array("size" => "large")); ?>	
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal" id="<?php echo $id_payed;?>_modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;" data-backdrop="<?php echo (isset($backdrop) ? $backdrop : "true");?>">
 	<div class="modal-dialog <?php echo (isset($modalSize) ? $modalSize : "modal-lg");?> offer-dialog">
 	 	<div class="modal-content">
 			<div class="modal-body">
@@ -74,6 +101,14 @@ $(document).ready(function() {
 					<th><?php echo('Nr');?></th>
 					<th><?php echo('Kunde');?></th>
 					<th><?php echo('Summe');?></th>
+					<th ><?php echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
+										 data-toggle="popover"
+										 data-content="Skonto"
+										 data-trigger="hover"
+										 data-placement="top"
+									
+									></i>  ';
+									echo('sk');?></th>
 					<th><?php echo('Zahlungsziel');?></th>
 					<th><?php echo('Gezahlt am');?></th>
 					<th><?php echo('AB');?></th>

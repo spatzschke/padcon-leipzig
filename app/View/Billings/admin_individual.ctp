@@ -154,7 +154,23 @@ $(document).ready(function() {
 						    autoclose: true,
 						    todayHighlight: true
 						    });
-					</script> 				
+					</script> 		
+					
+					<div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-eur" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
+									 data-content="Rechnungsbetrag"></i>
+						</span>
+                        <?php echo $this->Form->input('billing_price', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Confirmation',
+							'placeholder' => 'Rechnungsbetrag',
+							'data-field' => 'billing_price', 
+							'autoComplete' => true,
+							'type' => 'text',
+						));
+						?>              
+                     </div>		
 					
 				</div>
 				

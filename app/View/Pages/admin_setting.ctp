@@ -15,6 +15,13 @@
 		<?php echo $this->Html->link('Platzhalter für Rechnung erstellen', '/admin/billings/add_placeholder', array('class' => 'btn btn-default')); ?>
 	  </div>
 	</div>
+	
+	<div class="panel panel-default col-md-12">
+	  <div class="panel-heading">Rechnungen</div>
+	  <div class="panel-body">
+	    <?php echo $this->Html->link('Rechnungen korrigieren', '/admin/billings/fillBillingPrice', array('class' => 'btn btn-danger')); ?>
+	  </div>
+	</div>
 </div>                    
 		
 	</div>
