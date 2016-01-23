@@ -197,8 +197,13 @@ class BillingsController extends AppController {
 				
 				//Erste AB-Adresse zum Kunden finden
 				$Addresses = new AddressesController(); 
-				$address = $Addresses->getAddressByType($confirmation, 3, TRUE);
-				$billing['Billing']['address_id'] = $address['Address']['id'];
+				$address = $Addresses->getAddressByType($confirmation, 4, TRUE);
+				
+				if(empty($address['Address'])) {
+					$billing['Billing']['address_id'] = 0;
+				} else {
+					$billing['Billing']['address_id'] = $address['Address']['id'];
+				}
 				
 				$this->Billing->save($billing);
 				
@@ -492,7 +497,7 @@ class BillingsController extends AppController {
 			$addressDelivery = $this->Address->findById($this->request->data['Billing']['address_id']);
 			$this->request->data['Address'] = $addressDelivery['Address'];
 		} else {
-			if(isset($this->request->data['Billing']['address_id'])) {
+			if(isset($this->request->data['Billing']['address_id']) && $this->request->data['Billing']['address_id'] != 0 ) {
 				$addressDelivery = $this->Address->findById($this->request->data['Billing']['address_id']);
 				$this->request->data['Address'] = $addressDelivery['Address'];
 			} else {
