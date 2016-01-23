@@ -193,6 +193,7 @@ class DeliveriesController extends AppController {
 				$delivery['Delivery']['custom'] = FALSE;
 				$delivery['Delivery']['confirmation_id'] = $confirmation['Confirmation']['id'];
 				$delivery['Delivery']['delivery_date'] = time();
+				$delivery['Delivery']['delivery_date'] = time();
 				
 				//Gernerierung der Auftragsbestätigungsnummer
 				$delivery['Delivery']['delivery_number'] = $this->generateDeliveryNumber();
@@ -200,7 +201,13 @@ class DeliveriesController extends AppController {
 				//Erste AB-Adresse zum Kunden finden
 				$Addresses = new AddressesController(); 
 				$address = $Addresses->getAddressByType($confirmation, 3, TRUE);
-				$delivery['Delivery']['address_id'] = $address['Address']['id'];
+				
+				if(empty($address['Address'])) {
+					$delivery['Delivery']['address_id'] = 0;
+				} else {
+					$delivery['Delivery']['address_id'] = $address['Address']['id'];
+				}
+				
 								
 				if($cart_id) {
 					//Cart des Teillieferscheins an Lieferschein übertragen
@@ -617,17 +624,19 @@ Lieferzeit: ca. 3-4 Wochen
 			$addressDelivery = $this->Address->findById($this->request->data['Delivery']['address_id']);
 			$this->request->data['Address'] = $addressDelivery['Address'];
 		} else {
-			if(isset($this->request->data['Delivery']['address_id'])) {
+			if(isset($this->request->data['Delivery']['address_id']) && $this->request->data['Delivery']['address_id'] != 0) {
 				$addressDelivery = $this->Address->findById($this->request->data['Delivery']['address_id']);
 				$this->request->data['Address'] = $addressDelivery['Address'];
 			} else {
 				$this->request->data = $Addresses->getAddressByType($this->request->data, 3, TRUE);
 			}
 		}
+
+		if(!empty($this->request->data['Address'])) {
+			$a = $Addresses->splitAddressData($this->request->data);
+			$this->request->data['Address'] += $a['Address'];	
+		}
 		
-		$a = $Addresses->splitAddressData($this->request->data);
-		
-		$this->request->data['Address'] += $a['Address'];
 		
 		$confirmation = $Confirmations->calcPrice($this->request->data);		
 		$this->request->data['Confirmation'] += $confirmation;		
