@@ -18,6 +18,25 @@ $(document).ready(function() {
 	$('.glyphicon').popover({
             html:true
         });
+        
+    $('.add_address').on('click', function(){
+								
+		var c = $('.address_dummy').length;
+			
+		$('#address_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/add\/'+c+'\/<?php echo $this->data['Customer']['id'];?>');
+		$('#address_add').modal('show');
+		
+		return false;
+	});	
+	
+	$('.edit_btn').on('click', function(){
+		
+		
+		$('#address_add .modal-content').load($(this).parent('a').attr('href'));
+		$('#address_add').modal('show');
+		
+		return false;
+	});	
 									
 });
 
@@ -156,22 +175,7 @@ $(document).ready(function() {
 					<?php
 					if(isset($this->data['Customer'])) {
 					?>
-					<script>
-
-					$(document).ready(function() {
-								
-						$('.add_address').on('click', function(){
-								
-							var c = $('.address_dummy').length;
-								
-							$('#address_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/add\/'+c+'\/<?php echo $this->data['Customer']['id'];?>');
-							$('#address_add').modal('show');
-							
-							return false;
-						});														
-					});
 					
-					</script>
 					<div class="col-md-12">
 						<hr>
 						<h4 class="col-md-8">Adressen</h4> <button class="btn btn-success add_address pull-right">Adresse hinzufügen</button>
@@ -179,7 +183,7 @@ $(document).ready(function() {
 						<?php
 						if(isset($this->data['Customer']['Addresses'])){
 							foreach ($this->data['Customer']['Addresses'] as $address) {
-								echo $this->element('backend/portlets/Address/addressMiniViewPortlet', array('address' => $address['Address'],)); 
+								echo $this->element('backend/portlets/Address/addressMiniViewPortlet', array('address' => $address['Address'], 'customer_id' => $this->data['Customer']['id'])); 
 							}
 						}?>
 						

@@ -1,9 +1,6 @@
 <?php
 		$dept = '';
 		$orga = '';
-
-		
-		
 		if(!isset($address)) {
 			$address = $this->data['Address'];
 		}
@@ -53,7 +50,9 @@
     	echo $this->Form->input('Address.'.$count.'.id', array('hidden' => true, 'value' => $address['id']));	
     }
     ?>	
-     <span class="input-group-addon">
-    
+     <span class="input-group-addon address-buttons">
+    	<?php //echo $this->Html->link('<i class="glyphicon glyphicon-pencil edit_btn"></i>', '/admin/Addresses/edit/'.$address['id'].'/'.$customer_id, array('class' => 'btn btn-default', 'escape' => false)); ?>
+    	<br><br><br><br><br><br>
+    	<?php echo $this->Html->link('<i class="glyphicon glyphicon-trash"></i>', '/admin/Addresses/delete/'.$address['id'].'/'.$customer_id, array('class' => 'btn btn-default', 'escape' => false), sprintf(__('Soll die Adresse wirklich gelöscht werden?', true))); ?>
 	</span>
 </div>

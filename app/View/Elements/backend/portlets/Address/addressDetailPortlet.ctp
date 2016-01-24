@@ -26,7 +26,7 @@ $(document).ready(function() {
 					 data: <?php echo $data ?>,
 					 success:function (data, textStatus) {
 					 		
-					 	window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/Customers/view/<?php echo $this->data['Customer']['id'];?>';
+					 //	window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/Customers/view/<?php echo $this->data['Customer']['id'];?>';
 					 	
 					 },
 					 error:function (data, textStatus) {
@@ -62,19 +62,22 @@ $(document).ready(function() {
 					 <!-- Rechts -->
 					<div class="col-md-12">
 						
-						<?php echo $this->Form->input('id');?> 
+						<?php echo $this->Form->input('id');
+						?> 
 						
 						<div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-pushpin" data-toggle="popover" data-content="Adresstypen" data-trigger="hover" data-placement="left"></i></span>
-                            <?php echo $this->Form->select('type', $addressTypes, array(
+                            <?php 
+                            echo $this->Form->input('addressTypes', array(
+								'multiple' => 'multiple',
+	  							'type' => 'select',
+								'label' => false,
 								'class' => 'form-control',
-								'label' => FALSE, 
-								'div' => FALSE,
-								'data-model' => 'Address', 
-								'data-field' => 'type', 
+								'data-model' => 'Address',
+								'placeholder' => 'Adresstypen',
+								'data-field' => 'addressTypes', 
 								'autoComplete' => true,
-								'multiple' => true,
-								'value' => $this->data['addressType']));
+								'default' => $this->data['Address']['addressType']));
 							?>   
 						</div>                          
                          <div class="input-group">
@@ -87,7 +90,6 @@ $(document).ready(function() {
 								'data-field' => 'organisation', 
 								'autoComplete' => true,
 								'type' => 'text',
-								'value' => $this->data['Customer']['organisation'],
 							));
 							?> 
 						</div>
@@ -102,7 +104,6 @@ $(document).ready(function() {
 								'data-field' => 'department', 
 								'autoComplete' => true,
 								'type' => 'text',
-								'value' => $this->data['Customer']['department']
 							));
 							?> 
 						</div>
@@ -118,8 +119,7 @@ $(document).ready(function() {
 										'placeholder' => 'Anrede',
 										'data-model' => 'Address', 
 										'data-field' => 'salutation', 
-										'autoComplete' => true,
-										'value' => $this->data['Customer']['salutation']));
+										'autoComplete' => true,));
 									?>   
 								</div>                          
                         	</div>
@@ -133,7 +133,6 @@ $(document).ready(function() {
 										'placeholder' => 'Titel',
 										'data-field' => 'title', 
 										'autoComplete' => true,
-										'value' => $this->data['Customer']['title']
 									));
 									?>                                      
 	                             </div>
@@ -148,7 +147,6 @@ $(document).ready(function() {
 								'placeholder' => 'Vorname',
 								'data-field' => 'first_name', 
 								'autoComplete' => true,
-								'value' => $this->data['Customer']['first_name']
 							));
 							?>                                      
                          </div>
@@ -161,7 +159,6 @@ $(document).ready(function() {
 								'placeholder' => 'Nachname',
 								'data-field' => 'last_name', 
 								'autoComplete' => true,
-								'value' => $this->data['Customer']['last_name']
 							));
 							?>                                      
                          </div>
@@ -262,7 +259,7 @@ $(document).ready(function() {
                         <!-- Button -->
                         <div class="col-sm-12 controls">                         
                         	<?php                    			
-                        			echo '<button class="btn btn-success form-control addAddressNow">Hinzufügen</button>';
+                        			echo '<button class="btn btn-success form-control addAddressNow">Speichern</button>';
                         	?>
                     	</div>
                     </div>

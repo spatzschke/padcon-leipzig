@@ -332,7 +332,7 @@ function updateURL(currUrl, param, paramVal){
                  </div>
                 <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-screenshot"></i></span>
-                        <?php                         
+                        <?php                   
                         
                         echo $this->Form->input('cores', array(
                         	'multiple' => 'multiple',

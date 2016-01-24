@@ -14,7 +14,7 @@ class AddressesController extends AppController {
  * @var array
  */
 	public $components = array('Paginator');
-	public $uses = array('Customer', 'Address', 'CustomerAddress', 'AddressAddresstype', 'Offer', 'Confirmation', 'Billing', 'Delivery');
+	public $uses = array('Customer', 'Address', 'CustomerAddress', 'AddressAddresstype', 'Addresstype', 'Offer', 'Confirmation', 'Billing', 'Delivery');
 
 /**
  * index method
@@ -211,8 +211,7 @@ class AddressesController extends AppController {
 						$loadAddress = $this->Address->findById($lastAddressId);
 						$this->request->data['Address'] = $this->splitAddressData($loadAddress['Address']);
 						
-							$this->render('/Elements/backend/portlets/Customer/customerFormPortlet');	
-						
+						$this->render('/Elements/backend/portlets/Customer/customerFormPortlet');	
 					}
 				}
 				
@@ -262,21 +261,48 @@ class AddressesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function admin_edit($id = null) {
+	public function admin_edit($id = null, $customer = null) {
+			
+		$this->layout = 'ajax';
+			
 		if (!$this->Address->exists($id)) {
 			throw new NotFoundException(__('Invalid address'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
+			
+			// HIER MÜSSEN DIE ADRESSTYPEN GEHANDELT WERDEN
+			
 			if ($this->Address->save($this->request->data)) {
 				$this->Session->setFlash(__('The address has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+			//	return $this->redirect(array('controller' => 'Customers', 'action' => 'edit', $customer));
 			} else {
 				$this->Session->setFlash(__('The address could not be saved. Please, try again.'));
 			}
-		} else {
-			$options = array('conditions' => array('Address.' . $this->Address->primaryKey => $id));
-			$this->request->data = $this->Address->find('first', $options);
+		} 
+		
+		
+		$options = array('conditions' => array('Customer.' . $this->Customer->primaryKey => $customer));
+		$customerArr = $this->Customer->find('first', $options);
+		$this->request->data = $customerArr;
+	
+		$this->request->data['Address']['addressTypes'] = $this->Address->getAddressTypes();
+		
+		$address = $this->Address->findById($id);
+		$types = $this->AddressAddresstype->findAllByAddressId($id);
+		$typeInput= array();
+		foreach($types as $key => $typ) {
+			array_push($typeInput, $typ['Addresstype']['id']);
 		}
+		
+		
+		
+		$addressTypes = $this->Addresstype->find('list');
+		$this->set(compact('addressTypes'));
+	 	
+		$this->request->data['Address'] += $address['Address'];	
+		
+		$this->request->data['Address']['addressType'] = $typeInput;	
+		$this->render('/Elements/backend/portlets/Address/addressDetailPortlet');	
 	}
 
 /**
@@ -286,18 +312,20 @@ class AddressesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function admin_delete($id = null) {
+	public function admin_delete($id = null, $customer_id = null) {
 		$this->Address->id = $id;
 		if (!$this->Address->exists()) {
 			throw new NotFoundException(__('Invalid address'));
 		}
-		$this->request->onlyAllow('post', 'delete');
-		if ($this->Address->delete()) {
-			$this->Session->setFlash(__('The address has been deleted.'));
+		
+		
+		$this->AddressAddresstype->deleteAll(array('address_id' => $id), false);
+		if ($this->CustomerAddress->deleteAll(array('address_id' => $id), false)) {
+			$this->Session->setFlash(__('Die Adresse wurde gelöscht'));
 		} else {
 			$this->Session->setFlash(__('The address could not be deleted. Please, try again.'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		return $this->redirect(array('controller' => 'Customers','action' => 'edit', $customer_id));
 	}
 
 	
@@ -338,6 +366,7 @@ class AddressesController extends AppController {
 		$data['postal_code'] = str_pad($data['postal_code'], 5, "0", STR_PAD_LEFT);
 		
 		$arr_customer['Address']['city_combination'] = trim($data['postal_code']).' '.trim($data['city']);
+		$arr_customer['Address']['id'] = $data['id'];
 			
 		return $arr_customer;
 	}
