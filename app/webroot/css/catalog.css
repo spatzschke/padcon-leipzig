@@ -101,7 +101,9 @@
 }
 
 .sheet.sonderseite.color .punkt.col01,
-.sheet.sonderseite.color .punkt.col26 {
+.sheet.sonderseite.color .punkt.col26,
+.sheet.sonderseite.color .punkt.col32,
+.sheet.sonderseite.color .punkt.col33 {
 	border: 1px solid grey !important;
 }
 
@@ -121,7 +123,8 @@
 .sheet.sonderseite.color .punkt.col26,
 .sheet.sonderseite.color .punkt.col28,
 .sheet.sonderseite.color .punkt.col30,
-.sheet.sonderseite.color .punkt.col32 {
+.sheet.sonderseite.color .punkt.col32,
+.sheet.sonderseite.color .punkt.col33 {
 	color: black !important;	
 }
 
@@ -132,14 +135,15 @@
 }
 
 
-.sheet.sonderseite.color .materialBox.mat1{top: 455px; right:0}
+.sheet.sonderseite.color .materialBox.mat1{top: 425px; right:0}
 .sheet.sonderseite.color .materialBox.mat2{top: 360px; right:0}
 .sheet.sonderseite.color .materialBox.mat3{top: 590px; left:0}
 .sheet.sonderseite.color .materialBox.mat4{top: 225px; left:0}
-.sheet.sonderseite.color .materialBox.mat5{top: 730px; left:0}
-.sheet.sonderseite.color .materialBox.mat6{top: 225px; right:0}
+.sheet.sonderseite.color .materialBox.mat5{top: 225px; right:0}
+.sheet.sonderseite.color .materialBox.mat6{top: 325px; right:0}
 .sheet.sonderseite.color .materialBox.mat7{top: 225px; right:0; display: none}
 .sheet.sonderseite.color .materialBox.mat8{top: 685px; right:0}
+.sheet.sonderseite.color .materialBox.mat9{top: 325px; right:0; display: none}
 
 .sheet.sonderseite.color .materialBox .header{
 	font-weight: bold;

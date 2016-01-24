@@ -45,7 +45,7 @@
 		    });
 		}, 5000);
 		 
-		$('.glyphicon').popover({
+		$('[data-toggle="popover"]').popover({
             html:true
         });
 		 

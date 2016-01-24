@@ -457,13 +457,15 @@ class BillingsController extends AppController {
 				$id = $this->request->data['Billing']['id'];
 				
 				$data = $this->Billing->findById($id);
-				
-				$data['Billing']['additional_text'] = $this->request->data['Billing']['additional_text'];
-				
-				//Filtere Zahlungsziel aus Text heraus
-				$data['Billing']['payment_target'] = $this->findPaymentTarget($this->request->data);
+				$save['Billing']['additional_text'] = $this->request->data['Billing']['additional_text'];
+				$save['Billing']['skonto'] = $this->request->data['Billing']['skonto'];
+				$save['Billing']['created'] = date('Y-m-d', strtotime($this->request->data['Billing']['created']));
+				$save['Billing']['payment_target'] = $this->findPaymentTarget($this->request->data);
+				$save['Billing']['skonto_date'] = $this->findSkontoDate($this->request->data);
+
+				$save['Billing']['id'] = $id;
 					
-				if($this->Billing->save($data)){
+				if($this->Billing->save($save)){
 					$this->Session->setFlash(__('Speicherung erfolgreich', true));
 				} else {
 					$this->Session->setFlash(__('Es kam zu Fehlern beim Speichern', true));
@@ -479,8 +481,46 @@ class BillingsController extends AppController {
 							
 			} else {
 				$data = $this->Billing->findById($id);
+				$data['Billing']['id'] = $id;
+				
+				//WEnn noch nicht gesetzt, standardtext nehmen
+				if(empty($data['Billing']['additional_text'])) {
+					$data['Billing']['additional_text'] = Configure::read('padcon.Rechnung.additional_text.default');
+				}
+				
+				//Zahlungsziel anhand des Standardtextes bestimmen
+				if(empty($data['Billing']['payment_target']) || strcmp('1970-01-01', $data['Billing']['payment_target']) == 0 || strcmp('0000-00-00', $data['Billing']['payment_target']) == 0) {
+					$data['Billing']['payment_target'] = date('d.m.Y', strtotime("+".Configure::read('padcon.zahlungsbedingung.netto.tage')." days"));
+					$data['Billing']['nettoDays'] = Configure::read('padcon.zahlungsbedingung.netto.tage');
+				} else {
+					$data['Billing']['payment_target'] = date('d.m.Y', strtotime($data['Billing']['payment_target']));
+					$datetime1 = new DateTime($data['Billing']['payment_target']);
+					$datetime2 = new DateTime($data['Billing']['created']);
+					$interval = $datetime1->diff($datetime2);	
+					$data['Billing']['nettoDays'] = $interval->format('%a');
+				}
+				//Skonto  anhand des Standardtextes bestimmen
+				//SkontoDatum anhand des Standardtextes bestimmen
+				if(empty($data['Billing']['skonto_date']) || strcmp('1970-01-01', $data['Billing']['skonto_date']) == 0 || strcmp('0000-00-00', $data['Billing']['skonto_date']) == 0) {
+					$data['Billing']['skonto_date'] = date('d.m.Y', strtotime("+".Configure::read('padcon.zahlungsbedingung.skonto.tage')." days"));
+					$data['Billing']['skontoDays'] = Configure::read('padcon.zahlungsbedingung.skonto.tage');
+				} else {
+					$data['Billing']['skonto_date'] = date('d.m.Y', strtotime($data['Billing']['skonto_date']));
+					$datetime1 = new DateTime($data['Billing']['skonto_date']);
+					$datetime2 = new DateTime($data['Billing']['created']);
+					$interval = $datetime1->diff($datetime2);	
+					$data['Billing']['skontoDays'] = $interval->format('%a');
+				}
 
-				$data['Billing']['additional_text'] = Configure::read('padcon.Rechnung.additional_text.default');
+
+				//Skonto  anhand des Standardtextes bestimmen
+				if(empty($data['Billing']['skonto']) || $data['Billing']['skonto'] == 0) {
+					$data['Billing']['skonto'] = Configure::read('padcon.zahlungsbedingung.skonto.wert');
+				} 
+				
+				$data['Billing']['created'] = date('d.m.Y', strtotime($data['Billing']['created']));
+				
+
 				
 				$controller_name = 'Billings'; 
 				$controller_id = $data['Billing']['id'];

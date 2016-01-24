@@ -90,6 +90,10 @@
 	margin: 5px 0 10px -1px;
 }
 
+.productListItem .productItemContent .productItemCore{	
+	min-height: 25px;
+}
+
 .productListItem .productItemContent .productItemMaterial{	
 }
 
