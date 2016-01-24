@@ -5,7 +5,7 @@ class CustomersController extends AppController {
 
 	var $name = 'Customers';
 	public $components = array('Auth', 'Session');
-	public $uses = array('Customer', 'Offer', 'User', 'Address', 'CustomerAddress', 'Cart', 'AddressAddressType');
+	public $uses = array('Customer', 'Offer', 'User', 'Address', 'CustomerAddress', 'Cart', 'AddressAddresstype');
 	
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
@@ -122,7 +122,7 @@ class CustomersController extends AppController {
 		$Addresses = new AddressesController();
 		
 		foreach ($customerAddresses as $address) {
-			$types = $this->AddressAddressType->findAllByAddressId($address['Address']['id']);
+			$types = $this->AddressAddresstype->findAllByAddressId($address['Address']['id']);
 			
 			$addressType = array();
 			foreach ($types as $key => $value) {				
@@ -195,7 +195,7 @@ class CustomersController extends AppController {
 			$Addresses = new AddressesController();
 			
 			foreach ($customerAddresses as $address) {
-				$types = $this->AddressAddressType->findAllByAddressId($address['Address']['id']);
+				$types = $this->AddressAddresstype->findAllByAddressId($address['Address']['id']);
 			
 				$addressType = array();
 				foreach ($types as $key => $value) {				
