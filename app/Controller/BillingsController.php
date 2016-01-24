@@ -457,9 +457,6 @@ class BillingsController extends AppController {
 				$id = $this->request->data['Billing']['id'];
 				
 				$data = $this->Billing->findById($id);
-				
-				debug($this->request->data);
-				
 				$save['Billing']['additional_text'] = $this->request->data['Billing']['additional_text'];
 				$save['Billing']['skonto'] = $this->request->data['Billing']['skonto'];
 				$save['Billing']['created'] = date('Y-m-d', strtotime($this->request->data['Billing']['created']));
@@ -467,8 +464,6 @@ class BillingsController extends AppController {
 				$save['Billing']['skonto_date'] = $this->findSkontoDate($this->request->data);
 
 				$save['Billing']['id'] = $id;
-				
-				debug($save);
 					
 				if($this->Billing->save($save)){
 					$this->Session->setFlash(__('Speicherung erfolgreich', true));

@@ -170,10 +170,34 @@ class AddressesController extends AppController {
 		$this->layout = 'ajax';
 		if ($this->request->is('post')) {
 			$this->Address->create();
+			
+			$types = $this->request->data['Address']['type'];
+			$this->request->data['Address']['type'] = 0;
+			
+			
 			if ($this->Address->save($this->request->data)) {
 				//$this->Session->setFlash(__('Adresse gespeichert.'));
 					
 				$lastAddressId = $this->Address->getLastInsertID();
+				
+				//Addresse dem Customer in CustomerAddress zusammenführen
+				$this->CustomerAddress->create();
+				$custAdd['CustomerAddress']['customer_id'] = $customer;
+				$custAdd['CustomerAddress']['address_id'] = $lastAddressId;
+				$this->CustomerAddress->save($custAdd);
+				
+				//Schleife zur Anlage von Addressen udn Addresstypen
+				foreach ($types as $value) {
+					$this->AddressAddresstype->create();
+					$addType['AddressAddresstype']['customer_id'] = $customer;
+					$addType['AddressAddresstype']['address_id'] = $lastAddressId;
+					$addType['AddressAddresstype']['type_id'] = $value;
+					$this->AddressAddresstype->save($addType);
+				}			
+				
+				
+				
+				//Vorbereitung um neue Addresse anzuzeigen
 				if(is_null($customer)) {
 					$this->request->data['Address'] = $this->splitAddressData($this->request->data['Address']);
 					$this->request->data['Address']['id'] = $lastAddressId;

@@ -68,12 +68,12 @@
 			<li><i class="glyphicon glyphicon-tag" style="color: grey"></i><?php echo $this->Html->link('Preisliste generieren', '/admin/catalogs/generate_pl'); ?></li>
 		</ul>
 		
-		<!--<h3>Kundendatenbank</h3>
+		<h3><i class="glyphicon glyphicon-user" style="color: grey"></i>&nbsp;&nbsp;Kundendatenbank</h3>
 		<ul class="toggle">
-			<li class="icn_add_user"><?php echo $this->Html->link('Neuer Kunde', '/admin/customers/add'); ?></li>
-			<li class="icn_view_users"><?php echo $this->Html->link('Alle Kunden anzeigen', '/admin/customers/index'); ?></li>
+			<li><i class="glyphicon glyphicon-plus" style="color: grey"></i><?php echo $this->Html->link('Neuer Kunde', '/admin/customers/add'); ?></li>
+			<li><i class="glyphicon glyphicon-list" style="color: grey"></i><?php echo $this->Html->link('Alle Kunden anzeigen', '/admin/customers/index'); ?></li>
 		</ul>
-		<h3>Kundenkonten</h3>
+		<!--<h3>Kundenkonten</h3>
 		<ul class="toggle">	
 			<li class="icn_add_user"><?php echo $this->Html->link('Neues Kundekonto', '/admin/users/add'); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Alle Kundenkonten anzeigen', '/admin/users/index'); ?></li>
