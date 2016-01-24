@@ -16,7 +16,11 @@
 					for($j = 0; $j < $colorsPerSlide; $j++) {
 						
 						if(isset($colors[$i * $colorsPerSlide + $j]))
-							echo '<div class="colorItem" rel="'.$colors[$i * $colorsPerSlide + $j]['Color']['code'].'" style="background-color: #'.$colors[$i * $colorsPerSlide + $j]['Color']['rgb'].';"></div>';
+							echo '<div class="colorItem" rel="'.$colors[$i * $colorsPerSlide + $j]['Color']['code'].'" style="background-color: #'.$colors[$i * $colorsPerSlide + $j]['Color']['rgb'].';" data-toggle="popover" 
+								 data-content="'.$colors[$i * $colorsPerSlide + $j]['Color']['name'].'"
+								 data-trigger="hover" data-placement="bottom"></div>';
+						
+					
 					}
 				echo '</div>';
 				

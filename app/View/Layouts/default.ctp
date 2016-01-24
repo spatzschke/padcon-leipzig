@@ -52,6 +52,26 @@
 		
 		echo $this->Html->script('main');
 	?>	
+	
+	<script type="text/javascript">
+		<!--
+		 
+		$(document).ready(function () {
+		 
+		window.setTimeout(function() {
+		    $(".alert.alert-dismissible").fadeTo(1500, 0).slideUp(500, function(){
+		        $(this).remove(); 
+		    });
+		}, 5000);
+		 
+		$('[data-toggle="popover"]').popover({
+            html:true,
+            container:'body'
+        });
+		 
+		});
+		//-->
+	</script>
 </head>
 <body>
 	<div id="navigationBandage"></div>

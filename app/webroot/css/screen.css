@@ -496,7 +496,9 @@ a:hover .categoryItemLeft, a:hover .categoryItemRight {
 	border-radius: 5px
 }
 .productItemColor .colorItem[rel="01"],
-.productItemColor .colorItem[rel="26"]{
+.productItemColor .colorItem[rel="26"],
+.productItemColor .colorItem[rel="33"],
+.productItemColor .colorItem[rel="17"]{
 	border: 1px solid grey;
 }
 
