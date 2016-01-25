@@ -26,7 +26,7 @@ $(document).ready(function() {
 					 data: <?php echo $data ?>,
 					 success:function (data, textStatus) {
 					 		
-					 //	window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/Customers/view/<?php echo $this->data['Customer']['id'];?>';
+					 	window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/Customers/view/<?php echo $this->data['Customer']['id'];?>';
 					 	
 					 },
 					 error:function (data, textStatus) {
@@ -68,6 +68,7 @@ $(document).ready(function() {
 						<div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-pushpin" data-toggle="popover" data-content="Adresstypen" data-trigger="hover" data-placement="left"></i></span>
                             <?php 
+                                                       
                             echo $this->Form->input('addressTypes', array(
 								'multiple' => 'multiple',
 	  							'type' => 'select',
@@ -77,7 +78,7 @@ $(document).ready(function() {
 								'placeholder' => 'Adresstypen',
 								'data-field' => 'addressTypes', 
 								'autoComplete' => true,
-								'default' => $this->data['Address']['addressType']));
+								'selected' => $this->data['Address']['addressType']));
 							?>   
 						</div>                          
                          <div class="input-group">

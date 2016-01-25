@@ -76,7 +76,16 @@ $(document).ready(function() {
 										 data-content=""
 										 data-trigger="hover">#</b>
 								</span>
-	                                <?php echo $this->Form->input('id', array(
+	                                <?php 
+	                                if($this->request->params['action'] != "admin_add") {
+										$readonly = "readonly";
+										$disable = "disabled";
+									} else {
+										$readonly = "";
+										$disable = "";
+									}
+	                                
+	                                echo $this->Form->input('id', array(
 										'label' => false,
 										'class' => 'form-control',
 										'data-model' => 'Customer',
@@ -84,8 +93,8 @@ $(document).ready(function() {
 										'data-field' => 'title', 
 										'autoComplete' => true,
 										'type' => 'text',
-										'readonly' => 'readonly',
-										'disabled' => 'disabled'
+										'readonly' => $readonly,
+										'disabled' => $disable
 									));
 									?>                                      
 	                             </div>
@@ -93,14 +102,26 @@ $(document).ready(function() {
                         	<div class="col-md-8">
 	                            <div class="input-group">
 	                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-	                                <?php echo $this->Form->input('organisation', array(
+	                                <?php 
+	                                
+	                                if($this->request->params['action'] != "admin_edit" &&  $this->request->params['action'] != "admin_add") {
+										$readonly = "readonly";
+										$disable = "disabled";
+									} else {
+										$readonly = "";
+										$disable = "";
+									}
+	                                
+	                                echo $this->Form->input('organisation', array(
 										'label' => false,
 										'class' => 'form-control',
 										'data-model' => 'Customer',
 										'placeholder' => 'Kundenname',
 										'data-field' => 'title', 
 										'autoComplete' => true,
-										'type' => 'text'
+										'type' => 'text',
+										'readonly' => $readonly,
+										'disabled' => $disable
 									));
 									?>                                      
 	                             </div>
@@ -117,8 +138,9 @@ $(document).ready(function() {
 	                    </div>
 	                    <?php } ?>
                          </form>
-                         <hr>
+                         
                          <?php if($this->request->params['action'] == "admin_view") { ?>
+                         <hr>
                          <div class="row">
 		                 <h4>Auswertung</h4>   
 		                 

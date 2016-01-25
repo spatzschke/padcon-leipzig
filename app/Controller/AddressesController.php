@@ -270,11 +270,17 @@ class AddressesController extends AppController {
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			
-			// HIER MÜSSEN DIE ADRESSTYPEN GEHANDELT WERDEN
+			$this->AddressAddresstype->deleteAll(array('address_id' => $this->request->data['Address']['id']), false);
+			foreach ($this->request->data['Address']['addressTypes'] as $key => $value) {
+				$this->AddressAddresstype->create();
+				$type['AddressAddresstype']['address_id'] = $this->request->data['Address']['id'];
+				$type['AddressAddresstype']['type_id'] = $value;
+				$this->AddressAddresstype->save($type);	
+			}
 			
 			if ($this->Address->save($this->request->data)) {
-				$this->Session->setFlash(__('The address has been saved.'));
-			//	return $this->redirect(array('controller' => 'Customers', 'action' => 'edit', $customer));
+				$this->Session->setFlash(__('Die Addresse wurde aktualisiert.'));
+				return $this->redirect(array('controller' => 'Customers', 'action' => 'edit', $customer));
 			} else {
 				$this->Session->setFlash(__('The address could not be saved. Please, try again.'));
 			}
@@ -291,7 +297,7 @@ class AddressesController extends AppController {
 		$types = $this->AddressAddresstype->findAllByAddressId($id);
 		$typeInput= array();
 		foreach($types as $key => $typ) {
-			array_push($typeInput, $typ['Addresstype']['id']);
+			array_push($typeInput, intval($typ['Addresstype']['id']));
 		}
 		
 		
