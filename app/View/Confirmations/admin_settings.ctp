@@ -24,8 +24,6 @@
 					 	
 					 	obj.removeClass('loading');
 					 	
-						//$("#settings_modal .modal-body").html(data);
-						//$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/<?php echo $controller_name;?>/reloadSheet/<?php echo $controller_id;?>');
 						window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/edit/<?php echo $controller_id;?>';
 					 } 
 				 }); 
@@ -95,6 +93,39 @@
 					$('#ConfirmationAdditionalText').html(res);
 					console.log(res)
 					$("#deliveryCost").attr('value','<?php echo Configure::read('padcon.delivery_cost.paket');?>')
+				}	
+				return event.isDefaultPrevented();
+			}
+		});
+		
+		$("[name='pattern-cb']").bootstrapSwitch({
+			size: "large",
+			onText: "Ja", 
+			offText: "Nein",
+			handleWidth: "70px",
+			state: <?php 
+				$string = $this->data['Confirmation']['additional_text'];
+				if(strpos($string,"Muster")!==false) {
+					echo "true";
+				} else {
+					echo "false";
+				}
+			
+			?>,
+			onInit: function(event, state) {},
+			onSwitchChange: function(event, state) {
+				if(state) {
+					//Versandkostenfrei
+					res = '<?php echo Configure::read('padcon.Auftragsbestaetigung.additional_text.pattern');?>'
+					$('#ConfirmationAdditionalText').html(res);
+					$("#pattern").attr('value','1')
+				} else {
+					$("[name='delivery-cb']").bootstrapSwitch('state', true);
+					$("[name='deliveryfree-cb']").bootstrapSwitch('state', false);
+					var res = '<?php echo Configure::read('padcon.Auftragsbestaetigung.additional_text.default');?>'
+					$('#ConfirmationAdditionalText').html(res);
+					console.log(res)
+					$("#pattern").attr('value','0')
 				}	
 				return event.isDefaultPrevented();
 			}
@@ -191,6 +222,16 @@
 	                                <?php echo $this->Form->input('deliveryCost', array(
 									    'hidden' => true,
 										'id' => "deliveryCost",
+										'label' => false));
+									?>                                 
+	                             </div>
+	                             
+	                             <!-- Musterlieferung -->
+	                             <label class="col-md-6">Musterlieferung</label>
+	                             <div class="input-group">
+	                                <input type="checkbox" name="pattern-cb" checked>    
+	                                <?php echo $this->Form->input('pattern', array(
+									    'hidden' => true,
 										'label' => false));
 									?>                                 
 	                             </div>
