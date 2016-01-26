@@ -1,0 +1,7 @@
+TRUNCATE padcon.billings;
+TRUNCATE padcon.carts;
+TRUNCATE padcon.cart_products;
+TRUNCATE padcon.confirmations;
+TRUNCATE padcon.offers;
+TRUNCATE padcon.deliveries;
+TRUNCATE padcon.confirmation_deliveries;

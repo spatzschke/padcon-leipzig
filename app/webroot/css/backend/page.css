@@ -1,0 +1,273 @@
+/* Offer */
+
+.controls-row [class*="span"] + [class*="span"] {
+    margin-left: 4px;
+}
+
+.sheetHeader .title { font-size: 22px; font-weight: bold; margin-top: 40px}
+.sheetHeader .title .small { font-size: 13px; font-weight: normal }
+.sheetHeader .logo { margin-top: 20px;}
+
+.addressHeader { font-size: 10px; border-bottom: 1px solid black; margin-bottom: 10px; width: 260px;}
+
+.customerData { margin-top: 30px } 
+
+#main .row-fluid .offerInfo h1{
+	border-bottom: 1px solid black;
+    font-size: 16px;
+    line-height: normal;
+    margin-top: 0;
+    margin-bottom: 2px;
+    padding: 2px 0 2px 5px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.offerInfo { 
+	border: 1px solid black;
+    float: right;
+    padding-bottom: 5px;
+    width: 280px;
+    margin-top: 20px;
+}
+
+.offerInfo label {padding-left: 5px}
+
+.row-fluid .offerInfo * { line-height: 15px; min-height: 15px; color: #666 }
+
+.row-fluid .offerInfo label {
+    font-size: 14px;
+    color: #666;
+}
+
+#main .row-fluid .offerInfo input{
+	width: 64%;
+}
+
+.offerInfo .offerNumber * {font-weight: bold;}
+
+.offerInfo .pageNumber { margin-left: 0px; color: #666;}
+
+.offer.noInput input, .offer.noInput select {
+	border:none;
+	box-shadow: none; 
+    color: #666666;
+    font-size: 14px;
+    padding: 0;
+    min-height: auto;
+    height: auto;
+    margin: auto;
+    background: none;
+    cursor: default;
+    min-height: 10px !important;
+}
+
+.row-fluid.sheet select {
+	margin-top: 5px;
+	border: 0 none;
+}
+
+.row-fluid.sheet input {
+	min-height: 17px;
+}
+
+.row-fluid.sheet select {
+	min-height: 20px;
+}
+
+.offerSheet tr.cartProductHeader {
+	border-bottom: 0 none;
+}
+
+.offerSheet tr.cartProductHeader td, .offerSheet tr.offerFooter td{
+	padding-bottom: 0;
+	border: 0 none;
+}
+
+.offerSheet tr.cartProductFooter, .offerSheet tr.offerFooter {
+	border: 0 none;
+}
+
+.offerSheet tr.cartProductFooter td {
+	-moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color -moz-use-text-color #DDDDDD;
+    border-image: none;
+    border-style: none none solid;
+    border-width: 0 0 1px;
+    padding-top: 0;
+}
+
+.offerSheet tr.offerFooter td{ 
+	padding-top: 0;
+	padding-bottom: 0;
+	border: 0 none;
+}
+
+.offerSheet .table {
+	border-top: 1px solid #ddd;
+}
+
+article.sheet {
+    position: relative;
+    width: 779px;
+    height: 1088px;
+    padding-top: 50px;
+}
+
+.offerSheet {
+	border: 0 none;
+	margin-left: 0;
+	font-size: 11px;
+	margin-top: 20px;
+	float: left;
+}
+
+.offerHeader {
+	border-bottom: 1px dotted #000000;
+    border-top: 1px dotted #000000;
+    float: left;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 5px 0;
+    width: 100%;
+}
+
+.offerHeader div {float: left;}
+
+.sheetItem { width: 100%; clear: both; margin-bottom: 0px; padding-bottom: 5px; float: left;}
+.sheetItem > div, .sheetItem .content > div{float: left;}
+
+.offerMiddle .content { 
+	float: right;
+    width: 405px;
+    margin-right: 15px;
+}
+
+.offerSheet .module_content {
+	margin-left: 45px;
+}
+
+.offerHeader .sum_price, .offerMiddle .sum_price {
+	float: right !important;
+    text-align: right;
+    width: 100px;
+    font-size: 14px;    
+}
+
+.offerMiddle .sum_price { margin-right: -15px; }
+
+.pages .offerMiddle input, 
+.pages .row-fluid input,
+.pages .row-fluid select { 
+	min-height: auto;
+	border: 0 none; 
+	background: 0 none;
+	box-shadow: 0 none;
+	padding: 0;
+}
+
+
+.offerMiddle .sum_price .double{
+	border-bottom: 1px double black; 
+}
+
+.offerHeader .price, .offerMiddle .price {
+	margin-left: 40px;
+	font-size: 14px;
+}
+
+.pages .row-fluid .offerText input.text { width: 100%;}
+.pages .row-fluid .offerText { width: 100%; float: left;}
+
+.offerMiddle .price input {max-width: 65px; margin-top: -1px;}
+
+.offerMiddle .price input{
+    text-align: right;
+    width: 60px;
+}
+
+.offerHeader .pos, .offerMiddle .pos {
+	text-align: center;
+	width: 25px;
+}
+.offerHeader .amount, .offerMiddle .amount {
+	text-align: center;
+	width: 90px;
+}
+
+.offerMiddle { float: left; width: 100%;}
+
+.offerMiddle .number {
+	text-align: left;
+	width: 75px;
+}
+
+.offerMiddle .number .productNumber {
+	font-weight: bold;
+	font-size: 11px;
+}
+
+.offerMiddle .productName {
+	font-weight: bold;
+	font-size: 15px;
+	margin-bottom: 0;
+}
+
+.offerMiddle .size { width: 100% }
+.offerMiddle .price { width: 75px; margin-left: 195px; }
+.offerHeader .number { width: 94px;}
+.offerHeader .content { width: 133px; margin: 0;}
+.offerHeader .price { width: 45px;}
+
+.offerFooter { float: left; width: 100%; margin: 0; border-top: 1px dotted black; padding-top: 5px}
+.offerFooter div {float: right; width: 100%; height: 20px;}
+.offerFooter label { 
+	float: left;
+    font-size: 14px;
+    width: 79%;	
+}
+.offerFooter p { 
+	float: right;
+    font-size: 15px;
+    text-align: right;
+    width: 129px;	
+}
+
+.offerFooter p .double{ 
+	border-bottom-style: double;
+    border-left-color: black;
+    border-right-color: black;
+    border-top-color: black;
+}
+
+.additionalContent {
+	float: left; 
+	width: 100%;
+	margin-top: 30px;
+}
+.aditionalContent textarea{
+	float: left; 
+}
+
+.pages .sheetFooter { 
+    border-top: 1px solid black;
+    bottom: 20px;
+    font-size: 9px;
+    left: 40px;
+    line-height: 12px;
+    padding-top: 10px;
+    position: absolute;
+    width: 687px;
+}
+
+.pages .sheetFooter .col-md-3 {
+	width: 28%;
+}
+
+.pages .sheetFooter .col-md-4{ 
+	padding: 0 15;
+} 
+

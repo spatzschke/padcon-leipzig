@@ -5,5 +5,214 @@
  */
  
  body {
-	baclground-color: black; 
  }
+ 
+ .sheet.deckblatt img {
+ 	position: absolute;
+ 	left: 0;
+ 	top: 0;
+ 	width: 100%
+ }
+ 
+.sheet.deckblatt .list_title {
+	position: absolute;
+	left: 0;
+	top: 337px;
+	width: 100%;
+	z-index: 1000;
+	font-size: 35px;
+	font-weight: bold;
+	text-align: center;
+	color: #345F8F !important;
+}
+
+.sheetHeader {
+	left: 0;
+    margin-bottom: 110px;
+    position: absolute;
+    top: 80px;
+    width: 100%;
+}
+
+.sheetHeader .logo img {
+	float: right;
+    height: 50px;
+    margin: -73px 55px 0 0;
+}
+ 
+.sheetHeader .bandage{
+	height: 15px;
+	width: 100%;
+	background-color: #346aa6;
+}
+
+.sheetContent {
+	margin-top: 100px
+}
+
+.pages .sheetFooter {
+	left: 0;
+    margin-bottom: 20px;
+    position: absolute;
+    bottom: -80px;
+    width: 100%;
+    border-top: 0 none;
+    bottom: 0px;
+    font-size: auto;
+    line-height: auto;
+    
+}
+
+.sheetFooter .bandage{
+	background-color: #346aa6;
+    color: #fff;
+    font-size: 18px;
+    height: 40px;
+    padding: 13px 30px;
+    text-align: right;
+    width: 100%;
+}
+
+.ruckseite .sheetFooter .bandage div{
+	width: 100%;
+	text-align: center	
+}
+
+.sheet .sheetHeader .content{
+	font-size: 24px;
+    margin-left: 45px;
+    margin-top: -20px;
+}
+.sheet.sonderseite .agb p{
+	font-size: 13px;
+	margin-bottom: 6px;
+}
+
+.sheet.sonderseite.color .punkt{
+	border: 1px solid grey;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    height: 35px;
+    padding: 5px 7px;
+    width: 35px;
+    float: left;
+    color: #FFF;
+}
+
+.sheet.sonderseite.color .punkt.col01,
+.sheet.sonderseite.color .punkt.col26,
+.sheet.sonderseite.color .punkt.col32,
+.sheet.sonderseite.color .punkt.col33 {
+	border: 1px solid grey !important;
+}
+
+.sheet.sonderseite.color img {
+	margin: 0 0 20px 100px;
+}
+
+.sheet.sonderseite.color .punkt.col01,
+.sheet.sonderseite.color .punkt.col11,
+.sheet.sonderseite.color .punkt.col12,
+.sheet.sonderseite.color .punkt.col13,
+.sheet.sonderseite.color .punkt.col15,
+.sheet.sonderseite.color .punkt.col17,
+.sheet.sonderseite.color .punkt.col22,
+.sheet.sonderseite.color .punkt.col23,
+.sheet.sonderseite.color .punkt.col24,
+.sheet.sonderseite.color .punkt.col26,
+.sheet.sonderseite.color .punkt.col28,
+.sheet.sonderseite.color .punkt.col30,
+.sheet.sonderseite.color .punkt.col32,
+.sheet.sonderseite.color .punkt.col33 {
+	color: black !important;	
+}
+
+.sheet.sonderseite.color .materialBox{
+ 	width: 300px;
+ 	float: left;	
+ 	position: absolute;
+}
+
+
+.sheet.sonderseite.color .materialBox.mat1{top: 425px; right:0}
+.sheet.sonderseite.color .materialBox.mat2{top: 360px; right:0}
+.sheet.sonderseite.color .materialBox.mat3{top: 590px; left:0}
+.sheet.sonderseite.color .materialBox.mat4{top: 225px; left:0}
+.sheet.sonderseite.color .materialBox.mat5{top: 225px; right:0}
+.sheet.sonderseite.color .materialBox.mat6{top: 325px; right:0}
+.sheet.sonderseite.color .materialBox.mat7{top: 225px; right:0; display: none}
+.sheet.sonderseite.color .materialBox.mat8{top: 685px; right:0}
+.sheet.sonderseite.color .materialBox.mat9{top: 325px; right:0; display: none}
+
+.sheet.sonderseite.color .materialBox .header{
+	font-weight: bold;
+	margin-top: 27px;	
+}
+
+.sheet.sonderseite.color .materialBox .entry{
+	float: left;
+	width: 47%;
+	margin-top: 10px;
+}
+
+.sheet.sonderseite.color .materialBox.mat1 .entry {
+	width: 100%;	
+}
+
+
+.sheet.sonderseite.color .materialBox .name{
+	float: left;
+	padding: 7px 10px;
+}
+
+
+.sheet.ruckseite .sheetContent {
+	margin-top: 70px;
+}
+
+.sheet.ruckseite .sheetHeader {
+	top: 480px;
+    z-index: 1000;	
+}
+
+.sheet.ruckseite .stemp {
+	border: 1px solid black;
+	width: 400px;
+	height: 200px;
+	padding: 5px;
+	margin: 0 auto
+}
+
+.sheet.ruckseite .more {
+	background-color: #346aa6;
+    color: #fff;
+    font-size: 18px;
+    height: 715px;
+    left: 0;
+    margin-top: 30px;
+    padding: 235px 191px;
+    position: absolute;
+    width: 100%;
+}
+
+/*Preisliste*/
+.sheet.priceList .sheetContent { margin-top: 85px; }
+
+.sheet.priceList .tableHead { border-bottom: 2px solid black}
+.sheet.priceList .tableHead,
+.sheet.priceList .tableEntry  { width: 707px; float: left; font-size: 12px }
+.sheet.priceList .tableHead *,
+.sheet.priceList .tableEntry *{ float: left; padding: 4px 0 }
+.sheet.priceList .tableHead * { font-weight: bold;}
+.sheet.priceList .number{ width: 80px; padding-left: 5px }
+.sheet.priceList .name{ width: 320px; padding-left: 5px; padding-right: 5px; }
+
+.sheet.priceList .tableEntry:nth-child(even){ background-color: #f5f5f5; border-bottom: 1px dotted #ccc; border-top: 1px dotted #ccc;}
+
+.sheet.priceList .material{ width: 130px }
+.sheet.priceList .size{ width: 106px }
+.sheet.priceList .price{ text-align: right; width: 70px; padding-right: 5px }
+
+article.sheet.priceList {padding-left: 35px}
+
