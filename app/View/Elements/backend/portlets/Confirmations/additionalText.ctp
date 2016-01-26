@@ -3,5 +3,10 @@
 		<?php echo $this->data['Confirmation']['additional_text']; ?>
 		<br \>
 		<br \>
-		Ich bedanke mich für Ihren Auftrag.
+		<?php
+			if(!$this->data['Confirmation']['pattern']) {	
+				echo 'Ich bedanke mich für Ihren Auftrag.';
+			}
+		?>
+		
 	</div>

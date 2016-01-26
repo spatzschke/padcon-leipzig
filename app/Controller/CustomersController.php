@@ -149,11 +149,9 @@ class CustomersController extends AppController {
 			$this->Customer->create();
 			if ($this->Customer->save($this->request->data)) {
 				
-				$lastId = $this->Customer->getLastInsertID();
-				$this->Session->setFlash(__('sads', true), 'flash_message', array('class' => 'alert-danger'));
-			
+				$lastId = $this->Customer->getLastInsertID();			
 					
-				//$this->redirect(array('action' => 'edit', $lastId));			
+				$this->redirect(array('action' => 'edit', $lastId));			
 			
 			} else {
 				$this->Session->setFlash(__('Kunde konnte nicht erstellt werden!. Bitte versuchen Sie es erneut.', true), 'flash_message', array('class' => 'alert-danger'));
@@ -358,9 +356,14 @@ class CustomersController extends AppController {
 		
 		$customerOfferCount = $this->Offer->find('count', array('conditions' => array('Offer.customer_id' => $id))); 
 		$allOfferCount = $this->Offer->find('count');
+
+		$percent = 0;
+		if($allOfferCount != 0) {
+			$percent = $customerOfferCount / $allOfferCount;
+		}
 		
 		$offerArray = array('title' => 'Angebot', 
-			'percent' => $Number->toPercentage($customerOfferCount / $allOfferCount, 0, array(
+			'percent' => $Number->toPercentage($percent, 0, array(
 			    'multiply' => true
 			)),
 			'ownCount' => $customerOfferCount,

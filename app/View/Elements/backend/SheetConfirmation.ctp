@@ -21,6 +21,7 @@ if(empty($this->data['Pages'])) {
 
 <article class="module width_full sheet business noInput">	
 		<?php 
+		
 			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $pageCur, 'maxPage' => count($pages), 'logo' => true)); 				
 			
 			if($this->data['Confirmation']['order_date']) {

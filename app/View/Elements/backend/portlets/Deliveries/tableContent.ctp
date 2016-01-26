@@ -1,4 +1,4 @@
-<?php
+<?php
 	foreach ($data as $item):
 	
 		if(true) {				
@@ -164,8 +164,7 @@
 					<td>
 						<?php 
 							
-							if(empty($item['Confirmation']['billing_id'])) {
-								if($item['Delivery']['custom']){
+							if(empty($item['Confirmation']['billing_id'])) {								if($item['Confirmation']['pattern']) {									echo '<i class="glyphicon glyphicon-th" data-toggle="popover" style="color: teal; cursor: pointer"											data-content="Musterlieferung"											data-trigger="hover"></i>';								}elseif($item['Delivery']['custom']){
 									echo $this->Html->link('Rechnung', array('controller' => 'Billings', 'action' => 'add_individual', 'admin' =>'true', $item['Confirmation']['id']),
 																array('class' => 'btn btn-default')); 	
 								} else {

@@ -48,6 +48,8 @@
 		$('[data-toggle="popover"]').popover({
             html:true
         });
+        
+        $('[data-toggle="dropdown"]').dropdown();
 		 
 		});
 		//-->
