@@ -171,8 +171,8 @@ class AddressesController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Address->create();
 			
-			$types = $this->request->data['Address']['type'];
-			$this->request->data['Address']['type'] = 0;
+			$types = $this->request->data['Address']['addressTypes'];
+			$this->request->data['Address']['addressTypes'] = 0;
 			
 			
 			if ($this->Address->save($this->request->data)) {
@@ -243,7 +243,7 @@ class AddressesController extends AppController {
 						
 			unset($this->request->data['Offer']);
 			$types = $this->Address->getAddressTypes();
-			$this->request->data['addressType'] = $type; 
+			$this->request->data['Address']['addressType'] = $type; 
 				
 			$this->set('primary_button','Hinzufügen');
 			$this->set('count', $count);
