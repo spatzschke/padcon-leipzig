@@ -60,9 +60,14 @@ class BillingsController extends AppController {
 		}
 		$options = array('conditions' => array('Billing.' . $this->Billing->primaryKey => $id));
 		$data = $this->Billing->find('first', $options);
+
+		if($data['Confirmation']['delivery_id']) {
+			$delivery = $this->Delivery->findById($data['Confirmation']['delivery_id']);
+			$this->generateData($data, $delivery['Delivery']['cart_id']);	
+		} else {
+			$this->generateData($data, $data['Confirmation']['cart_id']);	
+		}
 		
-		$delivery = $this->Delivery->findById($data['Confirmation']['delivery_id']);
-		$this->generateData($data, $delivery['Delivery']['cart_id']);
 
 		
 		$controller_name = 'Deliveries'; 
@@ -307,20 +312,23 @@ class BillingsController extends AppController {
 				$confirmation['Confirmation']['billing_id'] = $currBillingId;
 				$this->Confirmation->save($confirmation);
 				
-				$delivery = $this->Delivery->findById($confirmation['Confirmation']['delivery_id']);
-								
-				$this->generateData($this->Billing->findById($currBillingId), $delivery['Delivery']['cart_id']);
-				
+				if($confirmation['Confirmation']['delivery_id']) {
+					$delivery = $this->Delivery->findById($confirmation['Confirmation']['delivery_id']);				
+					$this->generateData($this->Billing->findById($currBillingId), $delivery['Delivery']['cart_id']);
+				} else {
+					$this->generateData($this->Billing->findById($currBillingId), $confirmation['Confirmation']['cart_id']);
+				}
 				$this->set('pdf', null);
 				
 				$controller_name = 'Billings'; 
 				$controller_id = $currBillingId;
 				$this->set(compact('controller_id', 'controller_name'));
 				
+				//$this->redirect('admin_view', $currBillingId);
 				$this->render('admin_view');
 				
 			} else {
-				$this->Session->setFlash(__('Rechnung bereits vorhanden'));
+				//$this->Session->setFlash(__('Rechnung bereits vorhanden'));
 				return $this->redirect(array('action' => 'view', $confirmation['Confirmation']['billing_id']));
 			}
 		} else {
@@ -634,8 +642,9 @@ class BillingsController extends AppController {
 			$cart = $Carts->calcSumPrice($cart);
 			
 			$this->request->data['Cart'] = $cart['Cart'];
-		
-			$this->request->data += $cart;
+			if($cart['Cart']) {
+				$this->request->data += $cart;			
+			}
 			$this->request->data['Cart']['count'] = count($cart['CartProduct']);
 		}
 		
@@ -666,8 +675,10 @@ class BillingsController extends AppController {
 		$this->request->data['Confirmation'] += $confirmation;		
 
 		//Nachladen des Lieferscheins
-		$delivery = $this->Delivery->find('first', array('conditions' => array('Delivery.id' => $this->request->data['Confirmation']['delivery_id'])));
-		$this->request->data['Delivery'] = $delivery['Delivery'];
+		if($this->request->data['Confirmation']['delivery_id']) {
+			$delivery = $this->Delivery->find('first', array('conditions' => array('Delivery.id' => $this->request->data['Confirmation']['delivery_id'])));
+			$this->request->data['Delivery'] = $delivery['Delivery'];
+		}
 
 		return $Confirmations->calcPrice($this->request->data);
 
@@ -742,8 +753,10 @@ class BillingsController extends AppController {
 				$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
 				
 				//Lieferschein
-				$delivery = $this->Delivery->findById($item['Confirmation']['delivery_id']);
-				$item['Billing']['delivery_number'] = $delivery['Delivery']['delivery_number'];
+				if($item['Confirmation']['delivery_id']) {
+					$delivery = $this->Delivery->findById($item['Confirmation']['delivery_id']);
+					$item['Billing']['delivery_number'] = $delivery['Delivery']['delivery_number'];
+				}
 			}
 
 						

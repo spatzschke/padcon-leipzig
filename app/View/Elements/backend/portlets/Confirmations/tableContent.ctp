@@ -151,13 +151,51 @@
 								echo '-';
 							} else {
 								if(count($item['ConfirmationDelivery']) == 0) {
-									if($item['Confirmation']['custom']){
-										echo $this->Html->link('Lieferschein', array('controller' => 'Deliveries', 'action' => 'add_individual', 'admin' =>'true', $item['Confirmation']['id']),
-																	array('class' => 'btn btn-default')); 
-									} else {
-										echo $this->Html->link('Lieferschein', array('controller' => 'Deliveries', 'action' => 'convert', 'admin' =>'true', $item['Confirmation']['id']),
-																	array('class' => 'btn btn-default')); 
-									}										
+									echo '
+									<div id="delivery_drop_btn" class="input-group">
+									
+										<a id="dLabel" data-target="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="btn btn-default">
+											Lieferschein
+										    <span class="caret"></span>
+										</a>
+								
+										<ul class="dropdown-menu" aria-labelledby="dLabel" style="top: -3px; left: 101%; padding: 5px 5px 0 5px">';
+										
+										    if($item['Confirmation']['custom']){
+										    	
+												echo $this->element('backend/helper/sheetButtonHelper', array(
+													"id" => 'createDelivery',
+													"icon" => "file",
+													"href" => $this->Html->link('Lieferschein erstellen', '/admin/Deliveries/add_individual/'.$item['Confirmation']['id'], array('escape' => false, 'class' => 'btn btn-default'))));	
+											
+											} else {
+												
+												echo $this->element('backend/helper/sheetButtonHelper', array(
+													"id" => 'createDelivery',
+													"icon" => "file",
+													"href" => $this->Html->link('Lieferschein erstellen', '/admin/Deliveries/convert/'.$item['Confirmation']['id'], array('escape' => false, 'class' => 'btn btn-default'))));	
+												
+											}
+											
+											
+											if($item['Confirmation']['custom']){
+										    	
+												echo $this->element('backend/helper/sheetButtonHelper', array(
+													"id" => 'createBilling',
+													"icon" => "briefcase",
+													"href" => $this->Html->link('Lieferung durch Hersteller', '/admin/Billings/add_individual/'.$item['Confirmation']['id'], array('escape' => false, 'class' => 'btn btn-default'))));	
+											
+											} else {
+												
+												echo $this->element('backend/helper/sheetButtonHelper', array(
+													"id" => 'createBilling',
+													"icon" => "briefcase",
+													"href" => $this->Html->link('Lieferung durch Hersteller', '/admin/Billings/convert/'.$item['Confirmation']['id'], array('escape' => false, 'class' => 'btn btn-default'))));	
+												
+											}
+												
+													
+										echo '</ul></div>';
 								} else {
 									if(count($item['ConfirmationDelivery']) > 1) {
 										
@@ -170,12 +208,16 @@
 										echo '<i class="glyphicon glyphicon-duplicate" data-toggle="popover" 
 											data-content="Mehrere Teil-Lieferscheine vorhanden. <br>'.$deliveryNumbers.'"
 											data-trigger="hover"></i>';
-									} else {
+									} else {										
 										if($item['Confirmation']['custom']){
 											echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 											data-content="'.$item['Delivery']['delivery_number'].'"
 											data-trigger="hover"></i>', 
 											array('admin' => true, 'controller' => 'Deliveries', 'action' => 'edit_individual', $item['Confirmation']['delivery_id']), array('escape' => false));
+										} elseif(!$item['Confirmation']['delivery_id']) {
+											echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
+											data-content="Lieferung durch den Hersteller<br>mit der Rechnungsnummer<br>'.$item['Billing']['billing_number'].'<b></b>"
+											data-trigger="hover"></i>';
 										} else {
 											echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 											data-content="'.$item['Delivery']['delivery_number'].'"

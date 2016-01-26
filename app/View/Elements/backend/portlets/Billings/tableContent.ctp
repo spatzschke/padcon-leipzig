@@ -196,12 +196,16 @@
 								echo '-';
 							} else {
 								
-								if($item['Billing']['status']){
+								if($item['Billing']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Billing']['delivery_number'].'"
 									data-trigger="hover"
 									></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit_individual', $item['Confirmation']['id']), array('escape' => false));
 								
+								} elseif(!$item['Confirmation']['delivery_id']) {
+											echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
+											data-content="Lieferung durch den Hersteller</b>"
+											data-trigger="hover"></i>'; 
 								} else {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Billing']['delivery_number'].'"

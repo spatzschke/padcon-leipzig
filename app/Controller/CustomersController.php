@@ -149,11 +149,9 @@ class CustomersController extends AppController {
 			$this->Customer->create();
 			if ($this->Customer->save($this->request->data)) {
 				
-				$lastId = $this->Customer->getLastInsertID();
-				$this->Session->setFlash(__('sads', true), 'flash_message', array('class' => 'alert-danger'));
-			
+				$lastId = $this->Customer->getLastInsertID();			
 					
-				//$this->redirect(array('action' => 'edit', $lastId));			
+				$this->redirect(array('action' => 'edit', $lastId));			
 			
 			} else {
 				$this->Session->setFlash(__('Kunde konnte nicht erstellt werden!. Bitte versuchen Sie es erneut.', true), 'flash_message', array('class' => 'alert-danger'));
