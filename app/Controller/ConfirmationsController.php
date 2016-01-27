@@ -793,7 +793,7 @@ class ConfirmationsController extends AppController {
 		// 14 = aktuelles Jahr
 		
 		// 019 = Anzahl der AB im Monat - dreistellig
-		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01 00:00:01'), date('Y-m-d 23:59:59')), ))));
+		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01 00:00:00'), date('Y-m-d 00:00:00', strtotime("+1 days")))))));
 		$countMonthConfirmations++;
 		$countMonthConfirmations = str_pad($countMonthConfirmations, 3, "0", STR_PAD_LEFT);
 		// 11 = aktueller Monat

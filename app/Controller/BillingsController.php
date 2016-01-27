@@ -616,7 +616,7 @@ class BillingsController extends AppController {
 		// 14 = laufendes Jahr
 	
 		// 427 = laufende Rechnung im Jahr
-		$countYearBillings = count($this->Billing->find('all',array('conditions' => array('Billing.created BETWEEN ? AND ?' => array(date('Y-01-01 00:00:01'), date('Y-m-d 23:59:59'))))))+1;
+		$countYearBillings = count($this->Billing->find('all',array('conditions' => array('Billing.created BETWEEN ? AND ?' => array(date('Y-01-01 00:00:00'), date('Y-m-d 00:00:00', strtotime("+1 days")))))))+1;
 		$countYearBillings = str_pad($countYearBillings, 3, "0", STR_PAD_LEFT);
 		// 14 = aktuelles Jahr
 		$year = date('y');
