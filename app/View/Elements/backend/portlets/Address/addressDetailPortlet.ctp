@@ -28,9 +28,6 @@ $(document).ready(function() {
 					 		
 					 	window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/Customers/view/<?php echo $this->data['Customer']['id'];?>';
 					 	
-					 },
-					 error:function (data, textStatus) {
-					 	console.log("Error");
 					 }
 				}); 
 				return false;
