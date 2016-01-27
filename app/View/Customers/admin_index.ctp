@@ -31,7 +31,7 @@ $(document).ready(function() {
 			});
 			
 			$('#filter .search input').dynamicSearch({
-				url: "<?php echo FULL_BASE_URL.$this->base;?>\/Customers\/search\/",
+				url: "<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Customers\/search\/",
 				renderTemplate: '/Elements/backend/portlets/Customer/customerPortletTableContent',
 				cancel: '.form-search .cancel',
 				content: '.customerPortlet tbody',
