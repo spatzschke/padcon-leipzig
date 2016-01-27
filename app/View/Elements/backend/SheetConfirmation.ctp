@@ -27,18 +27,25 @@ if(empty($this->data['Pages'])) {
 			if($this->data['Confirmation']['order_date']) {
 				
 				if($this->data['Confirmation']['order_number'] != '' || $this->data['Confirmation']['order_number'] != null) {
-					echo '<p class="offerText">Ihre Bestellung Nr.: '.$this->data['Confirmation']['order_number'].' vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' bestätige ich wie folgt:</p>';
+					echo '<p class="offerText">'.sprintf(Configure::read('padcon.Auftragsbestaetigung.header.Bestellnummer'),$this->data['Confirmation']['order_number'],$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y')).'</p>';
+				} elseif($this->data['Confirmation']['pattern']) {
+					echo '<p class="offerText">'.sprintf(Configure::read('padcon.Auftragsbestaetigung.header.pattern')).'</p>';	
 				} else {
-					echo '<p class="offerText">Ihre Bestellung vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' bestätige ich wie folgt:</p>';
+					echo '<p class="offerText">'.sprintf(Configure::read('padcon.Auftragsbestaetigung.header.default'),$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y')).'</p>';
 				}
 			}
 			
 			if(!empty($this->data['Pages'])) {
-				echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'page' => $page, 'pagePrice' => true, 'productCount' => $productCount)); 
+				$price = true;
+				if($this->data['Confirmation']['pattern']) { $price = false;}
+				
+				echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'page' => $page, 'pagePrice' => false, 'productCount' => $productCount)); 
 			}
 			
-			if(!empty($this->data['Pages']) && in_array("C", $carti)){ 
-				echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/calc', array('page' => $page)); 
+			if(!empty($this->data['Pages']) && in_array("C", $carti)){
+				
+				if(!$this->data['Confirmation']['pattern']) 
+					echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/calc', array('page' => $page)); 
 		
 				if(in_array("T", $carti)) { 
 					echo $this->element('backend/portlets/'.ucfirst($this->request->params['controller']).'/additionalText', array('offer' => $this->data, 'page' => $page)); 

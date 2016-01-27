@@ -25,9 +25,11 @@ foreach ($pages as $page => $carti) {
 			if($this->data['Confirmation']['order_date']) {
 				
 				if($this->data['Confirmation']['order_number'] != '' || $this->data['Confirmation']['order_number'] != null) {
-					echo '<p class="offerText">Ihre Bestellung Nr.: '.$this->data['Confirmation']['order_number'].' vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' liefern wir wie folgt:</p>';
+					echo '<p class="offerText">'.sprintf(Configure::read('padcon.Lieferschein.header.Bestellnummer'),$this->data['Confirmation']['order_number'], $this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y')).'</p>';
+				} elseif($this->data['Confirmation']['pattern']) {
+					echo '<p class="offerText">'.sprintf(Configure::read('padcon.Lieferschein.header.pattern'),'').'</p>';	
 				} else {
-					echo '<p class="offerText">Ihre Bestellung vom '.$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y').' liefern wir wie folgt:</p>';
+					echo '<p class="offerText">'.sprintf(Configure::read('padcon.Lieferschein.header.default'),$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y')).'/p>';
 				}
 			}
 			

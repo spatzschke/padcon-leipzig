@@ -24,13 +24,13 @@ if(empty($this->data['Pages'])) {
 			if($page == 1) {
 				if($this->data['Offer']['request_date'] != '0000-00-00') {
 					if($this->data['Offer']['request_number'] != '' || $this->data['Offer']['request_number'] != null) {
-						echo '<p class="offerText">Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format($this->data['Offer']['request_date'], '%d.%m.%Y').' mit der Nummer '.$this->data['Offer']['request_number'].' unterbreiten wir Ihnen folgendes Angebot:</p>';
+						echo '<p class="offerText">'.sprintf(Configure::read('padcon.Angebot.header.Anfragenummer'),$this->Time->format($this->data['Offer']['request_date'], '%d.%m.%Y'), $this->data['Offer']['request_number']).'</p>';
 					} else {
-						echo '<p class="offerText">Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format($this->data['Offer']['request_date'], '%d.%m.%Y').' unterbreiten wir Ihnen folgendes Angebot:</p>';
+						echo '<p class="offerText">'.sprintf(Configure::read('padcon.Angebot.header.default'),$this->Time->format($this->data['Offer']['request_date'], '%d.%m.%Y')).'</p>';
 					}	
-					} else {
+				} else {
 					if(!empty($this->data['Pages'])) {
-						echo '<p class="offerText">Bezug nehmend auf Ihre Anfrage vom '.$this->Time->format(time(), '%d.%m.%Y').' unterbreiten wir Ihnen folgendes Angebot:</p>';
+						echo '<p class="offerText">'.sprintf(Configure::read('padcon.Angebot.header.default'),$this->Time->format($this->data['Offer']['request_date'], '%d.%m.%Y')).'</p>';
 					}
 				}
 			}
