@@ -33,7 +33,7 @@
 	
 //Auftragsbestätigung - Confirmation
 	Configure::write('padcon.Auftragsbestaetigung.header.Bestellnummer','Ihre Bestellung Nr.: %s vom %s bestätige ich wie folgt:');
-	Configure::write('padcon.Auftragsbestaetigung.header.default','Ihre Bestellung Nr.: %s vom %s bestätige ich wie folgt:');
+	Configure::write('padcon.Auftragsbestaetigung.header.default','Ihre Bestellung vom %s bestätige ich wie folgt:');
 	Configure::write('padcon.Auftragsbestaetigung.header.pattern','Vielen Dank für Ihr Interesse an unseren Produkten.  Ihre Musterabforderung haben wir  erhalten. Wir werden  ihnen folgende Muster als kostenlose Probestellung für einen Zeitraum von 4 Wochen  wie folgt zur Verfügung stellen:');
 	
 	Configure::write('padcon.Auftragsbestaetigung.additional_text.default','Zahlungsbedingung: '.Configure::read('padcon.zahlungsbedingung.skonto.tage').' Tage '.Configure::read('padcon.zahlungsbedingung.skonto.wert').'% Skonto oder '.Configure::read('padcon.zahlungsbedingung.netto.tage').' Tage netto <br />Die Lieferung erfolgt zuzüglich anteiliger Versandkosten in Höhe von '.Configure::read('padcon.delivery_cost.paket').',00 Euro (Lieferung frei Haus ab einem Nettobestellwert von '.Configure::read('padcon.delivery_cost.versandkostenfrei_ab').',00 Euro). <br />Lieferzeit: ca. '.Configure::read('padcon.lieferzeit.week').'. KW '.Configure::read('padcon.lieferzeit.year').'');
