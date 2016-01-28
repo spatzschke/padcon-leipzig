@@ -33,7 +33,7 @@
 	
 //Auftragsbestätigung - Confirmation
 	Configure::write('padcon.Auftragsbestaetigung.header.Bestellnummer','Ihre Bestellung Nr.: %s vom %s bestätige ich wie folgt:');
-	Configure::write('padcon.Auftragsbestaetigung.header.default','Bezug nehmend auf Ihre Anfrage vom %s unterbreiten wir Ihnen folgendes Angebot:');
+	Configure::write('padcon.Auftragsbestaetigung.header.default','Ihre Bestellung Nr.: $s vom %s bestätige ich wie folgt:');
 	Configure::write('padcon.Auftragsbestaetigung.header.pattern','Vielen Dank für Ihr Interesse an unseren Produkten.  Ihre Musterabforderung haben wir  erhalten. Wir werden  ihnen folgende Muster als kostenlose Probestellung für einen Zeitraum von 4 Wochen  wie folgt zur Verfügung stellen:');
 	
 	Configure::write('padcon.Auftragsbestaetigung.additional_text.default','Zahlungsbedingung: '.Configure::read('padcon.zahlungsbedingung.skonto.tage').' Tage '.Configure::read('padcon.zahlungsbedingung.skonto.wert').'% Skonto oder '.Configure::read('padcon.zahlungsbedingung.netto.tage').' Tage netto <br />Die Lieferung erfolgt zuzüglich anteiliger Versandkosten in Höhe von '.Configure::read('padcon.delivery_cost.paket').',00 Euro (Lieferung frei Haus ab einem Nettobestellwert von '.Configure::read('padcon.delivery_cost.versandkostenfrei_ab').',00 Euro). <br />Lieferzeit: ca. '.Configure::read('padcon.lieferzeit.week').'. KW '.Configure::read('padcon.lieferzeit.year').'');
@@ -43,7 +43,7 @@
 //Lieferschein - Delivery
 	Configure::write('padcon.Lieferschein.header.Bestellnummer','Ihre Bestellung Nr.: %s vom %s liefern wir wie folgt:');
 	Configure::write('padcon.Lieferschein.header.default','Ihre Bestellung vom $s liefern wir wie folgt:');
-	Configure::write('padcon.Lieferschein.header.pattern','Bezugnehmend auf %s liefere ich folgende Lagerungshilfsmittel als Probestellung:');
+	Configure::write('padcon.Lieferschein.header.pattern','Bezugnehmend auf Ihre Musterabforderung vom %s liefern wir folgende/s Lagerungshilfsmittel als Probestellung:');
 	
 	Configure::write('padcon.Lieferschein.additional_text.pattern','Wir bitten die Produkte entsprechend geltender Hausstandards zu reinigen und zu behandeln. Irreparable Beschriftungen verpflichten zum Kauf.<br>Wir bitten um Rücksendung der Probestellung nach 4 Wochen bzw. um persönliche Rücksprache. Sollten wir keine Information Ihrerseits erhalten, behalten wir uns vor zu gegebener Zeit die Muster in Rechnung zu stellen.');
 	

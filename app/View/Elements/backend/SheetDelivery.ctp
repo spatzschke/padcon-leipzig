@@ -22,14 +22,15 @@ foreach ($pages as $page => $carti) {
 <article class="module width_full sheet business noInput">	
 		<?php 
 			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $pageCur, 'maxPage' => count($pages), 'logo' => true)); 
-			if($this->data['Confirmation']['order_date']) {
-				
-				if($this->data['Confirmation']['order_number'] != '' || $this->data['Confirmation']['order_number'] != null) {
-					echo '<p class="offerText">'.sprintf(Configure::read('padcon.Lieferschein.header.Bestellnummer'),$this->data['Confirmation']['order_number'], $this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y')).'</p>';
-				} elseif($this->data['Confirmation']['pattern']) {
-					echo '<p class="offerText">'.sprintf(Configure::read('padcon.Lieferschein.header.pattern'),'').'</p>';	
+			if($this->data['Confirmation']['order_date']) {			
+				if($this->data['Confirmation']['pattern']) {
+					echo '<p class="offerText">'.sprintf(Configure::read('padcon.Lieferschein.header.pattern'),date('d.m.Y',strtotime($this->data['Confirmation']['order_date']))).'</p>';	
 				} else {
-					echo '<p class="offerText">'.sprintf(Configure::read('padcon.Lieferschein.header.default'),$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y')).'/p>';
+					if($this->data['Confirmation']['order_number'] != '' || $this->data['Confirmation']['order_number'] != null) {
+						echo '<p class="offerText">'.sprintf(Configure::read('padcon.Lieferschein.header.Bestellnummer'),$this->data['Confirmation']['order_number'], $this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y')).'</p>';
+					} else {
+						echo '<p class="offerText">'.sprintf(Configure::read('padcon.Lieferschein.header.default'),$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y')).'/p>';
+					}
 				}
 			}
 			

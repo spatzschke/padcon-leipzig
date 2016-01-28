@@ -39,7 +39,7 @@ if(empty($this->data['Pages'])) {
 				$price = true;
 				if($this->data['Confirmation']['pattern']) { $price = false;}
 				
-				echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'page' => $page, 'pagePrice' => false, 'productCount' => $productCount)); 
+				echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'page' => $page, 'pagePrice' => $price, 'productCount' => $productCount)); 
 			}
 			
 			if(!empty($this->data['Pages']) && in_array("C", $carti)){

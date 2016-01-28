@@ -5,7 +5,7 @@ class CustomersController extends AppController {
 
 	var $name = 'Customers';
 	public $components = array('Auth', 'Session');
-	public $uses = array('Customer', 'Offer', 'User', 'Address', 'CustomerAddress', 'Cart', 'AddressAddresstype');
+	public $uses = array('Customer', 'Offer', 'Confirmation', 'Billings', 'User', 'Address', 'CustomerAddress', 'Cart', 'AddressAddresstype');
 	
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
@@ -368,7 +368,8 @@ class CustomersController extends AppController {
 			)),
 			'ownCount' => $customerOfferCount,
 			'allCount' => $allOfferCount,
-			'description' => ''		
+			'description' => '',	
+			'type' => 'Doughnut'	
 		);
 		if (strpos($offerArray['title'],' ') !== false) {
 		    $offerArray += array('data' => strtolower(str_replace(' ', '', $offerArray['title'])));
@@ -378,33 +379,31 @@ class CustomersController extends AppController {
 		array_push($tempCustomer['CustomerInformation'], $offerArray);
 		
 		
-// Gesamtumsatz eines Kunden
+// Anzahl der Auftragsbestätigung zu einem Kunden
 		
-		$customerRevenue = $this->Offer->find('first', array(
-			'conditions' => array(
-			 	'Offer.customer_id' => $id,
-				),
-			'fields' => array('SUM(Offer.offer_price) AS summe')
-		));
-		
-		
-		$allRevenue = $this->Offer->find('first', array(
-			'fields' => array('SUM(Offer.offer_price) AS summe')
-		));
+		$customerCount = $this->Confirmation->find('count', array('conditions' => array('customer_id' => $id))); 
+		$allCount = $this->Confirmation->find('count');
 
-		$revenueArray = array(
-			'title' => 'Umsatz', 
-			'percent' => $this->format_num(floatval($customerRevenue[0]['summe']),1),
-			'ownCount' => $Number->precision($customerRevenue[0]['summe'],2),
-			'allCount' => $Number->precision($allRevenue[0]['summe'],2),
-			'description' => ''			
-		);
-		if (strpos($revenueArray['title'],' ') !== false) {
-		    $revenueArray += array('data' => strtolower(str_replace(' ', '', $revenueArray['title'])));
+		$percent = 0;
+		if($allCount != 0) {
+			$percent = $customerCount / $allCount;
 		}
-		$revenueArray += array('data' => strtolower($revenueArray['title']));
-			
-		array_push($tempCustomer['CustomerInformation'], $revenueArray);
+		
+		$data = array('title' => 'Auftragsbestätigung', 
+			'percent' => $Number->toPercentage($percent, 0, array(
+			    'multiply' => true
+			)),
+			'ownCount' => $customerCount,
+			'allCount' => $allCount,
+			'description' => '',	
+			'type' => 'Doughnut'	
+		);
+		if (strpos($data['title'],' ') !== false) {
+		    $data += array('data' => strtolower(str_replace(' ', '', $data['title'])));
+		}
+		$data += array('data' => strtolower($data['title']));
+		
+		array_push($tempCustomer['CustomerInformation'], $data);
 	
 // Offene Angebote
 		
@@ -432,7 +431,8 @@ class CustomersController extends AppController {
 			'percent' => $perc,
 			'ownCount' => $customerOfferStatus,
 			'allCount' => $allOfferStatus,
-			'description' => ''			
+			'description' => '',	
+			'type' => 'Doughnut'			
 		);
 		if (strpos($offerStatusArray['title'],' ') !== false) {
 		    $offerStatusArray += array('data' => strtolower(str_replace(' ', '', $offerStatusArray['title'])));
