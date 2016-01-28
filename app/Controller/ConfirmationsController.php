@@ -934,20 +934,20 @@ class ConfirmationsController extends AppController {
 		$confirmations = $this->Confirmation->find('all');
 		foreach ($confirmations as $key => $value) {
 				
-			if($value['Confirmation']['cost'] == 0 || is_null($value['Confirmation']['cart_id'])){
+			if($value['Confirmation']['cost'] == 0 || $value['Confirmation']['cart_id'] != 0){
 				$cart = $this->Cart->findById($value['Confirmation']['cart_id']);
 				
-				$con['Confirmation']['id'] = $value['Confirmation']['id'];
-				$con['Confirmation']['cost'] = $cart['Cart']['sum_base_price'];
-				
-				if($this->Confirmation->save($con)) {
-					$this->Session->setFlash(__('ABs aktualsiert', true));
-				} else {			
-					$this->Session->setFlash(__('Fehler', true));
+				if(isset($cart['Cart'])) {
+					$con['Confirmation']['id'] = $value['Confirmation']['id'];				
+					$con['Confirmation']['cost'] = $cart['Cart']['sum_base_price'];
+					
+					if($this->Confirmation->save($con)) {
+						$this->Session->setFlash(__('ABs aktualsiert', true));
+					} else {			
+						$this->Session->setFlash(__('Fehler', true));
+					}
 				}
-			}
-			$this->Session->setFlash(__('Nichts zu tun', true));
-			
+			}			
 		}
 		
 		$this->redirect(array('controller' => 'pages', 'action' => 'setting'));

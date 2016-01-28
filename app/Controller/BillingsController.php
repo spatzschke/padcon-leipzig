@@ -818,7 +818,7 @@ class BillingsController extends AppController {
 				$data['Billing']['billing_price'] = $item['Confirmation']['confirmation_price'];
 
 				$this->Billing->id = $item['Billing']['id'];
-				 if($this->Billing->save($data)) {
+				if($this->Billing->save($data)) {
 					$this->Session->setFlash(__('Rechnungen aktualsiert', true));
 				} else {			
 					$this->Session->setFlash(__('Images not update', true));
