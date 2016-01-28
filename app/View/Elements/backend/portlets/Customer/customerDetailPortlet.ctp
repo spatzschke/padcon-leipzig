@@ -181,7 +181,7 @@ $(document).ready(function() {
 												<?php } ?>
 											];
 											var ctx<?php echo $info['data'] ?> = document.getElementById("chart-<?php echo $info['data'] ?>").getContext("2d");
-											window.myPie = new Chart(ctx<?php echo $info['data'] ?>).Doughnut(data<?php echo $info['data'] ?>, {});
+											window.myPie = new Chart(ctx<?php echo $info['data'] ?>).<?php echo $info['type'] ?>(data<?php echo $info['data'] ?>, {});
 											
 											</script> 
 									</div>

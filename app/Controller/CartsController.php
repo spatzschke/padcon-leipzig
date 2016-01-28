@@ -12,7 +12,7 @@ class CartsController extends AppController {
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			parent::beforeFilter();
-			$this->Auth->allow('addToCart', 'add', 'reloadFrontendMiniCart','calcSumPriceByCartId','updateCartCount','get_cart_by_id', 'get_cart_by_cookie');
+			$this->Auth->allow('addToCart', 'add', 'reloadFrontendMiniCart','calcSumPriceByCartId','updateCart','get_cart_by_id', 'get_cart_by_cookie');
 		}
 	}
 	
@@ -133,7 +133,6 @@ class CartsController extends AppController {
 		if(!$cart_id) {
 			$activeCart = $this->admin_add();
 		} else {
-			$options = array('conditions' => array('Cart.id' => $cart_id));
 			$activeCart = $this->Cart->find("first", array("conditions" => array("Cart.id" => $cart_id)));
 		}
 
@@ -167,7 +166,7 @@ class CartsController extends AppController {
 		
 		$activeCart = $this->calcSumPriceByActiveCart($activeCart['Cart']['id']);
 		
-		$this->updateCartCount($activeCart);
+		$this->updateCart($activeCart);
 		
 	}
 	
@@ -185,19 +184,18 @@ class CartsController extends AppController {
 		return $this->Cart->read(null, $cart_id);
 	}
 	
-	function updateCartCount($cart = null) {
+	function updateCart($cart = null) {
 				
 		if($cart == NULL) {		
 			$cart = $this->get_cart_by_id($this->Cookie->read('pd.cart'));	
 		} 
 		
-		// $cart = $this->Cart->findById($cart['id']);
-		
+		// Update CartCount
 		if(isset($cart['CartProduct'])) {
 			$cart['Cart']['count'] = count($cart['CartProduct']);
 		} else {
 			$cart['Cart']['count'] = 0;
-		}			
+		}	
 		
 		$this->Cart->save($cart['Cart']);
 		
@@ -206,7 +204,7 @@ class CartsController extends AppController {
 	function reloadFrontendMiniCart() {
 		$this->layout = 'ajax';
 		$this->calcSumPriceByActiveCart();
-		$this->updateCartCount();
+		$this->updateCart();
 		$this->render('/Elements/miniCart');
 
 	}
@@ -214,7 +212,7 @@ class CartsController extends AppController {
 	function reloadMiniCart($id = null) {
 		$this->layout = 'ajax';
 		$this->calcSumPriceByActiveCart($id);
-		$this->updateCartCount($this->Cart->findById($id));
+		$this->updateCart($this->Cart->findById($id));
 		$this->render('/Elements/backend/miniCart');
 
 	}
@@ -422,8 +420,4 @@ class CartsController extends AppController {
 		return $page;
 		
 	}
-
-	
-
-
 }
