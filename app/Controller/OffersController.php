@@ -397,7 +397,7 @@ class OffersController extends AppController {
 			$this->CartProduct->delete($id);
 		}
 		$Carts = new CartsController();		
-		$Carts->updateCartCount($offer['Cart']);
+		$Carts->updateCart($offer['Cart']);
 		
 		$offer = $this->Offer->findById($offer_id);
 		

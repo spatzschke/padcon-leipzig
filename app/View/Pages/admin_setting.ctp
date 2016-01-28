@@ -17,6 +17,13 @@
 	</div>
 	
 	<div class="panel panel-default col-md-12">
+	  <div class="panel-heading">Auftragsbestätigung</div>
+	  <div class="panel-body">
+	    <?php echo $this->Html->link('AB-Kosten korrigieren', '/admin/Confirmations/fillConfirmationCosts', array('class' => 'btn btn-danger')); ?>
+	  </div>
+	</div>
+	
+	<div class="panel panel-default col-md-12">
 	  <div class="panel-heading">Rechnungen</div>
 	  <div class="panel-body">
 	    <?php echo $this->Html->link('Rechnungen korrigieren', '/admin/billings/fillBillingPrice', array('class' => 'btn btn-danger')); ?>

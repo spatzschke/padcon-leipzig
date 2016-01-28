@@ -247,6 +247,9 @@ class ConfirmationsController extends AppController {
 			
 			if($data['Confirmation']['confirmation_price'] == 0)
 				$data['Confirmation']['confirmation_price'] = null;
+				
+			if($data['Confirmation']['cost'] == 0)
+				$data['Confirmation']['cost'] = null;
 			$this->request->data = $data;
 			
 			$this->set('primary_button', 'Speichern');
@@ -555,7 +558,7 @@ class ConfirmationsController extends AppController {
 		}
 		$Carts = new CartsController();		
 		
-		$Carts->updateCartCount($confirmation['Cart']);
+		$Carts->updateCart($confirmation['Cart']);
 		
 		$confirmation['CartProducts'] = $this->getSettingCartProducts($confirmation);
 		$this->request->data = $confirmation;
@@ -777,6 +780,9 @@ class ConfirmationsController extends AppController {
 		} else {
 			$arr_data['Confirmation']['confirmation_price'] = $data_price;
 		}	
+
+		//Kosten von Cart in AB übertragen/aktualisieren
+		$arr_data['Confirmation']['cost'] = $data['Cart']['sum_base_price'];
 		
 		$arr_data['Confirmation']['id'] = $data['Confirmation']['id'];
 
@@ -922,6 +928,29 @@ class ConfirmationsController extends AppController {
 		} else {
 			return $data;
 		}
+	}
+	
+	function admin_fillConfirmationCosts() {
+		$confirmations = $this->Confirmation->find('all');
+		foreach ($confirmations as $key => $value) {
+				
+			if($value['Confirmation']['cost'] == 0 || is_null($value['Confirmation']['cart_id'])){
+				$cart = $this->Cart->findById($value['Confirmation']['cart_id']);
+				
+				$con['Confirmation']['id'] = $value['Confirmation']['id'];
+				$con['Confirmation']['cost'] = $cart['Cart']['sum_base_price'];
+				
+				if($this->Confirmation->save($con)) {
+					$this->Session->setFlash(__('ABs aktualsiert', true));
+				} else {			
+					$this->Session->setFlash(__('Fehler', true));
+				}
+			}
+			$this->Session->setFlash(__('Nichts zu tun', true));
+			
+		}
+		
+		$this->redirect(array('controller' => 'pages', 'action' => 'setting'));
 	}
 	
 }
