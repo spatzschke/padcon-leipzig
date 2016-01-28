@@ -20,7 +20,7 @@
 			$("#BillingSkonto").val(skonto);			
 		})
 		
-		$("#BillingNettoDays").change(function() {
+		$("#BillingSkontoDays").change(function() {
 			var text = $('#BillingAdditionalText').val();
 			var spliting = text.split('Tage')
 			var days = spliting[0].split('bedingung:')[1].trim();
@@ -28,7 +28,7 @@
 			$("#BillingAdditionalText").html(newText.trim());
 		})
 		
-		$("#BillingSkontoDays").change(function() {
+		$("#BillingNettoDays").change(function() {
 			var text = $('#BillingAdditionalText').val();
 			var spliting = text.split('Tage')
 			var days = spliting[1].split('oder ')[1].trim();

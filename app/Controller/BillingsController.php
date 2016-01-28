@@ -505,19 +505,19 @@ class BillingsController extends AppController {
 					$datetime1 = new DateTime($data['Billing']['payment_target']);
 					$datetime2 = new DateTime($data['Billing']['created']);
 					$interval = $datetime1->diff($datetime2);	
-					$data['Billing']['nettoDays'] = $interval->format('%a');
+					$data['Billing']['nettoDays'] = $interval->format('%a')+1;
 				}
 				//Skonto  anhand des Standardtextes bestimmen
 				//SkontoDatum anhand des Standardtextes bestimmen
 				if(empty($data['Billing']['skonto_date']) || strcmp('1970-01-01', $data['Billing']['skonto_date']) == 0 || strcmp('0000-00-00', $data['Billing']['skonto_date']) == 0) {
-					$data['Billing']['skonto_date'] = date('d.m.Y', strtotime("+".Configure::read('padcon.zahlungsbedingung.skonto.tage')." days"));
+					$data['Billing']['skonto_date'] = date('d.m.Y', strtotime("+".(Configure::read('padcon.zahlungsbedingung.skonto.tage'))." days"));
 					$data['Billing']['skontoDays'] = Configure::read('padcon.zahlungsbedingung.skonto.tage');
 				} else {
 					$data['Billing']['skonto_date'] = date('d.m.Y', strtotime($data['Billing']['skonto_date']));
 					$datetime1 = new DateTime($data['Billing']['skonto_date']);
 					$datetime2 = new DateTime($data['Billing']['created']);
 					$interval = $datetime1->diff($datetime2);	
-					$data['Billing']['skontoDays'] = $interval->format('%a');
+					$data['Billing']['skontoDays'] = $interval->format('%a')+1;
 				}
 
 
