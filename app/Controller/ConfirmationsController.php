@@ -466,8 +466,7 @@ class ConfirmationsController extends AppController {
 					$date = date_create_from_format('d.m.Y', $this->request->data['Confirmation']['order_date']);
 					$confirmation['Confirmation']['order_date'] = date_format($date, 'Y-m-d');
 				}	
-				
-				if($this->request->data['pattern-cb'] == 'on') {
+				if($this->request->data['Confirmation']['pattern'] == 'on') {
 					$confirmation['Confirmation']['pattern'] = true;
 				} else {
 					$confirmation['Confirmation']['pattern'] = false;	
