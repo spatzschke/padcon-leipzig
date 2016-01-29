@@ -31,7 +31,7 @@ if(empty($this->data['Pages'])) {
 			}
 			
 			if(!empty($this->data['Pages'])) {
-				echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'page' => $page, 'pagePrice' => false, 'productCount' => $productCount)); 
+				echo $this->element('backend/portlets/Cheet/middle', array('carti' => $carti, 'page' => $page, 'pagePrice' => true, 'productCount' => $productCount)); 
 			}
 			
 			if(!empty($this->data['Pages']) && in_array("C", $carti)){ 
