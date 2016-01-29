@@ -4,7 +4,6 @@ $(document).ready(function() {
 	$('#<?php echo $id;?>_btn').find('a').on('click',function() {
 		$('#<?php echo $id;?>_modal .modal-body').load('<?php echo FULL_BASE_URL.$this->base.$url; ?>');
 		$('#<?php echo $id;?>_modal').modal('show');
-		console.log("open");
 	})
 
 	$("#<?php echo $id;?>_modal").on("hidden.bs.modal", function(){ 

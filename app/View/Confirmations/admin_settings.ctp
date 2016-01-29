@@ -24,7 +24,7 @@
 					 	
 					 	obj.removeClass('loading');
 					 	
-						window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/edit/<?php echo $controller_id;?>';
+						//window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/edit/<?php echo $controller_id;?>';
 					 } 
 				 }); 
 			return false;
@@ -118,14 +118,15 @@
 					//Versandkostenfrei
 					res = '<?php echo Configure::read('padcon.Auftragsbestaetigung.additional_text.pattern');?>'
 					$('#ConfirmationAdditionalText').html(res);
-					$("#pattern").attr('value','1')
+					$("#ConfirmationPattern").attr('value','1')
+					$("#ConfirmationPattern_").attr('value','1')
 				} else {
 					$("[name='delivery-cb']").bootstrapSwitch('state', true);
 					$("[name='deliveryfree-cb']").bootstrapSwitch('state', false);
 					var res = '<?php echo Configure::read('padcon.Auftragsbestaetigung.additional_text.default');?>'
 					$('#ConfirmationAdditionalText').html(res);
-					console.log(res)
-					$("#pattern").attr('value','0')
+					$("#ConfirmationPattern").attr('value','0')
+					$("#ConfirmationPattern_").attr('value','0')
 				}	
 				return event.isDefaultPrevented();
 			}

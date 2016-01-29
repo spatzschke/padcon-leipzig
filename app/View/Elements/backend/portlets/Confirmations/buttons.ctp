@@ -85,10 +85,7 @@
 						"icon" => "duplicate",
 						"text" => "Teil-Lieferung erstellen"));		
 				
-					echo $this->element('backend/helper/modalHelper', array(
-						"id" => $id_createPartDelivery,
-						"url" => "\/admin\/".$nextSheet."\/convertPart\/".$dataId,
-						"redirect" => ""));	
+						
 				}
 
 				echo $this->element('backend/helper/sheetButtonHelper', array(
@@ -98,7 +95,13 @@
 			
 			
 			echo '</ul>
+			
 </div>';
+echo $this->element('backend/helper/modalHelper', array(
+						"id" => $id_createPartDelivery,
+						"url" => "\/admin\/".$nextSheet."\/convertPart\/".$dataId,
+						"redirect" => ""));
+;
 		
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
 			

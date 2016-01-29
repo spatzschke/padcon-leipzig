@@ -151,9 +151,16 @@
 								echo '-';
 							} else {
 								if(count($item['ConfirmationDelivery']) == 0) {
-									echo '
-									<div id="delivery_drop_btn" class="input-group">
-									
+										
+									if(!$item['Confirmation']['delivery_id'] && $item['Confirmation']['billing_id']) {
+										echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
+											data-content="Lieferung durch den Hersteller <br> mit der Rechnung: <b>'.$item['Billing']['billing_number'].'</b>"
+											data-trigger="hover"></i>';
+									} else {								
+										
+										echo '
+										<div id="delivery_drop_btn" class="input-group">
+										
 										<a id="dLabel" data-target="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="btn btn-default">
 											Lieferschein
 										    <span class="caret"></span>
@@ -196,6 +203,7 @@
 												
 													
 										echo '</ul></div>';
+									}
 								} else {
 									if(count($item['ConfirmationDelivery']) > 1) {
 										
