@@ -420,4 +420,11 @@ class CartsController extends AppController {
 		return $page;
 		
 	}
+
+	function convertPriceToSql($price) {
+		$price = str_replace('.', '', $price);
+		$price = str_replace(',', '.', $price);
+		
+		return $price;
+	}
 }

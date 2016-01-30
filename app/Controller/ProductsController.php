@@ -1,6 +1,8 @@
 <?php
-class ProductsController extends AppController {
+App::import('Controller', 'Carts');
 
+class ProductsController extends AppController {
+	
 	var $name = 'Products';
 	public $uses = array('Cart', 'Product', 'Material', 'Color', 'Image', 'Category', 'Core', 'ProductCore', 'ProductCategory');
 	var $components = array('RequestHandler', 'Auth', 'Session');
@@ -654,10 +656,9 @@ class ProductsController extends AppController {
 			$product = $this->getProduct($id);
 			
 			//Preis von Komma auf Punkt konvertieren
-			$data['Product']['price'] = str_replace('.', '', $data['Product']['price']);
-			$data['Product']['retail_price'] = str_replace('.', '', $data['Product']['retail_price']);
-			$data['Product']['price'] = str_replace(',', '.', $data['Product']['price']);
-			$data['Product']['retail_price'] = str_replace(',', '.', $data['Product']['retail_price']);
+			$Carts = new CartsController();
+			$data['Product']['price'] = $Carts->convertPriceToSql($data['Product']['price']);
+			$data['Product']['retail_price'] = $Carts->convertPriceToSql($data['Product']['retail_price']);
 			
 			//Kerne Updaten
 			$cores = $this->ProductCore->findAllByProductId($id);

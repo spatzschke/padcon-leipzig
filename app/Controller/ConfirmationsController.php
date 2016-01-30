@@ -210,11 +210,9 @@ class ConfirmationsController extends AppController {
 			$data['Confirmation']['id'] = $id;
 			
 			//Preis von Komma auf Punkt konvertieren
-			$data['Confirmation']['cost'] = str_replace('.', '', $data['Confirmation']['cost']);
-			$data['Confirmation']['confirmation_price'] = str_replace('.', '', $data['Confirmation']['confirmation_price']);
-			$data['Confirmation']['cost'] = str_replace(',', '.', $data['Confirmation']['cost']);
-			$data['Confirmation']['confirmation_price'] = str_replace(',', '.', $data['Confirmation']['confirmation_price']);
-			
+			$Carts = new CartsController();
+			$data['Confirmation']['cost'] = $Carts->convertPriceToSql($data['Confirmation']['cost']);
+			$data['Confirmation']['confirmation_price'] = $Carts->convertPriceToSql($data['Confirmation']['confirmation_price']);
 			
 			if($data['Confirmation']['customer_id'] == "") {
 				$this->Session->setFlash(__('Bitte geben Sie einen Kunden ein!'), 'flash_message', array('class' => 'alert-danger'));

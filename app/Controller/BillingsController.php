@@ -178,7 +178,8 @@ class BillingsController extends AppController {
 			//Filtere Skonto aus Text heraus
 			$data['Billing']['skonto'] = $this->findSkonto($data);
 			
-			$data['Billing'];
+			$Carts = new CartsController();
+			$data['Confirmation']['billing_price'] = $Carts->convertPriceToSql($data['Confirmation']['confirmation_price']);
 			
 			if($this->Billing->save($data)) {
 				$this->Session->setFlash(__('Rechnung wurde gespeichert.'));
