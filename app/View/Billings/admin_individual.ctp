@@ -157,10 +157,13 @@ $(document).ready(function() {
 					</script> 		
 					
 					<div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-eur" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-piggy-bank" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
 									 data-content="Rechnungsbetrag"></i>
 						</span>
-                        <?php echo $this->Form->input('billing_price', array(
+                        <?php 
+                        $conPrice = $this->data['Billing']['billing_price'];
+                        if($conPrice) { $conPrice = $this->Number->currency($conPrice,'EUR', array('before' => false)); }       
+                        echo $this->Form->input('billing_price', array(
 							'label' => false,
 							'class' => 'form-control',
 							'data-model' => 'Confirmation',
@@ -168,8 +171,10 @@ $(document).ready(function() {
 							'data-field' => 'billing_price', 
 							'autoComplete' => true,
 							'type' => 'text',
+							'value' => $conPrice
 						));
-						?>              
+						?>     
+						<span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>         
                      </div>		
 					
 				</div>

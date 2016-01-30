@@ -13,7 +13,7 @@ App::uses('AppController', 'Controller');
 class BillingsController extends AppController {
 
 	
-	public $uses = array('Billing', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Delivery');
+	public $uses = array('Billing', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Delivery', 'ConfirmationDelivery');
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			$this->Auth->deny('*');
@@ -178,7 +178,8 @@ class BillingsController extends AppController {
 			//Filtere Skonto aus Text heraus
 			$data['Billing']['skonto'] = $this->findSkonto($data);
 			
-			$data['Billing'];
+			$Carts = new CartsController();
+			$data['Confirmation']['billing_price'] = $Carts->convertPriceToSql($data['Confirmation']['confirmation_price']);
 			
 			if($this->Billing->save($data)) {
 				$this->Session->setFlash(__('Rechnung wurde gespeichert.'));
@@ -259,20 +260,27 @@ class BillingsController extends AppController {
  *
  * @return void
  */
-	public function admin_convert($confirmation_id = null) {
+	public function admin_convert($delivery_id = null) {
 		$this->layout = 'admin';		
-		if($confirmation_id) {
+		if($delivery_id) {
 				
-			$confirmation = $this->Confirmation->findById($confirmation_id);
+			$data = $this->ConfirmationDelivery->findByDeliveryId($delivery_id);
+						
+			//Confirmation nachladen
+			if(empty($data)) {
+				$confirmation = $this->Confirmation->findById($delivery_id);
+			} else {
+				$confirmation = $this->Confirmation->findById($data['ConfirmationDelivery']['confirmation_id']);
+			}
+					
 			$billing = array();
 			
-			if(empty($confirmation['Confirmation']['billing_id'])) {
+			if(empty($data['ConfirmationDelivery']['billing_id'])) {
 				
 				$this->Billing->create();
 				
 				$billing['Billing']['status'] = 'open';
 				$billing['Billing']['custom'] = FALSE;
-				$billing['Billing']['confirmation_id'] = $confirmation['Confirmation']['id'];
 				$billing['Billing']['billing_price'] = $confirmation['Confirmation']['confirmation_price'];
 				
 				//Default Settings
@@ -289,6 +297,9 @@ class BillingsController extends AppController {
 				//Skonto  anhand des Standardtextes bestimmen
 				$billing['Billing']['skonto_date'] = date('Y-m-d', strtotime("+".Configure::read('padcon.zahlungsbedingung.skonto.tage')." days"));
 				$billing['Billing']['skonto'] = Configure::read('padcon.zahlungsbedingung.skonto.wert');
+				
+				
+				
 				
 				//Erste AB-Adresse zum Kunden finden
 				$Addresses = new AddressesController(); 
@@ -308,16 +319,27 @@ class BillingsController extends AppController {
 				$billing['Billing']['hash'] =  Security::hash($currBillingId, 'md5', true);
 				$this->Billing->save($billing);
 				
-				//Neue Rechnungs-ID in AB speichern 
-				$confirmation['Confirmation']['billing_id'] = $currBillingId;
-				$this->Confirmation->save($confirmation);
-				
-				if($confirmation['Confirmation']['delivery_id']) {
-					$delivery = $this->Delivery->findById($confirmation['Confirmation']['delivery_id']);				
-					$this->generateData($this->Billing->findById($currBillingId), $delivery['Delivery']['cart_id']);
-				} else {
-					$this->generateData($this->Billing->findById($currBillingId), $confirmation['Confirmation']['cart_id']);
+				//Neue Rechnungs-ID in AB speichern wenn es keine Teillieferung ist
+				if(empty($data) || $data['ConfirmationDelivery']['type'] == 'full') {
+					$confirmation['Confirmation']['billing_id'] = $currBillingId;
+					$confirmation['Confirmation']['status'] = 'close';
+					$this->Confirmation->save($confirmation);
 				}
+				
+				//Neue Rechnungs-ID in Mapping-Tabelle speichern 
+				if(!empty($data)) {
+					$conDel = $data['ConfirmationDelivery'];
+					$conDel['ConfirmationDelivery']['billing_id'] = $currBillingId;
+					$this->ConfirmationDelivery->save($conDel);
+				}
+				
+				if(empty($data)) {
+					$this->generateData($this->Billing->findById($currBillingId), $confirmation['Confirmation']['cart_id']);
+				} else {
+					$this->generateData($this->Billing->findById($currBillingId), $data['ConfirmationDelivery']['cart_id']);
+				}
+				
+			
 				$this->set('pdf', null);
 				
 				$controller_name = 'Billings'; 

@@ -144,14 +144,14 @@
 							  
 						 ?>
 					</td> -->
-					<td>
+					<td style="width: 0">
 						<?php 
 							
 							if($item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
 								echo '-';
 							} else {
-								if(count($item['ConfirmationDelivery']) == 0) {
-										
+								
+								if(count($item['ConfirmationDelivery']) == 0) {										
 									if(!$item['Confirmation']['delivery_id'] && $item['Confirmation']['billing_id']) {
 										echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
 											data-content="Lieferung durch den Hersteller <br> mit der Rechnung: <b>'.$item['Billing']['billing_number'].'</b>"
@@ -205,19 +205,22 @@
 										echo '</ul></div>';
 									}
 								} else {
-									if(count($item['ConfirmationDelivery']) > 1) {
-										
+									if(count($item['ConfirmationDelivery']) > 1) {										
 										$deliveryNumbers = '';
 										foreach($item['ConfirmationDelivery'] as $key => $del) {
 											
 											$deliveryNumbers .= 'Teillieferschein: '.$del['delivery_number'].'<br>';
 										}
 										
-										echo '<i class="glyphicon glyphicon-duplicate" data-toggle="popover" 
+										echo '<i class="glyphicon glyphicon-duplicate" data-toggle="popover" style="color: teal; cursor: pointer"
 											data-content="Mehrere Teil-Lieferscheine vorhanden. <br>'.$deliveryNumbers.'"
 											data-trigger="hover"></i>';
-									} else {										
-										if($item['Confirmation']['custom']){
+									} else {
+										if($item['ConfirmationDelivery'][0]['type'] == 'part') {
+											echo '<i class="glyphicon glyphicon-duplicate" data-toggle="popover" style="color: teal; cursor: pointer"
+											data-content="Erster Teil-Lieferscheine vorhanden."
+											data-trigger="hover"></i>';
+										} elseif($item['Confirmation']['custom']){
 											echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 											data-content="'.$item['Delivery']['delivery_number'].'"
 											data-trigger="hover"></i>', 
@@ -233,9 +236,6 @@
 											array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Confirmation']['delivery_id']), array('escape' => false));
 										}	
 									}
-									
-									
-									
 								}
 									
 								

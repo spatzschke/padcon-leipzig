@@ -102,7 +102,10 @@
 					<td>
 						<?php 
 						if($item['Billing']['status'] && !empty($item['Billing']['skonto'])){
-								//Zahlungsziel nähert sich an
+							if($item['Billing']['status'] == 'close' && !$item['Billing']['skonto_take'] ) {
+								echo '-';
+							} else {
+								//Skonto gezogen
 								if($item['Billing']['skonto_take']) {							
 									echo '<i class="glyphicon glyphicon-ok-sign" style="color: green; cursor: pointer"
 										 data-toggle="popover" 
@@ -111,11 +114,12 @@
 										 data-placement="top"								
 									></i>';
 								}
-								echo '&nbsp;';
-								echo $this->Number->toPercentage($item['Billing']['skonto'],0);	
-							} else {
-								echo '-'; 							
+								// echo '&nbsp;';
+								// echo $this->Number->toPercentage($item['Billing']['skonto'],0);	
 							}
+						} else {
+							echo '-'; 							
+						}
 						?>
 						
 					</td>					

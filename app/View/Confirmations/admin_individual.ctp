@@ -273,7 +273,10 @@ $(document).ready(function() {
                         <span class="input-group-addon"><i class="glyphicon glyphicon-share" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
 									 data-content="Einkaufspreis"></i>
 						</span>
-                        <?php  echo $this->Form->input('cost', array(
+                        <?php  
+                        $cost = $this->data['Confirmation']['cost'];
+                        if($cost) {	$cost = $this->Number->currency($cost,'EUR', array('before' => false)); }  
+                        echo $this->Form->input('cost', array(
 							'label' => false,
 							'class' => 'form-control',
 							'data-model' => 'Confirmation',
@@ -281,6 +284,7 @@ $(document).ready(function() {
 							'data-field' => 'cost', 
 							'autoComplete' => true,
   							'type' => 'text',
+  							'value' => $cost
 						));
 						?>  
 						<span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>                                    
@@ -290,7 +294,10 @@ $(document).ready(function() {
                         <span class="input-group-addon"><i class="glyphicon glyphicon-piggy-bank" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
 									 data-content="AB-Gesamtsumme"></i>
 						</span>
-                        <?php  echo $this->Form->input('confirmation_price', array(
+                        <?php  
+                        $conPrice = $this->data['Confirmation']['confirmation_price'];
+                        if($conPrice) { $conPrice = $this->Number->currency($conPrice,'EUR', array('before' => false)); }                        
+                        echo $this->Form->input('confirmation_price', array(
 							'label' => false,
 							'class' => 'form-control',
 							'data-model' => 'Confirmation',
@@ -298,6 +305,7 @@ $(document).ready(function() {
 							'data-field' => 'confirmation_price', 
 							'autoComplete' => true,
   							'type' => 'text',
+  							'value' => $conPrice
 						));
 						?>  
 						<span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>                                    

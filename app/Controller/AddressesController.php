@@ -165,7 +165,7 @@ class AddressesController extends AppController {
  *
  * @return void
  */
-	public function admin_add($count = 0, $customer = null, $type = null) {
+	public function admin_add($customer = null) {
 
 		$this->layout = 'ajax';
 		if ($this->request->is('post')) {
@@ -243,10 +243,9 @@ class AddressesController extends AppController {
 						
 			unset($this->request->data['Offer']);
 			$types = $this->Address->getAddressTypes();
-			$this->request->data['Address']['addressType'] = $type; 
+			$this->request->data['Address']['addressType'] = null; 
 				
 			$this->set('primary_button','Hinzufügen');
-			$this->set('count', $count);
 			
 			$this->set('addressTypes', $this->Address->getAddressTypes());
 			$this->render('/Elements/backend/portlets/Address/addressDetailPortlet');	
@@ -261,7 +260,7 @@ class AddressesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function admin_edit($id = null, $customer = null) {
+	public function admin_edit($customer = null, $id = null) {
 			
 		$this->layout = 'ajax';
 			
