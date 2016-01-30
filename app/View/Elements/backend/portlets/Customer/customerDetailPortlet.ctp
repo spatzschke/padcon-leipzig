@@ -23,7 +23,7 @@ $(document).ready(function() {
 								
 		var c = $('.address_dummy').length;
 			
-		$('#address_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/add\/'+c+'\/<?php echo $this->data['Customer']['id'];?>');
+		$('#address_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/add\/<?php echo $this->data['Customer']['id'];?>');
 		$('#address_add').modal('show');
 		
 		return false;
