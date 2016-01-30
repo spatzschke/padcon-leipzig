@@ -14,19 +14,34 @@
 						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Billing']['status'], 'custom' => $item['Billing']['custom']));	?>
 					</td>
 					<td>
-						<?php if(empty($item['Billing']['billing_number'])) {
+						<?php 
+						
+						if(empty($item['Billing']['billing_number'])) {
 							 echo '-'; 
 							} else {
 								
 								if($item['Billing']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'edit_individual', $item['Billing']['id']), array('escape' => false));
-									echo '&nbsp;&nbsp;&nbsp;';
-									echo $item['Billing']['billing_number'];
 								} else {
-									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'view', $item['Billing']['id']), array('escape' => false));
-									echo '&nbsp;&nbsp;&nbsp;';
-									echo $item['Billing']['billing_number'];
+									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'view', $item['Billing']['id']), array('escape' => false));									
 								}
+							}
+							echo '&nbsp;&nbsp;&nbsp;';
+							echo $item['Billing']['billing_number'];
+							if(strcmp($item['ConfirmationDelivery']['type'], 'full') == 0) {
+								echo '&nbsp;&nbsp;&nbsp;';
+								echo '<i class="Voll-Rechnung"
+									 data-trigger="hover"
+								
+								></i>';
+							} else {
+								echo '&nbsp;&nbsp;';
+								echo '<i class="glyphicon glyphicon-duplicate" style="color: teal; cursor: pointer"
+									 data-toggle="popover"
+									 data-content="Teil-Rechnung zu AB: '.$item['Billing']['confirmation_number'].'"
+									 data-trigger="hover"
+								
+								></i>';
 							}
 						?>
 					</td>
@@ -177,7 +192,7 @@
 								echo '-';
 							} else {
 								
-								if($item['Billing']['status']){
+								if($item['Billing']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									 data-content="'.$item['Confirmation']['confirmation_number'].'"
 									 data-trigger="hover"></i>', 
@@ -204,9 +219,9 @@
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Billing']['delivery_number'].'"
 									data-trigger="hover"
-									></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit_individual', $item['Confirmation']['id']), array('escape' => false));
+									></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'edit_individual', $item['Billing']['id']), array('escape' => false));
 								
-								} elseif(!$item['Confirmation']['delivery_id']) {
+								} elseif(!$item['ConfirmationDelivery']['delivery_id']) {
 											echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
 											data-content="Lieferung durch den Hersteller</b>"
 											data-trigger="hover"></i>'; 
@@ -214,7 +229,7 @@
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Billing']['delivery_number'].'"
 									data-trigger="hover"
-									></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['id']), array('escape' => false));
+									></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'view', $item['Billing']['id']), array('escape' => false));
 								
 								}
 								

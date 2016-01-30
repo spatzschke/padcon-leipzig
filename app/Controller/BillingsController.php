@@ -38,6 +38,15 @@ class BillingsController extends AppController {
 		$this->layout = "admin";
 		$data = $this->Billing->find('all', array('order' => array('Billing.billing_number DESC')));
 		
+		foreach ($data as $key => $value) {
+			
+			
+			if(!$value['Confirmation']['id']) {
+				$confirmation = $this->Confirmation->findById($value['ConfirmationDelivery']['confirmation_id']);
+				$data[$key]['Confirmation'] = $confirmation['Confirmation'];
+			}	
+			
+		}		
 		$this->set('title_for_panel', 'Alle Rechnungen');	
 			
 		$this->set('data', $this->fillIndexData($data));
@@ -773,18 +782,20 @@ class BillingsController extends AppController {
 				$item['Billing'] = $this->calcSkonto($item['Billing']);
 			}			
 			
-			if(isset($item['Confirmation']['customer_id'])) {
+			//if(isset($item['Confirmation']['customer_id'])) {
 			
 				//Auftragsbestätigung
-				$confirmation = $this->Confirmation->findByBillingId($item['Billing']['id']);
+				$confirmation = $this->ConfirmationDelivery->findByBillingId($item['Billing']['id']);
 				$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
+				
+				
 				
 				//Lieferschein
 				if($item['Confirmation']['delivery_id']) {
 					$delivery = $this->Delivery->findById($item['Confirmation']['delivery_id']);
 					$item['Billing']['delivery_number'] = $delivery['Delivery']['delivery_number'];
 				}
-			}
+			//}
 
 						
 			array_push($data_temp, $item);
