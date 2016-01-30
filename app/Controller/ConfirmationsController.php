@@ -338,6 +338,7 @@ class ConfirmationsController extends AppController {
 				$confirmation['Confirmation']['confirmation_price'] = $confirmation['Offer']['offer_price'];
 				$confirmation['Confirmation']['order_date'] = date('Y-m-d');
 				$confirmation['Confirmation']['custom'] = false;
+				$confirmation['Confirmation']['pattern'] = false;
 				
 				//Gernerierung der Auftragsbestätigungsnummer
 				$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
@@ -349,10 +350,12 @@ class ConfirmationsController extends AppController {
 				$confirmationCart = $this->Cart->findById($confirmation['Cart']['id']);
 				$confirmationCart['Cart']['id'] = NULL;
 				$this->Cart->save($confirmationCart);
-						
+		
+				//Kopierten Cart in AB einfügen
 				$lastCartId = $this->Cart->getLastInsertId();
 				$confirmation['Confirmation']['cart_id'] = $lastCartId;
 				
+				//Alle Cart_Producte aus Angeobt in AB Cart kopieren
 				$cartProducts = $this->CartProduct->find('all',array('conditions' => array('CartProduct.cart_id' => $confirmation['Cart']['id'])));
 				foreach ($cartProducts as $cartProduct) {
 					$this->CartProduct->create();
@@ -363,6 +366,9 @@ class ConfirmationsController extends AppController {
 					unset($cartItem['CartProduct']['modified']);			
 					$this->CartProduct->save($cartItem);
 				}
+
+				//Kosten aus Cart der Offer in AB übernehmen
+				$confirmation['Confirmation']['cost'] = $confirmationCart['Cart']['sum_base_price'];
 				
 				//Erste AB-Adresse zum Kunden finden
 				$Addresses = new AddressesController(); 
