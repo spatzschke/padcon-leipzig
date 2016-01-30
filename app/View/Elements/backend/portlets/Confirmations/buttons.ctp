@@ -83,17 +83,14 @@
 					echo $this->element('backend/helper/sheetButtonHelper', array(
 						"id" => $id_createPartDelivery,
 						"icon" => "duplicate",
-						"text" => "Teil-Lieferung erstellen"));		
-				
-						
+						"text" => "Teil-Lieferung erstellen"));				
 				}
 
 				echo $this->element('backend/helper/sheetButtonHelper', array(
 						"id" => $id_company,
 						"icon" => "briefcase",
-						"href" => $this->Html->link('Lieferung durch Hersteller', '/admin/Billings/convert/'.$dataId, array('escape' => false, 'class' => 'btn btn-default'))));
-			
-			
+						"href" => $this->Html->link('Lieferung durch Hersteller', '/admin/Billings/convert/0/'.$dataId, array('escape' => false, 'class' => 'btn btn-default'))));
+
 			echo '</ul>
 			
 </div>';
