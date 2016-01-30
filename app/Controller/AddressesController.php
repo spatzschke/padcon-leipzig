@@ -379,7 +379,7 @@ class AddressesController extends AppController {
 	function getAddressByType($data = null , $type = null, $first = FALSE)
 	{
 						
-		if($data['Customer']['id'] != null) {
+		if(isset($data['Customer'])) {
 
 			$customerId = $data['Customer']['id'];
 			$addresses = null;
