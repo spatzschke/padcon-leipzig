@@ -209,6 +209,11 @@ class ConfirmationsController extends AppController {
 			// $data['Confirmation']['modified'] = date('Y-m-d',strtotime($data['Confirmation']['created']));
 			$data['Confirmation']['id'] = $id;
 			
+			//Preis von Komma auf Punkt konvertieren
+			$data['Confirmation']['cost'] = str_replace('.', '', $data['Confirmation']['cost']);
+			$data['Confirmation']['confirmation_price'] = str_replace('.', '', $data['Confirmation']['confirmation_price']);
+			$data['Confirmation']['cost'] = str_replace(',', '.', $data['Confirmation']['cost']);
+			$data['Confirmation']['confirmation_price'] = str_replace(',', '.', $data['Confirmation']['confirmation_price']);
 			
 			
 			if($data['Confirmation']['customer_id'] == "") {

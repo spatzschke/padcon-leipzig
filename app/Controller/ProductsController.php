@@ -653,6 +653,12 @@ class ProductsController extends AppController {
 			
 			$product = $this->getProduct($id);
 			
+			//Preis von Komma auf Punkt konvertieren
+			$data['Product']['price'] = str_replace('.', '', $data['Product']['price']);
+			$data['Product']['retail_price'] = str_replace('.', '', $data['Product']['retail_price']);
+			$data['Product']['price'] = str_replace(',', '.', $data['Product']['price']);
+			$data['Product']['retail_price'] = str_replace(',', '.', $data['Product']['retail_price']);
+			
 			//Kerne Updaten
 			$cores = $this->ProductCore->findAllByProductId($id);
 

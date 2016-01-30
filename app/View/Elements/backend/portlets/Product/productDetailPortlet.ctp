@@ -181,7 +181,15 @@ function updateURL(currUrl, param, paramVal){
                     <div class="row">
                     	<div class="col-md-6">
                     	<div class="input-group">
-                            <span class="input-group-addon"><b>€</b></span>
+                            <span class="input-group-addon"><i 
+                            	data-content="Einkaufspreis" 
+                            	data-placement="left" 
+                            	data-trigger="hover" 
+                            	data-toggle="popover" 
+                            	style="cursor: pointer" 
+                            	class="glyphicon glyphicon-share" 
+                            	data-original-title="" 
+                            	title=""></i></span>
                             <?php echo $this->Form->input('price', array(
 								'label' => false,
 								'class' => 'form-control',
@@ -190,14 +198,24 @@ function updateURL(currUrl, param, paramVal){
 								'data-field' => 'price', 
 								'autoComplete' => true,
 								'min' => 0,
-								'value' => $data['Product']['price'], 
+								'type' => 'text',
+								'value' => $this->Number->currency($data['Product']['price'],'EUR', array('before' => false)), 
 							));
-							?>                                    
+							?> 
+							<span class="input-group-addon"><b>€</b></span>                                   
                          </div>
                         </div>
                     	<div class="col-md-6">
                             <div class="input-group">
-                                <span class="input-group-addon"><b>€</b></span>
+                                <span class="input-group-addon"><i 
+                                	data-content="Verkaufsspreis" 
+                                	data-placement="left" 
+                                	data-trigger="hover" 
+                                	data-toggle="popover" 
+                                	style="cursor: pointer" 
+                                	class="glyphicon glyphicon-piggy-bank" 
+                                	data-original-title="" 
+                                	title=""></i></span>
                                 <?php echo $this->Form->input('retail_price', array(
 									'label' => false,
 									'class' => 'form-control',
@@ -206,9 +224,11 @@ function updateURL(currUrl, param, paramVal){
 									'data-field' => 'retail_price', 
 									'autoComplete' => true,
 									'min' => 0,
-									'value' => $data['Product']['retail_price'], 
+									'type' => 'text',
+									'value' => $this->Number->currency($data['Product']['retail_price'],'EUR', array('before' => false)),
 								));
-								?>                                      
+								?>      
+								<span class="input-group-addon"><b>€</b></span>                                
                              </div>
                          </div>
                 	</div> 
