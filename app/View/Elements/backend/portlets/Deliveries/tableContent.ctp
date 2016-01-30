@@ -28,7 +28,7 @@
 									echo '&nbsp;&nbsp;';
 									echo '<i class="glyphicon glyphicon-duplicate" style="color: teal; cursor: pointer"
 										 data-toggle="popover"
-										 data-content="Teil-Lieferschein von AB: '.$item['Confirmation']['confirmation_number'].'""
+										 data-content="Teil-Lieferschein zu AB: '.$item['Confirmation']['confirmation_number'].'""
 										 data-trigger="hover"
 									
 									></i>';
@@ -163,8 +163,7 @@
 					</td>
 					<td>
 						<?php 
-							
-							if(empty($item['Confirmation']['billing_id'])) {								if($item['Confirmation']['pattern']) {									echo '<i class="glyphicon glyphicon-th" data-toggle="popover" style="color: teal; cursor: pointer"											data-content="Musterlieferung"											data-trigger="hover"></i>';								}elseif($item['Delivery']['custom']){
+							if($item['ConfirmationDelivery']['billing_id'] == 0) {								if($item['Confirmation']['pattern']) {									echo '<i class="glyphicon glyphicon-th" data-toggle="popover" style="color: teal; cursor: pointer"											data-content="Musterlieferung"											data-trigger="hover"></i>';								}elseif($item['Delivery']['custom']){
 									echo $this->Html->link('Rechnung', array('controller' => 'Billings', 'action' => 'add_individual', 'admin' =>'true', $item['Confirmation']['id']),
 																array('class' => 'btn btn-default')); 	
 								} else {
@@ -176,7 +175,7 @@
 								
 							} else {
 								echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
-								data-content="'.$item['Delivery']['billing_number'].'"
+								data-content="'.$item['Billing']['billing_number'].'"
 								data-trigger="hover"></i>', 
 								array('admin' => true, 'controller' => 'Billings', 'action' => 'view', $item['Confirmation']['billing_id']), array('escape' => false));
 								

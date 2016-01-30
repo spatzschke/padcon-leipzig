@@ -52,7 +52,7 @@ class OffersController extends AppController {
 		
 		$active = $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));
 		
-		$this->generateOfferNumber($active['Offer']['customer_id']);
+		//$this->generateOfferNumber($active['Offer']['customer_id']);
 		
 		$offer = null;
 		if($active) {

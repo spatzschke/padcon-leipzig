@@ -793,6 +793,9 @@ class ConfirmationsController extends AppController {
 		}	
 
 		//Kosten von Cart in AB übertragen/aktualisieren
+		
+		
+		
 		$arr_data['Confirmation']['cost'] = $data['Cart']['sum_base_price'];
 		
 		$arr_data['Confirmation']['id'] = $data['Confirmation']['id'];

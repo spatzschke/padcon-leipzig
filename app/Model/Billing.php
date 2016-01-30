@@ -11,6 +11,13 @@ class Billing extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'ConfirmationDelivery' => array(
+			'className' => 'ConfirmationDelivery',
+			'foreignKey' => 'billing_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 }
