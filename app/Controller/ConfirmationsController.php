@@ -986,4 +986,32 @@ class ConfirmationsController extends AppController {
 		$this->redirect(array('controller' => 'pages', 'action' => 'setting'));
 	}
 	
+	function admin_fillPorcessIndex() {
+		$confirmations = $this->Confirmation->find('all');
+		foreach ($confirmations as $key => $value) {
+			$process = array();			
+			$conf = $this->Process->findByConfirmationId($value['Confirmation']['id']);
+			if(empty($conf)) {
+				$this->Process->create();
+				$process['Process']['confirmation_id'] = $value['Confirmation']['id'];
+				if($value['Delivery']['id'])
+					$process['Process']['delivery_id'] = $value['Delivery']['id'];
+				if($value['Billing']['id'])
+					$process['Process']['billing_id'] = $value['Billing']['id'];
+				$process['Process']['customer_id'] = $value['Confirmation']['customer_id'];
+				$process['Process']['cart_id'] = $value['Confirmation']['cart_id'];
+				
+				if(isset($value['Delivery']['id'])) { $process['Process']['type'] = 'full'; }
+				
+				$offer = $this->Offer->findByConfirmationId($value['Confirmation']['id']);
+				if(!empty($offer)) { $process['Process']['offer_id'] = $offer['Offer']['id']; }
+				
+				$this->Process->save($process);		
+			}
+					
+		}
+		
+		$this->redirect(array('controller' => 'pages', 'action' => 'setting'));
+	}
+	
 }
