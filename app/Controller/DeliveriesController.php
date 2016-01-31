@@ -12,7 +12,7 @@ App::uses('AppController', 'Controller');
  */
 class DeliveriesController extends AppController {
 
-	public $uses = array('Delivery', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Billing', 'ConfirmationDelivery');
+	public $uses = array('Delivery', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Billing', 'Process');
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			$this->Auth->deny('*');
@@ -56,7 +56,7 @@ class DeliveriesController extends AppController {
 			throw new NotFoundException(__('Invalid delivery'));
 		}
 		
-		$data = $this->ConfirmationDelivery->findByDeliveryId($id);	
+		$data = $this->Process->findByDeliveryId($id);	
 		
 		$this->generateData($data);
 		$controller_name = 'Deliveries'; 
@@ -120,17 +120,17 @@ class DeliveriesController extends AppController {
 				
 		
 				//Neue ConfirmationDeliver erstellen - Full
-				$confirmationDelivery['ConfirmationDelivery']['type'] =  'full';
-				$confirmationDelivery['ConfirmationDelivery']['delivery_id'] =  $dev_id;
+				$Process['Process']['type'] =  'full';
+				$Process['Process']['delivery_id'] =  $dev_id;
 				
 				if($id) {
-					$confirmationDelivery['ConfirmationDelivery']['confirmation_id'] =  $id;
+					$Process['Process']['confirmation_id'] =  $id;
 				} else {
-					$confirmationDelivery['ConfirmationDelivery']['confirmation_id'] = 0;
+					$Process['Process']['confirmation_id'] = 0;
 				}
 				
-				$this->ConfirmationDelivery->create();
-				$this->ConfirmationDelivery->save($confirmationDelivery);		
+				$this->Process->create();
+				$this->Process->save($Process);		
 				
 				
 				// Generate Hash für AB
@@ -179,7 +179,7 @@ class DeliveriesController extends AppController {
 		$this->layout = "admin";
 		$this->set('pdf', null);
 		
-		$data = $this->ConfirmationDelivery->findByDeliveryId($id);
+		$data = $this->Process->findByDeliveryId($id);
 		
 		if (!empty($this->data)) {
 			$confirmation = null;			
@@ -238,12 +238,12 @@ class DeliveriesController extends AppController {
 				$this->Delivery->save($data);
 				
 				//Neue ConfirmationDeliver erstellen - Full
-				$confirmationDelivery['ConfirmationDelivery']['type'] =  'full';
-				$confirmationDelivery['ConfirmationDelivery']['delivery_id'] =  $dev_id;
-				$confirmationDelivery['ConfirmationDelivery']['confirmation_id'] = 0;
+				$Process['Process']['type'] =  'full';
+				$Process['Process']['delivery_id'] =  $dev_id;
+				$Process['Process']['confirmation_id'] = 0;
 								
-				$this->ConfirmationDelivery->create();
-				$this->ConfirmationDelivery->save($confirmationDelivery);	
+				$this->Process->create();
+				$this->Process->save($Process);	
 	
 				$this->redirect(array('action'=>'index'));
 		} 
@@ -266,21 +266,16 @@ class DeliveriesController extends AppController {
 		if($confirmation_id) {
 				
 			$confirmation = $this->Confirmation->findById($confirmation_id);
-			$conDeliv = $this->ConfirmationDelivery->findByConfirmationId($confirmation_id);	
-			$delivery = array();
-			
-			debug(isset($conDeliv['ConfirmationDelivery']));
+			$process = $this->Process->findByConfirmationId($confirmation_id);
 
-
-			if(!isset($conDeliv['ConfirmationDelivery']) && $conDeliv['ConfirmationDelivery']['delivery_id'] == 0) {
-							
+			if($process['Process']['delivery_id'] == '0' || $cart_id) {
 				$this->Delivery->create();
 				
 				$delivery['Delivery']['status'] = 'open';
 				$delivery['Delivery']['custom'] = FALSE;
 				$delivery['Delivery']['confirmation_id'] = $confirmation['Confirmation']['id'];
 				$delivery['Delivery']['delivery_date'] = time();
-				$delivery['Delivery']['delivery_date'] = time();
+				$delivery['Delivery']['cost'] = $confirmation['Confirmation']['cost'];
 				
 				//Gernerierung der Auftragsbestätigungsnummer
 				$delivery['Delivery']['delivery_number'] = $this->generateDeliveryNumber();
@@ -295,7 +290,7 @@ class DeliveriesController extends AppController {
 					$delivery['Delivery']['address_id'] = $address['Address']['id'];
 				}
 				
-								
+				//NUR bei Teillieferschein				
 				if($cart_id) {
 					//Cart des Teillieferscheins an Lieferschein übertragen
 					$delivery['Delivery']['cart_id'] = $cart_id;
@@ -304,24 +299,25 @@ class DeliveriesController extends AppController {
 					$delivery['Delivery']['cart_id'] = $confirmation['Confirmation']['cart_id'];
 				}
 				
-				
-				$this->Delivery->save($delivery);
-				
+				$this->Delivery->save($delivery);				
 				$currDeliveryId = $this->Delivery->getLastInsertId();
 				
-				//Neue ConfirmationDelivery erzeugen und Cart übertagen
-				$this->ConfirmationDelivery->create();
+				//Neue Process erzeugen und Cart übertragen
 				if($cart_id) {
-					$cd['ConfirmationDelivery']['type'] = 'part';
-					$cd['ConfirmationDelivery']['cart_id'] = $cart_id;
+					$this->Process->create();
+					$proc['Process']['type'] = 'part';
+					$proc['Process']['cart_id'] = $cart_id;
+					$proc['Process']['offer_id'] = $process['Process']['offer_id'];
+					$proc['Process']['confirmation_id'] = $process['Process']['confirmation_id'];
+					$proc['Process']['customer_id'] = $process['Process']['customer_id'];
+					$proc['Process']['cart_id'] = $cart_id;
 				} else {
-					$cd['ConfirmationDelivery']['type'] = 'full';
-					$cd['ConfirmationDelivery']['cart_id'] = $confirmation['Confirmation']['cart_id'];
-				}
-				
-				$cd['ConfirmationDelivery']['delivery_id'] = $currDeliveryId;
-				$cd['ConfirmationDelivery']['confirmation_id'] = $confirmation['Confirmation']['id'];
-				$this->ConfirmationDelivery->save($cd);
+					$proc['Process']['id'] = $process['Process']['id'];
+					$proc['Process']['type'] = 'full';
+					$proc['Process']['cart_id'] = $confirmation['Confirmation']['cart_id'];
+				}				
+				$proc['Process']['delivery_id'] = $currDeliveryId;
+				$this->Process->save($proc);
 				
 				// Generate Hash für Offer
 				$delivery['Delivery']['hash'] =  Security::hash($currDeliveryId, 'md5', true);
@@ -341,11 +337,11 @@ class DeliveriesController extends AppController {
 				$controller_id = $currDeliveryId;
 				$this->set(compact('controller_id', 'controller_name'));
 				
-				$this->redirect(array('action' => 'view', $conDeliv['ConfirmationDelivery']['delivery_id']));
+				$this->redirect(array('action' => 'view', $currDeliveryId));
 				
 			} else {
-				$this->Session->setFlash(__('Lieferschein bereits vorhanden'));
-				return $this->redirect(array('action' => 'view', $conDeliv['ConfirmationDelivery']['delivery_id']));
+			//	$this->Session->setFlash(__('Lieferschein bereits vorhanden'));
+				return $this->redirect(array('action' => 'view', $process['Process']['delivery_id']));
 			}
 		} else {
 			
@@ -367,8 +363,10 @@ class DeliveriesController extends AppController {
 	public function admin_convertPart($confirmation_id = null, $edit = false) {
 		$this->layout = 'ajax';
 		
-		$confirmation = $this->Confirmation->findById($confirmation_id);
-		$cart = $this->Cart->findById($confirmation['Cart']['id']);
+		$process = $this->Process->findByConfirmationId($confirmation_id);
+		$processPart = $this->Process->findByConfirmationIdAndType($confirmation_id, 'part');
+		$processCount = $this->Process->find('count', array('conditions' => array('Process.confirmation_id' => $confirmation_id)));
+		$processCountPart = $this->Process->find('count', array('conditions' => array('Process.confirmation_id' => $confirmation_id, 'Process.type' => 'part')));
 		
 		if($edit) {
 			//Erzeuge neuen Cart
@@ -393,43 +391,54 @@ class DeliveriesController extends AppController {
 			$this->Cart->save($cartNew);
 			
 			echo $cart_id;
+			
 			$this->render(false);
 		}
 		
-		$this->request->data = $confirmation;
+		$this->request->data = $process;
 		
 		//Wenn bereits eine Teillieferung besteht, dann differenz ermitteln
-		$mainCartProducts = $this->Cart->findById($confirmation['Confirmation']['cart_id']);
+		$mainCartProducts = $this->Cart->findById($process['Confirmation']['cart_id']);
 		$mainCartProducts = $mainCartProducts['CartProduct'];
 
-		//Iteration über alle Teillieferscheine
-		foreach($confirmation['ConfirmationDelivery'] as $key => $item) {
-			$partCartProducts = $this->Cart->findById($item['cart_id']);
-			$partCartProducts = $partCartProducts['CartProduct'];
+		if($processCountPart > 0) {
 			
-			//Iteration über alle Produkte des Main
-			foreach($mainCartProducts as $mainKey => $main){
-				
-				//Iteration über alle Produkte des Part
-				foreach($partCartProducts as $partKey => $part){
-					
-					//Produktvergleich
-					if($main['product_id'] == $part['product_id']) {
-						
-						//Anzahlvergleich
-						if($main['amount'] == $part['amount']) {
-							unset($mainCartProducts[$mainKey]);
-						}
-						elseif($main['amount'] > $part['amount']) {
-							$mainCartProducts[$mainKey]['amount'] = $part['amount'];
-							
-						}else {
-						}
-						
-					}
-				}
+			//Wenn bisher nur eine Teillieferung, dann Array erzeugen
+			if($processCountPart == 1) {
+				$proc['Process'][0] = $processPart['Process'];
+				$process = $proc;
 			}
-		} 
+			
+			//Iteration über alle Teillieferscheine
+			foreach($process['Process'] as $key => $item) {
+				
+				$partCartProducts = $this->Cart->findById($item['cart_id']);
+				$partCartProducts = $partCartProducts['CartProduct'];
+				
+				//Iteration über alle Produkte des Main
+				foreach($mainCartProducts as $mainKey => $main){
+					
+					//Iteration über alle Produkte des Part
+					foreach($partCartProducts as $partKey => $part){
+						
+						//Produktvergleich
+						if($main['product_id'] == $part['product_id']) {
+							
+							//Anzahlvergleich
+							if($main['amount'] == $part['amount']) {
+								unset($mainCartProducts[$mainKey]);
+							}
+							elseif($main['amount'] > $part['amount']) {
+								$mainCartProducts[$mainKey]['amount'] = $part['amount'];
+								
+							}else {
+							}
+							
+						}
+					}
+				}	
+			} 
+		}
 		
 		$this->request->data['CartProduct'] = $mainCartProducts;
 		//$this->request->data['CartProduct'] = $cart['CartProduct'];
@@ -675,14 +684,13 @@ Lieferzeit: ca. 3-4 Wochen
 	}
 	
 	function generateData($data = null) {
-	
+		
 		$Addresses = new AddressesController();	
 		$Carts = new CartsController();
 		$Confirmations = new ConfirmationsController();
 
-		if(!$data || !isset($data['Confirmation'])) {
-			$confirmation_id = $data['ConfirmationDelivery']['confirmation_id'];
-			$data = $this->Confirmation->findById($confirmation_id);		
+		if(!$data || !isset($data['Confirmation'])) {			
+			$data = $this->Process->findById($data['Process']['id']);		
 		} 
 				
 	    $this->request->data = $data;
@@ -698,7 +706,7 @@ Lieferzeit: ca. 3-4 Wochen
 			
 			$this->request->data['Cart'] = $cart['Cart'];
 		
-			$this->request->data += $cart;
+			//$this->request->data += $cart;
 			$this->request->data['Cart']['count'] = count($cart['CartProduct']);
 		}
 		
@@ -726,8 +734,7 @@ Lieferzeit: ca. 3-4 Wochen
 		
 		
 		$confirmation = $Confirmations->calcPrice($this->request->data);		
-		$this->request->data['Confirmation'] += $confirmation;		
-
+		$this->request->data['Confirmation'] += $confirmation;	
 		
 		return $Confirmations->calcPrice($this->request->data);
 
@@ -761,13 +768,13 @@ Lieferzeit: ca. 3-4 Wochen
 		foreach ($data as $item) {
 						
 			if(!isset($item['Confirmation'])) {
-				$item += $this->ConfirmationDelivery->findByDeliveryId($item['Delivery']['id']);
-				$item += $this->Confirmation->findById($item['ConfirmationDelivery']['confirmation_id']);
+				$item += $this->Process->findByDeliveryId($item['Delivery']['id']);
+				$item += $this->Confirmation->findById($item['Process']['confirmation_id']);
 				
 			}
 
 			//Load Customer for the Delivery
-			if($item['ConfirmationDelivery']['cart_id'] != 0) {
+			if($item['Process']['cart_id'] != 0) {
 				$customer= $this->Customer->findById($item['Confirmation']['customer_id']);
 				$address = $this->Address->findById($item['Delivery']['address_id']);
 				$customer['Address'] = $address['Address'];
@@ -777,7 +784,7 @@ Lieferzeit: ca. 3-4 Wochen
 					$item['Address'] = $Customers->splitCustomerData($customer);
 				}	
 			
-				$cart = $Carts->get_cart_by_id($item['ConfirmationDelivery']['cart_id']);
+				$cart = $Carts->get_cart_by_id($item['Process']['cart_id']);
 				$item += $cart;
 					
 			

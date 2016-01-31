@@ -27,8 +27,8 @@ class Confirmation extends AppModel {
  * @var array
  */
  	public $hasMany = array(
-		'ConfirmationDelivery' => array(
-			'className' => 'ConfirmationDelivery',
+		'Process' => array(
+			'className' => 'Process',
 			'foreignKey' => 'confirmation_id',
 		)
 	);

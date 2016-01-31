@@ -31,7 +31,7 @@
 	$id_createConfirmation = 'createBilling';
 	echo $this->element('backend/helper/sheetButtonHelper', array(
 		"id" => $id_createConfirmation,
-		"icon" => "file", 
+		"icon" => "euro", 
 		"href" => $this->Html->link('Rechnung erstellen', '/admin/'.$nextSheet.'/convert/'.$dataId, array('escape' => false, 'class' => 'btn btn-default'))));		
 	
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------	

@@ -1,13 +1,13 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * ConfirmationDelivery Model
+ * Process Model
  *
  * @property Confirmation $Confirmation
  * @property Delivery $Delivery
  * @property Cart $Cart
  */
-class ConfirmationDelivery extends AppModel {
+class Process extends AppModel {
 
 /**
  * Display field
@@ -25,6 +25,14 @@ class ConfirmationDelivery extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
+	
+		'Offer' => array(
+			'className' => 'Offer',
+			'foreignKey' => 'offer_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 		'Confirmation' => array(
 			'className' => 'Confirmation',
 			'foreignKey' => 'confirmation_id',
@@ -39,16 +47,23 @@ class ConfirmationDelivery extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Cart' => array(
-			'className' => 'Cart',
-			'foreignKey' => 'cart_id',
+		'Billing' => array(
+			'className' => 'Billing',
+			'foreignKey' => 'billing_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
-		'Billing' => array(
-			'className' => 'Billing',
-			'foreignKey' => 'billing_id',
+		'Customer' => array(
+			'className' => 'Customer',
+			'foreignKey' => 'customer_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
+		'Cart' => array(
+			'className' => 'Cart',
+			'foreignKey' => 'cart_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

@@ -18,7 +18,7 @@
 								}
 								echo '&nbsp;&nbsp;';
 								echo $item['Delivery']['delivery_number'];	
-								if(strcmp($item['ConfirmationDelivery']['type'], 'full') == 0) {
+								if(strcmp($item['Process']['type'], 'full') == 0) {
 									echo '&nbsp;&nbsp;&nbsp;';
 									echo '<i class="Voll-Lieferschein"
 										 data-trigger="hover"
@@ -163,7 +163,7 @@
 					</td>
 					<td>
 						<?php 
-							if($item['ConfirmationDelivery']['billing_id'] == 0) {								if($item['Confirmation']['pattern']) {									echo '<i class="glyphicon glyphicon-th" data-toggle="popover" style="color: teal; cursor: pointer"											data-content="Musterlieferung"											data-trigger="hover"></i>';								}elseif($item['Delivery']['custom']){
+							if($item['Process']['billing_id'] == 0) {								if($item['Confirmation']['pattern']) {									echo '<i class="glyphicon glyphicon-th" data-toggle="popover" style="color: teal; cursor: pointer"											data-content="Musterlieferung"											data-trigger="hover"></i>';								}elseif($item['Delivery']['custom']){
 									echo $this->Html->link('Rechnung', array('controller' => 'Billings', 'action' => 'add_individual', 'admin' =>'true', $item['Confirmation']['id']),
 																array('class' => 'btn btn-default')); 	
 								} else {

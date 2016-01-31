@@ -28,12 +28,12 @@
 							}
 							echo '&nbsp;&nbsp;&nbsp;';
 							echo $item['Billing']['billing_number'];
-							if(strcmp($item['ConfirmationDelivery']['type'], 'full') == 0) {
+							if(strcmp($item['Process']['type'], 'full') == 0) {
 								echo '&nbsp;&nbsp;&nbsp;';
 								echo '<i class="Voll-Rechnung"
 									 data-trigger="hover"
 								
-								></i>';
+								></i>&nbsp;&nbsp;';
 							} else {
 								echo '&nbsp;&nbsp;';
 								echo '<i class="glyphicon glyphicon-duplicate" style="color: teal; cursor: pointer"
@@ -221,7 +221,7 @@
 									data-trigger="hover"
 									></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'edit_individual', $item['Billing']['id']), array('escape' => false));
 								
-								} elseif(!$item['ConfirmationDelivery']['delivery_id']) {
+								} elseif(!$item['Process']['delivery_id']) {
 											echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
 											data-content="Lieferung durch den Hersteller</b>"
 											data-trigger="hover"></i>'; 

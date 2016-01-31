@@ -1,3 +1,4 @@
+
 <?php 
 	echo $this->Html->script('jquery.dynamicSearch', false);
 ?>
@@ -18,12 +19,7 @@ $(document).ready(function() {
 					 success:function (data, textStatus) {
 					 	
 					 	obj.removeClass('loading');
-					 	
-					 	//$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/<?php echo $controller_name;?>/reloadSheet/<?php echo $controller_id;?>');
-
-						window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/edit/<?php echo $controller_id;?>';
-
-					 	//$('#addCustomer_modal').modal('hide')
+					 	window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/<?php echo $controller_name;?>/edit/<?php echo $controller_id;?>';
 					} 
 				}); 
 				
