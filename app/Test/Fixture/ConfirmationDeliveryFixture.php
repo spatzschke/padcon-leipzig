@@ -1,9 +1,9 @@
 <?php
 /**
- * ConfirmationDeliveryFixture
+ * ProcessFixture
  *
  */
-class ConfirmationDeliveryFixture extends CakeTestFixture {
+class ProcessFixture extends CakeTestFixture {
 
 /**
  * Fields

@@ -80,9 +80,9 @@
 		</ul>-->
 		<h3><i class="glyphicon glyphicon-cog" style="color: grey"></i>&nbsp;&nbsp;Admin</h3>
 		<ul class="toggle">
-			<li class="icn_settings"><?php echo $this->Html->link('Einstellungen', '/admin/pages/setting'); ?></li><!-- 
-			<li class="icn_security"><a href="#">Security</a></li>
-			<li class="icn_jump_back"><a href="#">Logout</a></li> -->
+			<!-- <li class="icn_settings"><?php echo $this->Html->link('Einstellungen', '/admin/pages/setting'); ?></li>
+			<li class="icn_security"><a href="#">Security</a></li>-->
+			<li class="icn_jump_back"><a href="#">Logout</a></li> 
 		</ul>
 		
 		

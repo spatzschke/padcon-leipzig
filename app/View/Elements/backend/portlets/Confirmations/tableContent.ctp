@@ -151,7 +151,7 @@
 								echo '-';
 							} else {
 								
-								if(count($item['ConfirmationDelivery']) == 0) {										
+								if(count($item['Process']) == 0) {										
 									if(!$item['Confirmation']['delivery_id'] && $item['Confirmation']['billing_id']) {
 										echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
 											data-content="Lieferung durch den Hersteller <br> mit der Rechnung: <b>'.$item['Billing']['billing_number'].'</b>"
@@ -205,18 +205,23 @@
 										echo '</ul></div>';
 									}
 								} else {
-									if(count($item['ConfirmationDelivery']) > 1) {										
+									
+									if(count($item['Process']) > 1) {
+										
 										$deliveryNumbers = '';
-										foreach($item['ConfirmationDelivery'] as $key => $del) {
-											
-											$deliveryNumbers .= 'Teillieferschein: '.$del['delivery_number'].'<br>';
+										foreach($item['Process'] as $key => $del) {											
+											if(is_array($del) && $del['delivery_id'] != '0' ){
+												$deliveryNumbers .= 'Teillieferschein: '.$del['delivery_number'].'<br>';
+											}
 										}
 										
 										echo '<i class="glyphicon glyphicon-duplicate" data-toggle="popover" style="color: teal; cursor: pointer"
 											data-content="Mehrere Teil-Lieferscheine vorhanden. <br>'.$deliveryNumbers.'"
 											data-trigger="hover"></i>';
+																			
+										
 									} else {
-										if($item['ConfirmationDelivery'][0]['type'] == 'part') {
+										if($item['Process'][0]['type'] == 'part') {
 											echo '<i class="glyphicon glyphicon-duplicate" data-toggle="popover" style="color: teal; cursor: pointer"
 											data-content="Erster Teil-Lieferscheine vorhanden."
 											data-trigger="hover"></i>';

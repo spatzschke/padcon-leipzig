@@ -4,4 +4,4 @@ TRUNCATE padcon.cart_products;
 TRUNCATE padcon.confirmations;
 TRUNCATE padcon.offers;
 TRUNCATE padcon.deliveries;
-TRUNCATE padcon.confirmation_deliveries;
+TRUNCATE padcon.processes;

@@ -13,7 +13,7 @@ App::uses('AppController', 'Controller');
 class BillingsController extends AppController {
 
 	
-	public $uses = array('Billing', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Delivery', 'ConfirmationDelivery');
+	public $uses = array('Billing', 'Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Delivery', 'Process');
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			$this->Auth->deny('*');
@@ -42,7 +42,7 @@ class BillingsController extends AppController {
 			
 			
 			if(!$value['Confirmation']['id']) {
-				$confirmation = $this->Confirmation->findById($value['ConfirmationDelivery']['confirmation_id']);
+				$confirmation = $this->Confirmation->findById($value['Process']['confirmation_id']);
 				$data[$key]['Confirmation'] = $confirmation['Confirmation'];
 			}	
 			
@@ -67,7 +67,7 @@ class BillingsController extends AppController {
 		if (!$this->Billing->exists($id)) {
 			throw new NotFoundException(__('Invalid billing'));
 		}
-		$data = $this->Billing->findById($id);
+		$data = $this->Process->findByBillingId($id);
 
 		if($data['Confirmation']['delivery_id']) {
 			$delivery = $this->Delivery->findById($data['Confirmation']['delivery_id']);
@@ -276,38 +276,23 @@ class BillingsController extends AppController {
 		$this->layout = 'admin';		
 		
 		if($delivery_id != 0 || $confirmation_id) {
-			
-			$conDeliv = array();
-			if($delivery_id != 0 ) {
-				$conDeliv = $this->ConfirmationDelivery->findByDeliveryId($delivery_id);	
-			} 
-											
-			//Confirmation nachladen
-			if($delivery_id == 0) {
-				$confirmation = $this->Confirmation->findById($confirmation_id);
+							
+			//Prozess nachladen
+			if($delivery_id != '0') {
+				$process = $this->Process->findByDeliveryId($delivery_id);
 			} else {
-				$confirmation = $this->Confirmation->findById($conDeliv['ConfirmationDelivery']['confirmation_id']);
-			}
-
-			//Wenn dirkte Rechnugn erstellt, dann eintrag in der ConDel-Tabell hinterlasse
-			if($delivery_id == 0) {
-				$this->ConfirmationDelivery->create();
-				$conDeliv['ConfirmationDelivery']['confirmation_id'] = $confirmation_id;
-				$conDeliv['ConfirmationDelivery']['cart_id'] = $confirmation['Confirmation']['cart_id'];
-				$conDeliv['ConfirmationDelivery']['type'] = 'full';
-				$this->ConfirmationDelivery->save($conDeliv);
-				$conDeliv['ConfirmationDelivery']['id'] = $this->ConfirmationDelivery->getLastInsertId();
+				$process = $this->Process->findByConfirmationId($confirmation_id);
 			}
 					
 			$billing = array();
 			
-			if(empty($conDeliv['ConfirmationDelivery']['billing_id'])) {
+			if(empty($conDeliv['Process']['billing_id'])) {
 				
 				$this->Billing->create();
 				
 				$billing['Billing']['status'] = 'open';
 				$billing['Billing']['custom'] = FALSE;
-				$billing['Billing']['billing_price'] = $confirmation['Confirmation']['confirmation_price'];
+				$billing['Billing']['billing_price'] = $process['Confirmation']['confirmation_price'];
 				
 				//Default Settings
 				$billing['Billing']['additional_text'] = Configure::read('padcon.Rechnung.additional_text.default');
@@ -325,7 +310,7 @@ class BillingsController extends AppController {
 				
 				//Erste AB-Adresse zum Kunden finden
 				$Addresses = new AddressesController(); 
-				$address = $Addresses->getAddressByType($confirmation, 4, TRUE);
+				$address = $Addresses->getAddressByType($process, 4, TRUE);
 				
 				if(empty($address['Address'])) {
 					$billing['Billing']['address_id'] = 0;
@@ -343,25 +328,24 @@ class BillingsController extends AppController {
 				$this->Billing->save($billing);
 				
 				//Neue Rechnungs-ID in AB speichern wenn es keine Teillieferung ist
-				if(empty($conDeliv) || $conDeliv['ConfirmationDelivery']['type'] == 'full') {
+				if($process['Process']['type'] == 'full') {
 					$confirmation['Confirmation']['billing_id'] = $currBillingId;
 					$confirmation['Confirmation']['status'] = 'close';
 					$this->Confirmation->save($confirmation);
 				}
 				
 				//Neue Rechnungs-ID in Mapping-Tabelle speichern 
-				if(!empty($conDeliv)) {
-					$conDel['ConfirmationDelivery']['id'] = $conDeliv['ConfirmationDelivery']['id'];
-					$conDel['ConfirmationDelivery']['billing_id'] = $currBillingId;
-					$this->ConfirmationDelivery->save($conDel);
-				}
 				
-				if(empty($conDeliv)) {
-					$this->generateData($this->Billing->findById($currBillingId), $confirmation['Confirmation']['cart_id']);
-				} else {
-					$this->generateData($this->Billing->findById($currBillingId), $conDeliv['ConfirmationDelivery']['cart_id']);
-				}
+				$proc['Process']['id'] = $process['Process']['id'];
+				$proc['Process']['billing_id'] = $currBillingId;
 				
+				//Wenn Prozess-Type leer ist, dann mit full auffüllen 
+				if(empty($process['Process']['type'])) 
+					$proc['Process']['type'] = 'full';
+				
+				$this->Process->save($proc);
+				
+				$this->generateData($this->Billing->findById($currBillingId), $process['Process']['cart_id']);
 			
 				$this->set('pdf', null);
 				
@@ -673,21 +657,12 @@ class BillingsController extends AppController {
 		$Addresses = new AddressesController();	
 		$Carts = new CartsController();
 		$Confirmations = new ConfirmationsController();
-		
-		
-		//Wenn Confirmation ist leer, nachladen
-		$confirmation = array();
-		if(!$data['Confirmation']['id']) {
-			$confirmation = $this->Confirmation->findById($data['ConfirmationDelivery']['confirmation_id']);
-			$confirmation['ConfirmationDelivery'] = $data['ConfirmationDelivery'];
-			$confirmation['Billing'] = $data['Billing'];
-			$data= $confirmation;
-		}	
+	
 	    $this->request->data = $data;
 		
 		if(!empty($data)) {
 			
-	    	$cart = $Carts->get_cart_by_id($data['ConfirmationDelivery']['cart_id']);
+	    	$cart = $Carts->get_cart_by_id($data['Process']['cart_id']);
 			
 			//Berechen Seitenbelegung mit Produkte
 			$this->request->data['Pages'] = $Carts->calcPageLoad($cart, 7, 5);
@@ -812,7 +787,7 @@ class BillingsController extends AppController {
 			//if(isset($item['Confirmation']['customer_id'])) {
 			
 				//Auftragsbestätigung
-				$confirmation = $this->ConfirmationDelivery->findByBillingId($item['Billing']['id']);
+				$confirmation = $this->Process->findByBillingId($item['Billing']['id']);
 				$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
 				
 				//Lieferschein
@@ -893,7 +868,7 @@ class BillingsController extends AppController {
 	function calcPrice($data = null) {
 		
 		
-		$data = $this->ConfirmationDelivery->findByBillingId($data['Billing']['id']);
+		$data = $this->Process->findByBillingId($data['Billing']['id']);
 
 
 		 $arr_data = null;
