@@ -266,11 +266,13 @@ class DeliveriesController extends AppController {
 		if($confirmation_id) {
 				
 			$confirmation = $this->Confirmation->findById($confirmation_id);
+			$conDeliv = $this->ConfirmationDelivery->findByConfirmationId($confirmation_id);	
 			$delivery = array();
 			
-			
-			
-			if(empty($confirmation['Confirmation']['delivery_id']) || !is_null($cart_id)) {
+			debug(isset($conDeliv['ConfirmationDelivery']));
+
+
+			if(!isset($conDeliv['ConfirmationDelivery']) && $conDeliv['ConfirmationDelivery']['delivery_id'] == 0) {
 							
 				$this->Delivery->create();
 				
@@ -339,11 +341,11 @@ class DeliveriesController extends AppController {
 				$controller_id = $currDeliveryId;
 				$this->set(compact('controller_id', 'controller_name'));
 				
-				$this->render('admin_view');
+				$this->redirect(array('action' => 'view', $conDeliv['ConfirmationDelivery']['delivery_id']));
 				
 			} else {
 				$this->Session->setFlash(__('Lieferschein bereits vorhanden'));
-				return $this->redirect(array('action' => 'view', $confirmation['Confirmation']['delivery_id']));
+				return $this->redirect(array('action' => 'view', $conDeliv['ConfirmationDelivery']['delivery_id']));
 			}
 		} else {
 			

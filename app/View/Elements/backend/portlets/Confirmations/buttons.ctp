@@ -78,13 +78,12 @@
 					"href" => $this->Html->link('Lieferschein erstellen', '/admin/'.$nextSheet.'/convert/'.$dataId, array('escape' => false, 'class' => 'btn btn-default'))));	
 				
 			    
-				if (Configure::read('debug') > 0) {
-					$id_createPartDelivery = 'createPartDelivery';
-					echo $this->element('backend/helper/sheetButtonHelper', array(
-						"id" => $id_createPartDelivery,
-						"icon" => "duplicate",
-						"text" => "Teil-Lieferung erstellen"));				
-				}
+				$id_createPartDelivery = 'createPartDelivery';
+				echo $this->element('backend/helper/sheetButtonHelper', array(
+					"id" => $id_createPartDelivery,
+					"icon" => "duplicate",
+					"text" => "Teil-Lieferung erstellen"));				
+				
 
 				echo $this->element('backend/helper/sheetButtonHelper', array(
 						"id" => $id_company,
