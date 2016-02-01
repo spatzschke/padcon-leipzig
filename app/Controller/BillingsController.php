@@ -43,7 +43,9 @@ class BillingsController extends AppController {
 			
 			if(!$value['Confirmation']['id']) {
 				$confirmation = $this->Confirmation->findById($value['Process']['confirmation_id']);
-				$data[$key]['Confirmation'] = $confirmation['Confirmation'];
+				
+				if(!empty($confirmation))
+					$data[$key]['Confirmation'] = $confirmation['Confirmation'];
 			}	
 			
 		}		
@@ -788,7 +790,8 @@ class BillingsController extends AppController {
 			
 				//Auftragsbestätigung
 				$confirmation = $this->Process->findByBillingId($item['Billing']['id']);
-				$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
+				if(!empty($confirmation))
+					$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
 				
 				//Lieferschein
 				if($item['Confirmation']['delivery_id']) {

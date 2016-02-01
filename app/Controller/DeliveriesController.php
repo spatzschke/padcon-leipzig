@@ -36,7 +36,7 @@ class DeliveriesController extends AppController {
 		$this->layout = 'admin';
 	
 		$this->Delivery->recursive = 0;
-		$data = $this->Delivery->find('all', array('order' => array('Delivery.delivery_number DESC')));
+		$data = $this->Delivery->find('all', array('order' => array('substring(Delivery.delivery_number, 4, 5) DESC', 'substring(Delivery.delivery_number, 1, 3) DESC')));
 		
 		$this->set('title_for_panel', 'Alle Lieferscheine');	
 			
@@ -776,13 +776,16 @@ Lieferzeit: ca. 3-4 Wochen
 			//Load Customer for the Delivery
 			if($item['Process']['cart_id'] != 0) {
 				$customer= $this->Customer->findById($item['Confirmation']['customer_id']);
-				$address = $this->Address->findById($item['Delivery']['address_id']);
-				$customer['Address'] = $address['Address'];
-				$item['Customer'] = $customer['Customer'];
-			
-				if($Customers->splitCustomerData($customer)) {
-					$item['Address'] = $Customers->splitCustomerData($customer);
-				}	
+				$address = $this->Address->findById($item['Delivery']['address_id']);				
+				
+				if(!empty($address)) {
+					$customer['Address'] = $address['Address'];				
+					$item['Customer'] = $customer['Customer'];
+				
+					if($Customers->splitCustomerData($customer)) {
+						$item['Address'] = $Customers->splitCustomerData($customer);
+					}	
+				}
 			
 				$cart = $Carts->get_cart_by_id($item['Process']['cart_id']);
 				$item += $cart;

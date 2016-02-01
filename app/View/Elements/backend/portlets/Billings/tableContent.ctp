@@ -35,13 +35,15 @@
 								
 								></i>&nbsp;&nbsp;';
 							} else {
-								echo '&nbsp;&nbsp;';
-								echo '<i class="glyphicon glyphicon-duplicate" style="color: teal; cursor: pointer"
-									 data-toggle="popover"
-									 data-content="Teil-Rechnung zu AB: '.$item['Billing']['confirmation_number'].'"
-									 data-trigger="hover"
-								
-								></i>';
+								if(isset($item['Billing']['confirmation_number'])) {
+									echo '&nbsp;&nbsp;';
+									echo '<i class="glyphicon glyphicon-duplicate" style="color: teal; cursor: pointer"
+										 data-toggle="popover"
+										 data-content="Teil-Rechnung zu AB: '.$item['Billing']['confirmation_number'].'"
+										 data-trigger="hover"
+									
+									></i>';
+								}
 							}
 						?>
 					</td>
@@ -128,9 +130,9 @@
 										 data-trigger="hover"
 										 data-placement="top"								
 									></i>';
-								}
-								// echo '&nbsp;';
-								// echo $this->Number->toPercentage($item['Billing']['skonto'],0);	
+								} 
+								 echo '&nbsp;';
+								 echo $this->Number->toPercentage($item['Billing']['skonto'],0);	
 							}
 						} else {
 							echo '-'; 							
