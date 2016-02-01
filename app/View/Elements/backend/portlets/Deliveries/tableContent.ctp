@@ -75,9 +75,8 @@
 					</td> -->
 					<td>
 						<?php 
-						$cartProducts = "";
-												
-						if(empty($item['Cart']['count'])) { echo '-'; } else {
+						$cartProducts = "";	
+						if(empty($item['Cart']['count']) || empty($item['Cart']['CartProduct'])) { echo '-'; } else {
 							foreach ($item['Cart']['CartProduct'] as $cartProduct) {
 								$cartProducts = $cartProducts . $cartProduct['amount'].'x '. $cartProduct['Information']['Product']['name'] . ' ( '.$cartProduct['Information']['Product']['product_number'].' )<br>';
 							}
