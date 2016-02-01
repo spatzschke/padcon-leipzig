@@ -33,7 +33,7 @@ class UsersController extends AppController {
 				$this->request->data['User']['last_login'] = date('Y-m-d h:i:s');
         		if ($this->User->save($this->request->data)) {
 					//return $this->redirect(array('controller' => 'Pages', 'action' => 'dashboard', 'admin' => true,'prefix' => 'admin'));
-					return $this->redirect(array('controller' => 'Billings', 'action' => 'index', 'admin' => true,'prefix' => 'admin'));
+					return $this->redirect(array('controller' => 'Pages', 'action' => 'dashboard', 'admin' => true,'prefix' => 'admin'));
 	        	}
 			}
 	        $this->Session->setFlash('Der eingebene Benutzer oder das Passwort sind falsch!', 'flash_message', array('class' => 'alert-danger'));

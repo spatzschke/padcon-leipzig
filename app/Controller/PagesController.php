@@ -36,7 +36,7 @@ class PagesController extends AppController {
  *
  * @var array
  */
- 	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'AddressAddresstype');
+ 	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'AddressAddresstype', 'Billing', 'Process');
 	
 /**
  * Displays a view
@@ -86,12 +86,29 @@ class PagesController extends AppController {
 	
 	function admin_dashboard() {
 		$this->layout = 'admin';
+		
+		$this->monthUmsatz();
 	
 	}
 	
 	function admin_setting() {
 		$this->layout = 'admin';
 	
+	} 
+	
+	private function monthUmsatz() {
+		$billings = $this->Billing->find('all', array('conditions' => array('Billing.created BETWEEN ? AND ?' => array(date('Y-m-01 00:00:00'), date('Y-m-d 00:00:00', strtotime("+1 days"))))));
+		$einnahme = 0;
+		$ausgabe =  0;
+		foreach ($billings as $key => $value) {
+			$proc = $this->Process->findByBillingId($value['Billing']['id']);
+			$einnahme += $value['Billing']['billing_price'];
+			if(isset($proc['Confirmation']))
+				$ausgabe += $proc['Confirmation']['cost'];
+		}
+		$diff = $einnahme - $ausgabe;
+		
+		$this->set(compact('diff','einnahme','ausgabe'));
 	}  
 
 }
