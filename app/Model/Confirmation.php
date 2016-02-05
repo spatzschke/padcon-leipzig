@@ -34,13 +34,13 @@ class Confirmation extends AppModel {
 	);
  
 	public $belongsTo = array(
-		// 'Cart' => array(
-			// 'className' => 'Cart',
-			// 'foreignKey' => 'cart_id',
-			// 'conditions' => '',
-			// 'fields' => '',
-			// 'order' => ''
-		// ),
+		'Cart' => array(
+			'className' => 'Cart',
+			'foreignKey' => 'cart_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 		'Customer' => array(
 			'className' => 'Customer',
 			'foreignKey' => 'customer_id',

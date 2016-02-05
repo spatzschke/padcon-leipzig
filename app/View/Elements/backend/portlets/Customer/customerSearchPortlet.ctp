@@ -37,51 +37,40 @@
 	</div>
 </div>
 <div id="customerAddressBox">
-			<?php			
-			 	if(is_null($this->data['Customer']['id'])) {
-			 		
-			 	}	else {
-			 					 	
-				if(empty($this->data['Address']['street'])) {
-					
-					echo'<div class="alert alert-danger" role="alert">';
-						echo 'Es exisitert keine '.$addressTypeName.' für den Kunden: </br>';
-						if(!empty($this->data['Customer']['last_name'])) {
-							echo '<b>'.$this->data['Customer']['salutation'].' '.$this->data['Customer']['title'].' '.$this->data['Customer']['first_name'].' '.$this->data['Customer']['last_name'].' '.'</b></br>';
-						}
-						if(!empty($this->data['Customer']['organisation'])) {
-							echo '<b>'.$this->data['Customer']['organisation'].'</b></br>';
-						}
-						if(!empty($this->data['Customer']['department'])) {
-							echo '<b>'.$this->data['Customer']['department'].'</b></br>';
-						}
-						echo '<div id="addAddress" class="input-group">';
-						echo $this->Html->link(
-								    'Adresse hinzufügen',
-								    '#',
-								    array(
-								        'class' => 'btn btn-default',
-								        'id' => 'addAddress'
-								    )
-								);
-						echo '</div>';
-					echo '</div>';
-				} else {
-				
-			?>
-
-					<?php echo $this->element('backend/portlets/Customer/customerFormPortlet'); ?>
-			<?php 					
-				} 
-			}		
-			?>
+<?php				
+ 	if(is_null($this->data['Customer']['id'])) {
+ 		
+ 	} else {
+ 					 	
+		if(empty($this->data['Address']['street'])) {
+			
+			echo'<div class="alert alert-danger" role="alert">';
+			echo 'Es exisitert keine '.$addressTypeName.' für den Kunden: </br>';
+			if(!empty($this->data['Customer']['last_name'])) {
+				echo '<b>'.$this->data['Customer']['salutation'].' '.$this->data['Customer']['title'].' '.$this->data['Customer']['first_name'].' '.$this->data['Customer']['last_name'].' '.'</b></br>';
+			}
+			if(!empty($this->data['Customer']['organisation'])) {
+				echo '<b>'.$this->data['Customer']['organisation'].'</b></br>';
+			}
+			if(!empty($this->data['Customer']['department'])) {
+				echo '<b>'.$this->data['Customer']['department'].'</b></br>';
+			}
+			echo '<div id="addAddress" class="input-group">';
+			echo $this->Html->link(
+					    'Adresse hinzufügen',
+					    '#',
+					    array(
+					        'class' => 'btn btn-default',
+					        'id' => 'addAddress'
+					    )
+					);
+				echo '</div>';
+			echo '</div>';
+		} else {
+			echo $this->element('backend/portlets/Customer/customerFormPortlet'); 			
+		} 
+	}		
+?>
 </div>
-	<script>
-
-
-
-
-
-</script>
 
 

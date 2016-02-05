@@ -18,6 +18,13 @@ class Cart extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		), 
+		'Process' => array(
+			'className' => 'Process',
+			'foreignKey' => 'cart_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 	
