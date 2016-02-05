@@ -585,7 +585,14 @@ class ConfirmationsController extends AppController {
 		$confirmation['CartProducts'] = $this->getSettingCartProducts($confirmation);
 		$this->request->data = $confirmation;
 		
+		$controller = 'Confirmations'; 
+		$controller_id = $confirmation_id;
+
+		$this->set(compact('controller_id', 'controller'));
+		
 		$this->render('/Elements/backend/portlets/Product/settingsProductTable');
+		
+		
 	}
 	
 	function admin_update($id = null, $confirmation_id = null, $address = null) {
