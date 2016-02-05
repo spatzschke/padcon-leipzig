@@ -801,11 +801,11 @@ class ConfirmationsController extends AppController {
 		}	
 
 		//Kosten von Cart in AB übertragen/aktualisieren
-		
-		
-		
 		$arr_data['Confirmation']['cost'] = $data['Cart']['sum_base_price'];
-		
+
+		if(!$data['Confirmation']['id']) {
+			 $data['Confirmation']['id'] = $data['Process']['confirmation_id']; 
+		}
 		$arr_data['Confirmation']['id'] = $data['Confirmation']['id'];
 
 		$this->Confirmation->save($arr_data['Confirmation']);

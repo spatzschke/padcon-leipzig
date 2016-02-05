@@ -155,9 +155,9 @@
 								echo '-';
 							} else {
 								if(sizeof($item['Process']) == 1) {									
-									if(!$item['Confirmation']['delivery_id'] && $item['Confirmation']['billing_id']) {
+									if(!$item['Process'][0]['delivery_id'] && $item['Process'][0]['billing_id']) {
 										echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
-											data-content="Lieferung durch den Hersteller <br> mit der Rechnung: <b>'.$item['Billing']['billing_number'].'</b>"
+											data-content="Lieferung durch den Hersteller"
 											data-trigger="hover"></i>';
 									} else {
 										
@@ -215,7 +215,6 @@
 																			
 										
 									} else {
-										debug($item);
 										if($item['Process'][0]['type'] == 'part') {
 											echo '<i class="glyphicon glyphicon-duplicate" data-toggle="popover" style="color: teal; cursor: pointer"
 											data-content="Erster Teil-Lieferscheine vorhanden."
@@ -225,9 +224,9 @@
 											data-content="'.$item['Delivery']['delivery_number'].'"
 											data-trigger="hover"></i>', 
 											array('admin' => true, 'controller' => 'Deliveries', 'action' => 'edit_individual', $item['Confirmation']['delivery_id']), array('escape' => false));
-										} elseif(!$item['Confirmation']['delivery_id'] && $item['Confirmation']['billing_id']) {
+										} elseif(!$item['Process'][0]['delivery_id']) {
 											echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
-											data-content="Lieferung durch den Hersteller<br>mit der Rechnungsnummer<br>'.$item['Billing']['billing_number'].'<b></b>"
+											data-content="Lieferung durch den Hersteller"
 											data-trigger="hover"></i>';
 										} else {
 											echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 

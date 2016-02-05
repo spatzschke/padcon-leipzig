@@ -78,11 +78,11 @@
 					"href" => $this->Html->link('Lieferschein erstellen', '/admin/'.$nextSheet.'/convert/'.$dataId, array('escape' => false, 'class' => 'btn btn-default'))));	
 				
 			    
-				$id_createPartDelivery = 'createPartDelivery';
-				echo $this->element('backend/helper/sheetButtonHelper', array(
-					"id" => $id_createPartDelivery,
-					"icon" => "duplicate",
-					"text" => "Teil-Lieferung erstellen"));				
+				// $id_createPartDelivery = 'createPartDelivery';
+				// echo $this->element('backend/helper/sheetButtonHelper', array(
+					// "id" => $id_createPartDelivery,
+					// "icon" => "duplicate",
+					// "text" => "Teil-Lieferung erstellen"));				
 				
 
 				echo $this->element('backend/helper/sheetButtonHelper', array(
@@ -93,10 +93,10 @@
 			echo '</ul>
 			
 </div>';
-echo $this->element('backend/helper/modalHelper', array(
-						"id" => $id_createPartDelivery,
-						"url" => "\/admin\/".$nextSheet."\/convertPart\/".$dataId,
-						"redirect" => ""));
+// echo $this->element('backend/helper/modalHelper', array(
+						// "id" => $id_createPartDelivery,
+						// "url" => "\/admin\/".$nextSheet."\/convertPart\/".$dataId,
+						// "redirect" => ""));
 ;
 		
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------	
