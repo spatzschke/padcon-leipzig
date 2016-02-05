@@ -40,15 +40,15 @@ class BillingsController extends AppController {
 		
 		foreach ($data as $key => $value) {
 			
-			
-			if(!$value['Confirmation']['id']) {
+			if($value['Process']['confirmation_id']) {
 				$confirmation = $this->Confirmation->findById($value['Process']['confirmation_id']);
 				
 				if(!empty($confirmation))
 					$data[$key]['Confirmation'] = $confirmation['Confirmation'];
-			}	
+			}
 			
-		}		
+		}	
+			
 		$this->set('title_for_panel', 'Alle Rechnungen');	
 			
 		$this->set('data', $this->fillIndexData($data));
@@ -270,15 +270,11 @@ class BillingsController extends AppController {
  *
  * @return void
  */
- 	public function admin_convertFactory($confirmation_id = null) {
- 		$this->redirect(array('action' => 'convert', null, $confirmation_id));
-	}
- 
 	public function admin_convert($delivery_id = null, $confirmation_id = null) {
-		$this->layout = 'admin';		
+		$this->layout = 'admin';			
 		
 		if($delivery_id != 0 || $confirmation_id) {
-							
+
 			//Prozess nachladen
 			if($delivery_id != '0') {
 				$process = $this->Process->findByDeliveryId($delivery_id);
@@ -288,7 +284,7 @@ class BillingsController extends AppController {
 					
 			$billing = array();
 			
-			if(empty($conDeliv['Process']['billing_id'])) {
+			if(empty($process['Process']['billing_id'])) {
 				
 				$this->Billing->create();
 				
@@ -330,7 +326,8 @@ class BillingsController extends AppController {
 				$this->Billing->save($billing);
 				
 				//Neue Rechnungs-ID in AB speichern wenn es keine Teillieferung ist
-				if($process['Process']['type'] == 'full') {
+				if($process['Process']['type'] == 'full' || $delivery_id == '0') {
+					$confirmation['Confirmation']['id'] = $process['Process']['confirmation_id'];
 					$confirmation['Confirmation']['billing_id'] = $currBillingId;
 					$confirmation['Confirmation']['status'] = 'close';
 					$this->Confirmation->save($confirmation);
@@ -359,7 +356,7 @@ class BillingsController extends AppController {
 				
 			} else {
 				//$this->Session->setFlash(__('Rechnung bereits vorhanden'));
-				return $this->redirect(array('action' => 'view', $confirmation['Confirmation']['billing_id']));
+				return $this->redirect(array('action' => 'view', $process['Confirmation']['billing_id']));
 			}
 		} else {
 			
@@ -584,7 +581,7 @@ class BillingsController extends AppController {
 		$this->layout = 'pdf';
 		$pdf = true;
 		
-		$data = $this->Billing->findById($id);
+		$data = $this->Process->findByBillingId($id);
 		
 		$delivery = $this->Delivery->findById($data['Confirmation']['delivery_id']);
 		$this->generateData($data, $delivery['Delivery']['cart_id']);
@@ -603,7 +600,9 @@ class BillingsController extends AppController {
 		
 		$this->layout = 'ajax';
 		
-		$billing = $this->Billing->findById($id);
+		$process = $this->Process->findByBillingId($id);
+		
+		
 		
 		if(!empty($this->request->data)) {
 			
@@ -611,27 +610,28 @@ class BillingsController extends AppController {
 			$data['Billing']['payment_date'] = date('y-m-d',strtotime($this->request->data['Billing']['payment_date']));	
 			$data['Billing']['status'] = "close";	
 			
-			//Update Billing_price mit Skonto
-			
+			//Update Billing_price mit Skonto			
 			if(isset($this->request->data['Billing']['skontoTake']) && $this->request->data['Billing']['skontoTake'] == "true") {
 				$data['Billing']['skonto_take'] = 1;
 				
-				$billing['Billing']['confirmation_price'] = $billing['Confirmation']['confirmation_price'];
-				$price = $this->calcSkonto($billing['Billing'], true);
+				$process['Billing']['confirmation_price'] = $process['Confirmation']['confirmation_price'];
+				$price = $this->calcSkonto($process['Billing'], true);
 				$data['Billing']['billing_price'] = $price['billing_price'];
 				
 			} else {
 				$data['Billing']['skonto_take'] = 0;
 			}
+			
+			debug($data);
 					
 			$this->Billing->id = $id;
 			$this->Billing->save($data);
 			
-			$this->redirect('index');
+		//	$this->redirect('index');
 		}
 			
-		$this->request->data = $billing;
-		$this->request->data['Billing']['skonto_date'] = date('d.m.Y',strtotime($billing['Billing']['skonto_date']));
+		$this->request->data = $process;
+		$this->request->data['Billing']['skonto_date'] = date('d.m.Y',strtotime($process['Billing']['skonto_date']));
 		$this->request->data['Billing']['payment_date'] = date("d.m.Y");
 		$controller_name = 'Billings'; 
 		$controller_id = $id;
@@ -748,25 +748,23 @@ class BillingsController extends AppController {
 		
 		// for($i=0; $i<=10;$i++) {
 		foreach ($data as $item) {
-						
+									
 			//Load Customer for the Delivery
-			if($item['Confirmation']['cart_id'] != 0) {
+			if($item['Process']['cart_id'] != 0) {
 				
-				$customer= $this->Customer->findById($item['Confirmation']['customer_id']);
+				$customer= $this->Customer->findById($item['Process']['customer_id']);				
 				$address = $this->Address->findById($item['Billing']['address_id']);
-
+				
 				if(isset($address['Address'])) {
 					$customer['Address'] = $address['Address'];
 					if($Customers->splitCustomerData($customer)) {
 						$item['Address'] = $Customers->splitCustomerData($customer);
 					}	
 				}
-	
+				
 				$item['Customer'] = $customer['Customer'];
-				
-							
-				
-				$cart = $Carts->get_cart_by_id($item['Confirmation']['cart_id']);
+
+				$cart = $Carts->get_cart_by_id($item['Process']['cart_id']);
 				$item['Cart'] = $cart['Cart'];
 				$item['Cart']['CartProduct'] = $cart['CartProduct'];
 				if(!empty($cart['CartProduct'])) {
@@ -779,17 +777,19 @@ class BillingsController extends AppController {
 						$item['Cart']['CartProduct'][$j]['Information'] = $product;
 						$j++;
 					}
-				}
+				}				
 				
-				$item['Billing'] += $Confirmations->calcPrice($item);
+				$item['Billing'] += $this->calcPrice($item);	
 				
+				$item['Billing']['confirmation_price'] = $item['Confirmation']['confirmation_price'];
+							
 				$item['Billing'] = $this->calcSkonto($item['Billing']);
 			}			
 			
 			//if(isset($item['Confirmation']['customer_id'])) {
 			
 				//Auftragsbestätigung
-				$confirmation = $this->Process->findByBillingId($item['Billing']['id']);
+				
 				if(!empty($confirmation))
 					$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
 				
@@ -798,9 +798,9 @@ class BillingsController extends AppController {
 					$delivery = $this->Delivery->findById($item['Confirmation']['delivery_id']);
 					$item['Billing']['delivery_number'] = $delivery['Delivery']['delivery_number'];
 				}
-			//}		
+			//}	
+				
 			array_push($data_temp, $item);
-			
 		}	
 			
 		return $data_temp;
@@ -872,8 +872,6 @@ class BillingsController extends AppController {
 		
 		
 		$data = $this->Process->findByBillingId($data['Billing']['id']);
-
-
 		 $arr_data = null;
 
 		// Kosten aus AB berechen
@@ -913,8 +911,7 @@ class BillingsController extends AppController {
  		
 		// $arr_data['Billing']['cost'] = $data['Cart']['sum_base_price'];
  		
-		 $arr_data['Billing']['id'] = $data['Billing']['id'];
- 
+		 $arr_data['Billing']['id'] = $data['Billing']['id']; 
 		 $this->Billing->save($arr_data['Billing']);
 				
 		return $arr_data['Billing'];

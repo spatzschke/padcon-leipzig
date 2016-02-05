@@ -49,10 +49,10 @@
 					</td>
 					<td>
 						<?php 						
-						if(!is_null($item['Confirmation']['customer_id'])) {
+						if(!is_null($item['Process']['customer_id'])) {
 							
-							if(empty($item['Confirmation']['customer_id'])) { echo '-'; } else {
-								echo $item['Confirmation']['customer_id'];	
+							if(empty($item['Process']['customer_id'])) { echo '-'; } else {
+								echo $item['Process']['customer_id'];	
 								if(!is_null($item['Billing']['address_id']) && $item['Billing']['address_id'] != 0) {
 									echo '&nbsp;';
 									echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
@@ -189,57 +189,46 @@
 					<!-- Auftragsbestätigung-Nummer -->
 					<td>
 						<?php 
-							
-							if($item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
+							if(empty($item['Process']['confirmation_id'])) {
 								echo '-';
 							} else {
-								
 								if($item['Billing']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									 data-content="'.$item['Confirmation']['confirmation_number'].'"
 									 data-trigger="hover"></i>', 
-									 array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit_individual', $item['Confirmation']['id']), array('escape' => false));
+									 array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit_individual', $item['Process']['confirmation_id']), array('escape' => false));
 								} else {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									 data-content="'.$item['Confirmation']['confirmation_number'].'"
 									 data-trigger="hover"></i>', 
-									 array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['id']), array('escape' => false));
+									 array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Process']['confirmation_id']), array('escape' => false));
 								}
 																	
 							}
-							  
-						 ?>
+					    ?>
 					</td>
 					<!-- Lieferschein-Nummer -->
 					<td>
 						<?php 
-							if($item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
-								echo '-';
+							if($item['Process']['delivery_id'] == '0') {
+								echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
+									data-content="Lieferung durch den Hersteller</b>"
+									data-trigger="hover"></i>'; 
 							} else {
 								
 								if($item['Billing']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Billing']['delivery_number'].'"
 									data-trigger="hover"
-									></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'edit_individual', $item['Billing']['id']), array('escape' => false));
-								
-								} elseif(!$item['Process']['delivery_id']) {
-											echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
-											data-content="Lieferung durch den Hersteller</b>"
-											data-trigger="hover"></i>'; 
+									></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'edit_individual', $item['Process']['delivery_id']), array('escape' => false));
 								} else {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Billing']['delivery_number'].'"
 									data-trigger="hover"
-									></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'view', $item['Billing']['id']), array('escape' => false));
+									></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Process']['delivery_id']), array('escape' => false));
 								
 								}
-								
-								
-								
-								
 							}
-							  
 						 ?>
 					</td>
 					
