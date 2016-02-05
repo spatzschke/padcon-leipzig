@@ -473,8 +473,6 @@ class ProductsController extends AppController {
 							$newProduct['Product']['active'] = 'checked';
 							$newProduct['Product']['new'] = '';
 							
-							debug(strcmp($company, 'Fa. padcon'));
-							
 							if (strpos($number, 'Z') !== FALSE || strcmp($company, 'Fa. padcon') < 0) {
 								$newProduct['Product']['custom'] = 'checked';
 							} else {
@@ -527,6 +525,7 @@ class ProductsController extends AppController {
 						array_push($newProducts, $newProduct);
 					
 				}
+
 				$this->request->data['Products'] = $newProducts;
 				}					
 			} else {				
@@ -537,7 +536,9 @@ class ProductsController extends AppController {
 					
 					foreach($data as $i=>$prod) {
 						$errors['prod'.$i] = array();
-																								
+											
+						$prod['retail_price'] = str_replace(',', '.', $prod['retail_price']);
+						$prod['price'] = str_replace(',', '.', $prod['price']);														
 												
 						$this->Product->create();
 						if ($this->Product->save($prod)) {
