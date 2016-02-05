@@ -49,10 +49,10 @@
 					</td>
 					<td>
 						<?php 						
-						if(!is_null($item['Confirmation']['customer_id'])) {
+						if(!is_null($item['Process']['customer_id'])) {
 							
-							if(empty($item['Confirmation']['customer_id'])) { echo '-'; } else {
-								echo $item['Confirmation']['customer_id'];	
+							if(empty($item['Process']['customer_id'])) { echo '-'; } else {
+								echo $item['Process']['customer_id'];	
 								if(!is_null($item['Billing']['address_id']) && $item['Billing']['address_id'] != 0) {
 									echo '&nbsp;';
 									echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
@@ -228,6 +228,7 @@
 											data-content="Lieferung durch den Hersteller</b>"
 											data-trigger="hover"></i>'; 
 								} else {
+									debug($item);
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Billing']['delivery_number'].'"
 									data-trigger="hover"

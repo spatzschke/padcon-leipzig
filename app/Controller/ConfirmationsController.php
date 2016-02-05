@@ -366,7 +366,7 @@ class ConfirmationsController extends AppController {
 				
 				
 				//Alle Cart_Producte aus Angebot in AB Cart kopieren
-				$cartProducts = $this->CartProduct->find('all',array('conditions' => array('CartProduct.cart_id' => $process['Cart']['id'])));
+				$cartProducts = $this->CartProduct->find('all',array('conditions' => array('CartProduct.cart_id' => $process['Process']['cart_id'])));
 				foreach ($cartProducts as $cartProduct) {
 					$this->CartProduct->create();
 					$cartItem['CartProduct'] = $cartProduct['CartProduct'];
@@ -390,7 +390,6 @@ class ConfirmationsController extends AppController {
 				
 				//Neue Auftragsbestätigungs-ID der AB hinzufügen speichern 
 				$confirmation['Confirmation']['id'] = $currConfirmationId;
-				$this->Offer->save($confirmation);
 				
 				// Generate Hash für Offer
 				$confirmation['Confirmation']['hash'] =  Security::hash($currConfirmationId, 'md5', true);
@@ -782,8 +781,7 @@ class ConfirmationsController extends AppController {
 
 	function calcPrice($data = null) {
 
-		$arr_data = null;
-		
+		$arr_data = null;		
 		$discount_price = $data['Confirmation']['discount'] * $data['Cart']['sum_retail_price'] / 100;
 		$part_price = $data['Cart']['sum_retail_price'] - $discount_price + $data['Confirmation']['delivery_cost'];
 		$vat_price = $data['Confirmation']['vat'] * $part_price / 100;

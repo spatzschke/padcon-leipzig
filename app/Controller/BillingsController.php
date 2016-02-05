@@ -41,7 +41,7 @@ class BillingsController extends AppController {
 		foreach ($data as $key => $value) {
 			
 			
-			if(!$value['Confirmation']['id']) {
+			if(!$value['Process']['confirmation_id']) {
 				$confirmation = $this->Confirmation->findById($value['Process']['confirmation_id']);
 				
 				if(!empty($confirmation))
@@ -748,25 +748,28 @@ class BillingsController extends AppController {
 		
 		// for($i=0; $i<=10;$i++) {
 		foreach ($data as $item) {
-						
+									
 			//Load Customer for the Delivery
-			if($item['Confirmation']['cart_id'] != 0) {
+			if($item['Process']['cart_id'] != 0) {
 				
-				$customer= $this->Customer->findById($item['Confirmation']['customer_id']);
+				$customer= $this->Customer->findById($item['Process']['customer_id']);				
 				$address = $this->Address->findById($item['Billing']['address_id']);
-
+				
+				if($customer['Customer']['id'] == '8001') {
+					debug($item['Billing']['billing_number']);
+				}
 				if(isset($address['Address'])) {
 					$customer['Address'] = $address['Address'];
 					if($Customers->splitCustomerData($customer)) {
 						$item['Address'] = $Customers->splitCustomerData($customer);
+						
 					}	
 				}
+				
 	
 				$item['Customer'] = $customer['Customer'];
 				
-							
-				
-				$cart = $Carts->get_cart_by_id($item['Confirmation']['cart_id']);
+				$cart = $Carts->get_cart_by_id($item['Process']['cart_id']);
 				$item['Cart'] = $cart['Cart'];
 				$item['Cart']['CartProduct'] = $cart['CartProduct'];
 				if(!empty($cart['CartProduct'])) {
@@ -779,17 +782,16 @@ class BillingsController extends AppController {
 						$item['Cart']['CartProduct'][$j]['Information'] = $product;
 						$j++;
 					}
-				}
+				}				
 				
-				$item['Billing'] += $Confirmations->calcPrice($item);
-				
+				$item['Billing'] += $Confirmations->calcPrice($item);				
 				$item['Billing'] = $this->calcSkonto($item['Billing']);
 			}			
 			
 			//if(isset($item['Confirmation']['customer_id'])) {
 			
 				//Auftragsbestätigung
-				$confirmation = $this->Process->findByBillingId($item['Billing']['id']);
+				
 				if(!empty($confirmation))
 					$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
 				
@@ -800,7 +802,6 @@ class BillingsController extends AppController {
 				}
 			//}		
 			array_push($data_temp, $item);
-			
 		}	
 			
 		return $data_temp;

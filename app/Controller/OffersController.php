@@ -43,17 +43,24 @@ class OffersController extends AppController {
 		$this->generateData($offer);
 	}
 
-	function admin_add($isActive = null, $layout = "admin") {		
+	function admin_add($layout = "admin") {		
 		$this->layout = $layout;
 		$this->set('pdf', null);	
 		$offer = null;	
+		
+		// Wenn es noch eine leere Offer (ohne Kunden) gibt, dann nimm die
+		$empty = $this->Offer->find('first', array('conditions' => array('Offer.customer_id' => '0')));		
+		if(!empty($empty)) {
+			//$this->Session->setFlash(__('Eine leeres Angebot wurde gefunden! Bitte diese Ausfüllen.'));
+			$this->redirect(array('action'=>'edit', $empty['Offer']['id']));
+		}
 		
 		//Erzeuge neuen Cart
 		$cart = $this->requestAction('/admin/carts/add/');
 		
 		$this->Offer->create();
 		
-		$data['Offer']['status'] = 'active';
+		$data['Offer']['status'] = 'open';
 		$data['Offer']['agent'] = 'Ralf Patzschke';
 		$data['Offer']['customer_id'] = 0;
 		$data['Offer']['cart_id'] = $cart['Cart']['id'];
@@ -82,7 +89,7 @@ class OffersController extends AppController {
 		$offer = $data;
 		$this->set(compact('data','offer'));
 		
-		$this->redirect(array('action'=>'edit', $data_id));
+		//$this->redirect(array('action'=>'edit', $data_id));
 	}
 
 	public function admin_add_individual($id = null) {
@@ -205,6 +212,11 @@ class OffersController extends AppController {
 		
 		if($offer) {
 			
+			//Offer-Status setzen
+			$offer['Offer']['status'] = 'open';
+			$offer['Offer']['customer_id'] = $customer['Customer']['id'];
+			$offer['Customer'] = $customer['Customer'];
+			
 			//Addressen suchen						
 			if(!is_null($address_id)) {
 				$address = $this->Address->findById($address_id);
@@ -225,10 +237,6 @@ class OffersController extends AppController {
 				$offer['Offer']['offer_number'] = $this->generateOfferNumber($customer['Customer']['id']);
 			}
 			
-			//Offer-Status setzen
-			$offer['Offer']['status'] = 'open';
-			$offer['Offer']['customer_id'] = $customer['Customer']['id'];
-			$offer['Customer'] = $customer['Customer'];
 			$this->Offer->save($offer);
 			
 		} else {
