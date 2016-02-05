@@ -584,7 +584,7 @@ class BillingsController extends AppController {
 		$this->layout = 'pdf';
 		$pdf = true;
 		
-		$data = $this->Billing->findById($id);
+		$data = $this->Process->findByBillingId($id);
 		
 		$delivery = $this->Delivery->findById($data['Confirmation']['delivery_id']);
 		$this->generateData($data, $delivery['Delivery']['cart_id']);

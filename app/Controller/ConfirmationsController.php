@@ -175,7 +175,7 @@ class ConfirmationsController extends AppController {
 			$this->redirect(array('action'=>'edit_individual', $id));
 		} 
 		
-		if(!isset($id)){
+		if($id){
 			// Wenn es noch eine leere AB (ohen Kunden) gibt, dann nimm die
 			$empty = $this->Confirmation->find('first', array('conditions' => array('customer_id' => NULL, 'Confirmation.cart_id' => 0)));
 			if(!empty($empty)) {

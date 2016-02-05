@@ -215,6 +215,7 @@
 																			
 										
 									} else {
+										debug($item);
 										if($item['Process'][0]['type'] == 'part') {
 											echo '<i class="glyphicon glyphicon-duplicate" data-toggle="popover" style="color: teal; cursor: pointer"
 											data-content="Erster Teil-Lieferscheine vorhanden."
