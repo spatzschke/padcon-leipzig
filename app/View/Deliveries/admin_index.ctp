@@ -90,6 +90,19 @@ $(document).ready(function() {
 	        </div>	
 		</section>
 
+		<!-- <nav>
+		  <ul class="pagination">
+		    <li>
+		      <span aria-hidden="true"><?php echo $this->Paginator->prev('<<', array(), null, array('class' => 'prev disabled')); ?></span>
+		    </li>
+		    <?php echo $this->Paginator->numbers(array('before' => '<li>', 'after' => '</li>', 'separator' => '')); ?>
+		    <li>
+		        <span aria-hidden="true"><?php echo $this->Paginator->next(' >>', array(), null, array('class' => 'next disabled')); ?></span>
+		     
+		    </li>
+		  </ul>
+		</nav> -->
+
 		<div class="module_content">
 			<table class="tablesorter" cellspacing="0"> 
 			<thead> 
@@ -117,6 +130,19 @@ $(document).ready(function() {
 			</tbody>
 			 
 			</table>
+			
+		<!-- <nav>
+		  <ul class="pagination">
+		    <li>
+		      <span aria-hidden="true"><?php echo $this->Paginator->prev('<<', array(), null, array('class' => 'prev disabled')); ?></span>
+		    </li>
+		    <?php echo $this->Paginator->numbers(array('before' => '<li>', 'after' => '</li>', 'separator' => '')); ?>
+		    <li>
+		        <span aria-hidden="true"><?php echo $this->Paginator->next(' >>', array(), null, array('class' => 'next disabled')); ?></span>
+		     
+		    </li>
+		  </ul>
+		</nav> -->
 			
 		</div><!-- end of .tab_container -->
 </article><!-- end of stats article -->
