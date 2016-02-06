@@ -60,23 +60,20 @@ body .row-fluid .firstItem { margin: 0;}
 	margin-bottom: 30px;
 }
 
-#processOverview .processStepContainer.stepOffer {
-	margin-left: 110px;
-    width: 190px !important;
-}
 
 #processOverview .processStep, #processOverview .stepType {
-	border: 5px solid #DDD;
+	border: 3px solid #DDD;
 	width: 40px;
 	height: 40px;
 	background-color: white;
 	z-index: 5000;
 	position: relative;
 	border-radius: 50px;
-	box-shadow: 0 0 10px 2px #CCC
+	box-shadow: 0 0 10px 2px #CCC;
+	padding: 2px
 }
 
-
+#processOverview .stepType { box-shadow: none; border-color: #FFF }
 
 #processOverview .processStep.status-open {	border-color: grey; box-shadow: 0 0 10px 2px #888 }
 #processOverview .processStep.status-close {	border-color: green; box-shadow: 0 0 10px 2px #888 }
@@ -85,16 +82,17 @@ body .row-fluid .firstItem { margin: 0;}
 #processOverview .processStep.status-open i{ color: grey }
 #processOverview .processStep.status-close i{ color: green }
 #processOverview .processStep.status-cancel i{ color: red }
-
-#processOverview .processStep i, #processOverview .stepType i{
+#processOverview .stepType  i,
+#processOverview .processStep  i{
 	font-size: 18px;
     margin: 4px 0 0 4px;
     color: lightgrey
 }
-#processOverview .stepOffer .processStep  i { margin: 5px 0 0 8px; }
+#processOverview .stepOffer .processStep  i { margin: 5px 0 0 2px; }
 #processOverview .stepConfirmation .processStep  i { margin: 4px 0 0 4px; }
 #processOverview .stepDelivery .processStep  i { margin: 5px 0 0 4px; }
 #processOverview .stepBilling .processStep  i { margin: 4px 0 0 2px; }
+#processOverview .stepType.processStep  i { margin: 4px 0 0 7px; }
 
 #processOverview .processLine {
 	border: 1px solid lightgrey;
@@ -120,7 +118,7 @@ body .row-fluid .firstItem { margin: 0;}
     opacity: 0.8
 }
 
-#processOverview .stepBilling .stepId { left: -40px; }
+#processOverview .col-md-2 .stepId { left: -40px; }
 
 #processOverview .stepLabel {
 	background: white none repeat scroll 0 0;
@@ -134,13 +132,8 @@ body .row-fluid .firstItem { margin: 0;}
     opacity: 0.8
 }
 
-#processOverview .stepBilling .stepLabel { left: 30px; }
+#processOverview .col-md-2 .stepLabel { left: 30px; }
 
-#processOverview .stepType { 
-	position: absolute;
-    right: -65px;
-    top: 0;
-}
 
 
 

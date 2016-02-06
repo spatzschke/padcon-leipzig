@@ -12,29 +12,29 @@
 			<li class="icn_view_users"><?php echo $this->Html->link('Rechnung aus Lieferschein erstellen', '/admin/billings/convert', array('disabled' => 'disabled')); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Auswertung anzeigen', '/admin/offers/index', array('disabled' => 'disabled')); ?></li>
 		</ul>-->
-		<h3><i class="glyphicon glyphicon-file" style="color: grey"></i>&nbsp;&nbsp;Angebote</h3>
+		<h3><i class="glyphicon glyphicon-send" style="color: grey"></i>&nbsp;&nbsp;Angebote</h3>
 		<ul class="toggle">
-			<li><i class="glyphicon glyphicon-plus" style="color: grey"></i><?php echo $this->Html->link('Neues Angebot erstellen', '/admin/offers/add'); ?></li>
-			<li><i class="glyphicon glyphicon-hand-right" style="color: grey"></i><?php echo $this->Html->link('Individuelles Angebot erstellen', '/admin/offers/add_individual'); ?></li>
-			<li><i class="glyphicon glyphicon-list" style="color: grey"></i><?php echo $this->Html->link('Alle Angebote anzeigen', '/admin/offers/index'); ?></li>
+			<li><i class="glyphicon glyphicon-plus" style="color: grey"></i><?php echo $this->Html->link('Neues AN erstellen', '/admin/offers/add'); ?></li>
+			<li><i class="glyphicon glyphicon-hand-right" style="color: grey"></i><?php echo $this->Html->link('Indiv. AN erstellen', '/admin/offers/add_individual'); ?></li>
+			<li><i class="glyphicon glyphicon-list" style="color: grey"></i><?php echo $this->Html->link('Alle AN anzeigen', '/admin/offers/index'); ?></li>
 		</ul>
 		<h3><i class="glyphicon glyphicon-check" style="color: grey"></i>&nbsp;&nbsp;Auftragsbestätigung</h3>
 		<ul class="toggle">
 			<li><i class="glyphicon glyphicon-plus" style="color: grey"></i><?php echo $this->Html->link('Neue AB erstellen', '/admin/confirmations/add'); ?></li>
-			<li><i class="glyphicon glyphicon-hand-right" style="color: grey"></i><?php echo $this->Html->link('Individuelle AB erstellen', '/admin/confirmations/add_individual'); ?></li>
+			<li><i class="glyphicon glyphicon-hand-right" style="color: grey"></i><?php echo $this->Html->link('Indiv. AB erstellen', '/admin/confirmations/add_individual'); ?></li>
 			<li><i class="glyphicon glyphicon-list" style="color: grey"></i><?php echo $this->Html->link('Alle ABs anzeigen', '/admin/confirmations/index'); ?></li>
 		</ul>
 		<h3><i class="glyphicon glyphicon-qrcode" style="color: grey"></i>&nbsp;&nbsp;Lieferschein</h3>
 		<ul class="toggle">
 			<!-- <li class="icn_add_user"><?php echo $this->Html->link('Lieferschein aus AB erstellen', '/admin/deliveries/convert', array('disabled' => 'disabled')); ?></li> -->
-			<li><i class="glyphicon glyphicon-hand-right" style="color: grey"></i><?php echo $this->Html->link('Individuellen Lieferschein erstellen', '/admin/deliveries/add_individual'); ?></li>
-			<li><i class="glyphicon glyphicon-list" style="color: grey"></i><?php echo $this->Html->link('Alle Lieferscheine anzeigen', '/admin/deliveries/index'); ?></li>
+			<li><i class="glyphicon glyphicon-hand-right" style="color: grey"></i><?php echo $this->Html->link('Indiv. LS erstellen', '/admin/deliveries/add_individual'); ?></li>
+			<li><i class="glyphicon glyphicon-list" style="color: grey"></i><?php echo $this->Html->link('Alle LS anzeigen', '/admin/deliveries/index'); ?></li>
 		</ul>
 		<h3><i class="glyphicon glyphicon-euro" style="color: grey"></i>&nbsp;&nbsp;Rechnung</h3>
 		<ul class="toggle">
 			<!-- <li class="icn_add_user"><?php echo $this->Html->link('Rechnung aus AB erstellen', '/admin/billings/convert', array('disabled' => 'disabled')); ?></li> -->
-			<li><i class="glyphicon glyphicon-hand-right" style="color: grey"></i><?php echo $this->Html->link('Individuelle Rechnung erstellen', '/admin/billings/add_individual'); ?></li>
-			<li><i class="glyphicon glyphicon-list" style="color: grey"></i><?php echo $this->Html->link('Alle Rechnungen anzeigen', '/admin/billings/index'); ?></li>
+			<li><i class="glyphicon glyphicon-hand-right" style="color: grey"></i><?php echo $this->Html->link('Indiv. RE erstellen', '/admin/billings/add_individual'); ?></li>
+			<li><i class="glyphicon glyphicon-list" style="color: grey"></i><?php echo $this->Html->link('Alle RE anzeigen', '/admin/billings/index'); ?></li>
 		</ul>
 		<!--<h3>Warenkorb</h3>
 		<ul class="toggle">
