@@ -115,23 +115,14 @@ class DeliveriesController extends AppController {
 					$confirmation['Confirmation']['status'] = "close";
 				}
 				
-				$this->Confirmation->save($confirmation);
-				
+				$this->Confirmation->save($confirmation);			
 				
 		
-				//Neue ConfirmationDeliver erstellen - Full
-				$Process['Process']['type'] =  'full';
-				$Process['Process']['delivery_id'] =  $dev_id;
-				
-				if($id) {
-					$Process['Process']['confirmation_id'] =  $id;
-				} else {
-					$Process['Process']['confirmation_id'] = 0;
-				}
-				
-				$this->Process->create();
-				$this->Process->save($Process);		
-				
+				//Delivery zu Prozess zuschlüsseln
+				$proc = $this->Process->findByConfirmationId($id);
+				$proc['Process']['delivery_id'] =  $dev_id;
+				$proc['Process']['type'] =  'full';
+				$this->Process->save($proc);			
 				
 				// Generate Hash für AB
 				$data['Delivery']['id'] =  $dev_id;

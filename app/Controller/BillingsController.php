@@ -121,7 +121,7 @@ class BillingsController extends AppController {
 				$data['Billing']['billing_number'] = $this->data['Billing']['billing_number'];
 				
 				$this->Billing->save($data);
-				$dev_id = $this->Billing->id;
+				$bil_id = $this->Billing->id;
 				
 				if(!$id) {
 					$id = $confirmation['Confirmation']['id'];
@@ -129,16 +129,21 @@ class BillingsController extends AppController {
 				
 				// Rechnung in AB eintragen
 				$confirmation['Confirmation']['id'] =  $id;
-				$confirmation['Confirmation']['billing_id'] =  $dev_id;
+				$confirmation['Confirmation']['billing_id'] =  $bil_id;
 				$this->Confirmation->save($confirmation);
+				
+				//Delivery zu Prozess zuschlüsseln
+				$proc = $this->Process->findByConfirmationId($id);
+				$proc['Process']['billing_id'] =  $bil_id;
+				$this->Process->save($proc);	
 				
 				
 				// Generate Hash für AB
-				$data['Billing']['id'] =  $dev_id;
-				$data['Billing']['hash'] =  Security::hash($dev_id, 'md5', true);
+				$data['Billing']['id'] =  $bil_id;
+				$data['Billing']['hash'] =  Security::hash($bil_id, 'md5', true);
 				$this->Billing->save($data);
 	
-				$this->redirect(array('action'=>'edit_individual', $dev_id));
+				$this->redirect(array('action'=>'edit_individual', $bil_id));
 			}
 		} 
 		
@@ -177,7 +182,7 @@ class BillingsController extends AppController {
 			$data = $this->data;
 			$data['Billing']['created'] = date('Y-m-d',strtotime($data['Billing']['created']));
 			$data['Billing']['id'] = $id;
-			$billing['Billing']['billing_price'] = $data['Confirmation']['confirmation_price'];
+			$billing['Billing']['billing_price'] = $this->$data['Billing']['billing_price'];
 			
 			//Filtere Zahlungsziel aus Text heraus
 			$data['Billing']['payment_target'] = $this->findPaymentTarget($data);
@@ -189,7 +194,7 @@ class BillingsController extends AppController {
 			$data['Billing']['skonto'] = $this->findSkonto($data);
 			
 			$Carts = new CartsController();
-			$data['Confirmation']['billing_price'] = $Carts->convertPriceToSql($data['Confirmation']['confirmation_price']);
+			$data['Confirmation']['billing_price'] = $Carts->convertPriceToSql($this->$data['Billing']['billing_price']);
 			
 			if($this->Billing->save($data)) {
 				$this->Session->setFlash(__('Rechnung wurde gespeichert.'));
@@ -794,8 +799,8 @@ class BillingsController extends AppController {
 					$item['Billing']['confirmation_number'] = $confirmation['Confirmation']['confirmation_number'];
 				
 				//Lieferschein
-				if($item['Confirmation']['delivery_id']) {
-					$delivery = $this->Delivery->findById($item['Confirmation']['delivery_id']);
+				if($item['Process']['delivery_id']) {
+					$delivery = $this->Delivery->findById($item['Process']['delivery_id']);
 					$item['Billing']['delivery_number'] = $delivery['Delivery']['delivery_number'];
 				}
 			//}	
