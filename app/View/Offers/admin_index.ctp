@@ -7,7 +7,7 @@ $(document).ready(function() {
 		
 			$('#filter .search input').dynamicSearch({
 			url: "<?php echo FULL_BASE_URL.$this->base;?>\/Offers\/search\/",
-			renderTemplate: '/Elements/backend/portlets/Offer/offerPortletTableContent',
+			renderTemplate: '/Elements/backend/portlets/Offers/tableContent',
 			cancel: '.form-search .cancel',
 			loadingClass: 'loadingSpinner',
 			loadingElement: '#filter .search .input-group-addon i',
@@ -84,7 +84,7 @@ $(document).ready(function() {
 		    <li class="disabled"><a href="#"><span aria-hidden="true">&larr;</span>  Nächste</a></li>
 		    <li><a href="#">Vorherige  <span aria-hidden="true">&rarr;</span></a></li>
 
-		  </ul -->>
+		  </ul> -->
 		</nav>
 		<div class="module_content">
 			<table class="tablesorter" cellspacing="0"> 

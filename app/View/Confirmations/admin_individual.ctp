@@ -270,7 +270,7 @@ $(document).ready(function() {
 					</div>
 					
 					 <div class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-share" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-send" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
 									 data-content="Einkaufspreis"></i>
 						</span>
                         <?php  

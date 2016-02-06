@@ -36,6 +36,11 @@ class DeliveriesController extends AppController {
 		$this->layout = 'admin';
 	
 		$this->Delivery->recursive = 0;
+		$this->Paginator->settings = array(
+	        'order' => array('substring(Delivery.delivery_number, 4, 5)' => 'DESC', 'substring(Delivery.delivery_number, 1, 3)' => 'DESC'),
+	        'limit' => 20
+	    );
+	//    $data = $this->Paginator->paginate('Delivery');
 		$data = $this->Delivery->find('all', array('order' => array('substring(Delivery.delivery_number, 4, 5) DESC', 'substring(Delivery.delivery_number, 1, 3) DESC')));
 		
 		$this->set('title_for_panel', 'Alle Lieferscheine');	

@@ -36,7 +36,13 @@ class BillingsController extends AppController {
 	public function admin_index() {
 		
 		$this->layout = "admin";
-		$data = $this->Billing->find('all', array('order' => array('Billing.billing_number DESC')));
+		
+		 $this->Paginator->settings = array(
+        'order' => array('Billing.billing_number' => 'DESC'),
+        'limit' => 40
+	    );
+	    $data = $this->Paginator->paginate('Billing');
+		//$data = $this->Billing->find('all', array('order' => array('Billing.billing_number DESC')));
 		
 		foreach ($data as $key => $value) {
 			

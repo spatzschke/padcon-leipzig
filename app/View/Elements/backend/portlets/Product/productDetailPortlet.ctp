@@ -187,7 +187,7 @@ function updateURL(currUrl, param, paramVal){
                             	data-trigger="hover" 
                             	data-toggle="popover" 
                             	style="cursor: pointer" 
-                            	class="glyphicon glyphicon-share" 
+                            	class="glyphicon glyphicon-send" 
                             	data-original-title="" 
                             	title=""></i></span>
                             <?php echo $this->Form->input('price', array(
