@@ -619,7 +619,7 @@ class OffersController extends AppController {
 		
 		if(!empty($offer)) {
 			$Carts = new CartsController();
-	    	$cart = $Carts->get_cart_by_id($offer['Cart']['id']);		
+	    	$cart = $Carts->getCartById($offer['Cart']['id']);		
 			
 			//Berechen Seitenbelegung mit Produkte
 			$this->request->data['Pages'] = $Carts->calcPageLoad($cart);
@@ -663,7 +663,7 @@ class OffersController extends AppController {
 				$offer['Customer'] += $Customers->splitCustomerData($offer);
 			}			
 			
-			$cart = $Carts->get_cart_by_id($offer['Cart']['id']);
+			$cart = $Carts->getCartById($offer['Cart']['id']);
 			$offer['Cart']['CartProduct'] = $cart['CartProduct'];
 			if(!empty($cart['CartProduct'])) {
 				$j = 0;

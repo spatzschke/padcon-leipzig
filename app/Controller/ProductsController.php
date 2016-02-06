@@ -4,7 +4,7 @@ App::import('Controller', 'Carts');
 class ProductsController extends AppController {
 	
 	var $name = 'Products';
-	public $uses = array('Cart', 'Product', 'Material', 'Color', 'Image', 'Category', 'Core', 'ProductCore', 'ProductCategory');
+	public $uses = array('Cart', 'Product', 'Material', 'Color', 'Image', 'Category', 'Core', 'ProductCore', 'ProductCategory', 'CartProduct');
 	var $components = array('RequestHandler', 'Auth', 'Session');
 	var $helpers = array('Html', 'Js');
 	
@@ -886,4 +886,24 @@ class ProductsController extends AppController {
 		return $number;
 		
 	}
+	
+	function admin_fillCustomerProductPrice() {
+		
+		$cartProds = $this->CartProduct->find('all');
+		
+		foreach ($cartProds as $key => $value) {
+
+			$prod = $this->Product->findById($value['CartProduct']['product_id']);
+			
+			$cartProd['CartProduct']['id'] = $value['CartProduct']['id'];
+			$cartProd['CartProduct']['price'] = $prod['Product']['price'];
+			$cartProd['CartProduct']['retail_price'] = $prod['Product']['retail_price'];
+			
+			$this->CartProduct->save($cartProd);
+
+		}
+		
+		$this->redirect(array('controller' =>'Pages', 'action' => 'setting'));
+	}
+		
 }
