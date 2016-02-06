@@ -182,10 +182,7 @@
 							}
 						}
 						?>
-					</td>
-					<!--<td><?php echo $item['Confirmation']['discount']; ?>&nbsp;</td>
-					<td><?php echo $item['Confirmation']['delivery_cost']; ?>&nbsp;</td>-->
-					
+					</td>					
 					<!-- Auftragsbestätigung-Nummer -->
 					<td>
 						<?php 

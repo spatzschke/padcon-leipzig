@@ -164,11 +164,23 @@ class ConfirmationsController extends AppController {
 			$data['Confirmation']['hash'] =  Security::hash($id, 'md5', true);
 			$this->Confirmation->save($data);
 			
+			
+			
 			if(isset($offer_id)) {
 				// Trage AB-Nummer in Angebot ein
 				$offerArr['Offer']['id'] = $offer_id;
 				$offerArr['Offer']['confirmation_id'] =  $id;
 				$this->Offer->save($offerArr);
+				
+				//AB dem Prozess mit Offer zuschlüsseln
+				$proc = $this->Process->findByOfferId($offer_id);
+				$proc['Process']['confirmation_id'] =  $id;
+				$this->Process->save($proc);				
+				
+			} else {
+				//Neuen Prozess starten
+				$proc['Process']['confirmation_id'] =  $id;
+				$this->Process->save($proc);
 			}
 
 			$this->redirect(array('action'=>'edit_individual', $id));
@@ -225,7 +237,13 @@ class ConfirmationsController extends AppController {
 				$this->Session->setFlash(__('Bitte geben Sie eine AB-Gesamtsumme ein!'), 'flash_message', array('class' => 'alert-danger'));
 			} else {
 				if($this->Confirmation->save($data)) {
-					$this->Session->setFlash(__('The confirmation has been saved.'));
+					$this->Session->setFlash(__('Auftragsbestätigung wurde aktualisiert.'));
+					
+					//Kunde an Prozess übertragen
+					$proc = $this->Process->findByConfirmationId($id);
+					$proc['Process']['customer_id'] =  $data['Confirmation']['customer_id'];
+					$this->Process->save($proc);							
+					
 					$this->redirect(array('action'=>'index'));
 				} else {
 					$this->Session->setFlash(__('Konnte nicht gespeichert werden'));

@@ -1,13 +1,8 @@
 <?php	
 	foreach ($data as $item):
-	
-	
-	
-		if($item['Confirmation']['customer_id'] != 0) {
-						
+		if(true) {						
 ?>
-				<tr>
-					
+				<tr>				
 					<td>
 						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Confirmation']['status'], 'custom' => $item['Confirmation']['custom']));	?>	
 					</td>
@@ -88,10 +83,7 @@
 							} 
 						} else { echo '-'; }?>
 					</td>
-					<!--<td><?php echo $item['Confirmation']['discount']; ?>&nbsp;</td>
-					<td><?php echo $item['Confirmation']['delivery_cost']; ?>&nbsp;</td>-->
 					<td style="text-align: right; width: 130px">
-						
 						<?php 
 						$priceInfo = 'Gesamtpreis: '.$this->Number->currency($item['Cart']['sum_retail_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 									 $item['Confirmation']['discount'].'% Rabatt: '.$this->Number->currency($item['Confirmation']['discount_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
@@ -129,29 +121,10 @@
 							}
 						?>
 					</td>
-					<!-- <td>
-						<?php 
-							
-							if(empty($item['Cart']['count']) || $item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
-								echo '-';
-							} else {
-								if(empty($item['Confirmation']['billing_id'])) {
-									echo $this->Html->link('Rechnung', array('controller' => 'Billings', 'action' => 'convert', 'admin' =>'true', $item['Confirmation']['id']),
-																	array('class' => 'btn btn-default')); 	
-								} else {
-									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'view', $item['Confirmation']['billing_id']), array('escape' => false));
-									echo $item['Billing']['billing_number'];
-								}
-									
-								
-							}
-							  
-						 ?>
-					</td> -->
 					<td style="width: 0">
 						<?php 
 							
-							if($item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
+							if(empty($item['Confirmation']['customer_id']) || empty($item['Process'])) {
 								echo '-';
 							} else {
 								if(sizeof($item['Process']) == 1) {									

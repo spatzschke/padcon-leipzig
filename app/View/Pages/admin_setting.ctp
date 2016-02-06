@@ -40,7 +40,7 @@
 	<div class="panel panel-default col-md-12">
 	  <div class="panel-heading">Produkte</div>
 	  <div class="panel-body">
-	    <?php  echo $this->Html->link('Akutelle Produktpreise in CartProducts übertrage', '/admin/products/fillCustomerProductPrice', array('class' => 'btn btn-danger')); ?>
+	    <?php  //echo $this->Html->link('Akutelle Produktpreise in CartProducts übertrage', '/admin/products/fillCustomerProductPrice', array('class' => 'btn btn-danger')); ?>
 	  </div>
 	</div>
 </div>                    
