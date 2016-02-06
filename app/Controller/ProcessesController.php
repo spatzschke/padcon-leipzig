@@ -27,6 +27,12 @@ class ProcessesController extends AppController {
 		$this->layout = "admin";
 		
 		$this->Process->recursive = 0;
+		
+		 $this->Paginator->settings = array(
+        'order' => array('Process.id' => 'DESC'),
+        'limit' => 1000
+	    );
+		
 		$this->set('processes', $this->Paginator->paginate());
 	}
 

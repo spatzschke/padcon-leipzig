@@ -1,4 +1,4 @@
-<?php 
+#<?php 
 	echo $this->Html->script('jquery.dynamicSearch', false);
 ?>
 
@@ -84,7 +84,7 @@ $(document).ready(function() {
 		    <li class="disabled"><a href="#"><span aria-hidden="true">&larr;</span>  Nächste</a></li>
 		    <li><a href="#">Vorherige  <span aria-hidden="true">&rarr;</span></a></li>
 
-		  </ul -->>
+		  </ul> -->
 		</nav>
 		<div class="module_content">
 			<table class="tablesorter" cellspacing="0"> 
