@@ -14,28 +14,45 @@
 						<?php echo $this->element('backend/helper/tableStatusHelper', array('status' => $item['Billing']['status'], 'custom' => $item['Billing']['custom']));	?>
 					</td>
 					<td>
-						<?php if(empty($item['Billing']['billing_number'])) {
+						<?php 
+						
+						if(empty($item['Billing']['billing_number'])) {
 							 echo '-'; 
 							} else {
 								
 								if($item['Billing']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'edit_individual', $item['Billing']['id']), array('escape' => false));
-									echo '&nbsp;&nbsp;&nbsp;';
-									echo $item['Billing']['billing_number'];
 								} else {
-									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'view', $item['Billing']['id']), array('escape' => false));
-									echo '&nbsp;&nbsp;&nbsp;';
-									echo $item['Billing']['billing_number'];
+									echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Billings', 'action' => 'view', $item['Billing']['id']), array('escape' => false));									
+								}
+							}
+							echo '&nbsp;&nbsp;&nbsp;';
+							echo $item['Billing']['billing_number'];
+							if(strcmp($item['Process']['type'], 'full') == 0) {
+								echo '&nbsp;&nbsp;&nbsp;';
+								echo '<i class="Voll-Rechnung"
+									 data-trigger="hover"
+								
+								></i>&nbsp;&nbsp;';
+							} else {
+								if(isset($item['Billing']['confirmation_number'])) {
+									echo '&nbsp;&nbsp;';
+									echo '<i class="glyphicon glyphicon-duplicate" style="color: teal; cursor: pointer"
+										 data-toggle="popover"
+										 data-content="Teil-Rechnung zu AB: '.$item['Billing']['confirmation_number'].'"
+										 data-trigger="hover"
+									
+									></i>';
 								}
 							}
 						?>
 					</td>
 					<td>
 						<?php 						
-						if(!is_null($item['Confirmation']['customer_id'])) {
+						if(!is_null($item['Process']['customer_id'])) {
 							
-							if(empty($item['Confirmation']['customer_id'])) { echo '-'; } else {
-								echo $item['Confirmation']['customer_id'];	
+							if(empty($item['Process']['customer_id'])) { echo '-'; } else {
+								echo $item['Process']['customer_id'];	
 								if(!is_null($item['Billing']['address_id']) && $item['Billing']['address_id'] != 0) {
 									echo '&nbsp;';
 									echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
@@ -75,14 +92,14 @@
 							$skonto = '';
 							if($item['Billing']['skonto_take']) {
 								$skonto = '-'.$item['Billing']['skonto'].'% Skonto: '.$this->Number->currency($item['Billing']['skonto_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>';
-							}
-	
+							}	
 							$priceInfo = 'Gesamtpreis: '.$this->Number->currency($item['Cart']['sum_retail_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 										 $item['Confirmation']['discount'].'% Rabatt: '.$this->Number->currency($item['Billing']['discount_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
-										 'Versandkostenvorteil: '.$this->Number->currency($item['Billing']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
+										 'Versandkostenanteil: '.$this->Number->currency($item['Billing']['delivery_cost'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 										 'Zwischensumme: '.$this->Number->currency($item['Billing']['part_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 										 '+'.$item['Confirmation']['vat'].'% Mehrwertsteuer: '.$this->Number->currency($item['Billing']['vat_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 										 $skonto.
+										 '_______________________________ <br />'.
 										 '<b>Rechnungswert: '.$this->Number->currency($item['Billing']['billing_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'</b>';					
 							
 							
@@ -92,7 +109,7 @@
 								 data-toggle="popover" 
 								 data-content="'.
 								 	$cartProducts.'
-								 --------------- <br />
+								 --------------------------------------------------- <br />
 								 '.$priceInfo.'"
 								 data-trigger="hover"
 							
@@ -102,7 +119,10 @@
 					<td>
 						<?php 
 						if($item['Billing']['status'] && !empty($item['Billing']['skonto'])){
-								//Zahlungsziel nähert sich an
+							if($item['Billing']['status'] == 'close' && !$item['Billing']['skonto_take'] ) {
+								echo '-';
+							} else {
+								//Skonto gezogen
 								if($item['Billing']['skonto_take']) {							
 									echo '<i class="glyphicon glyphicon-ok-sign" style="color: green; cursor: pointer"
 										 data-toggle="popover" 
@@ -110,12 +130,13 @@
 										 data-trigger="hover"
 										 data-placement="top"								
 									></i>';
-								}
-								echo '&nbsp;';
-								echo $this->Number->toPercentage($item['Billing']['skonto'],0);	
-							} else {
-								echo '-'; 							
+								} 
+								 echo '&nbsp;';
+								 echo $this->Number->toPercentage($item['Billing']['skonto'],0);	
 							}
+						} else {
+							echo '-'; 							
+						}
 						?>
 						
 					</td>					
@@ -161,64 +182,50 @@
 							}
 						}
 						?>
-					</td>
-					<!--<td><?php echo $item['Confirmation']['discount']; ?>&nbsp;</td>
-					<td><?php echo $item['Confirmation']['delivery_cost']; ?>&nbsp;</td>-->
-					
+					</td>					
 					<!-- Auftragsbestätigung-Nummer -->
 					<td>
 						<?php 
-							
-							if($item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
+							if(empty($item['Process']['confirmation_id'])) {
 								echo '-';
 							} else {
-								
-								if($item['Billing']['status']){
+								if($item['Billing']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									 data-content="'.$item['Confirmation']['confirmation_number'].'"
 									 data-trigger="hover"></i>', 
-									 array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit_individual', $item['Confirmation']['id']), array('escape' => false));
+									 array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit_individual', $item['Process']['confirmation_id']), array('escape' => false));
 								} else {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									 data-content="'.$item['Confirmation']['confirmation_number'].'"
 									 data-trigger="hover"></i>', 
-									 array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['id']), array('escape' => false));
+									 array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Process']['confirmation_id']), array('escape' => false));
 								}
 																	
 							}
-							  
-						 ?>
+					    ?>
 					</td>
 					<!-- Lieferschein-Nummer -->
 					<td>
 						<?php 
-							if($item['Confirmation']['order_date'] == '0000-00-00' || empty($item['Confirmation']['customer_id']) || empty($item['Confirmation']['confirmation_price'])) {
-								echo '-';
+							if($item['Process']['delivery_id'] == '0') {
+								echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
+									data-content="Lieferung durch den Hersteller</b>"
+									data-trigger="hover"></i>'; 
 							} else {
 								
 								if($item['Billing']['custom']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Billing']['delivery_number'].'"
 									data-trigger="hover"
-									></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'edit_individual', $item['Confirmation']['id']), array('escape' => false));
-								
-								} elseif(!$item['Confirmation']['delivery_id']) {
-											echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
-											data-content="Lieferung durch den Hersteller</b>"
-											data-trigger="hover"></i>'; 
+									></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'edit_individual', $item['Process']['delivery_id']), array('escape' => false));
 								} else {
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Billing']['delivery_number'].'"
 									data-trigger="hover"
-									></i>', array('admin' => true, 'controller' => 'Confirmations', 'action' => 'view', $item['Confirmation']['id']), array('escape' => false));
+									></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Process']['delivery_id']), array('escape' => false));
 								
 								}
-								
-								
-								
-								
 							}
-							  
 						 ?>
 					</td>
 					

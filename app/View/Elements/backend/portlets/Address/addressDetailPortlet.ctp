@@ -2,6 +2,9 @@
 	echo $this->Html->script('jquery.caret.1.02.min', false);
 	echo $this->Html->script('jquery.liveValidation', false);
 	echo $this->Html->script('jquery.lazyload.min', false);
+
+	$action = 'add';
+	if($this->request->params['action'] == 'admin_edit') { $action = 'edit'; }
 ?>
 
 <script>
@@ -11,8 +14,11 @@ $(document).ready(function() {
 			
 			$('.addAddressNow').on('click', function(){
 					
-				<?php 
-					$data = $this->Js->get('#AddressAdminAddForm')->serializeForm(array('isForm' => true, 'inline' => true)); 
+				<?php
+					$form = '#AddressAdminAddForm';
+					if($this->request->params['action'] == 'admin_edit') { $form = '#AddressAdminEditForm'; }
+				 
+					$data = $this->Js->get($form)->serializeForm(array('isForm' => true, 'inline' => true)); 
 				?>
 								
 				var xhr = null
@@ -22,15 +28,13 @@ $(document).ready(function() {
 
 				xhr = $.ajax({
 					 type: 'POST',
-					 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/Addresses/add/<?php echo $count;?>/<?php echo $this->data['Customer']['id'];?>',
+					 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/Addresses/<?php echo $action;?>/<?php echo $this->data['Customer']['id'];?>/<?php echo $this->data['Address']['id'];?>',
 					 data: <?php echo $data ?>,
 					 success:function (data, textStatus) {
 					 		
-					 	window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/Customers/view/<?php echo $this->data['Customer']['id'];?>';
+					 	//window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/Customers/view/<?php echo $this->data['Customer']['id'];?>';
+					 	window.location = '';
 					 	
-					 },
-					 error:function (data, textStatus) {
-					 	console.log("Error");
 					 }
 				}); 
 				return false;

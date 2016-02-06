@@ -217,7 +217,7 @@ article.sheet {
 }
 
 .offerMiddle .size { width: 100% }
-.offerMiddle .price { width: 75px; margin-left: 195px; }
+.offerMiddle .price { margin-left: 180px; }
 .offerHeader .number { width: 94px;}
 .offerHeader .content { width: 133px; margin: 0;}
 .offerHeader .price { width: 45px;}

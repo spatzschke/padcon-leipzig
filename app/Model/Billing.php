@@ -11,6 +11,13 @@ class Billing extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Process' => array(
+			'className' => 'Process',
+			'foreignKey' => 'billing_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 }

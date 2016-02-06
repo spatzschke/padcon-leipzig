@@ -1,11 +1,11 @@
 <?php
-App::uses('ConfirmationDelivery', 'Model');
+App::uses('Process', 'Model');
 
 /**
- * ConfirmationDelivery Test Case
+ * Process Test Case
  *
  */
-class ConfirmationDeliveryTest extends CakeTestCase {
+class ProcessTest extends CakeTestCase {
 
 /**
  * Fixtures
@@ -40,7 +40,7 @@ class ConfirmationDeliveryTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->ConfirmationDelivery = ClassRegistry::init('ConfirmationDelivery');
+		$this->Process = ClassRegistry::init('Process');
 	}
 
 /**
@@ -49,7 +49,7 @@ class ConfirmationDeliveryTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->ConfirmationDelivery);
+		unset($this->Process);
 
 		parent::tearDown();
 	}

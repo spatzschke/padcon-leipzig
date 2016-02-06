@@ -1,8 +1,10 @@
 <?php
-class ProductsController extends AppController {
+App::import('Controller', 'Carts');
 
+class ProductsController extends AppController {
+	
 	var $name = 'Products';
-	public $uses = array('Cart', 'Product', 'Material', 'Color', 'Image', 'Category', 'Core', 'ProductCore', 'ProductCategory');
+	public $uses = array('Cart', 'Product', 'Material', 'Color', 'Image', 'Category', 'Core', 'ProductCore', 'ProductCategory', 'CartProduct');
 	var $components = array('RequestHandler', 'Auth', 'Session');
 	var $helpers = array('Html', 'Js');
 	
@@ -471,8 +473,6 @@ class ProductsController extends AppController {
 							$newProduct['Product']['active'] = 'checked';
 							$newProduct['Product']['new'] = '';
 							
-							debug(strcmp($company, 'Fa. padcon'));
-							
 							if (strpos($number, 'Z') !== FALSE || strcmp($company, 'Fa. padcon') < 0) {
 								$newProduct['Product']['custom'] = 'checked';
 							} else {
@@ -525,6 +525,7 @@ class ProductsController extends AppController {
 						array_push($newProducts, $newProduct);
 					
 				}
+
 				$this->request->data['Products'] = $newProducts;
 				}					
 			} else {				
@@ -535,7 +536,9 @@ class ProductsController extends AppController {
 					
 					foreach($data as $i=>$prod) {
 						$errors['prod'.$i] = array();
-																								
+											
+						$prod['retail_price'] = str_replace(',', '.', $prod['retail_price']);
+						$prod['price'] = str_replace(',', '.', $prod['price']);														
 												
 						$this->Product->create();
 						if ($this->Product->save($prod)) {
@@ -652,6 +655,11 @@ class ProductsController extends AppController {
 		if (!empty($data)) {
 			
 			$product = $this->getProduct($id);
+			
+			//Preis von Komma auf Punkt konvertieren
+			$Carts = new CartsController();
+			$data['Product']['price'] = $Carts->convertPriceToSql($data['Product']['price']);
+			$data['Product']['retail_price'] = $Carts->convertPriceToSql($data['Product']['retail_price']);
 			
 			//Kerne Updaten
 			$cores = $this->ProductCore->findAllByProductId($id);
@@ -878,4 +886,24 @@ class ProductsController extends AppController {
 		return $number;
 		
 	}
+	
+	function admin_fillCustomerProductPrice() {
+		
+		$cartProds = $this->CartProduct->find('all');
+		
+		foreach ($cartProds as $key => $value) {
+
+			$prod = $this->Product->findById($value['CartProduct']['product_id']);
+			
+			$cartProd['CartProduct']['id'] = $value['CartProduct']['id'];
+			$cartProd['CartProduct']['price'] = $prod['Product']['price'];
+			$cartProd['CartProduct']['retail_price'] = $prod['Product']['retail_price'];
+			
+			$this->CartProduct->save($cartProd);
+
+		}
+		
+		$this->redirect(array('controller' =>'Pages', 'action' => 'setting'));
+	}
+		
 }

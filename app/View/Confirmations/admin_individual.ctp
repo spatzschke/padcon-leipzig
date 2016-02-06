@@ -268,12 +268,36 @@ $(document).ready(function() {
 						?> 
 						<span class="input-group-addon"><b>%</b></span>    
 					</div>
+					
+					 <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-share" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
+									 data-content="Einkaufspreis"></i>
+						</span>
+                        <?php  
+                        $cost = $this->data['Confirmation']['cost'];
+                        if($cost) {	$cost = $this->Number->currency($cost,'EUR', array('before' => false)); }  
+                        echo $this->Form->input('cost', array(
+							'label' => false,
+							'class' => 'form-control',
+							'data-model' => 'Confirmation',
+							'placeholder' => 'AB-Einkaufspreis',
+							'data-field' => 'cost', 
+							'autoComplete' => true,
+  							'type' => 'text',
+  							'value' => $cost
+						));
+						?>  
+						<span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>                                    
+                    </div>  
 					 
                       <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-piggy-bank" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
 									 data-content="AB-Gesamtsumme"></i>
 						</span>
-                        <?php  echo $this->Form->input('confirmation_price', array(
+                        <?php  
+                        $conPrice = $this->data['Confirmation']['confirmation_price'];
+                        if($conPrice) { $conPrice = $this->Number->currency($conPrice,'EUR', array('before' => false)); }                        
+                        echo $this->Form->input('confirmation_price', array(
 							'label' => false,
 							'class' => 'form-control',
 							'data-model' => 'Confirmation',
@@ -281,10 +305,14 @@ $(document).ready(function() {
 							'data-field' => 'confirmation_price', 
 							'autoComplete' => true,
   							'type' => 'text',
+  							'value' => $conPrice
 						));
 						?>  
 						<span class="input-group-addon"><i class="glyphicon glyphicon-euro"></i></span>                                    
                     </div>  
+                    
+                     
+                    
                      <div class="input-group">
 	                    <span class="input-group-addon"><i class="glyphicon glyphicon-align-left" style="cursor: pointer" data-toggle="popover" data-trigger="hover" data-placement="left"
 									 data-content="Zusatztext"></i>

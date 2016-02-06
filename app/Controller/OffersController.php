@@ -7,7 +7,7 @@ App::import('Controller', 'Addresses');
 class OffersController extends AppController {
 
 	var $name = 'Offers';
-	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'User', 'AddressAddresstype');
+	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'User', 'AddressAddresstype', 'Process');
 	public $components = array('Auth', 'Session');
 	
 	public function beforeFilter() {
@@ -40,62 +40,56 @@ class OffersController extends AppController {
 		$this->set('offer', $offer);
 		$this->set('pdf', null);
 		//$this->request->data = $offer;
-		$this->generateDataByOffer($offer);
+		$this->generateData($offer);
 	}
 
-	function admin_add($isActive = null, $layout = "admin") {
-		
+	function admin_add($layout = "admin") {		
 		$this->layout = $layout;
+		$this->set('pdf', null);	
+		$offer = null;	
 		
-		$active = null;
-		$this->set('pdf', null);
-		
-		$active = $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));
-		
-		$this->generateOfferNumber($active['Offer']['customer_id']);
-		
-		$offer = null;
-		if($active) {
-			
-			$this->generateDataByOffer($active);
-		
-			$this->request->data = $active;
-		
-			$this->set('pdf', null);
-			
-		    $this->set('offer', $this->request->data);
-			
-			$this->set(compact('active'));
-			
-		} else {
-		
-			$cart = $this->requestAction('/admin/carts/add/');
-			
-			$this->Offer->create();
-			
-			$offer['Offer']['status'] = 'active';
-			$offer['Offer']['agent'] = 'Ralf Patzschke';
-			$offer['Offer']['customer_id'] = '';
-			$offer['Offer']['cart_id'] = $cart['Cart']['id'];
-			$offer['Offer']['custom'] = FALSE;
-			
-			//Default settings
-			$offer['Offer']['additional_text'] = Configure::read('padcon.Angebot.additional_text.default');
-			
-			
-			$this->Offer->save($offer);
-			
-			$this->generateDataByOffer($this->Offer->findById($this->Offer->id));
-			$offer['Offer']['id'] = $this->Offer->id;
-			
-			// Generate Hash für Offer
-			$offer['Offer']['hash'] =  Security::hash($this->Offer->id, 'md5', true);
-			$this->Offer->save($offer);
-			
-			$this->set(compact('offer', 'active'));
-			
+		// Wenn es noch eine leere Offer (ohne Kunden) gibt, dann nimm die
+		$empty = $this->Offer->find('first', array('conditions' => array('Offer.customer_id' => '0')));		
+		if(!empty($empty)) {
+			//$this->Session->setFlash(__('Eine leeres Angebot wurde gefunden! Bitte diese Ausfüllen.'));
+			$this->redirect(array('action'=>'edit', $empty['Offer']['id']));
 		}
 		
+		//Erzeuge neuen Cart
+		$cart = $this->requestAction('/admin/carts/add/');
+		
+		$this->Offer->create();
+		
+		$data['Offer']['status'] = 'open';
+		$data['Offer']['agent'] = 'Ralf Patzschke';
+		$data['Offer']['customer_id'] = 0;
+		$data['Offer']['cart_id'] = $cart['Cart']['id'];
+		$data['Offer']['custom'] = FALSE;
+		
+		//Default settings
+		$data['Offer']['additional_text'] = Configure::read('padcon.Angebot.additional_text.default');
+		$this->Offer->save($data);
+		$data_id = $this->Offer->id;
+		
+		$this->generateData($this->Offer->findById($data_id));
+		$data['Offer']['id'] = $data_id;
+		
+		//Starte neuen Prozess
+		$this->Process->create();
+		$proc['Process']['offer_id'] = $data_id;
+		$proc['Process']['customer_id'] = $data['Offer']['customer_id'];
+		$proc['Process']['cart_id'] = $cart['Cart']['id'];
+		$this->Process->save($proc);
+				
+		// Generate Hash für Offer
+		$data['Offer']['hash'] =  Security::hash($this->Offer->id, 'md5', true);
+		$this->Offer->save($data);
+		
+		//Alt-Last
+		$offer = $data;
+		$this->set(compact('data','offer'));
+		
+		//$this->redirect(array('action'=>'edit', $data_id));
 	}
 
 	public function admin_add_individual($id = null) {
@@ -193,12 +187,6 @@ class OffersController extends AppController {
 			$this->render('admin_individual');
 		}
 	}
-	
-	function admin_active() {
-	
-		$this->layout = 'admin';		
-		$this->viewActiveOffer();	
-	}
 
 	function admin_edit($id = null) {
 		$this->layout = 'admin';
@@ -208,8 +196,58 @@ class OffersController extends AppController {
 		$this->set('offer', $offer);
 		$this->set('pdf', null);
 		//$this->request->data = $offer;
-		$this->generateDataByOffer($offer);
+		$this->generateData($offer);
 		$this->render('admin_add'); 
+	}
+	
+	function admin_update($customer_id = null, $offer_id = null, $address_id = null) {
+		$Addresses = new AddressesController();
+		
+		$this->layout="ajax";
+		
+		//Angebot, Prozess und Customer beziehen
+		$offer = $this->Offer->findById($offer_id);
+		$customer = $this->Customer->findById($customer_id);
+		$process = $this->Process->findByOfferId($offer['Offer']['id']);
+		
+		if($offer) {
+			
+			//Offer-Status setzen
+			$offer['Offer']['status'] = 'open';
+			$offer['Offer']['customer_id'] = $customer['Customer']['id'];
+			$offer['Customer'] = $customer['Customer'];
+			
+			//Addressen suchen						
+			if(!is_null($address_id)) {
+				$address = $this->Address->findById($address_id);
+				$offer['Offer']['address_id'] = $address['Address']['id'];
+				$offer['Offer']['Address'] = $address['Address'];
+			} else {
+			//Suche erste Adresse
+				$offer = $Addresses->getAddressByType($offer, 1, TRUE);	
+				$offer['Offer']['address_id'] = $offer['Address']['id'];
+			}
+			
+			//Prozess aktualisieren
+			$process['Process']['customer_id'] = $customer_id;
+			$this->Process->save($process);
+			
+			//Offer-Nummer generieren
+			if(empty($confirmation['Offer']['offer_number'])) {
+				$offer['Offer']['offer_number'] = $this->generateOfferNumber($customer['Customer']['id']);
+			}
+			
+			$this->Offer->save($offer);
+			
+		} else {
+			$this->Session->setFlash(__('Fehler beim der Aktualisierung des Angebots!'));
+		}	
+		
+		$this->request->data = $offer;
+				
+		//echo json_encode($offer['Offer']);
+		$this->autoRender = false;
+		$this->layout = 'admin';
 	}
 
 	function admin_delete($id = null) {
@@ -247,7 +285,7 @@ class OffersController extends AppController {
 			$offer = $this->Offer->findById($offerID);
 		}
 		
-		$this->generateDataByOffer($this->Offer->findById($offerID));
+		$this->generateData($this->Offer->findById($offerID));
 		
 		$title = "Angebot_".str_replace('/', '-', $offer['Offer']['offer_number']);
 		$this->set('title_for_layout', $title);
@@ -397,7 +435,7 @@ class OffersController extends AppController {
 			$this->CartProduct->delete($id);
 		}
 		$Carts = new CartsController();		
-		$Carts->updateCartCount($offer['Cart']);
+		$Carts->updateCart($offer['Cart']);
 		
 		$offer = $this->Offer->findById($offer_id);
 		
@@ -478,8 +516,6 @@ class OffersController extends AppController {
 	}
 
 	function gerneratePdfContent() {
-		
-		
 		$html =	$this->render('admin_add');	
 		return $html;
 		
@@ -490,65 +526,8 @@ class OffersController extends AppController {
 		GETTeR & SETTER
 	
 	*/
+
 	
-	function getActiveOffer() {
-		return $this->Offer->find('first', array('conditions' => array('Offer.status' => 'active')));	
-	}
-	
-	function admin_update($id = null, $offer = null, $address = null) {
-		$this->update($id, $offer, $address);
-	}
-	
-	function update($customer = null, $offer = null, $address = null) {
-		
-		$Addresses = new AddressesController();
-		
-		$this->layout="ajax";
-		
-		if(!$offer) {
-			$offer = $this->getActiveOffer();
-			$offer = $offer['Offer']['id'];
-		}
-		
-		$offer = $this->Offer->findById($offer);
-		$customer_arr = $this->Customer->findById($customer);
-		
-		$offer['Offer']['customer_id'] = $customer;
-		$offer['Customer'] = $customer_arr['Customer'];
-		
-		if($offer) {
-						
-			if(!is_null($address)) {
-				$address = $this->Address->findById($address);
-				$offer['Offer']['address_id'] = $address['Address']['id'];
-				$offer['Offer']['Address'] = $address['Address'];
-			} else {
-			//Suche erste Adresse
-				$offer = $Addresses->getAddressByType($offer, 1, TRUE);	
-				$offer['Offer']['address_id'] = $offer['Address']['id'];
-			}
-			if(empty($confirmation['Offer']['offer_number'])) {
-				$offer['Offer']['offer_number'] = $this->generateOfferNumber($customer);
-			}
-			$offer['Offer']['status'] = 'open';
-			
-			if($this->Offer->save($offer)){
-				$offer['Offer']['stat'] = 'saved';
-			} else {
-				$offer['Offer']['stat'] = 'not saved';
-			}
-		} else {
-			$offer['Offer']['stat'] = 'error';
-		}	
-		
-		$this->request->data = $offer;
-				
-		//echo json_encode($offer['Offer']);
-		$this->autoRender = false;
-		$this->layout = 'admin';
-		// $this->render('admin_edit','210');
-		
-	}
 	
 	function reloadSheet($offer_id = null) {
 		$this->layout = 'ajax';
@@ -556,58 +535,14 @@ class OffersController extends AppController {
 		
 		$offer = $this->Offer->find('first', array('conditions' => array('Offer.id' => $offer_id)));
 		
-		$this->generateDataByOffer($offer);
+		$this->generateData($offer);
 		
-		array_push($this->request->data['Offer'] ,$this->generateDataByOffer($offer));
+		array_push($this->request->data['Offer'] ,$this->generateData($offer));
 		
 		$this->render('/Elements/backend/SheetOffer');
 	}
 	
-	function splitAddressData($offer = null)
-	{
-		$arr_customer = null;
-		
-
-		$customerAddress = $this->Address->find('all', array('conditions' => array('Address.id' => $offer['Offer']['address_id'])));
-		
-		if(empty($customerAddress)) {
-			return null;
-		}
-		
-		for($j=0; $j < count($customerAddress); $j++) {
-			//split department and company
-			$split_arr = array('department','organisation');
-			
-			foreach($split_arr as $split_str) {
-				$arr = explode("\n", $customerAddress[$j]['Address'][$split_str]);
-				$count = 0;
-				for ($i = 0; $i <= count($arr)-1; $i++) {
-					if($arr[$i] != '') {
-						$arr_customer['Address'][$j][$split_str.'_'.$i] = str_replace('\n', '', $arr[$i]);
-						$count++;			
-					}
-				}
-				
-				$arr_customer['Address'][$j][$split_str.'_count'] = $count;
-			}
-			
-			$str_title = '';
-			$str_first_name = '';
-			
-			if(!empty($customerAddress[$j]['Address']['title'])){
-				$str_title = $customerAddress[$j]['Address']['title'].' ';
-			};
-			if(!empty($customerAddress[$j]['Address']['first_name'])){
-				$str_first_name = $customerAddress[$j]['Address']['first_name'].' ';
-			};
-			$arr_customer['Address'][$j]['name'] = $customerAddress[$j]['Address']['salutation'].' '.$str_title.$str_first_name.$customerAddress[$j]['Address']['last_name'];
-			$arr_customer['Address'][$j]['street'] = $customerAddress[$j]['Address']['street'];
-			$arr_customer['Address'][$j]['city_combination'] = str_pad($customerAddress[$j]['Address']['postal_code'],5,'0', STR_PAD_LEFT).' '.$customerAddress[$j]['Address']['city'];
-		}		
-		return $arr_customer;
-	}
-	
-	function calcOfferPrice($offer = null) {
+	function calcPrice($offer = null) {
 		
 		$arr_offer = null;
 		
@@ -651,28 +586,6 @@ class OffersController extends AppController {
 		return $arr_offer['Offer'];
 	}
 
-	
-	function archiveActiveOffer(){
-		
-	    $this->Offer->updateAll(
-		    array('Offer.status' => "'open'"),
-		    array('Offer.status' => "active")
-	    );
-		$this->admin_add(false,"ajax");
-		$this->render('admin_add');
-	}
-	
-	function viewActiveOffer($layout = "admin"){
-		$this->layout = $layout;
-		
-		$this->generateDataByOffer();
-		
-		$this->set('pdf', null);
-		
-	    $this->set('offer', $this->request->data);
-		$this->render('admin_add');
-	}
-	
 	function generateOfferNumber($customerId = null) {
 	
 		// Angebot Nr.: 204/091104
@@ -682,23 +595,23 @@ class OffersController extends AppController {
 		// 04 = Anzahl der gemachten Angebote für den Kunden im laufendem Jahr
 		
 		// 204 = Fortlaufende Nummer im Jahr
-		$countYearOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-01-01 00:00:01'), date('Y-m-d 23:59:59'))))));
+		$countYearOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-01-01 00:00:00'), date('Y-m-d 00:00:00', strtotime("+1 days")))))));
 		$countYearOffers = str_pad($countYearOffers, 2, "0", STR_PAD_LEFT);
 		
 		// 09 = laufende Nummer im Monat
-		$countMonthOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-m-01 00:00:01'), date('Y-m-d 23:59:59'))))));
+		$countMonthOffers = count($this->Offer->find('all',array('conditions' => array('Offer.created BETWEEN ? AND ?' => array(date('Y-m-01 00:00:00'), date('Y-m-d 00:00:00', strtotime("+1 days")))))));
 		$countMonthOffers = str_pad($countMonthOffers, 2, "0", STR_PAD_LEFT);
 		// 11 = Monat November
 		$month = date('m');
 		// 04 = Anzahl der gemachten Angebote für den Kunden im laufendem Jahr
-		$countCustomerOffers = count($this->Offer->find('all',array('conditions' => array('Offer.customer_id' => $customerId), 'Offer.created BETWEEN ? AND ?' => array(date('Y-01-01 00:00:01'), date('Y-m-d 23:59:59')))))+1;
+		$countCustomerOffers = count($this->Offer->find('all',array('conditions' => array('Offer.customer_id' => $customerId), 'Offer.created BETWEEN ? AND ?' => array(date('Y-01-01 00:00:00'), date('Y-m-d 00:00:00', strtotime("+1 days"))))))+1;
 		$countCustomerOffers = str_pad($countCustomerOffers, 2, "0", STR_PAD_LEFT);
 		
 		// Angebot Nr.: 204/091104
 		return $countYearOffers.'/'.$countMonthOffers.$month.$countCustomerOffers;
 	}
 	
-	function generateDataByOffer($offer = null) {
+	function generateData($offer = null) {
 	
 		$Addresses = new AddressesController(); 
 					
@@ -706,7 +619,7 @@ class OffersController extends AppController {
 		
 		if(!empty($offer)) {
 			$Carts = new CartsController();
-	    	$cart = $Carts->get_cart_by_id($offer['Cart']['id']);		
+	    	$cart = $Carts->getCartById($offer['Cart']['id']);		
 			
 			//Berechen Seitenbelegung mit Produkte
 			$this->request->data['Pages'] = $Carts->calcPageLoad($cart);
@@ -726,9 +639,9 @@ class OffersController extends AppController {
 			'customer_id' => $offer['Offer']['customer_id'],
 			'type_id' => 1)));
 
-		$this->request->data['Offer'] += $this->calcOfferPrice($this->request->data);
+		$this->request->data['Offer'] += $this->calcPrice($this->request->data);
 		
-		return 	$this->calcOfferPrice($this->request->data);
+		return 	$this->calcPrice($this->request->data);
 
 	}
 	
@@ -750,7 +663,7 @@ class OffersController extends AppController {
 				$offer['Customer'] += $Customers->splitCustomerData($offer);
 			}			
 			
-			$cart = $Carts->get_cart_by_id($offer['Cart']['id']);
+			$cart = $Carts->getCartById($offer['Cart']['id']);
 			$offer['Cart']['CartProduct'] = $cart['CartProduct'];
 			if(!empty($cart['CartProduct'])) {
 				$j = 0;
@@ -764,7 +677,7 @@ class OffersController extends AppController {
 					$j++;
 				}
 			}
-			$offer['Offer'] = $offer['Offer'] + $this->calcOfferPrice($offer);
+			$offer['Offer'] = $offer['Offer'] + $this->calcPrice($offer);
 						
 			array_push($offers2, $offer);
 			

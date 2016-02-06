@@ -56,9 +56,9 @@
 			            		
 								echo '</span></div>
 								';
-								if($this->request->params['controller'] != "Deliveries") {
-								echo '<div class="price"><span type="text">'.number_format($product['Product']['retail_price'], 2, ",", ".").'</span> '.Configure::read('padcon.currency.symbol').'</div>
-									<div class="sum_price">'.number_format(floatVal($product['Product']['retail_price'])*intVal($cartProduct['amount']), 2, ",", ".").' '.Configure::read('padcon.currency.symbol').'</div>';							
+								if($pagePrice) {
+								echo '<div class="price"><span type="text">'.number_format($cartProduct['retail_price'], 2, ",", ".").'</span> '.Configure::read('padcon.currency.symbol').'</div>
+									<div class="sum_price">'.number_format(floatVal($cartProduct['retail_price'])*intVal($cartProduct['amount']), 2, ",", ".").' '.Configure::read('padcon.currency.symbol').'</div>';							
 								}
 								echo '</div>
 						</div>

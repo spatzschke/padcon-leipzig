@@ -9,41 +9,10 @@ $(document).ready(function() {
 									
 });
 
-function saveAndReloadConfirmationHeader(id) {
-		
-	xhr = $.ajax({
-				 type: 'POST',
-				 url: '<?php echo FULL_BASE_URL.$this->base;?>\/Confirmations\/updateConfirmation\/'+id+'/<?php echo $this->data['Confirmation']['id'];?>',
-				 data: '',
-				 success:function (data, textStatus) {
-				 
-				 		data = jQuery.parseJSON(data);
-				 
-				 		$(data).each(function(i,val){
-						    $.each(val,function(k,v){
-						    	$('.ConfirmationInfo').find('input').each(function() {
-							    	
-							    	if(k == $(this).attr('data-field')) {
-								       
-								       $(this).val(v);
-								       
-								       
-							        } 
-							    	
-						    	});
-						        
-							});
-						});
-					} 
-			 }); 
-	
-}
 
 
 </script>
 
-
-		
 		<div class="offerInfo">
 		
 			<h1> Auftragsbestätigung </h1>

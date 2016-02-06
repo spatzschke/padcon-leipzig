@@ -43,10 +43,10 @@ class Product extends AppModel {
 				//'allowEmpty' => false,
 				
 			),
-			 // 'isUnique' => array(
-			 	// 'rule' => array('isUnique'),
-			 	// 'message' => 'Die Produktnummer ist bereits vorhanden!'
-			 // ),
+			 'isUnique' => array(
+			 	'rule' => array('isUnique'),
+			 	'message' => 'Die Produktnummer ist bereits vorhanden!'
+			 ),
 			 'minLength' => array(
 			  	'rule' => array('minLength', 5),
 			  	'message' => 'Die Produktnummer muss mindestens 5 Zeichen haben!'

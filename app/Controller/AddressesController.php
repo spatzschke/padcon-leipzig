@@ -116,21 +116,22 @@ class AddressesController extends AppController {
 		$customer_id = null;
 		if($controller_name == "Offers") {
 			$data = $this->Offer->findById($controller_id); 
-			$customer_id = $data['Offer']['customer_id'];
+			$customer_id = $data['Process']['customer_id'];
 		}
 		if($controller_name == "Confirmations") {
 			$data = $this->Confirmation->findById($controller_id);
-			$customer_id = $data['Confirmation']['customer_id'];
+			$customer_id = $data['Process']['customer_id'];
 		}
 		if($controller_name == "Deliveries") {
 			$data = $this->Delivery->findById($controller_id); 
 			$data = $this->Confirmation->findByDeliveryId($data['Delivery']['id']);			
-			$customer_id = $data['Confirmation']['customer_id'];
+			$customer_id = $data['Process']['customer_id'];
 		}
 		if($controller_name == "Billings") {
 			$data = $this->Billing->findById($controller_id); 
-			$customer_id = $data['Confirmation']['customer_id'];
+			$customer_id = $data['Process']['customer_id'];
 		}
+		
 
         $addresses = $this->AddressAddresstype->findAllByCustomerIdAndTypeId($customer_id, $type);
 		
@@ -165,7 +166,7 @@ class AddressesController extends AppController {
  *
  * @return void
  */
-	public function admin_add($count = 0, $customer = null, $type = null) {
+	public function admin_add($customer = null) {
 
 		$this->layout = 'ajax';
 		if ($this->request->is('post')) {
@@ -243,10 +244,9 @@ class AddressesController extends AppController {
 						
 			unset($this->request->data['Offer']);
 			$types = $this->Address->getAddressTypes();
-			$this->request->data['Address']['addressType'] = $type; 
+			$this->request->data['Address']['addressType'] = null; 
 				
 			$this->set('primary_button','Hinzufügen');
-			$this->set('count', $count);
 			
 			$this->set('addressTypes', $this->Address->getAddressTypes());
 			$this->render('/Elements/backend/portlets/Address/addressDetailPortlet');	
@@ -261,7 +261,7 @@ class AddressesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function admin_edit($id = null, $customer = null) {
+	public function admin_edit($customer = null, $id = null) {
 			
 		$this->layout = 'ajax';
 			
@@ -380,17 +380,17 @@ class AddressesController extends AppController {
 	function getAddressByType($data = null , $type = null, $first = FALSE)
 	{
 						
-		if($data['Customer']['id'] != null) {
+		if(isset($data['Customer'])) {
 
-			$customerId = $data['Customer']['id'];
+			$customerId = $data['Customer']['id'];			
 			$addresses = null;
 
-			if($first) {
+			if($first) {				
 				$addresses = $this->AddressAddresstype->find('first', array('conditions' => array('customer_id' => $customerId, 'type_id' => $type)));
 			} else {
 				$addresses = $this->AddressAddresstype->find('all', array('conditions' => array('customer_id' => $customerId, 'type_id' => $type)));
 			}
-			
+					
 			if(!empty($addresses)) {
 				$data['Address'] = $addresses['Address'];				
 			} else {

@@ -18,7 +18,7 @@ class ConfirmationsController extends AppController {
  *
  * @var array
  */
-	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Delivery', 'AddressAddresstype');
+	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'Delivery', 'AddressAddresstype', 'Process');
 	public $components = array('Auth', 'Session', 'Paginator');
 	
 	public function beforeFilter() {
@@ -39,7 +39,7 @@ class ConfirmationsController extends AppController {
 		$this->layout = 'admin';
 	
 		//$this->Confirmation->recursive = 0;
-		$data = $this->Confirmation->find('all', array('order' => array('Confirmation.confirmation_number DESC')));
+		$data = $this->Confirmation->find('all', array('order' => array('substring(Confirmation.confirmation_number, 5, 6) DESC', 'substring(Confirmation.confirmation_number, 1, 3) DESC')));
 			
 		$this->set('title_for_panel', 'Alle Auftragsbestätigungen');	
 		
@@ -67,7 +67,7 @@ class ConfirmationsController extends AppController {
 		$this->set('confirmation', $confirmation);
 		$this->set('pdf', null);
 	
-		$this->generateData($confirmation);
+		$this->generateData($this->Process->findByConfirmationId($id));
 	}
 
 /**
@@ -110,12 +110,17 @@ class ConfirmationsController extends AppController {
 			// Generate Hash für Offer
 			$confirmation['Confirmation']['hash'] =  Security::hash($id, 'md5', true);
 			$this->Confirmation->save($confirmation);
+			
+			//Erstelle neuen Prozess
+			$this->Process->create();
+			$proc['Process']['confirmation_id'] = $id;
+			$proc['Process']['cart_id'] = $cart['Cart']['id'];
+			$this->Process->save($proc);
 
 			$this->redirect(array('action'=>'add', $id));
 		}
 
-		$this->generateData($this->Confirmation->findById($id));
-		
+		$this->generateData($this->Process->findByConfirmationId($id));
 		$controller_name = 'Confirmations'; 
 		$controller_id = $id;
 		$this->set(compact('controller_id', 'controller_name','confirmation'));
@@ -159,17 +164,29 @@ class ConfirmationsController extends AppController {
 			$data['Confirmation']['hash'] =  Security::hash($id, 'md5', true);
 			$this->Confirmation->save($data);
 			
+			
+			
 			if(isset($offer_id)) {
 				// Trage AB-Nummer in Angebot ein
 				$offerArr['Offer']['id'] = $offer_id;
 				$offerArr['Offer']['confirmation_id'] =  $id;
 				$this->Offer->save($offerArr);
+				
+				//AB dem Prozess mit Offer zuschlüsseln
+				$proc = $this->Process->findByOfferId($offer_id);
+				$proc['Process']['confirmation_id'] =  $id;
+				$this->Process->save($proc);				
+				
+			} else {
+				//Neuen Prozess starten
+				$proc['Process']['confirmation_id'] =  $id;
+				$this->Process->save($proc);
 			}
 
 			$this->redirect(array('action'=>'edit_individual', $id));
 		} 
 		
-		if(!isset($id)){
+		if($id){
 			// Wenn es noch eine leere AB (ohen Kunden) gibt, dann nimm die
 			$empty = $this->Confirmation->find('first', array('conditions' => array('customer_id' => NULL, 'Confirmation.cart_id' => 0)));
 			if(!empty($empty)) {
@@ -209,7 +226,10 @@ class ConfirmationsController extends AppController {
 			// $data['Confirmation']['modified'] = date('Y-m-d',strtotime($data['Confirmation']['created']));
 			$data['Confirmation']['id'] = $id;
 			
-			
+			//Preis von Komma auf Punkt konvertieren
+			$Carts = new CartsController();
+			$data['Confirmation']['cost'] = $Carts->convertPriceToSql($data['Confirmation']['cost']);
+			$data['Confirmation']['confirmation_price'] = $Carts->convertPriceToSql($data['Confirmation']['confirmation_price']);
 			
 			if($data['Confirmation']['customer_id'] == "") {
 				$this->Session->setFlash(__('Bitte geben Sie einen Kunden ein!'), 'flash_message', array('class' => 'alert-danger'));
@@ -217,7 +237,13 @@ class ConfirmationsController extends AppController {
 				$this->Session->setFlash(__('Bitte geben Sie eine AB-Gesamtsumme ein!'), 'flash_message', array('class' => 'alert-danger'));
 			} else {
 				if($this->Confirmation->save($data)) {
-					$this->Session->setFlash(__('The confirmation has been saved.'));
+					$this->Session->setFlash(__('Auftragsbestätigung wurde aktualisiert.'));
+					
+					//Kunde an Prozess übertragen
+					$proc = $this->Process->findByConfirmationId($id);
+					$proc['Process']['customer_id'] =  $data['Confirmation']['customer_id'];
+					$this->Process->save($proc);							
+					
 					$this->redirect(array('action'=>'index'));
 				} else {
 					$this->Session->setFlash(__('Konnte nicht gespeichert werden'));
@@ -247,6 +273,9 @@ class ConfirmationsController extends AppController {
 			
 			if($data['Confirmation']['confirmation_price'] == 0)
 				$data['Confirmation']['confirmation_price'] = null;
+				
+			if($data['Confirmation']['cost'] == 0)
+				$data['Confirmation']['cost'] = null;
 			$this->request->data = $data;
 			
 			$this->set('primary_button', 'Speichern');
@@ -280,11 +309,8 @@ class ConfirmationsController extends AppController {
 			} else {
 				$this->Session->setFlash(__('The confirmation could not be saved. Please, try again.'));
 			}
-		} else {
-			$options = array('conditions' => array('Confirmation.' . $this->Confirmation->primaryKey => $id));
-			$confirmation = $this->Confirmation->find('first', $options);
-			
-			$this->generateData($confirmation);
+		} else {			
+			$this->generateData($this->Process->findByConfirmationId($id));
 		}
 		$controller_name = 'Confirmations'; 
 		$controller_id = $id;
@@ -316,25 +342,26 @@ class ConfirmationsController extends AppController {
 		return $this->redirect(array('action' => 'index'));
 	}
 
-	public function admin_convert($confirmation_id = null) {
+	public function admin_convert($offer_id = null) {
 		$this->layout = 'admin';		
-		if($confirmation_id) {
-				
-			$confirmation = $this->Offer->findById($confirmation_id);
-			
-			if(empty($confirmation['Offer']['confirmation_id'])) {
+		if($offer_id) {
+								
+			$process = $this->Process->findByOfferId($offer_id);	
+							
+			if($process['Process']['confirmation_id'] == '0') {
 				
 				$this->Confirmation->create();
 				$confirmation['Confirmation']['status'] = 'open';
 				$confirmation['Confirmation']['agent'] = 'Ralf Patzschke';
-				$confirmation['Confirmation']['customer_id'] = $confirmation['Offer']['customer_id'];
-				$confirmation['Confirmation']['offer_id'] = $confirmation['Offer']['id'];
-				$confirmation['Confirmation']['discount'] = $confirmation['Offer']['discount'];
-				$confirmation['Confirmation']['delivery_cost'] = $confirmation['Offer']['delivery_cost'];
-				$confirmation['Confirmation']['vat'] = $confirmation['Offer']['vat'];
-				$confirmation['Confirmation']['confirmation_price'] = $confirmation['Offer']['offer_price'];
+				$confirmation['Confirmation']['customer_id'] = $process['Offer']['customer_id'];
+				$confirmation['Confirmation']['offer_id'] = $process['Offer']['id'];
+				$confirmation['Confirmation']['discount'] = $process['Offer']['discount'];
+				$confirmation['Confirmation']['delivery_cost'] = $process['Offer']['delivery_cost'];
+				$confirmation['Confirmation']['vat'] = $process['Offer']['vat'];
+				$confirmation['Confirmation']['confirmation_price'] = $process['Offer']['offer_price'];
 				$confirmation['Confirmation']['order_date'] = date('Y-m-d');
 				$confirmation['Confirmation']['custom'] = false;
+				$confirmation['Confirmation']['pattern'] = false;
 				
 				//Gernerierung der Auftragsbestätigungsnummer
 				$confirmation['Confirmation']['confirmation_number'] = $this->generateConfirmationNumber();
@@ -343,14 +370,17 @@ class ConfirmationsController extends AppController {
 				$confirmation['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
 				
 				//Warenkorb des Angebots kopieren
-				$confirmationCart = $this->Cart->findById($confirmation['Cart']['id']);
+				$confirmationCart = $this->Cart->findById($process['Cart']['id']);
 				$confirmationCart['Cart']['id'] = NULL;
 				$this->Cart->save($confirmationCart);
-						
+		
+				//Kopierten Cart in AB einfügen
 				$lastCartId = $this->Cart->getLastInsertId();
 				$confirmation['Confirmation']['cart_id'] = $lastCartId;
 				
-				$cartProducts = $this->CartProduct->find('all',array('conditions' => array('CartProduct.cart_id' => $confirmation['Cart']['id'])));
+				
+				//Alle Cart_Producte aus Angebot in AB Cart kopieren
+				$cartProducts = $this->CartProduct->find('all',array('conditions' => array('CartProduct.cart_id' => $process['Process']['cart_id'])));
 				foreach ($cartProducts as $cartProduct) {
 					$this->CartProduct->create();
 					$cartItem['CartProduct'] = $cartProduct['CartProduct'];
@@ -360,10 +390,13 @@ class ConfirmationsController extends AppController {
 					unset($cartItem['CartProduct']['modified']);			
 					$this->CartProduct->save($cartItem);
 				}
+
+				//Kosten aus Cart der Offer in AB übernehmen
+				$confirmation['Confirmation']['cost'] = $confirmationCart['Cart']['sum_base_price'];
 				
 				//Erste AB-Adresse zum Kunden finden
 				$Addresses = new AddressesController(); 
-				$address = $Addresses->getAddressByType($confirmation, 2, TRUE);
+				$address = $Addresses->getAddressByType($process, 2, TRUE);
 				$confirmation['Confirmation']['address_id'] = $address['Address']['id'];
 				
 				$this->Confirmation->save($confirmation);
@@ -371,29 +404,32 @@ class ConfirmationsController extends AppController {
 				
 				//Neue Auftragsbestätigungs-ID der AB hinzufügen speichern 
 				$confirmation['Confirmation']['id'] = $currConfirmationId;
-				$this->Offer->save($confirmation);
 				
 				// Generate Hash für Offer
 				$confirmation['Confirmation']['hash'] =  Security::hash($currConfirmationId, 'md5', true);
 				$this->Confirmation->save($confirmation);
 				
-				//Neue Auftragsbestätigungs-ID in Angebot speichern 
-				$confirmation['Offer']['confirmation_id'] = $currConfirmationId;
-				$this->Offer->save($confirmation);
+				//Neue Auftragsbestätigungs-ID in Prozess speichern 
+				// $confirmation['Offer']['confirmation_id'] = $currConfirmationId;
+				// $this->Offer->save($confirmation);
+				$proc['Process']['id'] = $process['Process']['id'];
+				$proc['Process']['confirmation_id'] = $currConfirmationId;
+				$proc['Process']['cart_id'] = $lastCartId;
+				$this->Process->save($proc);
 				
 				$this->generateData($this->Confirmation->findById($currConfirmationId));
 				
 				$this->set('pdf', null);
 				
 				$controller_name = 'Confirmations'; 
-				$controller_id = $confirmation_id;
+				$controller_id = $currConfirmationId;
 				$this->set(compact('controller_id', 'controller_name'));
 				
 				$this->render('admin_add');
 				
 			} else {
-				$this->Session->setFlash(__('Auftragsbestätigung bereits vorhanden'));
-				return $this->redirect(array('action' => 'edit', $confirmation['Offer']['confirmation_id']));
+			//	$this->Session->setFlash(__('Auftragsbestätigung bereits vorhanden'));
+				return $this->redirect(array('action' => 'edit', $process['Process']['confirmation_id']));
 			}
 		} else {
 			
@@ -463,8 +499,8 @@ class ConfirmationsController extends AppController {
 					$date = date_create_from_format('d.m.Y', $this->request->data['Confirmation']['order_date']);
 					$confirmation['Confirmation']['order_date'] = date_format($date, 'Y-m-d');
 				}	
-				
-				if($this->request->data['pattern-cb'] == 'on') {
+								
+				if($this->request->data['Confirmation']['pattern'] == '1') {
 					$confirmation['Confirmation']['pattern'] = true;
 				} else {
 					$confirmation['Confirmation']['pattern'] = false;	
@@ -480,10 +516,10 @@ class ConfirmationsController extends AppController {
 					$this->Session->setFlash(__('Es kam zu Fehlern beim Speichern', true));
 				}
 				
-				$confirmation = $this->Confirmation->findById($id);
-				$confirmation['CartProducts'] = $this->getSettingCartProducts($confirmation);
+				$data = $this->Process->findByConfirmationId($id);
+				$data['CartProducts'] = $this->getSettingCartProducts($data);
 				
-				$cart = $this->Cart->findById($confirmation['Confirmation']['cart_id']);
+				$cart = $this->Cart->findById($data['Process']['cart_id']);
 				$controller_id = 0;
 				$controller_name = '';
 				if(isset($cart['Confirmation']['id'])) {
@@ -555,12 +591,19 @@ class ConfirmationsController extends AppController {
 		}
 		$Carts = new CartsController();		
 		
-		$Carts->updateCartCount($confirmation['Cart']);
+		$Carts->updateCart($confirmation['Cart']);
 		
 		$confirmation['CartProducts'] = $this->getSettingCartProducts($confirmation);
 		$this->request->data = $confirmation;
 		
+		$controller = 'Confirmations'; 
+		$controller_id = $confirmation_id;
+
+		$this->set(compact('controller_id', 'controller'));
+		
 		$this->render('/Elements/backend/portlets/Product/settingsProductTable');
+		
+		
 	}
 	
 	function admin_update($id = null, $confirmation_id = null, $address = null) {
@@ -592,6 +635,11 @@ class ConfirmationsController extends AppController {
 			}
 			$confirmation['Confirmation']['customer_id'] = $id;
 			
+			//Prozess updaten
+			$process = $this->Process->findByConfirmationId($confirmation_id);
+			$proc['Process']['id'] = $process['Process']['id'];
+			$proc['Process']['customer_id'] = $id;
+			$this->Process->save($proc);			
 			
 			if($this->Confirmation->save($confirmation)){
 				$confirmation['Confirmation']['stat'] = 'saved';
@@ -663,7 +711,7 @@ class ConfirmationsController extends AppController {
 	function getSettingCartProducts($confirmation = null) {
 		$cart = $this->Cart->find('first', array(
 			'conditions' => array(
-			 	'Cart.id' => $confirmation['Cart']['id']
+			 	'Cart.id' => $confirmation['Confirmation']['cart_id']
 				)
 			)
 		);
@@ -702,39 +750,33 @@ class ConfirmationsController extends AppController {
 		return $cartProductsNew;
 	}
 
-	function generateData($confirmation = null) {
+	function generateData($process = null) {
 	
 		$Addresses = new AddressesController();	
 		$Carts = new CartsController();
-	
-		if(!$confirmation) {
-			$confirmation_id = $this->Confirmation->getLastInsertId();
-			$confirmation = $this->Confirmation->findById($confirmation_id);		
-		} 
-			
-	    $this->request->data = $confirmation;
+
+	    $this->request->data = $process;
 		
 		
-		if(!empty($confirmation)) {
+		if(!empty($process)) {
 			
-	    	$cart = $Carts->get_cart_by_id($confirmation['Cart']['id']);
+	    	$cart = $Carts->getCartById($process['Cart']['id']);
 			
 			//Berechen Seitenbelegung mit Produkte
 			$this->request->data['Pages'] = $Carts->calcPageLoad($cart);			
 			$this->request->data += $cart;
 		}
 
-
-		if(is_null($this->request->data['Address']['id'])) {
+		if(!isset($this->request->data['Address'])) {
 			$this->request->data = $Addresses->getAddressByType($this->request->data, 2, TRUE);
 		}
 			
-		if(!is_null($this->request->data['Address'])) {
+		if(isset($this->request->data['Address'])) {
 			$a = $Addresses->splitAddressData($this->request->data);
 			$this->request->data['Address'] += $a['Address'];
 		}
 		$this->request->data['Address']['count'] = $this->AddressAddresstype->find('count', array('conditions' => array(
-			'customer_id' => $confirmation['Confirmation']['customer_id'],
+			'customer_id' => $process['Process']['customer_id'],
 			'type_id' => 1)));
 
 		$this->request->data['Confirmation'] += $this->calcPrice($this->request->data);
@@ -744,9 +786,7 @@ class ConfirmationsController extends AppController {
 	}
 
 	function calcPrice($data = null) {
-
-		$arr_data = null;
-		
+		$arr_data = null;		
 		$discount_price = $data['Confirmation']['discount'] * $data['Cart']['sum_retail_price'] / 100;
 		$part_price = $data['Cart']['sum_retail_price'] - $discount_price + $data['Confirmation']['delivery_cost'];
 		$vat_price = $data['Confirmation']['vat'] * $part_price / 100;
@@ -777,7 +817,13 @@ class ConfirmationsController extends AppController {
 		} else {
 			$arr_data['Confirmation']['confirmation_price'] = $data_price;
 		}	
-		
+
+		//Kosten von Cart in AB übertragen/aktualisieren
+		$arr_data['Confirmation']['cost'] = $data['Cart']['sum_base_price'];
+
+		if(!$data['Confirmation']['id']) {
+			 $data['Confirmation']['id'] = $data['Process']['confirmation_id']; 
+		}
 		$arr_data['Confirmation']['id'] = $data['Confirmation']['id'];
 
 		$this->Confirmation->save($arr_data['Confirmation']);
@@ -793,7 +839,7 @@ class ConfirmationsController extends AppController {
 		// 14 = aktuelles Jahr
 		
 		// 019 = Anzahl der AB im Monat - dreistellig
-		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01 00:00:01'), date('Y-m-d 23:59:59')), ))));
+		$countMonthConfirmations = count($this->Confirmation->find('all',array('conditions' => array('Confirmation.created BETWEEN ? AND ?' => array(date('Y-m-01 00:00:00'), date('Y-m-d 00:00:00', strtotime("+1 days")))))));
 		$countMonthConfirmations++;
 		$countMonthConfirmations = str_pad($countMonthConfirmations, 3, "0", STR_PAD_LEFT);
 		// 11 = aktueller Monat
@@ -822,7 +868,7 @@ class ConfirmationsController extends AppController {
 				$item['Customer'] += $Customers->splitCustomerData($item);
 			}	
 			
-			$cart = $Carts->get_cart_by_id($item['Cart']['id']);
+			$cart = $Carts->getCartById($item['Cart']['id']);
 			$item['Cart']['CartProduct'] = $cart['CartProduct'];
 			if(!empty($cart['CartProduct'])) {
 				$j = 0;
@@ -843,11 +889,14 @@ class ConfirmationsController extends AppController {
 				$item['Confirmation']['offer_number'] = $offer['Offer']['offer_number'];
 			}
 			
+			
 			//Wenn Teillierferung dann alle Lierscheine laden
-			if(count($item['ConfirmationDelivery']) > 1) {
-				foreach($item['ConfirmationDelivery'] as $key => $conDel) {
-					$del = $this->Delivery->findById($item['ConfirmationDelivery'][$key]['delivery_id']);
-					$item['ConfirmationDelivery'][$key]['delivery_number'] = $del['Delivery']['delivery_number'];
+			if(count($item['Process']) > 1) {
+				
+				foreach($item['Process'] as $key => $proc) {
+					$del = $this->Delivery->findById($proc['delivery_id']);
+					if(!empty($del))
+						$item['Process'][$key]['delivery_number'] = $del['Delivery']['delivery_number'];
 				}
 			}
 						
@@ -864,10 +913,10 @@ class ConfirmationsController extends AppController {
 		$this->layout = 'ajax';
 		$this->set('pdf', null);
 		
-		$confirmation = $this->Confirmation->findById($id);
+		$data = $this->Process->findByConfirmationId($id);
 		
-		$this->generateData($confirmation);
-		$calc = $this->calcPrice($confirmation);
+		$this->generateData($data);
+		$calc = $this->calcPrice($data);
 		
 		$this->request->data['Confirmation']['confirmation_price'] = $calc['confirmation_price'];
 		
@@ -884,7 +933,7 @@ class ConfirmationsController extends AppController {
 		
 		if(!empty($data)) {
 			$Carts = new CartsController();
-	    	$cart = $Carts->get_cart_by_id($data['Cart']['id']);
+	    	$cart = $Carts->getCartById($data['Cart']['id']);
 			
 			//Berechen Seitenbelegung mit Produkte
 			$this->request->data['Pages'] = $Carts->calcPageLoad($cart);
@@ -922,6 +971,57 @@ class ConfirmationsController extends AppController {
 		} else {
 			return $data;
 		}
+	}
+	
+	function admin_fillConfirmationCosts() {
+		$confirmations = $this->Confirmation->find('all');
+		foreach ($confirmations as $key => $value) {
+				
+			if($value['Confirmation']['cost'] == 0 || $value['Confirmation']['cart_id'] != 0){
+				$cart = $this->Cart->findById($value['Confirmation']['cart_id']);
+				
+				if(isset($cart['Cart'])) {
+					$con['Confirmation']['id'] = $value['Confirmation']['id'];				
+					$con['Confirmation']['cost'] = $cart['Cart']['sum_base_price'];
+					
+					if($this->Confirmation->save($con)) {
+						$this->Session->setFlash(__('ABs aktualsiert', true));
+					} else {			
+						$this->Session->setFlash(__('Fehler', true));
+					}
+				}
+			}			
+		}
+		
+		$this->redirect(array('controller' => 'pages', 'action' => 'setting'));
+	}
+	
+	function admin_fillPorcessIndex() {
+		$confirmations = $this->Confirmation->find('all');
+		foreach ($confirmations as $key => $value) {
+			$process = array();			
+			$conf = $this->Process->findByConfirmationId($value['Confirmation']['id']);
+			if(empty($conf)) {
+				$this->Process->create();
+				$process['Process']['confirmation_id'] = $value['Confirmation']['id'];
+				if($value['Delivery']['id'])
+					$process['Process']['delivery_id'] = $value['Delivery']['id'];
+				if($value['Billing']['id'])
+					$process['Process']['billing_id'] = $value['Billing']['id'];
+				$process['Process']['customer_id'] = $value['Confirmation']['customer_id'];
+				$process['Process']['cart_id'] = $value['Confirmation']['cart_id'];
+				
+				if(isset($value['Delivery']['id'])) { $process['Process']['type'] = 'full'; }
+				
+				$offer = $this->Offer->findByConfirmationId($value['Confirmation']['id']);
+				if(!empty($offer)) { $process['Process']['offer_id'] = $offer['Offer']['id']; }
+				
+				$this->Process->save($process);		
+			}
+					
+		}
+		
+		$this->redirect(array('controller' => 'pages', 'action' => 'setting'));
 	}
 	
 }

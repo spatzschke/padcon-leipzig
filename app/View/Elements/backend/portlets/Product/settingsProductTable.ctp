@@ -10,7 +10,7 @@
 				 data: obj.attr('pdid'),
 				 success:function (data, textStatus) {
 				 				 	
-					$(".settingsPortlet .productTable").html(data);
+					$(".settingsPortlet .productTable .panel-body").html(data);
 					$('.wood_bg .pages').load('<?php echo FULL_BASE_URL.$this->base;?>/<?php echo $controller;?>/reloadSheet/<?php echo $controller_id;?>');
 				 } 
 			}); 			

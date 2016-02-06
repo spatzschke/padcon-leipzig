@@ -5,8 +5,8 @@ class Delivery extends AppModel {
 	//The Associations below have been created with all possible keys, those that are not needed can be remove
 	
 	var $hasOne = array(
-		'ConfirmationDelivery' => array(
-			'className' => 'ConfirmationDelivery',
+		'Process' => array(
+			'className' => 'Process',
 			'foreignKey' => 'delivery_id',
 			'conditions' => '',
 			'fields' => '',

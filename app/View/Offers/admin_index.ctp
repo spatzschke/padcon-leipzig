@@ -79,34 +79,41 @@ $(document).ready(function() {
 	         	<div class="cancel"><i class="glyphicon glyphicon-remove"></i></div>                                
 	        </div>	
 		</section>
+		<nav>
+		  <!-- <ul class="pager">
+		    <li class="disabled"><a href="#"><span aria-hidden="true">&larr;</span>  Nächste</a></li>
+		    <li><a href="#">Vorherige  <span aria-hidden="true">&rarr;</span></a></li>
 
+		  </ul -->>
+		</nav>
 		<div class="module_content">
 			<table class="tablesorter" cellspacing="0"> 
-			<thead> 
-				<tr> 
-   					<th></th>					
-					<th><?php echo('Nr');?></th>
-					<th><?php echo('Kunde');?></th>
-					<th><?php echo('Anfrage');?></th>
-					<th><?php echo('Produkt');?></th>
-					<!-- <th><?php echo('Rabatt');?></th>
-					<th><?php echo('Lieferkosten');?></th> -->
-					<th><?php echo('Preis');?></th>
-					<th><?php echo('AB-Nr');?></th>
-					<th><?php echo('Erstellt am');?></th>
-					<!-- <th><?php echo('Bearbeitungsdatum');?></th> -->
-					<th class="actions"><?php __('');?></th>
-				</tr> 
-			</thead> 
-			<tbody> 
-							
-				<?php echo $this->element('backend/portlets/Offers/tableContent', array('offers' => $offers)); ?>
-
-
-				
-			</tbody>
-			 
+				<thead> 
+					<tr> 
+	   					<th></th>					
+						<th><?php echo('Nr');?></th>
+						<th><?php echo('Kunde');?></th>
+						<th><?php echo('Anfrage');?></th>
+						<th><?php echo('Produkt');?></th>
+						<!-- <th><?php echo('Rabatt');?></th>
+						<th><?php echo('Lieferkosten');?></th> -->
+						<th><?php echo('Preis');?></th>
+						<th><?php echo('AB-Nr');?></th>
+						<th><?php echo('Erstellt am');?></th>
+						<!-- <th><?php echo('Bearbeitungsdatum');?></th> -->
+						<th class="actions"><?php __('');?></th>
+					</tr> 
+				</thead> 
+				<tbody> 						
+					<?php echo $this->element('backend/portlets/Offers/tableContent', array('offers' => $offers)); ?>	
+				</tbody>
 			</table>
-			
 		</div><!-- end of .tab_container -->
+		<nav>
+		  <!-- <ul class="pager">
+		    <li class="disabled"><a href="#"><span aria-hidden="true">&larr;</span>  Nächste</a></li>
+		    <li><a href="#">Vorherige  <span aria-hidden="true">&rarr;</span></a></li>
+
+		  </ul> -->
+		</nav>
 </article><!-- end of stats article -->
