@@ -92,14 +92,14 @@
 							$skonto = '';
 							if($item['Billing']['skonto_take']) {
 								$skonto = '-'.$item['Billing']['skonto'].'% Skonto: '.$this->Number->currency($item['Billing']['skonto_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>';
-							}
-	
+							}	
 							$priceInfo = 'Gesamtpreis: '.$this->Number->currency($item['Cart']['sum_retail_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 										 $item['Confirmation']['discount'].'% Rabatt: '.$this->Number->currency($item['Billing']['discount_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
-										 'Versandkostenvorteil: '.$this->Number->currency($item['Billing']['confirmation_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
+										 'Versandkostenanteil: '.$this->Number->currency($item['Billing']['delivery_cost'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 										 'Zwischensumme: '.$this->Number->currency($item['Billing']['part_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 										 '+'.$item['Confirmation']['vat'].'% Mehrwertsteuer: '.$this->Number->currency($item['Billing']['vat_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'<br>'.
 										 $skonto.
+										 '_______________________________ <br />'.
 										 '<b>Rechnungswert: '.$this->Number->currency($item['Billing']['billing_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ',')).'</b>';					
 							
 							
@@ -109,7 +109,7 @@
 								 data-toggle="popover" 
 								 data-content="'.
 								 	$cartProducts.'
-								 --------------- <br />
+								 --------------------------------------------------- <br />
 								 '.$priceInfo.'"
 								 data-trigger="hover"
 							
