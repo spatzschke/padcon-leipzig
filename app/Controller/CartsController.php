@@ -375,11 +375,9 @@ class CartsController extends AppController {
 			foreach ($cartProducts as $key => $value) {
 				$features = $Products->seperatFeatureList($value['product_id']);
 				$featureCount += count($features)+$standardProductRow; // 5 Standardzeile
-				
-				
 								
 				if($featureCount > $rowPerPage -$rowMinus  || (count($cartProducts) == 1 && $pages > 1)) {
-					$page[$j] = $prodArr;
+					//$page[$j] = $prodArr;
 					$featureCount = 0;
 					$prodArr = array();
 					array_push($prodArr, array('product' => $value , 'count' => count($features)+$standardProductRow));
@@ -390,30 +388,37 @@ class CartsController extends AppController {
 					unset($cartProducts[$key]);
 					continue;
 				}
-			}	
+			}
 			
-			//auf die letzte Seite die restlichten Produkte packen
-			if($j == $pages) {
-				$addProdArr = array();
-				
-				if($calcRow > 0 ) {
+			$addProdArr = array();
+			
+			if(!empty($prodArr)) {
+					
+				if($calcRow > 0 ) {					
 					if(($featureCount + $calcRow) < $rowPerPage) {
 						array_push($prodArr, 'C');
 					} else {
 						array_push($addProdArr, 'C');
 					}
-				}
+				}				
 					
 				if(($featureCount + $calcRow + $textRow) < $rowPerPage) {
 					array_push($prodArr, 'T');
 				} else {
 					array_push($addProdArr, 'T');
-				}
-				$page[$j] = $prodArr;
+				}	
 				
-				if(!empty($addProdArr)) {
+				$page[$j] = $prodArr;
+				$prodArr = array();
+			}
+				
+			
+			//auf die letzte Seite die restlichten Produkte packen
+			if(!empty($addProdArr)) {	
+				
+				
 					$page[$j+1] = $addProdArr;
-				}
+				
 			}
 		}
 		

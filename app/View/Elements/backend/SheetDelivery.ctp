@@ -13,7 +13,7 @@ if(empty($this->data['CartProduct'])) {
 $productCount = 0;
 foreach ($pages as $page => $carti) {
 
-		$pageCur = $page;
+		$pageCur = $page + 1;
 		if(count($pages) > 1)
 			$pageCur = $page + 1;		
 		
