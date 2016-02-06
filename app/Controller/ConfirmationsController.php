@@ -742,7 +742,7 @@ class ConfirmationsController extends AppController {
 		
 		if(!empty($process)) {
 			
-	    	$cart = $Carts->get_cart_by_id($process['Cart']['id']);
+	    	$cart = $Carts->getCartById($process['Cart']['id']);
 			
 			//Berechen Seitenbelegung mit Produkte
 			$this->request->data['Pages'] = $Carts->calcPageLoad($cart);			
@@ -850,7 +850,7 @@ class ConfirmationsController extends AppController {
 				$item['Customer'] += $Customers->splitCustomerData($item);
 			}	
 			
-			$cart = $Carts->get_cart_by_id($item['Cart']['id']);
+			$cart = $Carts->getCartById($item['Cart']['id']);
 			$item['Cart']['CartProduct'] = $cart['CartProduct'];
 			if(!empty($cart['CartProduct'])) {
 				$j = 0;
@@ -915,7 +915,7 @@ class ConfirmationsController extends AppController {
 		
 		if(!empty($data)) {
 			$Carts = new CartsController();
-	    	$cart = $Carts->get_cart_by_id($data['Cart']['id']);
+	    	$cart = $Carts->getCartById($data['Cart']['id']);
 			
 			//Berechen Seitenbelegung mit Produkte
 			$this->request->data['Pages'] = $Carts->calcPageLoad($cart);

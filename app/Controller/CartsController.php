@@ -12,7 +12,7 @@ class CartsController extends AppController {
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			parent::beforeFilter();
-			$this->Auth->allow('addToCart', 'add', 'reloadFrontendMiniCart','calcSumPriceByCartId','updateCart','get_cart_by_id', 'get_cart_by_cookie');
+			$this->Auth->allow('addToCart', 'add', 'reloadFrontendMiniCart','calcSumPriceByCartId','updateCart','getCartById', 'get_cart_by_cookie');
 		}
 	}
 	
@@ -80,7 +80,7 @@ class CartsController extends AppController {
 		$cart = null;
 		$cartProduct = null;
 		$activeCart = null;
-		
+/*	
 		//Cookie setzen wenn Produkt in Warenkorb gelegt wird und noch kein Cookie vorhanden ist
 		if(!$this->Cookie->check('pd')) {
 			
@@ -118,7 +118,7 @@ class CartsController extends AppController {
 			
 		} else {
 			$cookie_id = $this->Cookie->read('pd.id');
-			$activeCart = $this->get_cart_by_id($this->Cookie->read('pd.cart'));
+			$activeCart = $this->getCartById($this->Cookie->read('pd.cart'));
 			if(!$this->Session->check('pd.cart')) {
 				$this->Session->delete('pd.cart');
 				$this->Session->write('pd',
@@ -128,17 +128,24 @@ class CartsController extends AppController {
 				);
 			}
 			
-		}
+		} 
+*/
 	
 		if(!$cart_id) {
-			$activeCart = $this->admin_add();
+		//	$activeCart = $this->admin_add();
 		} else {
 			$activeCart = $this->Cart->find("first", array("conditions" => array("Cart.id" => $cart_id)));
 		}
+		
+		
+		//Hole das Product
+		$product = $this->Product->findById($id);
 
 		
 		$cartProduct['CartProduct']['cart_id'] = $activeCart['Cart']['id'];
 		$cartProduct['CartProduct']['product_id'] = $id;
+		$cartProduct['CartProduct']['price'] = $product['Product']['price'];
+		$cartProduct['CartProduct']['retail_price'] = $product['Product']['retail_price'];
 		$cartProduct['CartProduct']['color_id'] = $this->request->data['Product']['color'];
 		$cartProduct['CartProduct']['amount'] = $this->request->data['Product']['amount'];
 				
@@ -164,13 +171,13 @@ class CartsController extends AppController {
 			
 		}
 		
-		$activeCart = $this->calcSumPriceByActiveCart($activeCart['Cart']['id']);
-		
+		$activeCart = $this->calcSumPriceByCartId($activeCart['Cart']['id']);
+
 		$this->updateCart($activeCart);
 		
 	}
 	
-	public function get_cart_by_id($id = null) {
+	public function getCartById($id = null) {
 		$cart = $this->Cart->read(null, $id);
 		//$cart['CartProduct'] = $this->CartProduct->find('all', array('CartProduct.cart_id' => $id));	
 		return $cart;
@@ -186,8 +193,8 @@ class CartsController extends AppController {
 	
 	function updateCart($cart = null) {
 				
-		if($cart == NULL) {		
-			$cart = $this->get_cart_by_id($this->Cookie->read('pd.cart'));	
+		if(!$cart) {		
+			$cart = $this->getCartById($this->Cookie->read('pd.cart'));	
 		} 
 		
 		// Update CartCount
@@ -195,7 +202,9 @@ class CartsController extends AppController {
 			$cart['Cart']['count'] = count($cart['CartProduct']);
 		} else {
 			$cart['Cart']['count'] = 0;
-		}	
+		}
+		
+		debug($cart['Cart']);
 		
 		$this->Cart->save($cart['Cart']);
 		
@@ -229,7 +238,7 @@ class CartsController extends AppController {
 	}
 	
 	function calcSumPrice($cart = null) {
-		
+
 		if(empty($cart['CartProduct'])) {
 			return null;
 		}
@@ -241,14 +250,16 @@ class CartsController extends AppController {
 			
 			$product = $this->Product->findById($cartProduct['product_id']);
 	
-			$sumBasePrice += (floatVal($product['Product']['price']) * intVal($cartProduct['amount']));
-			$sumRetailPrice += (floatVal($product['Product']['retail_price']) * intVal($cartProduct['amount']));
+			$sumBasePrice += (floatVal($cartProduct['price']) * intVal($cartProduct['amount']));
+			$sumRetailPrice += (floatVal($cartProduct['retail_price']) * intVal($cartProduct['amount']));
 
 		}
 		
+		$cart['Cart']['id'] = $cart['Cart']['id'];
 		$cart['Cart']['sum_base_price'] = $sumBasePrice;
 		$cart['Cart']['sum_retail_price'] = $sumRetailPrice;
-				
+		
+			
 		$this->Cart->save($cart);
 				
 		return $cart;
@@ -262,8 +273,8 @@ class CartsController extends AppController {
 	}
 	
 	function calcSumPriceByCartId($id = null) {
-		$cart = $this->get_cart_by_id($id);
-		$this->calcSumPrice($cart);
+		$cart = $this->getCartById($id);
+		return $this->calcSumPrice($cart);
 	}
 	
 	function admin_active_cart($id = null) {

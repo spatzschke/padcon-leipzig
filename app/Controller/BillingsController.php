@@ -664,7 +664,7 @@ class BillingsController extends AppController {
 		
 		if(!empty($data)) {
 			
-	    	$cart = $Carts->get_cart_by_id($data['Process']['cart_id']);
+	    	$cart = $Carts->getCartById($data['Process']['cart_id']);
 			
 			//Berechen Seitenbelegung mit Produkte
 			$this->request->data['Pages'] = $Carts->calcPageLoad($cart, 7, 5);
@@ -764,7 +764,7 @@ class BillingsController extends AppController {
 				
 				$item['Customer'] = $customer['Customer'];
 
-				$cart = $Carts->get_cart_by_id($item['Process']['cart_id']);
+				$cart = $Carts->getCartById($item['Process']['cart_id']);
 				$item['Cart'] = $cart['Cart'];
 				$item['Cart']['CartProduct'] = $cart['CartProduct'];
 				if(!empty($cart['CartProduct'])) {
