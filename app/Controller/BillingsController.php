@@ -289,7 +289,7 @@ class BillingsController extends AppController {
 					
 			$billing = array();
 			
-			if(empty($process['Process']['billing_id'])) {
+			if($process['Process']['billing_id'] == 0) {
 				
 				$this->Billing->create();
 				
@@ -361,7 +361,7 @@ class BillingsController extends AppController {
 				
 			} else {
 				//$this->Session->setFlash(__('Rechnung bereits vorhanden'));
-				return $this->redirect(array('action' => 'view', $process['Confirmation']['billing_id']));
+				return $this->redirect(array('action' => 'view', $process['Process']['billing_id']));
 			}
 		} else {
 			
