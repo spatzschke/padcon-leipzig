@@ -13,6 +13,7 @@ class ProcessesController extends AppController {
  *
  * @var array
  */
+ 	public $uses = array('Offer', 'Confirmation', 'Delivery', 'Billing', 'Process');
 	public $components = array('Paginator');
 
 
@@ -30,10 +31,10 @@ class ProcessesController extends AppController {
 		
 		 $this->Paginator->settings = array(
         'order' => array('Process.id' => 'DESC'),
-        'limit' => 1000
+        'limit' => 100
 	    );
 		
-		$this->set('processes', $this->Paginator->paginate());
+		$this->set('processes', $this->Paginator->paginate('Process'));
 	}
 
 /**
@@ -125,4 +126,32 @@ class ProcessesController extends AppController {
 			$this->Session->setFlash(__('The process could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
-	}}
+	}
+	
+	function admin_search($searchString = null) {
+		
+		$this->layout = 'ajax';
+		
+		$data = $this->Process->find('all',array('conditions' => array("OR" => 
+			array (	
+					'Process.offer_id LIKE' => '%'.$this->data['str'].'%' ,
+					'Process.confirmation_id LIKE' => '%'.$this->data['str'].'%' ,
+					'Process.delivery_id LIKE' => '%'.$this->data['str'].'%' ,
+					'Process.billing_id LIKE' => '%'.$this->data['str'].'%' ,
+					'Process.customer_id LIKE' 	=> '%'.$this->data['str'].'%' ,
+					'Offer.offer_number LIKE' => '%'.$this->data['str'].'%' ,
+					'Confirmation.confirmation_number LIKE' 	=> '%'.$this->data['str'].'%',
+					'Delivery.delivery_number LIKE' => '%'.$this->data['str'].'%',
+					'Billing.billing_number LIKE' 	=> '%'.$this->data['str'].'%')),
+					'order' => array('Process.id DESC')));	
+
+		$this->set('processes', $data);
+		
+		
+		if(isset($this->data['template'])) {
+			$this->render($this->data['template']);
+		}
+	}
+
+}
+
