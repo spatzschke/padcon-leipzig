@@ -3,6 +3,7 @@
 </br>
 		<ul class="toggle">
 			<li><i class="glyphicon glyphicon-dashboard" style="color: grey"></i><?php echo $this->Html->link('Dashboard', '/admin/Pages/dashboard'); ?></li>
+			<li><i class="glyphicon glyphicon-tasks" style="color: grey"></i><?php echo $this->Html->link('Vorgangsübersicht', '/admin/Processes/index'); ?></li>
 		</ul>
 		<!--<h3>Dokumente erstellen</h3>
 		<ul class="toggle">
