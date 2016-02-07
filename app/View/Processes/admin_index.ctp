@@ -43,6 +43,7 @@ $(document).ready(function() {
 	         	<div class="cancel"><i class="glyphicon glyphicon-remove"></i></div>                                
 	        </div>	
 		</section>
+		<?php if($this->Paginator->numbers()){ ?>
 		<nav>
 		  <ul class="pagination">
 		    <li>
@@ -55,21 +56,24 @@ $(document).ready(function() {
 		    </li>
 		  </ul>
 		</nav>
+		<?php } ?>
 		<div class="module_content">
 			
-		<div class="col-md-12 processHeader">
-			<div class="col-md-1 stepCustomer"><h3><b>Kunde</b></h3></div>
-			<div class="col-md-3 stepOffer"><h3><b>Angebot</b></h3></div>
-			<div class="col-md-3 stepConfirmation"><h3><b>Auftragsbestätigung</b></h3></div>
-			<div class="col-md-3 stepDelivery"><h3><b>Lieferschein</b></h3></div>
-			<div class="col-md-2 stepBilling"><h3><b>Rechnung</div>
+		<div class="col-md-12 col-xs-12 processHeader">
+			<div class="col-md-1 col-xs-1 stepCustomer"><h3><b>Kunde</b></h3></div>
+			<div class="col-md-1 col-xs-1 "></div>
+			<div class="col-md-2 col-xs-2 stepOffer"><h3><b>Angebot</b></h3></div>
+			<div class="col-md-3 col-xs-3 stepConfirmation"><h3><b class="hidden-sm">Auftragsbestätigung</b><b class="visible-sm">AB</b></h3></div>
+			<div class="col-md-3 col-xs-3 stepDelivery"><h3><b>Lieferschein</b></h3></div>
+			<div class="col-md-2 col-xs-2 stepBilling"><h3><b>Rechnung</b></h3></div>
 		</div>
-		<div class="content">
+		<div class="col-md-12 content">
 			<?php 
 			
 			echo $this->element('backend/portlets/Process/tableContent', array('processes' => $processes)); ?>
 		</div>		
 			
+		<?php if($this->Paginator->numbers()){ ?>
 		<nav>
 		  <ul class="pagination">
 		    <li>
@@ -82,6 +86,9 @@ $(document).ready(function() {
 		    </li>
 		  </ul>
 		</nav>
+		<?php } ?>
+		
+		<div>&nbsp;</div>
 			
 		</div><!-- end of .tab_container -->
 </article><!-- end of stats article -->
