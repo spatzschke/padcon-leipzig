@@ -101,7 +101,7 @@ class PagesController extends AppController {
 	private function platzierungProdukt() {
 		$topProduct = $this->Billing->query('
 			SELECT count(CP.product_id) AS ANZAHL, PO.name AS NAME, PO.product_number AS NUMBER
-			FROM Billings RE 
+			FROM billings RE 
 			INNER JOIN processes PR 
 			ON RE.id = PR.billing_id 
 			INNER JOIN carts CA
@@ -122,7 +122,7 @@ class PagesController extends AppController {
 	private function platzierungKunde() {
 		$topCustomer = $this->Billing->query('
 			SELECT PR.customer_id AS KUNDENNUMMER, sum(RE.billing_price) AS SUMME, CU.organisation AS KUNDENNAME
-			FROM Billings RE 
+			FROM billings RE 
 			INNER JOIN processes PR 
 			ON RE.id = PR.billing_id 
 			INNER JOIN customers CU
@@ -142,7 +142,7 @@ class PagesController extends AppController {
 		for($i = 1; $i <= 12; $i++) {
 			$monthUmsatz = $this->Billing->query('
 			Select sum(RE.billing_price) AS EINNAHME, sum(CO.cost) AS AUSGABE, (sum(RE.billing_price) - sum(CO.cost)) AS DIFFERENZ
-			from Billings RE 
+			from billings RE 
 			INNER JOIN processes PR 
 			ON RE.id = PR.billing_id 
 			INNER JOIN confirmations CO
