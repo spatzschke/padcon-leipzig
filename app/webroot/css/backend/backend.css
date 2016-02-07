@@ -79,20 +79,22 @@ body .row-fluid .firstItem { margin: 0;}
 #processOverview .processStep.status-close {	border-color: green; box-shadow: 0 0 10px 2px #888 }
 #processOverview .processStep.status-cancel {	border-color: red; box-shadow: 0 0 10px 2px #888 }
 
-#processOverview .processStep.status-open i{ color: grey }
-#processOverview .processStep.status-close i{ color: green }
-#processOverview .processStep.status-cancel i{ color: red }
+#processOverview .processStep.status-open i{ color: grey; cursor: pointer }
+#processOverview .processStep.status-close i{ color: green; cursor: pointer }
+#processOverview .processStep.status-cancel i{ color: red; cursor: pointer }
+
 #processOverview .stepType  i,
 #processOverview .processStep  i{
 	font-size: 18px;
     margin: 4px 0 0 4px;
-    color: lightgrey
+    color: lightgrey;
+    cursor: default
 }
 #processOverview .stepOffer .processStep  i { margin: 5px 0 0 2px; }
 #processOverview .stepConfirmation .processStep  i { margin: 4px 0 0 4px; }
 #processOverview .stepDelivery .processStep  i { margin: 5px 0 0 4px; }
-#processOverview .stepBilling .processStep  i { margin: 4px 0 0 2px; }
-#processOverview .stepType.processStep  i { margin: 4px 0 0 7px; }
+#processOverview .stepBilling .processStep  i { margin: 4px 0 0 2px;  }
+#processOverview .stepType.processStep  i { margin: 4px 0 0 7px;  }
 
 #processOverview .processLine {
 	border: 1px solid lightgrey;
