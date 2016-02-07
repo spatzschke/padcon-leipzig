@@ -121,7 +121,7 @@ foreach ($processes as $key => $process):
 				?>
 			</div>
 			<?php if($process['Billing']['id']) { echo '<div class="stepLabel"><span class="hidden-sm">RE: </span>'.$process['Billing']['billing_number'].'</div>'; } ?>	
-			<?php echo '<div class=" processId stepId">'.$process['Process']['id'].'</div>'; ?>	
+			<?php echo '<div class=" processId stepId hidden-sm">'.$process['Process']['id'].'</div>'; ?>	
 		</div>
 		
 	

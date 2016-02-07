@@ -143,7 +143,7 @@ class ProcessesController extends AppController {
 					'Confirmation.confirmation_number LIKE' 	=> '%'.$this->data['str'].'%',
 					'Delivery.delivery_number LIKE' => '%'.$this->data['str'].'%',
 					'Billing.billing_number LIKE' 	=> '%'.$this->data['str'].'%')),
-					'order' => array('Process.id DESC')));	
+					'order' => array('Process.confirmation_id DESC')));	
 
 		$this->set('processes', $data);
 		
