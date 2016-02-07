@@ -207,13 +207,13 @@
 					<!-- Lieferschein-Nummer -->
 					<td>
 						<?php 
+						if($item['Process']['delivery_id']) {
 							if($item['Process']['delivery_id'] == '0') {
 								echo '<i class="glyphicon glyphicon-briefcase" data-toggle="popover" style="color: teal; cursor: pointer"
 									data-content="Lieferung durch den Hersteller</b>"
 									data-trigger="hover"></i>'; 
 							} else {
-								
-								if($item['Billing']['custom']){
+								if($item['Billing']['custom'] && !$item['Process']['billing_id']){
 									echo $this->Html->link('<i class="glyphicon glyphicon-search" data-toggle="popover" 
 									data-content="'.$item['Billing']['delivery_number'].'"
 									data-trigger="hover"
@@ -223,10 +223,10 @@
 									data-content="'.$item['Billing']['delivery_number'].'"
 									data-trigger="hover"
 									></i>', array('admin' => true, 'controller' => 'Deliveries', 'action' => 'view', $item['Process']['delivery_id']), array('escape' => false));
-								
 								}
 							}
-						 ?>
+						} else { echo '-';}
+						?>
 					</td>
 					
 					<td><?php echo $this->Time->format($item['Billing']['created'], '%d.%m.%Y'); ?></td>

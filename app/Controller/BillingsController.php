@@ -36,7 +36,13 @@ class BillingsController extends AppController {
 	public function admin_index() {
 		
 		$this->layout = "admin";
-		$data = $this->Billing->find('all', array('order' => array('Billing.billing_number DESC')));
+		
+		 $this->Paginator->settings = array(
+        'order' => array('Billing.billing_number' => 'DESC'),
+        'limit' => 40
+	    );
+	    $data = $this->Paginator->paginate('Billing');
+		//$data = $this->Billing->find('all', array('order' => array('Billing.billing_number DESC')));
 		
 		foreach ($data as $key => $value) {
 			
@@ -571,6 +577,23 @@ class BillingsController extends AppController {
 			
 			    $this->render('admin_settings', 'ajax'); 
 			}
+		}
+	}
+
+	function admin_search($searchString = null) {
+		
+		$this->layout = 'ajax';
+		
+		$offers = $this->Billing->find('all',array('conditions' => array("OR" => 
+			array (	'Billing.billing_number LIKE' => '%'.$this->data['str'].'%' ,
+					'Billing.id LIKE' 	=> '%'.$this->data['str'].'%',
+					'Process.customer_id LIKE' 	=> '%'.$this->data['str'].'%')),
+					'order' => array('Billing.billing_number' => 'DESC')));	
+		
+		$this->set('data', $this->fillIndexData($offers));
+		
+		if(isset($this->data['template'])) {
+			$this->render($this->data['template']);
 		}
 	}
 

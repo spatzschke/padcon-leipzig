@@ -6,8 +6,8 @@
 $(document).ready(function() {
 		
 			$('#filter .search input').dynamicSearch({
-			url: "<?php echo FULL_BASE_URL.$this->base;?>\/Offers\/search\/",
-			renderTemplate: '/Elements/backend/portlets/Offer/offerPortletTableContent',
+			url: "<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Billings\/search\/",
+			renderTemplate: '/Elements/backend/portlets/Billings/tableContent',
 			cancel: '.form-search .cancel',
 			loadingClass: 'loadingSpinner',
 			loadingElement: '#filter .search .input-group-addon i',
@@ -92,6 +92,20 @@ $(document).ready(function() {
 	         	<div class="cancel"><i class="glyphicon glyphicon-remove"></i></div>                                
 	        </div>	
 		</section>
+		
+	
+	<nav>
+	  <ul class="pagination">
+	    <li>
+	      <span aria-hidden="true"><?php echo $this->Paginator->prev('<<', array(), null, array('class' => 'prev disabled')); ?></span>
+	    </li>
+	    <?php echo $this->Paginator->numbers(array('before' => '<li>', 'after' => '</li>', 'separator' => '')); ?>
+	    <li>
+	        <span aria-hidden="true"><?php echo $this->Paginator->next(' >>', array(), null, array('class' => 'next disabled')); ?></span>
+	     
+	    </li>
+	  </ul>
+	</nav>
 
 		<div class="module_content">
 			<table class="tablesorter" cellspacing="0"> 
@@ -120,13 +134,26 @@ $(document).ready(function() {
 			</thead> 
 			<tbody> 
 							
-				<?php echo $this->element('backend/portlets/Billings/tableContent', array('data' => $data)); ?>
+				<?php echo $this->element('backend/portlets/Billings/tableContent', array('offers' => $data)); ?>
 
 
 				
 			</tbody>
 			 
 			</table>
+			
+					<nav>
+		  <ul class="pagination">
+		    <li>
+		      <span aria-hidden="true"><?php echo $this->Paginator->prev('<<', array(), null, array('class' => 'prev disabled')); ?></span>
+		    </li>
+		    <?php echo $this->Paginator->numbers(array('before' => '<li>', 'after' => '</li>', 'separator' => '')); ?>
+		    <li>
+		        <span aria-hidden="true"><?php echo $this->Paginator->next(' >>', array(), null, array('class' => 'next disabled')); ?></span>
+		     
+		    </li>
+		  </ul>
+		</nav>
 			
 		</div><!-- end of .tab_container -->
 </article><!-- end of stats article -->

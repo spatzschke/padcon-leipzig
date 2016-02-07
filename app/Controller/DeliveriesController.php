@@ -36,6 +36,11 @@ class DeliveriesController extends AppController {
 		$this->layout = 'admin';
 	
 		$this->Delivery->recursive = 0;
+		$this->Paginator->settings = array(
+	        'order' => array('substring(Delivery.delivery_number, 4, 5)' => 'DESC', 'substring(Delivery.delivery_number, 1, 3)' => 'DESC'),
+	        'limit' => 20
+	    );
+	//    $data = $this->Paginator->paginate('Delivery');
 		$data = $this->Delivery->find('all', array('order' => array('substring(Delivery.delivery_number, 4, 5) DESC', 'substring(Delivery.delivery_number, 1, 3) DESC')));
 		
 		$this->set('title_for_panel', 'Alle Lieferscheine');	
@@ -585,6 +590,23 @@ Lieferzeit: ca. 3-4 Wochen
 			
 			    $this->render('admin_settings', 'ajax'); 
 			}
+		}
+	}
+
+	function admin_search($searchString = null) {
+		
+		$this->layout = 'ajax';
+		
+		$offers = $this->Delivery->find('all',array('conditions' => array("OR" => 
+			array (	'Delivery.delivery_number LIKE' => '%'.$this->data['str'].'%' ,
+					'Delivery.id LIKE' 	=> '%'.$this->data['str'].'%',
+					'Process.customer_id LIKE' 	=> '%'.$this->data['str'].'%')),
+					'order' => array('substring(Delivery.delivery_number, 4, 5) DESC', 'substring(Delivery.delivery_number, 1, 3) DESC')));	
+		
+		$this->set('data', $this->fillIndexData($offers));
+		
+		if(isset($this->data['template'])) {
+			$this->render($this->data['template']);
 		}
 	}
 
