@@ -67,7 +67,7 @@
 	</header> <!-- end of header bar -->
 	
 	<section id="secondary_bar">
-		<div class="user">
+		<div class="user col-md-2 col-sm-1 col-xs-1">
 			<p><?php echo $this->Session->read('Auth.User.title').' '.$this->Session->read('Auth.User.last_name');?></p>
 			<?php echo $this->Html->link('Logout', '/Abmelden', array('class' => 'logout_user')); ?>
 		</div>
@@ -78,7 +78,7 @@
 	
 	<?php echo $this->element('backend/navigation'); ?>
 		
-	<section id="main" class="column">
+	<section id="main" class="col-md-10 col-sm-11 col-cs-11" >
 		<div class="panel-body">
 			<?php echo $this->Session->flash(); ?>
 		

@@ -205,7 +205,6 @@ background: #F1F1F4 url(../../img/backend/secondary_bar.png) repeat-x;
 
 section#secondary_bar .user {
 float: left;
-width: 23%;
 height: 38px;
 }
 
@@ -301,7 +300,6 @@ margin: 0 5px;
 /* Sidebar */
 
 aside#sidebar {
-width: 23%;
 background: #E0E0E3 url(../../img/backend/sidebar.png) repeat;
 float: left;
 min-height: 500px;
@@ -492,11 +490,11 @@ margin-top: 22px;
 
 
 section#main {
-width: 77%;
 min-height: 500px;
 background: url(../../img/backend/sidebar_shadow.png) repeat-y left top;
 float: left;
 margin-top: -2px;
+padding: 0;
 }
 
 #main h3 {
