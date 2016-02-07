@@ -90,7 +90,9 @@
 												'value' => $value['amount'],
 												'origAmount' => $value['amount'],
 												'type' => 'number',
-												'class' => 'form-control col-md-2 amount'
+												'class' => 'form-control col-md-2 amount',
+												'max' => $value['amount'],
+												'min' => 1,
 											)).
 											$this->Form->input('Product]['.$key.'][color_id]', array(
 												'label' => false,

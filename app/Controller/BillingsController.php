@@ -292,6 +292,7 @@ class BillingsController extends AppController {
 			} else {
 				$process = $this->Process->findByConfirmationId($confirmation_id);
 			}
+			
 					
 			$billing = array();
 			

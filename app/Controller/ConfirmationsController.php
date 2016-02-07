@@ -60,14 +60,13 @@ class ConfirmationsController extends AppController {
 		if (!$this->Confirmation->exists($id)) {
 			throw new NotFoundException(__('Invalid confirmation'));
 		}
-		$options = array('conditions' => array('Confirmation.' . $this->Confirmation->primaryKey => $id));
-		$confirmation = $this->Confirmation->find('first', $options);
+		$options = array('conditions' => array('Process.confirmation_id' => $id, 'Process.type' => ''));
+		$process = $this->Process->find('first', $options);
 		
-		
-		$this->set('confirmation', $confirmation);
+		$this->set('confirmation', $process);
 		$this->set('pdf', null);
 	
-		$this->generateData($this->Process->findByConfirmationId($id));
+		$this->generateData($this->Process->findByConfirmationIdAndType($id, ''));
 	}
 
 /**

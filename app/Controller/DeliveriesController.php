@@ -375,8 +375,14 @@ class DeliveriesController extends AppController {
 			foreach($this->data['Product'] as $key => $item) {
 				
 				$this->CartProduct->create();
+				
+				//Nachladen des Products
+				$product = $this->Product->findById($item['product_id']);
+				
 				$cartProduct['CartProduct']['cart_id'] = $cart_id;
 				$cartProduct['CartProduct']['product_id'] = $item['product_id'];
+				$cartProduct['CartProduct']['price'] = $product['Product']['price'];
+				$cartProduct['CartProduct']['retail_price'] = $product['Product']['retail_price'];
 				$cartProduct['CartProduct']['amount'] = $item['amount'];
 				$cartProduct['CartProduct']['color_id'] = $item['color_id'];
 				
