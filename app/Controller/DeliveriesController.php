@@ -593,6 +593,23 @@ Lieferzeit: ca. 3-4 Wochen
 		}
 	}
 
+	function admin_search($searchString = null) {
+		
+		$this->layout = 'ajax';
+		
+		$offers = $this->Delivery->find('all',array('conditions' => array("OR" => 
+			array (	'Delivery.delivery_number LIKE' => '%'.$this->data['str'].'%' ,
+					'Delivery.id LIKE' 	=> '%'.$this->data['str'].'%',
+					'Process.customer_id LIKE' 	=> '%'.$this->data['str'].'%')),
+					'order' => array('substring(Delivery.delivery_number, 4, 5) DESC', 'substring(Delivery.delivery_number, 1, 3) DESC')));	
+		
+		$this->set('data', $this->fillIndexData($offers));
+		
+		if(isset($this->data['template'])) {
+			$this->render($this->data['template']);
+		}
+	}
+
 	function createPdf ($hash = null) { 
 		$result = $this->Delivery->findByHash($hash);
 		if(!empty($result)) {

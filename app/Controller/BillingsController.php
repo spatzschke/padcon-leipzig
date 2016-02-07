@@ -580,6 +580,23 @@ class BillingsController extends AppController {
 		}
 	}
 
+	function admin_search($searchString = null) {
+		
+		$this->layout = 'ajax';
+		
+		$offers = $this->Billing->find('all',array('conditions' => array("OR" => 
+			array (	'Billing.billing_number LIKE' => '%'.$this->data['str'].'%' ,
+					'Billing.id LIKE' 	=> '%'.$this->data['str'].'%',
+					'Process.customer_id LIKE' 	=> '%'.$this->data['str'].'%')),
+					'order' => array('Billing.billing_number' => 'DESC')));	
+		
+		$this->set('data', $this->fillIndexData($offers));
+		
+		if(isset($this->data['template'])) {
+			$this->render($this->data['template']);
+		}
+	}
+
 	function createPdf ($hash = null) { 
 		$result = $this->Billing->findByHash($hash);
 		if(!empty($result)) {
