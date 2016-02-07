@@ -30,7 +30,7 @@ class ProcessesController extends AppController {
 		$this->Process->recursive = 0;
 		
 		 $this->Paginator->settings = array(
-        'order' => array('Process.id' => 'DESC'),
+        'order' => array('Process.confirmation_id' => 'DESC'),
         'limit' => 200
 	    );
 		

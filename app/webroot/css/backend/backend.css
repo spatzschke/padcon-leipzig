@@ -105,6 +105,13 @@ body .row-fluid .firstItem { margin: 0;}
     opacity: 0.8
 }
 
+#processOverview .processLine.processNodeConnector {
+	 height: 75px;
+    left: 30px;
+    top: 15px;
+    width: 12px;
+}
+
 #processOverview .stepId {
 	background: white none repeat scroll 0 0;
     border: 1px solid lightgrey;
@@ -116,6 +123,13 @@ body .row-fluid .firstItem { margin: 0;}
     top: 6px;
     z-index: 2;
     opacity: 0.8
+}
+
+#processOverview .col-md-2 .processId.stepId {	
+	left: 140px;
+    padding: 3px 0;
+    width: 50px;
+    text-align: center;
 }
 
 #processOverview .col-md-2 .stepId { left: -40px; }
@@ -134,7 +148,11 @@ body .row-fluid .firstItem { margin: 0;}
 
 #processOverview .col-md-2 .stepLabel { left: 30px; }
 
-
+#processOverview .processNode {
+	width: 15px; 
+	height: 15px; 
+	margin: 13px 0 0 14px
+}
 
 
 /* Header */
@@ -1102,7 +1120,7 @@ border-color: #B94A48;
 
 .wood_bg .buttons { 
 	position: absolute;
-	top: 145px;
+	top: 2px;
 	height: 0px;
 	width: 130px;
 	margin-left: 5px;
