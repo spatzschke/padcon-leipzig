@@ -151,12 +151,10 @@ class PagesController extends AppController {
 			
 			setlocale(LC_ALL, 'de_DE', 'German_Germany.1252');
 			$monthUmsatz[0][0]['MONAT'] = utf8_encode(strftime('%B', mktime(0, 0, 0, date('F') + $i, 1)));;
+			$monthUmsatz[0][0]['MONATSHORT'] = utf8_encode(strftime('%b', mktime(0, 0, 0, date('F') + $i, 1)));;
 			
 			array_push($umsatz, $monthUmsatz[0][0]);
 		}
-
-				
-		
 		
 		$this->set('umsatz', $umsatz);
 	}  

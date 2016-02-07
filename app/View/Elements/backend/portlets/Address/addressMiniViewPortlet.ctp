@@ -29,7 +29,7 @@
 		$style = 'color: grey; cursor: default';
 		$styleAcitve = 'color: teal; cursor: pointer';
 		
-		if(strcmp($value, "Angebot") == 0) { $glyph = "glyphicon-file"; $pop = $popAcitve; $style = $styleAcitve; }	
+		if(strcmp($value, "Angebot") == 0) { $glyph = "glyphicon-send"; $pop = $popAcitve; $style = $styleAcitve; }	
 		if(strcmp($value, "Auftragsbestätigung") == 0) { $glyph = "glyphicon-check"; $pop = $popAcitve; $style = $styleAcitve; }	
 		if(strcmp($value, "Lieferschein") == 0) { $glyph = "glyphicon-qrcode"; $pop = $popAcitve; $style = $styleAcitve; }	
 		if(strcmp($value, "Rechnung") == 0) { $glyph = "glyphicon-euro"; $pop = $popAcitve; $style = $styleAcitve; }	

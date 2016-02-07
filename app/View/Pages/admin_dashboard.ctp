@@ -49,14 +49,51 @@
 
        <div style="" class="col-md-12">                    
             <div class="panel panel-info" >
-                 <div class="panel-body" >
-	            	<table class="table table-striped">
+                 <div class="panel-body">
+                 	<table class="table table-striped visible-sm">
+					  	<thead> 
+					  		<tr>
+					  			<th></th>
+					  			<th style="text-align: center">Rechnungen</th>
+					  			<th style="text-align: center">Lieferanten</th>
+					  			<th style="text-align: center">Ergebnis</th>
+					  		</tr> 
+					  	</thead>				  
+					  	<tbody> 
+					  		<?php foreach ($umsatz as $key => $value) {
+					  		echo '<tr>';
+					  			echo '<td style="text-align: left">';																	 								
+									echo $value['MONAT']; 
+								echo '</td>';
+									
+								echo '<td style="text-align: center">';									
+								if($value['EINNAHME'])   								
+									echo $this->Number->currency($value['EINNAHME'],'EUR', array('wholePosition' => 'after')); 
+								echo '</td>';
+								
+								echo '<td style="text-align: center">';									
+								if($value['AUSGABE'])   								
+									echo $this->Number->currency($value['AUSGABE'],'EUR', array('wholePosition' => 'after')); 
+								echo '</td>';	
+									
+					  			echo '<td style="text-align: center"><b>';									
+								if($value['DIFFERENZ'])   								
+									echo $this->Number->currency($value['DIFFERENZ'],'EUR', array('wholePosition' => 'after')); 
+								echo '</b></td>';
+							echo '</tr>';
+						} ?>
+					  	</tbody>
+					</table>
+                 	
+                 	
+                 	
+	            	<table class="table table-striped hidden-sm">
 					  	<thead> 
 					  		<tr>
 					  			<th></th>
 					  			<?php
 					  				foreach ($umsatz as $key => $value) {
-										  echo '<th style="text-align: center">'.$value['MONAT'].'</th>';
+										  echo '<th style="text-align: center">'.$value['MONATSHORT'].'</th>';
 									 }					  			
 					  			?> 
 					  		</tr> 

@@ -43,20 +43,9 @@ $(document).ready(function() {
 	         	<div class="cancel"><i class="glyphicon glyphicon-remove"></i></div>                                
 	        </div>	
 		</section>
-		<?php if($this->Paginator->numbers()){ ?>
-		<nav>
-		  <ul class="pagination">
-		    <li>
-		      <span aria-hidden="true"><?php echo $this->Paginator->prev('<<', array(), null, array('class' => 'prev disabled')); ?></span>
-		    </li>
-		    <?php echo $this->Paginator->numbers(array('before' => '<li>', 'after' => '</li>', 'separator' => '')); ?>
-		    <li>
-		        <span aria-hidden="true"><?php echo $this->Paginator->next(' >>', array(), null, array('class' => 'next disabled')); ?></span>
-		     
-		    </li>
-		  </ul>
-		</nav>
-		<?php } ?>
+
+		<?php echo $this->element('backend/helper/paginationHelper'); ?>
+
 		<div class="module_content">
 			
 		<div class="col-md-12 col-xs-12 processHeader">
@@ -73,20 +62,7 @@ $(document).ready(function() {
 			echo $this->element('backend/portlets/Process/tableContent', array('processes' => $processes)); ?>
 		</div>		
 			
-		<?php if($this->Paginator->numbers()){ ?>
-		<nav>
-		  <ul class="pagination">
-		    <li>
-		      <span aria-hidden="true"><?php echo $this->Paginator->prev('<<', array(), null, array('class' => 'prev disabled')); ?></span>
-		    </li>
-		    <?php echo $this->Paginator->numbers(array('before' => '<li>', 'after' => '</li>', 'separator' => '')); ?>
-		    <li>
-		        <span aria-hidden="true"><?php echo $this->Paginator->next(' >>', array(), null, array('class' => 'next disabled')); ?></span>
-		     
-		    </li>
-		  </ul>
-		</nav>
-		<?php } ?>
+		<?php echo $this->element('backend/helper/paginationHelper'); ?>
 		
 		<div>&nbsp;</div>
 			

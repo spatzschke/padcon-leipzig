@@ -8,7 +8,7 @@ class OffersController extends AppController {
 
 	var $name = 'Offers';
 	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'User', 'AddressAddresstype', 'Process');
-	public $components = array('Auth', 'Session');
+	public $components = array('Auth', 'Session', 'Paginator');
 	
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
@@ -22,7 +22,12 @@ class OffersController extends AppController {
 		$this->layout = 'admin';
 	
 		$this->Offer->recursive = 0;
-		$offers = $this->Offer->find('all', array('order' => array('Offer.id DESC')));
+		$this->Paginator->settings = array(
+		    'order' => array('Offer.id' => 'DESC'),
+		    'limit' => 25
+		    );
+	    $offers = $this->Paginator->paginate('Offer');
+		//$offers = $this->Offer->find('all', array('order' => array('Offer.id DESC')));
 		
 		$this->set('title_for_panel', 'Alle Angebote');	
 		

@@ -37,11 +37,11 @@ class DeliveriesController extends AppController {
 	
 		$this->Delivery->recursive = 0;
 		$this->Paginator->settings = array(
-	        'order' => array('substring(Delivery.delivery_number, 4, 5)' => 'DESC', 'substring(Delivery.delivery_number, 1, 3)' => 'DESC'),
-	        'limit' => 20
-	    );
-	//    $data = $this->Paginator->paginate('Delivery');
-		$data = $this->Delivery->find('all', array('order' => array('substring(Delivery.delivery_number, 4, 5) DESC', 'substring(Delivery.delivery_number, 1, 3) DESC')));
+		    'order' => 'substring(Delivery.delivery_number, 4, 5) DESC, substring(Delivery.delivery_number, 1, 3) DESC',
+		    'limit' => 25
+		    );
+	    $data = $this->Paginator->paginate('Delivery');
+		//$data = $this->Delivery->find('all', array('order' => array('substring(Delivery.delivery_number, 4, 5) DESC', 'substring(Delivery.delivery_number, 1, 3) DESC')));
 		
 		$this->set('title_for_panel', 'Alle Lieferscheine');	
 			
@@ -375,8 +375,14 @@ class DeliveriesController extends AppController {
 			foreach($this->data['Product'] as $key => $item) {
 				
 				$this->CartProduct->create();
+				
+				//Nachladen des Products
+				$product = $this->Product->findById($item['product_id']);
+				
 				$cartProduct['CartProduct']['cart_id'] = $cart_id;
 				$cartProduct['CartProduct']['product_id'] = $item['product_id'];
+				$cartProduct['CartProduct']['price'] = $product['Product']['price'];
+				$cartProduct['CartProduct']['retail_price'] = $product['Product']['retail_price'];
 				$cartProduct['CartProduct']['amount'] = $item['amount'];
 				$cartProduct['CartProduct']['color_id'] = $item['color_id'];
 				

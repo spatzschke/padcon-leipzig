@@ -1,6 +1,6 @@
 <?php 
 
-foreach ($processes as $process): 	
+foreach ($processes as $key => $process): 	
 		$offerActive = false;		$confirmationActive = false;		$deliveryActive = false;		$billingActive = false;		
 		
 		if($process['Offer']['id']) { $offerActive = true; } 
@@ -10,6 +10,11 @@ foreach ($processes as $process):
 		
 		$action = 'view';
 		if($process['Confirmation']['custom']) { $action = 'edit_individual';}
+		
+		if(isset($processes[$key+1]))
+			$isPartProcess = $process['Process']['confirmation_id'] == $processes[$key+1]['Process']['confirmation_id'];
+		else
+			$isPartProcess = false;
 	?>
 	
 	<div class="col-md-12 col-xs-12 process">
@@ -25,13 +30,18 @@ foreach ($processes as $process):
 		<div class="col-md-1 col-xs-1  processStepContainer">
 			<?php 
 			
-			$icon = '';
-			if($process['Confirmation']['custom']) { $icon = 'hand-right';}
-			elseif($process['Process']['type'] == "full") { $icon = 'file';}
-			elseif($process['Process']['type'] == "part") { $icon = 'duplicate';}
+			$icon = ''; $text = '';
+			if($process['Confirmation']['custom']) { $icon = 'hand-right'; $text = 'Individual';}
+			elseif($process['Process']['type'] == "full") { $icon = 'file';$text = 'Voll-Lieferschein';}
+			elseif($process['Process']['type'] == "part" || $isPartProcess) { $icon = 'duplicate';$text = 'Teil-Lieferschein';}
 			
 			
-			echo '<div class="stepType hidden-sm processStep '.( $icon != '' ? 'status-open' : '').'"><i class="glyphicon glyphicon-'.$icon.'"></i></div>';  ?>
+			echo '<div class="stepType hidden-sm processStep '.( $icon != '' ? 'status-open' : '').'"><i class="glyphicon glyphicon-'.$icon.'" style="cursor: default"
+					 data-toggle="popover"
+					 data-content="'.$text.'"
+					 data-trigger="hover"
+					 data-placement="top"">
+			</i></div>';  ?>
 		</div>
 		
 		<div class="col-md-2 col-xs-2 processStepContainer stepOffer">
@@ -53,7 +63,9 @@ foreach ($processes as $process):
 
 		<div class="col-md-3 col-xs-3 processStepContainer stepConfirmation">
 			<div class="processLine <?php echo ($deliveryActive ? 'success' : ''); ?> <?php echo (!$process['Process']['delivery_id'] && $process['Process']['billing_id'] ? 'success' : ''); ?>"></div>
-			<?php if($process['Confirmation']['id']) { echo '<div class="stepId">'.$process['Confirmation']['id'].'</div>'; } ?>
+			<?php if($process['Confirmation']['id'] && !$isPartProcess) { echo '<div class="stepId">'.$process['Confirmation']['id'].'</div>'; } ?>
+			
+			<?php if(!$isPartProcess || $process['Process']['confirmation_id'] == 0) { ?>
 			<div class="processStep <?php echo ($confirmationActive ? 'status-'.$process['Confirmation']['status'] : ''); ?>">
 				<?php 
 				if($process['Confirmation']['id']) {
@@ -66,7 +78,11 @@ foreach ($processes as $process):
 				}
 				?>
 			</div>
-			<?php if($process['Confirmation']['id']) { echo '<div class="stepLabel"><span class="hidden-sm">AB: </span>'.$process['Confirmation']['confirmation_number'].'</div>'; } ?>
+			<?php } else { ?>
+				<div class="processLine processNodeConnector <?php echo ($confirmationActive ? 'success': ''); ?>"></div>
+				<div class="processStep processNode <?php echo ($confirmationActive ? 'status-'.$process['Confirmation']['status'] : ''); ?>"></div>
+			<?php }  ?>
+			<?php if($process['Confirmation']['id'] && !$isPartProcess) { echo '<div class="stepLabel"><span class="hidden-sm">AB: </span>'.$process['Confirmation']['confirmation_number'].'</div>'; } ?>
 		</div>
 		
 		<?php
@@ -104,8 +120,11 @@ foreach ($processes as $process):
 				}
 				?>
 			</div>
-			<?php if($process['Billing']['id']) { echo '<div class="stepLabel"><span class="hidden-sm">RE: </span>'.$process['Billing']['billing_number'].'</div>'; } ?>		
+			<?php if($process['Billing']['id']) { echo '<div class="stepLabel"><span class="hidden-sm">RE: </span>'.$process['Billing']['billing_number'].'</div>'; } ?>	
+			<?php echo '<div class=" processId stepId">'.$process['Process']['id'].'</div>'; ?>	
 		</div>
+		
+	
 	</div>
 	
 <?php endforeach; ?>

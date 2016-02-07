@@ -105,6 +105,13 @@ body .row-fluid .firstItem { margin: 0;}
     opacity: 0.8
 }
 
+#processOverview .processLine.processNodeConnector {
+	 height: 75px;
+    left: 30px;
+    top: 15px;
+    width: 12px;
+}
+
 #processOverview .stepId {
 	background: white none repeat scroll 0 0;
     border: 1px solid lightgrey;
@@ -116,6 +123,13 @@ body .row-fluid .firstItem { margin: 0;}
     top: 6px;
     z-index: 2;
     opacity: 0.8
+}
+
+#processOverview .col-md-2 .processId.stepId {	
+	left: 140px;
+    padding: 3px 0;
+    width: 50px;
+    text-align: center;
 }
 
 #processOverview .col-md-2 .stepId { left: -40px; }
@@ -134,7 +148,11 @@ body .row-fluid .firstItem { margin: 0;}
 
 #processOverview .col-md-2 .stepLabel { left: 30px; }
 
-
+#processOverview .processNode {
+	width: 15px; 
+	height: 15px; 
+	margin: 13px 0 0 14px
+}
 
 
 /* Header */
@@ -205,7 +223,6 @@ background: #F1F1F4 url(../../img/backend/secondary_bar.png) repeat-x;
 
 section#secondary_bar .user {
 float: left;
-width: 23%;
 height: 38px;
 }
 
@@ -301,7 +318,6 @@ margin: 0 5px;
 /* Sidebar */
 
 aside#sidebar {
-width: 23%;
 background: #E0E0E3 url(../../img/backend/sidebar.png) repeat;
 float: left;
 min-height: 500px;
@@ -492,11 +508,11 @@ margin-top: 22px;
 
 
 section#main {
-width: 77%;
 min-height: 500px;
 background: url(../../img/backend/sidebar_shadow.png) repeat-y left top;
 float: left;
 margin-top: -2px;
+padding: 0;
 }
 
 #main h3 {
@@ -1104,7 +1120,7 @@ border-color: #B94A48;
 
 .wood_bg .buttons { 
 	position: absolute;
-	top: 145px;
+	top: 2px;
 	height: 0px;
 	width: 130px;
 	margin-left: 5px;
@@ -1261,15 +1277,22 @@ article.sheet {
 #DeliveryAdminConvertPartForm {
     position: absolute;
     right: 0;
-    top: 15px;
+    top: 57px;
 }
 
 /*Cake Generic*/
 
 form .input { color: #666 !important}
 
-form option:selected {backgroun-color: green};
+form option:selected {backgroun-color: green}
 
+/* Paginiation */
+.pagination { margin-left: 20px; color: teal}
+.pagination span *{ color: teal}
+.pagination span.current, .pagination span.current:hover { background-color: teal; color: white; font-weight: bold; cursor: default}
+.pagination span.disabled { cursor: default}
+
+.pagination li span:hover *, .pagination li span:hover{ background-color: teal; color: white; font-weight: bold; cursor: pointer}
 
 
 

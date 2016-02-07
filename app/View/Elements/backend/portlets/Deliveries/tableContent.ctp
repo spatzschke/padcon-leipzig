@@ -166,7 +166,7 @@
 									echo $this->Html->link('Rechnung', array('controller' => 'Billings', 'action' => 'add_individual', 'admin' =>'true', $item['Confirmation']['id']),
 																array('class' => 'btn btn-default')); 	
 								} else {
-									echo $this->Html->link('Rechnung', array('controller' => 'Billings', 'action' => 'convert', 'admin' =>'true', $item['Confirmation']['id']),
+									echo $this->Html->link('Rechnung', array('controller' => 'Billings', 'action' => 'convert', 'admin' =>'true', $item['Delivery']['id']),
 																array('class' => 'btn btn-default')); 							
 								}
 									
