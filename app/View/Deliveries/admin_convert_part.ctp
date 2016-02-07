@@ -74,8 +74,11 @@
 		<div class="module_content row-fluid">
 					<div class="col-md-12">
 						<div class="panel panel-info" >
+                    		<div class="panel-heading" >Teillieferschein erstellen</div>
                     		<div class="panel-body" >
+                    			<h3><b>Warenkorb der Auftragsbestätigung</b></h3>
 								<div id="originalCart" class="col-md-5">
+									
 									<?php 
 									
 									foreach($this->data['CartProduct'] as $key => $value) {
@@ -117,6 +120,7 @@
 	                             <button id="add" class="btn btn-default" type="button">></button>
 	                            </div> 
 	                            <?php echo $this->Form->create('Delivery', array('class' => 'col-md-5'));?>
+	                            <h3><b>Warenkorb des Teillieferscheines</b></h3>
 								<div id="partCart" class="col-md-12">
 									
 								</div>
