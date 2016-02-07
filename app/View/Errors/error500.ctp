@@ -18,13 +18,30 @@ echo $this->Html->css('cake.generic');
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 ?>
-<h2><?php echo $name; ?></h2>
-<p class="error">
-	<strong><?php echo __d('cake', 'Error'); ?>: </strong>
-	<?php echo __d('cake', 'An Internal Error Has Occurred.'); ?>
-</p>
-<?php
-if (Configure::read('debug') > 0):
-	echo $this->element('exception_stack_trace');
-endif;
-?>
+<div class="container">    
+    <div style="margin-top:50px;" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
+        <div class="panel panel-info" >
+                <div class="panel-body" >
+                	<h2><?php echo $name; ?></h2>
+					<p class="error">
+						<strong><?php echo __d('cake', 'Fehler'); ?>: </strong>
+						<?php printf(
+							__d('cake', 'Es kam zu einem internen Fehler<br /><br />Bitte gehen Sie mit Hilfe des Browsers zurück.')
+						); ?>
+					</p>
+					<a class="" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+					  Fehlerlog <span class="caret"></span>
+					</a>
+					<div class="collapse" id="collapseExample">
+					  <div class="well">
+					    <?php
+							if (Configure::read('debug') > 0):
+								echo $this->element('exception_stack_trace');
+							endif;
+						?>
+					  </div>
+					</div>
+                </div>
+         </div>
+    </div>
+</div>

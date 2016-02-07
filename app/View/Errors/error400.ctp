@@ -17,16 +17,33 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 ?>
-<h2><?php echo $name; ?></h2>
-<p class="error">
-	<strong><?php echo __d('cake', 'Error'); ?>: </strong>
-	<?php printf(
-		__d('cake', 'The requested address %s was not found on this server.'),
-		"<strong>'{$url}'</strong>"
-	); ?>
-</p>
-<?php
-if (Configure::read('debug') > 0):
-	echo $this->element('exception_stack_trace');
-endif;
-?>
+<div class="container">    
+    <div style="margin-top:50px;" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
+        <div class="panel panel-info" >
+                <div class="panel-body" >
+                	<h2><?php echo $name; ?></h2>
+					<p class="error">
+						<strong><?php echo __d('cake', 'Fehler'); ?>: </strong>
+						<?php printf(
+							__d('cake', 'Die aufgerufene Webseite %s wurde nicht gefunden. <br /><br />Bitte prüfen Sie die URL oder gehen Sie mit Hilfe des Browsers zurück.'),
+							"<strong>'{$url}'</strong>"
+						); ?>
+					</p>
+					<?php if (Configure::read('debug') > 0) { ?>
+					<a class="" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+					  Fehlerlog <span class="caret"></span>
+					</a>
+					<div class="collapse" id="collapseExample">
+					  <div class="well">
+					    <?php echo $this->element('exception_stack_trace'); ?>
+					  </div>
+					</div>
+					<?php } ?>
+                </div>
+         </div>
+    </div>
+</div>
+
+
+
+
