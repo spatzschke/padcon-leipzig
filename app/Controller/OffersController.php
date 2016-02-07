@@ -466,7 +466,7 @@ class OffersController extends AppController {
 					'Offer.confirmation_id LIKE' 	=> '%'.$this->data['str'].'%')),
 					'order' => array('Offer.created DESC', 'Offer.id DESC')));	
 		
-		$this->set('data', $this->fillIndexData($offers));
+		$this->set('offers', $this->fillIndexData($offers));
 		
 		if(isset($this->data['template'])) {
 			$this->render($this->data['template']);

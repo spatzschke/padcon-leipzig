@@ -134,7 +134,7 @@ $(document).ready(function() {
 			</thead> 
 			<tbody> 
 							
-				<?php echo $this->element('backend/portlets/Billings/tableContent', array('data' => $data)); ?>
+				<?php echo $this->element('backend/portlets/Billings/tableContent', array('offers' => $data)); ?>
 
 
 				
