@@ -31,7 +31,7 @@ class ProcessesController extends AppController {
 		
 		 $this->Paginator->settings = array(
         'order' => array('Process.id' => 'DESC'),
-        'limit' => 100
+        'limit' => 200
 	    );
 		
 		$this->set('processes', $this->Paginator->paginate('Process'));
