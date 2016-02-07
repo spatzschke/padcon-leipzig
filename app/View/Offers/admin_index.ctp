@@ -64,7 +64,13 @@ $(document).ready(function() {
 			</div>
 		</div>
 		<header>
-			<div class="panel-title"><?php echo $title_for_panel; ?></div>
+			<div class="panel-title">
+				<h3>
+					<b><?php echo $title_for_panel; ?> </b>
+					<span><?php echo $this->Paginator->counter(array('format' => __(' (Anzahl {:count})')));?></span>
+				</h3>
+				<span class=pull-right><?php echo $this->Paginator->counter(array('format' => __('{:page}/{:pages}')));?></span>
+			</div>
 			<?php
 				if($this->request->is('ajax')) {
 					echo '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>';
@@ -79,13 +85,7 @@ $(document).ready(function() {
 	         	<div class="cancel"><i class="glyphicon glyphicon-remove"></i></div>                                
 	        </div>	
 		</section>
-		<nav>
-		  <!-- <ul class="pager">
-		    <li class="disabled"><a href="#"><span aria-hidden="true">&larr;</span>  Nächste</a></li>
-		    <li><a href="#">Vorherige  <span aria-hidden="true">&rarr;</span></a></li>
-
-		  </ul> -->
-		</nav>
+		<?php echo $this->element('backend/helper/paginationHelper'); ?>
 		<div class="module_content">
 			<table class="tablesorter" cellspacing="0"> 
 				<thead> 
@@ -109,11 +109,5 @@ $(document).ready(function() {
 				</tbody>
 			</table>
 		</div><!-- end of .tab_container -->
-		<nav>
-		  <!-- <ul class="pager">
-		    <li class="disabled"><a href="#"><span aria-hidden="true">&larr;</span>  Nächste</a></li>
-		    <li><a href="#">Vorherige  <span aria-hidden="true">&rarr;</span></a></li>
-
-		  </ul> -->
-		</nav>
+		<?php echo $this->element('backend/helper/paginationHelper'); ?>
 </article><!-- end of stats article -->

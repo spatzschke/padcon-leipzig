@@ -1284,8 +1284,15 @@ article.sheet {
 
 form .input { color: #666 !important}
 
-form option:selected {backgroun-color: green};
+form option:selected {backgroun-color: green}
 
+/* Paginiation */
+.pagination { margin-left: 20px; color: teal}
+.pagination span *{ color: teal}
+.pagination span.current, .pagination span.current:hover { background-color: teal; color: white; font-weight: bold; cursor: default}
+.pagination span.disabled { cursor: default}
+
+.pagination li span:hover *, .pagination li span:hover{ background-color: teal; color: white; font-weight: bold; cursor: pointer}
 
 
 

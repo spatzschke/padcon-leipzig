@@ -39,7 +39,7 @@ class BillingsController extends AppController {
 		
 		 $this->Paginator->settings = array(
         'order' => array('Billing.billing_number' => 'DESC'),
-        'limit' => 40
+        'limit' => 25
 	    );
 	    $data = $this->Paginator->paginate('Billing');
 		//$data = $this->Billing->find('all', array('order' => array('Billing.billing_number DESC')));

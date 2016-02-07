@@ -39,7 +39,12 @@ class ConfirmationsController extends AppController {
 		$this->layout = 'admin';
 	
 		//$this->Confirmation->recursive = 0;
-		$data = $this->Confirmation->find('all', array('order' => array('substring(Confirmation.confirmation_number, 5, 6) DESC', 'substring(Confirmation.confirmation_number, 1, 3) DESC')));
+		$this->Offer->recursive = 0;
+		$this->Paginator->settings = array(
+		    'order' => 'substring(Confirmation.confirmation_number, 5, 6) DESC, substring(Confirmation.confirmation_number, 1, 3) DESC',
+		    'limit' => 25
+		    );
+	    $data = $this->Paginator->paginate('Confirmation');
 			
 		$this->set('title_for_panel', 'Alle Auftragsbestätigungen');	
 		
