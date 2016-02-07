@@ -87,7 +87,9 @@ class PagesController extends AppController {
 	function admin_dashboard() {
 		$this->layout = 'admin';
 		
-		$this->monthUmsatz();
+		$this->umsatz();
+		$this->platzierungKunde();
+		$this->platzierungProdukt();
 	
 	}
 	
@@ -96,19 +98,67 @@ class PagesController extends AppController {
 	
 	} 
 	
-	private function monthUmsatz() {
-		$billings = $this->Billing->find('all', array('conditions' => array('Billing.created BETWEEN ? AND ?' => array(date('Y-m-01 00:00:00'), date('Y-m-d 00:00:00', strtotime("+1 days"))))));
-		$einnahme = 0;
-		$ausgabe =  0;
-		foreach ($billings as $key => $value) {
-			$proc = $this->Process->findByBillingId($value['Billing']['id']);
-			$einnahme += $value['Billing']['billing_price'];
-			if(isset($proc['Confirmation']))
-				$ausgabe += $proc['Confirmation']['cost'];
-		}
-		$diff = $einnahme - $ausgabe;
+	private function platzierungProdukt() {
+		$topProduct = $this->Billing->query('
+			SELECT count(CP.product_id) AS ANZAHL, PO.name AS NAME, PO.product_number AS NUMBER
+			FROM Billings RE 
+			INNER JOIN processes PR 
+			ON RE.id = PR.billing_id 
+			INNER JOIN carts CA
+			ON PR.cart_id = CA.id
+			INNER JOIN cart_products CP
+			ON CA.id = CP.cart_id
+			INNER JOIN products PO
+			ON CP.product_id = PO.id
+			WHERE RE.status = ? AND RE.created BETWEEN ? AND ?
+			GROUP BY CP.product_id
+			ORDER BY ANZAHL DESC, RE.created ASC
+			LIMIT 5', array('close', date('Y-01-01 00:00:00'), date('Y-12-23 23:59:59')));
+						
+		$this->set(compact('topProduct'));
+
+	}  
+	
+	private function platzierungKunde() {
+		$topCustomer = $this->Billing->query('
+			SELECT PR.customer_id AS KUNDENNUMMER, sum(RE.billing_price) AS SUMME, CU.organisation AS KUNDENNAME
+			FROM Billings RE 
+			INNER JOIN processes PR 
+			ON RE.id = PR.billing_id 
+			INNER JOIN customers CU
+			ON PR.customer_id = CU.id
+			WHERE RE.status = ? AND RE.created BETWEEN ? AND ?
+			GROUP BY customer_id 
+			ORDER BY SUMME DESC
+			LIMIT 5', array('close', date('Y-01-01 00:00:00'), date('Y-12-23 23:59:59')));			
+		$this->set(compact('topCustomer'));
+			
+	}  
+	
+	private function umsatz() {
 		
-		$this->set(compact('diff','einnahme','ausgabe'));
+		$umsatz = array();
+		
+		for($i = 1; $i <= 12; $i++) {
+			$monthUmsatz = $this->Billing->query('
+			Select sum(RE.billing_price) AS EINNAHME, sum(CO.cost) AS AUSGABE, (sum(RE.billing_price) - sum(CO.cost)) AS DIFFERENZ
+			from Billings RE 
+			INNER JOIN processes PR 
+			ON RE.id = PR.billing_id 
+			INNER JOIN confirmations CO
+			ON PR.confirmation_id = CO.id
+			WHERE RE.created BETWEEN ? AND ?', array( date('Y-'.$i.'-01 00:00:00'), date('Y-m-d 00:00:00', strtotime("+1 days"))));	
+			
+			setlocale(LC_ALL, 'de_DE', 'German_Germany.1252');
+			$monthUmsatz[0][0]['MONAT'] = utf8_encode(strftime('%B', mktime(0, 0, 0, date('F') + $i, 1)));;
+			
+			array_push($umsatz, $monthUmsatz[0][0]);
+		}
+
+				
+		
+		
+		$this->set('umsatz', $umsatz);
 	}  
 
 }
