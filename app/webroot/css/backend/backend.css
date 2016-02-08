@@ -320,7 +320,7 @@ margin: 0 5px;
 /* Sidebar */
 
 aside#sidebar {
-background: #E0E0E3 url(../../img/backend/sidebar.png) repeat;
+/*background: #E0E0E3 url(../../img/backend/sidebar.png) repeat;*/
 float: left;
 min-height: 500px;
 margin-top: -4px;
@@ -1297,6 +1297,13 @@ form option:selected {backgroun-color: green}
 .pagination li span:hover *, .pagination li span:hover{ background-color: teal; color: white; font-weight: bold; cursor: pointer}
 
 
-
+@media (min-width: 768px) {
+	#sidebar i{ font-size: 20px; margin-top: 5px}
+	#sidebar a:hover {text-decoration: none}
+}
+@media (min-width: 992px) {
+  	#sidebar i{ font-size: inherit; margin-top: 0}
+	#sidebar a:hover {text-decoration: none}
+}
 
 
