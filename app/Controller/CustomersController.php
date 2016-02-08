@@ -389,7 +389,7 @@ class CustomersController extends AppController {
 			$percent = $customerCount / $allCount;
 		}
 		
-		$data = array('title' => 'Auftragsbestätigung', 
+		$data = array('title' => 'Auftragsbestaetigung', 
 			'percent' => $Number->toPercentage($percent, 0, array(
 			    'multiply' => true
 			)),

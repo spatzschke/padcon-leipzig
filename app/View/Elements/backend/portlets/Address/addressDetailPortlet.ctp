@@ -5,6 +5,7 @@
 
 	$action = 'add';
 	if($this->request->params['action'] == 'admin_edit') { $action = 'edit'; }
+
 ?>
 
 <script>
@@ -28,12 +29,12 @@ $(document).ready(function() {
 
 				xhr = $.ajax({
 					 type: 'POST',
-					 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/Addresses/<?php echo $action;?>/<?php echo $this->data['Customer']['id'];?>/<?php echo $this->data['Address']['id'];?>',
+					 url:'<?php echo FULL_BASE_URL.$this->base;?>/admin/Addresses/<?php echo $action;?>/<?php echo $this->data['Customer']['id'];?>/<?php echo (isset($this->data['Address']['id'])) ? $this->data['Address']['id']: '';?>',
 					 data: <?php echo $data ?>,
 					 success:function (data, textStatus) {
 					 		
-					 	//window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/Customers/view/<?php echo $this->data['Customer']['id'];?>';
-					 	window.location = '';
+					 	window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/Customers/view/<?php echo $this->data['Customer']['id'];?>';
+					 	//window.location = '';
 					 	
 					 }
 				}); 

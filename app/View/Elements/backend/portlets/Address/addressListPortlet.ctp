@@ -70,6 +70,7 @@ $(document).ready(function() {
 			<thead> 
 				<tr> 
    					<th><?php __('');?></th>
+					<th><?php echo('Organisation');?></th>
 					<th><?php echo('Abteilung');?></th>
 					<th><?php echo('Anrede');?></th>
 					<th><?php echo('Nachname');?></th>
@@ -89,10 +90,11 @@ $(document).ready(function() {
 							<?php	
 																
 							echo '<td>';
-								echo $this->Html->link('<i class="glyphicon glyphicon-open"></i>', '', array('escape' => false, 'class' => 'addAdditionalAddress', 'addId' => $address['Address']['id'],
+								echo $this->Html->link('<i class="glyphicon glyphicon-plus"></i>', '', array('escape' => false, 'class' => 'addAdditionalAddress', 'addId' => $address['Address']['id'],
 								 	'cusId' => $address['AddressAddresstype']['customer_id']));
 							echo '</td>';	
 							?>
+							<td><?php echo $address['Address']['organisation']; ?>&nbsp;</td>
 							<td><?php echo $address['Address']['department']; ?>&nbsp;</td>
 							<td><?php echo $address['Address']['salutation']; ?>&nbsp;</td>
 							<td><?php echo $address['Address']['last_name']; ?>&nbsp;</td>
