@@ -3,18 +3,18 @@
 ?>
 
 <div class="sheetHeader module_content row" <?php if(!$logo) {echo 'style="visibility: hidden"';} ?>>	
-			<div class="title col-md-8">	
+			<div class="title col-md-8 col-sm-8">	
 				padcon Leipzig-Ralf Patzschke <br />
 				<span class="small">Fachhandel und Service für medizinische Einrichtungen</span>
 			</div>
-			<div class="logo col-md-2">	
+			<div class="logo col-md-2 col-sm-2">	
 				<?php  echo $this->Html->image('backend/backend_logo.png', array('alt' => 'padcon Leipzig'))?>
 			</div>
 		</div>
 
 		<div class="customerData module_content row-fluid">
 
-			<div class="firstItem col-md-6">	
+			<div class="firstItem col-md-6 col-sm-6">	
 				<div class="addressHeader">padcon Leipzig • Holunderweg 4 • 04416 Markkleeberg</div>
 				<?php 
 				

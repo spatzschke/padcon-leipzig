@@ -59,7 +59,7 @@
 
 <body>
 
-	<header id="header">
+	<header id="header" class="hidden-sm">
 		<hgroup>
 			<h1 class="site_title"><?php echo $this->Html->image('backend/backend_logo.png', array('alt' => 'Adminbereich'))?></h1>
 			<h2 class="section_title">Administrations-Bereich</h2><!--<div class="btn_view_site"></div>-->
@@ -78,7 +78,7 @@
 	
 	<?php echo $this->element('backend/navigation'); ?>
 		
-	<section id="main" class="col-md-10 col-sm-11 col-cs-11" >
+	<section id="main" class="col-md-10 col-sm-11 col-xs-11" >
 		<div class="panel-body">
 			<?php echo $this->Session->flash(); ?>
 		
