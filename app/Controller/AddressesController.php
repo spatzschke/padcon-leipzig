@@ -14,7 +14,7 @@ class AddressesController extends AppController {
  * @var array
  */
 	public $components = array('Paginator');
-	public $uses = array('Customer', 'Address', 'CustomerAddress', 'AddressAddresstype', 'Addresstype', 'Offer', 'Confirmation', 'Billing', 'Delivery');
+	public $uses = array('Customer', 'Address', 'CustomerAddress', 'AddressAddresstype', 'Addresstype', 'Offer', 'Confirmation', 'Billing', 'Delivery', 'Process');
 
 /**
  * index method
@@ -119,16 +119,15 @@ class AddressesController extends AppController {
 			$customer_id = $data['Process']['customer_id'];
 		}
 		if($controller_name == "Confirmations") {
-			$data = $this->Confirmation->findById($controller_id);
+			$data = $this->Process->findByConfirmationId($controller_id);
 			$customer_id = $data['Process']['customer_id'];
 		}
 		if($controller_name == "Deliveries") {
-			$data = $this->Delivery->findById($controller_id); 
-			$data = $this->Confirmation->findByDeliveryId($data['Delivery']['id']);			
+			$data = $this->Process->findByDeliveryId($controller_id);		
 			$customer_id = $data['Process']['customer_id'];
 		}
 		if($controller_name == "Billings") {
-			$data = $this->Billing->findById($controller_id); 
+			$this->Process->findByBillingId($controller_id);
 			$customer_id = $data['Process']['customer_id'];
 		}
 		
@@ -223,9 +222,10 @@ class AddressesController extends AppController {
 		}
 		else {
 			
+			$options = array('conditions' => array('Customer.' . $this->Customer->primaryKey => $customer));
+			$customerArr = $this->Customer->find('first', $options);
+				
 			if($customer) {
-				$options = array('conditions' => array('Customer.' . $this->Customer->primaryKey => $customer));
-				$customerArr = $this->Customer->find('first', $options);
 				$this->request->data = $customerArr;
 				$this->request->data['Customer']['salutation'] = array();
 				$this->request->data['Customer']['title'] = array();
@@ -240,11 +240,11 @@ class AddressesController extends AppController {
 				$this->request->data['Customer']['organisation'] = array();
 				$this->request->data['Customer']['department'] = array();
 			}
-			
 						
 			unset($this->request->data['Offer']);
 			$types = $this->Address->getAddressTypes();
 			$this->request->data['Address']['addressType'] = null; 
+			$this->request->data['Address']['organisation'] = $customerArr['Customer']['organisation']; 
 				
 			$this->set('primary_button','Hinzufügen');
 			

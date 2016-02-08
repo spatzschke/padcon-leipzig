@@ -71,7 +71,7 @@ class ConfirmationsController extends AppController {
 		$this->set('confirmation', $process);
 		$this->set('pdf', null);
 	
-		$this->generateData($this->Process->findByConfirmationIdAndType($id, ''));
+		$this->generateData($this->Process->find('first', array('conditions' => 'Process.confirmation_id = '.$id.' AND Process.type = "" OR Process.type = "full"')));
 	}
 
 /**
@@ -779,6 +779,7 @@ class ConfirmationsController extends AppController {
 			$a = $Addresses->splitAddressData($this->request->data);
 			$this->request->data['Address'] += $a['Address'];
 		}
+
 		$this->request->data['Address']['count'] = $this->AddressAddresstype->find('count', array('conditions' => array(
 			'customer_id' => $process['Process']['customer_id'],
 			'type_id' => 1)));

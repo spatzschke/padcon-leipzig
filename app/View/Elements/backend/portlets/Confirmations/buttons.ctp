@@ -125,7 +125,8 @@ echo $this->element('backend/helper/modalHelper', array(
 		
 		$('#<?php echo $id_addCustomer;?>_btn .input-group-addon').css('backgroundColor','lightgreen');	
 		
-		<?php if($this->data['Address']['count'] > 1) {?>			
+		<?php 
+		if($this->data['Address']['count'] > 1) {?>			
 			$('#<?php echo $id_addAdditionalAddress;?>_btn a').removeClass('disabled');	
 		<?php } ?>			
 	<?php } ?>
