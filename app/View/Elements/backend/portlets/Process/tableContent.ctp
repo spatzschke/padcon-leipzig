@@ -45,20 +45,24 @@ foreach ($processes as $key => $process):
 		</div>
 		
 		<div class="col-md-2 col-xs-2 processStepContainer stepOffer">
-			<div class="processLine <?php echo ($confirmationActive && $offerActive ? 'success' : ''); ?>"></div>
-			<?php if($process['Offer']['id']) { echo '<div class="stepId">'.$process['Offer']['id'].'</div>'; } ?>
-			<div class="processStep <?php echo ($offerActive ? 'status-'.$process['Offer']['status'] : ''); ?>">
-			<?php 
-			if($process['Offer']['id']) {
-				echo $this->Html->link('
-				<i class="glyphicon glyphicon-send">
-				</i>', array('controller' => 'offers', 'action' => $action, $process['Offer']['id']), array('escape' => false));
-			} else {
-				echo '<i class="glyphicon glyphicon-send"></i>';
-			}
-			 ?>
-			</div>
-			<?php if($process['Offer']['id']) { echo '<div class="stepLabel"><span class="hidden-sm">AN: </span>'.$process['Offer']['offer_number'].'</div>'; } ?>
+			<div class="processLine <?php echo ($confirmationActive && $offerActive && !$isPartProcess ? 'success' : ''); ?>"></div>
+			<?php if($process['Offer']['id'] && !$isPartProcess) { echo '<div class="stepId">'.$process['Offer']['id'].'</div>'; } ?>
+			<?php if(!$isPartProcess || $process['Process']['offer_id'] == 0) { ?>
+				<div class="processStep <?php echo ($offerActive ? 'status-'.$process['Offer']['status'] : ''); ?>">
+				<?php 
+				if($process['Offer']['id']) {
+					echo $this->Html->link('
+					<i class="glyphicon glyphicon-send">
+					</i>', array('controller' => 'offers', 'action' => $action, $process['Offer']['id']), array('escape' => false));
+				} else {
+					echo '<i class="glyphicon glyphicon-send"></i>';
+				}
+				 ?>
+				</div>
+			<?php } else { ?>
+				<div class="processStep"><i class="glyphicon glyphicon-send"></i></div>
+			<?php }  ?>
+			<?php if($process['Offer']['id'] && !$isPartProcess) { echo '<div class="stepLabel"><span class="hidden-sm">AN: </span>'.$process['Offer']['offer_number'].'</div>'; } ?>
 		</div>
 
 		<div class="col-md-3 col-xs-3 processStepContainer stepConfirmation">
