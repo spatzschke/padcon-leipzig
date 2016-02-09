@@ -21,12 +21,15 @@
 						$product_number_präfix = Configure::read('padcon.product.number.präfix');
 						if($product['Product']['custom']) {$product_number_präfix = '';}
 
+						$colorText = '';
+						if(!$product['Product']['external']) { $colorText = '-'.$color['Color']['code']; }
+
 						echo '
 						<div class="sheetItem">
 							<div class="pos">'.($prodCount).'</div>
 							<div class="amount">'.$cartProduct['amount'].'</div>
 							<div class="number">
-								<p class=""><span class="productNumber">'.$product['Product']['product_number'].'-'.$color['Color']['code'].'</span></br>'.$product['Product']['company'].'</p>
+								<p class=""><span class="productNumber">'.$product['Product']['product_number'].$colorText.'</span></br>'.$product['Product']['company'].'</p>
 							</div>
 							<div class="content">
 								<p class="productName col-md-12"><span >'.$product['Product']['name'].'</span></p>';
@@ -40,22 +43,24 @@
 									echo '<span class="text col-md-12">'.$fea.' </span><br />';
 								}
 
-								echo '<span class="text col-md-12">'.Configure::read('padcon.product.material.präfix').': '.$material['Material']['name'];
+								if(!$product['Product']['external']) {
+									echo '<span class="text col-md-12">'.Configure::read('padcon.product.material.präfix').': '.$material['Material']['name'];
+									
+									if($material['Material']['name'] != Configure::read('padcon.product.material.noMaterial')) {
+										echo ', '.Configure::read('padcon.product.color.präfix').': '.$color['Color']['name'];
+									}
+									echo '</span>';
 								
-								if($material['Material']['name'] != Configure::read('padcon.product.material.noMaterial')) {
-									echo ', '.Configure::read('padcon.product.color.präfix').': '.$color['Color']['name'];
+									echo'<div class="size"><span class="text col-md-12">'.Configure::read('padcon.product.size.präfix').': ';
+									if(empty($product['Product']['size'])) {
+				            			echo Configure::read('padcon.product.size.noSize');
+				            		} else {
+				            			echo $product['Product']['size'].Configure::read('padcon.product.size.suffix');
+				            		}
+				            		
+									echo '</span></div>
+									';
 								}
-								echo '</span>';
-								
-								echo'<div class="size"><span class="text col-md-12">'.Configure::read('padcon.product.size.präfix').': ';
-								if(empty($product['Product']['size'])) {
-			            			echo Configure::read('padcon.product.size.noSize');
-			            		} else {
-			            			echo $product['Product']['size'].Configure::read('padcon.product.size.suffix');
-			            		}
-			            		
-								echo '</span></div>
-								';
 								if($pagePrice) {
 								echo '<div class="price"><span type="text">'.number_format($cartProduct['retail_price'], 2, ",", ".").'</span> '.Configure::read('padcon.currency.symbol').'</div>
 									<div class="sum_price">'.number_format(floatVal($cartProduct['retail_price'])*intVal($cartProduct['amount']), 2, ",", ".").' '.Configure::read('padcon.currency.symbol').'</div>';							

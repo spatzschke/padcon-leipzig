@@ -5,7 +5,7 @@ class ProductsController extends AppController {
 	
 	var $name = 'Products';
 	public $uses = array('Cart', 'Product', 'Material', 'Color', 'Image', 'Category', 'Core', 'ProductCore', 'ProductCategory', 'CartProduct');
-	var $components = array('RequestHandler', 'Auth', 'Session');
+	var $components = array('RequestHandler', 'Auth', 'Session', 'Paginator');
 	var $helpers = array('Html', 'Js');
 	
 	public function beforeFilter() {
@@ -26,10 +26,33 @@ class ProductsController extends AppController {
 	function admin_index($layout = null, $cart_id = null) {
 		if($layout) {$this->layout = $layout; } else { $this->layout = 'admin'; }
 	
-		$products = $this->getProducts(null);
+		$this->Product->recursive = 0;
+		 $this->Paginator->settings = array(
+		 	'conditions' => array('Product.external' => '0'),
+	        'order' => array('Product.name' => 'ASC'),
+	        'limit' => 25
+	    );
+		$products = $this->Paginator->paginate('Product');
 		
 		$this->set(compact('products', 'cart_id'));
 		$this->set('ajax', 0);
+	}
+
+	function admin_index_external($layout = null, $cart_id = null) {
+		if($layout) {$this->layout = $layout; } else { $this->layout = 'admin'; }
+	
+		$this->Product->recursive = 0;
+		 $this->Paginator->settings = array(
+		 	'conditions' => array('Product.external' => '1'),
+	        'order' => array('Product.product_number' => 'ASC'),
+	        'limit' => 25
+	    );
+		$products = $this->Paginator->paginate('Product');
+		
+		$this->set(compact('products', 'cart_id'));
+		$this->set('ajax', 0);
+		
+		$this->render('admin_index');
 	}
 	
 	function admin_indexAjax($layout = null, $cart_id = null, $controller_id = null, $controller_name = null) {
@@ -155,8 +178,7 @@ class ProductsController extends AppController {
 		$product = $this->Product->read(null, $id);
 		$product['Product']['product_number'] = $product['Product']['product_number'];
 		$product['Product']['retail_price_string'] = $Number->currency($product['Product']['retail_price'],'EUR', array('wholePosition' => 'after', 'before' => ' €', 'thousands' => '.', 'decimals' => ','));
-		$product['Product']['featurelist'] = str_replace('<li>', '', $product['Product']['featurelist']);
-		$product['Product']['featurelist'] = str_replace('</li>', '', $product['Product']['featurelist']);
+		$product['Product']['featurelist'] = $this->getListElement($product['Product']['featurelist'], FALSE);
 		
 		$this->request->data = $product;
 		
@@ -175,7 +197,11 @@ class ProductsController extends AppController {
 		
 		if (!empty($this->data)) {
 			$this->Product->create();
-			if ($this->Product->save($this->data)) {
+			
+			$prod = $this->data;
+			$prod['Product']['featurelist'] = $this->getListElement($prod['Product']['featurelist'], TRUE);
+			
+			if ($this->Product->save($prod)) {
 				$this->Session->setFlash(__('Produkt wurde angelegt!', true));
 				$lastId = $this->Product->getLastInsertID();					
 				$this->redirect(array('action' => 'edit', $lastId));
@@ -185,17 +211,85 @@ class ProductsController extends AppController {
 				$this->Session->setFlash(__('The product could not be saved. Please, try again.', true));
 			}
 		}
+		$data['Product']['product_number'] = '';
+		$data['Product']['name'] = '';
+		$data['Product']['categories'] = '';
+		$data['Product']['featurelist'] = '';
+		$data['Product']['material_id'] = '';
+		$data['Product']['price'] = '';
+		$data['Product']['retail_price'] = '';
+		$data['Product']['custom'] = '';
+		$data['Product']['new'] = '';
+		$data['Product']['active'] = '';
+		$data['Product']['size'] = '';
+		$data['Product']['core_name'] = '';
+		$data['Product']['cores'] = '';
+		$data['Product']['reference'] = '';
+		$data['Product']['company'] = '';
+		$data['Product']['producer_name'] = '';
+		$data['Product']['producer_number'] = '';
+		
+		
+		$cores = $this->Core->find('list');
 		$categories = $this->Product->Category->find('list');
 		$materials = $this->Product->Material->find('list');
 		$carts = $this->Product->Cart->find('list');
-		$this->set(compact('categories', 'materials', 'carts'));
+		$this->set(compact('categories', 'materials', 'carts', 'data', 'cores'));
 		$this->set('primary_button', 'Anlegen');
 		$this->set('title_for_panel', 'Produkt anlegen');
-		$this->render('/Elements/backend/portlets/Product/productDetailPortlet');
+		// $this->render('/Elements/backend/portlets/Product/productDetailPortlet');
 		
 		// $this->request->data['Categories'] = $categories;
 		// $this->request->data['Materials'] = $materials;
 		// $this->request->data['Carts'] = $carts;
+		
+	}
+
+	function admin_add_external() {
+		$this->layout = 'admin';
+		
+		if (!empty($this->data)) {
+			$this->Product->create();
+			
+			$prod = $this->data;
+			
+			$prod['Product']['external'] = true;
+			$prod['Product']['active'] = true;
+			$prod['Product']['featurelist'] = $this->getListElement($prod['Product']['featurelist'], TRUE);
+			
+			if ($this->Product->save($prod)) {
+				$this->Session->setFlash(__('Fremdprodukt wurde angelegt!', true));
+				$lastId = $this->Product->getLastInsertID();					
+				$this->redirect(array('action' => 'edit_external', $lastId));
+			} else {
+				$errors = $this->Product->invalidFields();
+				$this->set(compact("errors"));
+				$this->Session->setFlash(__('The product could not be saved. Please, try again.', true));
+				
+				$data = $this->data;
+				
+				$data['Product']['featurelist'] = str_replace('<li>', '', $data['Product']['featurelist']);
+				$data['Product']['featurelist'] = str_replace('</li>', '', $data['Product']['featurelist']);
+				
+			}
+		} else {
+			$data['Product']['product_number'] = '';
+		$data['Product']['name'] = '';
+		$data['Product']['featurelist'] = '';
+		$data['Product']['price'] = '';
+		$data['Product']['retail_price'] = '';
+		$data['Product']['company'] = '';
+		}
+
+		
+			
+		
+		$this->set(compact('data'));	
+		
+		$this->set('primary_button', 'Anlegen');
+		$this->set('title_for_panel', 'Fremdprodukt anlegen');
+		
+		$this->render('admin_external');
 		
 	}
 
@@ -734,8 +828,10 @@ class ProductsController extends AppController {
 			
 		}
 		if (empty($this->data)) {
-			$this->data = $this->getProduct($id);
-			$colors = $this->Color->find('list',array('conditions' => array('Color.material_id' => ($this->data['Material']['id'])), 'fields' => array('Color.name')));			
+			$data = $this->getProduct($id);
+			$data['Product']['featurelist'] = $this->getListElement($data['Product']['featurelist'], FALSE);
+			$colors = $this->Color->find('list',array('conditions' => array('Color.material_id' => ($this->data['Material']['id'])), 'fields' => array('Color.name')));	
+			$this->data = $data;
 		}
 		$categories = $this->Product->Category->find('list');
 		$materials = $this->Product->Material->find('list');
@@ -746,6 +842,46 @@ class ProductsController extends AppController {
 		$this->layout = 'admin';
 		$this->set('title_for_panel', 'Produkt bearbeiten');
 		$this->set('primary_button', 'Speichern');
+	}
+
+	function admin_edit_external($id = null) {
+		
+		if (!$id && empty($this->data)) {
+			$this->Session->setFlash(__('Invalid product', true));
+			$this->redirect(array('action' => 'index'));
+		}
+		
+		$data = $this->data;
+		//unset($data['Product']['product_number']);
+		if (!empty($data)) {
+			
+			$product = $this->getProduct($id);
+			
+			//Preis von Komma auf Punkt konvertieren
+			$Carts = new CartsController();
+			$data['Product']['price'] = $Carts->convertPriceToSql($data['Product']['price']);
+			$data['Product']['retail_price'] = $Carts->convertPriceToSql($data['Product']['retail_price']);
+						
+			if ($this->Product->save($data)) {
+				$this->Session->setFlash(__('Das Produkt wurde gespeichert', true));
+				
+			} else {
+				$this->Session->setFlash(__('Das Produkt konnte nicht gespeichert werden. Bitte prüfen Sie die Meldungen.', true));
+			}
+			
+		}
+		
+		$data = $this->getProduct($id);
+		$data['Product']['featurelist'] = $this->getListElement($data['Product']['featurelist'], FALSE);
+		
+		$this->set(compact('data'));
+
+
+		$this->layout = 'admin';
+		$this->set('title_for_panel', 'Fremdprodukt bearbeiten');
+		$this->set('primary_button', 'Speichern');
+		
+		$this->render('admin_external');
 	}
 
 	function delete($id = null) {
@@ -884,6 +1020,26 @@ class ProductsController extends AppController {
 		$number = 'Z'.date("y").str_pad(intVal($number[1])+1, 3, "0", STR_PAD_LEFT);
 		
 		return $number;
+		
+	}
+	
+	function getListElement($input, $mode) {
+	
+		$list = '';
+	
+		// WEnn True, dann Li hinzufüge, ansonsten entfernen
+		if($mode) {
+			$input = explode(PHP_EOL, $input);
+			$list = '';
+			foreach ($input as $key => $value) {
+				$list =$list.'<li>'.$value.'</li>'.PHP_EOL;
+			}
+		} else {
+			$list = str_replace('<li>', '', $input);
+			$list = str_replace('</li>', '', $list);
+		}
+
+		return $list;
 		
 	}
 	

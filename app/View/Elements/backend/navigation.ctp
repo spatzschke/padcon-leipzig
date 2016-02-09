@@ -47,9 +47,11 @@
 		
 		<h3><i class="glyphicon glyphicon-th-large" style="color: grey"></i>&nbsp;&nbsp;<span class="hidden-sm">Produktdatenbank</span><span class="visible-sm-inline">PRD</span></h3>
 		<ul class="">
-			<!-- <li class="icn_add_user"><?php echo $this->Html->link('Produkte hinzufügen', '/admin/products/add', array('escape' => false)); ?></li> -->
 			<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-fast-forward" style="color: grey"></i>&nbsp;&nbsp;<span class="hidden-sm">QuickAdd</span>', '/admin/products/quickAdd', array('escape' => false)); ?></li>
+			<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-plus" style="color: grey"></i>&nbsp;&nbsp;<span class="hidden-sm">Neues Produkt</span>', '/admin/products/add', array('escape' => false)); ?></li>
 			<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-list" style="color: grey"></i>&nbsp;&nbsp;<span class="hidden-sm">Alle Produkte</span>', '/admin/products/index', array('escape' => false)); ?></li>
+			<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-tag" style="color: grey"></i>&nbsp;&nbsp;<span class="hidden-sm">Neues Fremdprodukt</span>', '/admin/products/add_external', array('escape' => false)); ?></li>
+			<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-tags" style="color: grey"></i>&nbsp;&nbsp;<span class="hidden-sm">Alle Fremdprodukte</span>', '/admin/products/index_external', array('escape' => false)); ?></li>
 			<!--<li class="icn_view_users"><?php echo $this->Html->link('Material hinzufügen', '/admin/materials/add', array('disabled' => 'disabled')); ?></li>
 			<li class="icn_view_users"><?php echo $this->Html->link('Farben hinzufügen', '/admin/colors/add', array('disabled' => 'disabled')); ?></li> -->
 		</ul>
@@ -88,6 +90,5 @@
 		
 		
 		<footer>
-			<hr />
 		</footer>
 </aside><!-- end of sidebar -->

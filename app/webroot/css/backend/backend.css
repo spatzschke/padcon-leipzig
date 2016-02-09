@@ -266,7 +266,7 @@ background: url(../../img/backend/icn_logout.png) center no-repeat;
 section#secondary_bar .breadcrumbs_container {
 float: left;
 width: 77%;
-background: url(../../img/backend/secondary_bar_shadow.png) no-repeat left top;
+/*background: url(../../img/backend/secondary_bar_shadow.png) no-repeat left top;*/
 height: 38px;
 }
 
@@ -320,10 +320,11 @@ margin: 0 5px;
 /* Sidebar */
 
 aside#sidebar {
-/*background: #E0E0E3 url(../../img/backend/sidebar.png) repeat;*/
+background: url(../../img/backend/sidebar_shadow.png) repeat-y 260px top;
 float: left;
 min-height: 500px;
 margin-top: -4px;
+background-color: white;
 }
 
 #sidebar hr {
@@ -511,7 +512,6 @@ margin-top: 22px;
 
 section#main {
 min-height: 500px;
-background: url(../../img/backend/sidebar_shadow.png) repeat-y left top;
 float: left;
 margin-top: -2px;
 padding: 0;
