@@ -19,9 +19,13 @@ foreach ($products as $product):?>
 		<td><?php echo $product['Product']['modified']; ?>&nbsp;</td>-->
 		
 		<?php
+		
+		$action_edit = 'edit';
+		if($product['Product']['external']) { $action_edit = 'edit_external'; }
+		
 		echo '<td class="actions">';
 		echo $this->Html->link('<i class="glyphicon glyphicon-search"></i>', array('admin' => true, 'controller' => 'Products', 'action' => 'view', $product['Product']['id']), array('escape' => false));
-		echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Products', 'action' => 'edit', $product['Product']['id']), array('escape' => false));
+		echo $this->Html->link('<i class="glyphicon glyphicon-pencil"></i>', array('admin' => true, 'controller' => 'Products', 'action' => $action_edit, $product['Product']['id']), array('escape' => false));
 		echo $this->Html->link('<i class="glyphicon glyphicon-trash"></i>', array('controller' => 'Products', 'action' => 'delete', $product['Product']['id']), array('escape' => false), sprintf(__('Are you sure you want to delete # %s?', true), $product['Product']['id']));
 		echo '</td>';
 		?>
