@@ -105,8 +105,10 @@ function updateURL(currUrl, param, paramVal){
                			echo $this->Session->flash();
                		}
                		 ?>
+               		 
+               		 
                     
-           		<?php echo $this->Form->input('id');?>   
+           		<?php echo $this->Form->input('id', array('hidden' => true, 'label' => false));?>   
                 
 				<?php 			
 				if($this->request->params['action'] == "admin_edit") {
@@ -114,6 +116,7 @@ function updateURL(currUrl, param, paramVal){
 				} else {
 					$readonly = "";
 				}
+
 				?>   
 				<!-- Links -->
 			
@@ -187,7 +190,7 @@ function updateURL(currUrl, param, paramVal){
                             	data-trigger="hover" 
                             	data-toggle="popover" 
                             	style="cursor: pointer" 
-                            	class="glyphicon glyphicon-send" 
+                            	class="glyphicon glyphicon-shopping-cart" 
                             	data-original-title="" 
                             	title=""></i></span>
                             <?php echo $this->Form->input('price', array(

@@ -69,7 +69,6 @@
 	<section id="secondary_bar">
 		<div class="user col-md-2 col-sm-1 col-xs-1">
 			<p><?php echo $this->Session->read('Auth.User.title').' '.$this->Session->read('Auth.User.last_name');?></p>
-			<?php echo $this->Html->link('Logout', '/Abmelden', array('class' => 'logout_user')); ?>
 		</div>
 		<div class="breadcrumbs_container">
 			<!--<article class="breadcrumbs"><a href="index.html">Website Admin</a> <div class="breadcrumb_divider"></div> <a class="current">Dashboard</a></article>-->

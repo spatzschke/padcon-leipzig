@@ -70,7 +70,7 @@ $(document).ready(function() {
 						echo $this->Form->input('id', array( 'data-field' => 'id'));
 					?>	
 						<div class="productInfo">
-							<div>pd-<?php echo $this->data['Product']['product_number'];?></div>
+							<div><?php echo $this->data['Product']['product_number'];?></div>
 							<div><b><?php echo $this->data['Product']['name'];?></b></div>
 						</div>
 				
@@ -87,6 +87,7 @@ $(document).ready(function() {
 						));
 						?>                                      
 	                 </div>
+	                 <?php if(!$this->data['Product']['external']) { ?>
 	                 <div class="input-group">
 	                    <span class="input-group-addon"><i>Farbe</i></span>
 	                    <?php echo $this->Form->input('color', array(
@@ -99,6 +100,7 @@ $(document).ready(function() {
 						));
 						?>                                      
 	                 </div>
+	                 <?php } ?>
 			      
 			      
 			      </div>

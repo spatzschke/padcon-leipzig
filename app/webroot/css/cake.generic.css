@@ -213,12 +213,7 @@ dd {
 }
 
 /** Forms **/
-form {
-	clear: both;
-	margin-right: 20px;
-	padding: 0;
-	width: 95%;
-}
+
 fieldset {
 	border: 1px solid #ccc;
 	margin-bottom: 1em;

@@ -1,5 +1,4 @@
 <?php 
-	$products = $this->requestAction('Products/getProducts/');
 	echo $this->Html->script('jquery.dynamicSearch', false);	
 	echo $this->Html->script('jquery.bootstrap.modal', false);
 	
@@ -60,6 +59,8 @@ $(document).ready(function() {
 	         	<div class="cancel"><i class="glyphicon glyphicon-remove"></i></div>                                
 	        </div>	
 		</section>
+	
+		<?php echo $this->element('backend/helper/paginationHelper'); ?>
 
 		<div class="module_content">
 			<table class="tablesorter" cellspacing="0"> 
@@ -67,7 +68,7 @@ $(document).ready(function() {
 				<tr> 
    					<th><?php __('');?></th>
     			<!--<th><?php __('ID');?></th>-->
-					<th><?php echo('pd-#');?></th>
+					<th><?php echo('#');?></th>
 					<th><?php echo('Name');?></th>
 				<!--<th><?php __('Beschreibung');?></th>
 					<th><?php __('Featurelist');?></th>-->
