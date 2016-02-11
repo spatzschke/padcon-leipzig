@@ -29,6 +29,7 @@ class ProductsController extends AppController {
 		$this->Product->recursive = 0;
 		 $this->Paginator->settings = array(
 		 	'conditions' => array('Product.external' => '0'),
+		 	'group' => array('Product.product_number'),
 	        'order' => array('Product.name' => 'ASC'),
 	        'limit' => 25
 	    );
@@ -256,6 +257,10 @@ class ProductsController extends AppController {
 			$prod['Product']['external'] = true;
 			$prod['Product']['active'] = true;
 			$prod['Product']['featurelist'] = $this->getListElement($prod['Product']['featurelist'], TRUE);
+			
+			$Carts = new CartsController();
+			$prod['Product']['price'] = $Carts->convertPriceToSql($prod['Product']['price']);
+			$prod['Product']['retail_price'] = $Carts->convertPriceToSql($prod['Product']['retail_price']);
 			
 			if ($this->Product->save($prod)) {
 				$this->Session->setFlash(__('Fremdprodukt wurde angelegt!', true));
