@@ -181,20 +181,24 @@ class AddressesController extends AppController {
 				$lastAddressId = $this->Address->getLastInsertID();
 				
 				//Addresse dem Customer in CustomerAddress zusammenführen
-				$this->CustomerAddress->create();
-				$custAdd['CustomerAddress']['customer_id'] = $customer;
-				$custAdd['CustomerAddress']['address_id'] = $lastAddressId;
-				$this->CustomerAddress->save($custAdd);
-				
-				//Schleife zur Anlage von Addressen udn Addresstypen
-				foreach ($types as $value) {
-					$this->AddressAddresstype->create();
-					$addType['AddressAddresstype']['customer_id'] = $customer;
-					$addType['AddressAddresstype']['address_id'] = $lastAddressId;
-					$addType['AddressAddresstype']['type_id'] = $value;
-					$this->AddressAddresstype->save($addType);
-				}			
-				
+				if(!is_null($customer)) {
+					$this->CustomerAddress->create();
+					$custAdd['CustomerAddress']['customer_id'] = $customer;
+					$custAdd['CustomerAddress']['address_id'] = $lastAddressId;
+					$this->CustomerAddress->save($custAdd);
+					
+					
+					//Schleife zur Anlage von Addressen udn Addresstypen
+					foreach ($types as $value) {
+						$this->AddressAddresstype->create();
+						$addType['AddressAddresstype']['customer_id'] = $customer;
+						$addType['AddressAddresstype']['address_id'] = $lastAddressId;
+						$addType['AddressAddresstype']['type_id'] = $value;
+						$this->AddressAddresstype->save($addType);
+					}			
+				} else {
+					$this->Session->setFlash(__('Fehler beim Speichern der Adresse!'));
+				}
 				
 				
 				//Vorbereitung um neue Addresse anzuzeigen
@@ -379,6 +383,8 @@ class AddressesController extends AppController {
 
 	function getAddressByType($data = null , $type = null, $first = FALSE)
 	{
+		
+
 						
 		if(isset($data['Customer'])) {
 
@@ -395,7 +401,7 @@ class AddressesController extends AppController {
 				$data['Address'] = $addresses['Address'];				
 			} else {
 				$data['Address'] = null;
-			}
+			}			
 			return $data;	
 		} else {			
 			return $data;

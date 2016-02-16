@@ -760,6 +760,8 @@ class ProductsController extends AppController {
 			$data['Product']['price'] = $Carts->convertPriceToSql($data['Product']['price']);
 			$data['Product']['retail_price'] = $Carts->convertPriceToSql($data['Product']['retail_price']);
 			
+			
+			
 			//Kerne Updaten
 			$cores = $this->ProductCore->findAllByProductId($id);
 
@@ -822,10 +824,13 @@ class ProductsController extends AppController {
 						$this->ProductCategory->save($tmpProdCat);
 					}
 				}
-			}			
+			}
+
+			debug($data);			
 			
 			if ($this->Product->save($data)) {
 				$this->Session->setFlash(__('Das Produkt wurde gespeichert', true));
+				$this->data = $data;
 				
 			} else {
 				$this->Session->setFlash(__('Das Produkt konnte nicht gespeichert werden. Bitte prüfen Sie die Meldungen.', true));
