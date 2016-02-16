@@ -639,6 +639,7 @@ class ConfirmationsController extends AppController {
 			}
 			$confirmation['Confirmation']['customer_id'] = $id;
 			
+			
 			//Prozess updaten
 			$process = $this->Process->findByConfirmationId($confirmation_id);
 			$proc['Process']['id'] = $process['Process']['id'];
@@ -650,6 +651,8 @@ class ConfirmationsController extends AppController {
 			} else {
 				$confirmation['Confirmation']['stat'] = 'not saved';
 			}
+			
+			
 		} else {
 			$confirmation['Confirmation']['stat'] = 'error';
 		}
@@ -672,11 +675,11 @@ class ConfirmationsController extends AppController {
 		$this->layout = 'pdf';
 		$pdf = true;
 		
-		$confirmation = $this->Confirmation->findById($id);
+		$data = $this->Process->findByConfirmationId($id);
 		
-		$this->generateData($confirmation);
+		$this->generateData($data);
 		
-		$title = "Auftragsbestätigung_".str_replace('/', '-', $confirmation['Confirmation']['confirmation_number']);
+		$title = "Auftragsbestätigung_".str_replace('/', '-', $data['Confirmation']['confirmation_number']);
 		$this->set('title_for_layout', $title);
 		
 		
@@ -771,9 +774,16 @@ class ConfirmationsController extends AppController {
 			$this->request->data += $cart;
 		}
 
-		if(!isset($this->request->data['Address'])) {
+		if($this->request->data['Confirmation']['address_id'] != 0) {
+			$address = $this->Address->findById($this->request->data['Confirmation']['address_id']);
+			$this->request->data['Address'] = $address['Address'];
+		} else {
 			$this->request->data = $Addresses->getAddressByType($this->request->data, 2, TRUE);
 		}
+
+		// if(!isset($this->request->data['Address'])) {
+			// $this->request->data = $Addresses->getAddressByType($this->request->data, 2, TRUE);
+		// }
 			
 		if(isset($this->request->data['Address'])) {
 			$a = $Addresses->splitAddressData($this->request->data);

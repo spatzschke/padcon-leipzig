@@ -632,13 +632,15 @@ class OffersController extends AppController {
 			$this->request->data += $cart;
 		}	
 			
-		if(empty($offer['Address']['id'])){		
+		if(!isset($this->request->data['Address'])) {	
 			$this->request->data = $Addresses->getAddressByType($this->request->data, 1, TRUE);
 		}
 		if(!is_null($this->request->data['Address'])) {		
 			$add = $Addresses->splitAddressData($this->request->data);
 			$this->request->data['Address'] += $add['Address'];	
 		}
+
+		
 		
 		$this->request->data['Address']['count'] = $this->AddressAddresstype->find('count', array('conditions' => array(
 			'customer_id' => $offer['Offer']['customer_id'],

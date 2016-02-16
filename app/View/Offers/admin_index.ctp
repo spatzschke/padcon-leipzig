@@ -69,6 +69,7 @@ $(document).ready(function() {
 					<b><?php echo $title_for_panel; ?> </b>
 					<span><?php echo $this->Paginator->counter(array('format' => __(' (Anzahl {:count})')));?></span>
 				</h3>
+				
 				<span class=pull-right><?php echo $this->Paginator->counter(array('format' => __('{:page}/{:pages}')));?></span>
 			</div>
 			<?php
