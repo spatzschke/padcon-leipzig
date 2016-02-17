@@ -945,4 +945,28 @@ class BillingsController extends AppController {
 				
 		return $arr_data['Billing'];
 	}
+
+	function admin_getWarning() {
+		
+		$all = $this->Billing->findAllByStatus('open');
+		$warning = 0; 
+		$warningArray = array();
+		$datetime1 = new DateTime();
+
+		foreach ($all as $key => $value) {
+			$datetime2 = new DateTime($value['Billing']['payment_target']);
+			$interval = $datetime1->diff($datetime2);
+
+			if(strcmp($interval->format('%R'),'-') == 0) {
+				$warning++;
+				$tempWarn = array();
+				$tempWarn['number'] = $value['Billing']['billing_number'];
+				$tempWarn['interval'] = $interval->format('%a');
+				array_push($warningArray, $tempWarn);
+			}
+		}		
+		
+		return $warningArray;	
+	}
+	
 }

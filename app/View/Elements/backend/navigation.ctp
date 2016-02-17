@@ -1,8 +1,22 @@
+<?php
+
+?>
+
 
 <aside id="sidebar" class="col-md-2 col-sm-1 col-xs-1">
 </br>
 		<ul class="toggle">
-			<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-dashboard" style="color: grey"></i> <span class="hidden-sm">Dashboard</span>', '/admin/Pages/dashboard', array('escape' => false)); ?></li>
+			<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-dashboard" style="color: grey"></i> <span class="hidden-sm">Dashboard</span>', '/admin/Pages/dashboard', array('escape' => false)); ?>
+				<?php if(!empty($warningBilling)) {
+					echo '<i style="color: red; left: -15px; font-size: 15px; top: 3px; cursor: pointer" 
+						class="glyphicon glyphicon-alert pull-right" 
+						data-original-title="" 
+						data-toggle="popover"
+						data-content="Es gibt <b>'.count($warningBilling).'</b> überfällige Zahlungen."
+						data-trigger="hover"
+						title=""></i>';
+				} ?>
+				</li>
 			<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-tasks" style="color: grey"></i>&nbsp;&nbsp;<span class="hidden-sm">Vorgangsübersicht</span>', '/admin/Processes/index', array('escape' => false)); ?></li>
 		</ul>
 		<!--<h3>Dokumente erstellen</h3>

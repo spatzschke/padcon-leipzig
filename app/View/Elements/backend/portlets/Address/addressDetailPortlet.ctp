@@ -33,7 +33,7 @@ $(document).ready(function() {
 					 data: <?php echo $data ?>,
 					 success:function (data, textStatus) {
 					 		
-					 //	window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/Customers/view/<?php echo $this->data['Customer']['id'];?>';
+					 window.location = '<?php echo FULL_BASE_URL.$this->base;?>/admin/Customers/view/<?php echo $this->data['Customer']['id'];?>';
 					 	//window.location = '';
 					 	
 					 }

@@ -202,10 +202,7 @@ class CartsController extends AppController {
 			$cart['Cart']['count'] = count($cart['CartProduct']);
 		} else {
 			$cart['Cart']['count'] = 0;
-		}
-		
-		debug($cart['Cart']);
-		
+		}				
 		$this->Cart->save($cart['Cart']);
 		
 	}

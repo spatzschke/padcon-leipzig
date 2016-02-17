@@ -114,12 +114,13 @@ class AddressesController extends AppController {
 		$data = null;
 		$addresses = null;
 		$customer_id = null;
+		
 		if($controller_name == "Offers") {
-			$data = $this->Offer->findById($controller_id); 
+			$data = $this->Process->findByOfferId($controller_id);
 			$customer_id = $data['Process']['customer_id'];
 		}
 		if($controller_name == "Confirmations") {
-			$data = $this->Process->findByConfirmationId($controller_id);
+			$data = $this->Process->findByConfirmationId($controller_id);		
 			$customer_id = $data['Process']['customer_id'];
 		}
 		if($controller_name == "Deliveries") {
@@ -131,8 +132,11 @@ class AddressesController extends AppController {
 			$customer_id = $data['Process']['customer_id'];
 		}
 		
+		
 
         $addresses = $this->AddressAddresstype->findAllByCustomerIdAndTypeId($customer_id, $type);
+		
+		debug($customer_id);
 		
 		$customer = $this->Customer->findById($customer_id);
 		
@@ -277,6 +281,7 @@ class AddressesController extends AppController {
 			$this->AddressAddresstype->deleteAll(array('address_id' => $this->request->data['Address']['id']), false);
 			foreach ($this->request->data['Address']['addressTypes'] as $key => $value) {
 				$this->AddressAddresstype->create();
+				$type['AddressAddresstype']['customer_id'] = $customer;
 				$type['AddressAddresstype']['address_id'] = $this->request->data['Address']['id'];
 				$type['AddressAddresstype']['type_id'] = $value;
 				$this->AddressAddresstype->save($type);	

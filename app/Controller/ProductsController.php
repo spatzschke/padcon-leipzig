@@ -753,6 +753,8 @@ class ProductsController extends AppController {
 		//unset($data['Product']['product_number']);
 		if (!empty($data)) {
 			
+			
+			
 			$product = $this->getProduct($id);
 			
 			//Preis von Komma auf Punkt konvertieren
@@ -826,10 +828,16 @@ class ProductsController extends AppController {
 				}
 			}
 
-			debug($data);			
+			$number = $data['Product']['product_number'];
+			unset($data['Product']['product_number']);
+
+debug($data);
+			
+			$this->Product->id = $data['Product']['id'];
 			
 			if ($this->Product->save($data)) {
 				$this->Session->setFlash(__('Das Produkt wurde gespeichert', true));
+				$data['Product']['product_number'] = $number;
 				$this->data = $data;
 				
 			} else {
@@ -837,12 +845,17 @@ class ProductsController extends AppController {
 			}
 			
 		}
+
 		if (empty($this->data)) {
 			$data = $this->getProduct($id);
 			$data['Product']['featurelist'] = $this->getListElement($data['Product']['featurelist'], FALSE);
-			$colors = $this->Color->find('list',array('conditions' => array('Color.material_id' => ($this->data['Material']['id'])), 'fields' => array('Color.name')));	
 			$this->data = $data;
 		}
+
+		if(isset($this->data['Material'])) {
+			$colors = $this->Color->find('list',array('conditions' => array('Color.material_id' => ($this->data['Material']['id'])), 'fields' => array('Color.name')));	
+		}
+
 		$categories = $this->Product->Category->find('list');
 		$materials = $this->Product->Material->find('list');
 		$cores = $this->Core->find('list');

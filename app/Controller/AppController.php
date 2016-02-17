@@ -20,8 +20,8 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-App::uses('Controller', 'Controller');
 
+App::uses('Controller', 'Controller');
 /**
  * Application Controller
  *
@@ -58,7 +58,10 @@ class AppController extends Controller {
 	  			$this->layout = 'admin';
 	  		}
 	      
-	   }        
+	   }  
+	 
+		$warning = $this->requestAction('/admin/billings/getWarning/');
+		$this->set('warningBilling', $warning);      
 	}
 
 }
