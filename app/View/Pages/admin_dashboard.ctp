@@ -18,7 +18,40 @@
 
 <div class="container">   
 	<div class="row">
-        <div style="margin-top:50px;" class="col-md-3 col-md-offset-4">                    
+		
+<!-- Überfällige Rechnungen -->
+	<?php  if(!empty($warningBilling)) {?>
+		 <div style="margin-top:50px;" class="col-md-4">                    
+            <div class="panel panel-danger" >
+            	 <div class="panel-heading">
+		        	<h4><i style="color: red; font-size: 20px; left: -10px; padding: 0 5px 0 10px; top: 3px;" class="glyphicon glyphicon-alert"></i>Überfällige Rechnungen</h4>
+		         </div>
+                 <div class="panel-body" >
+                 	<table class="table table-striped">
+					  	<thead> 
+					  		<tr> 
+					  			<th>#</th> 
+					  			<th>Rechnung</th> 
+					  			<th style="text-align: right">Überfällig seit</th>
+					  		</tr> 
+					  	</thead> 
+					  	<tbody> 
+					  		<?php foreach ($warningBilling as $key => $value) { 
+								echo '<tr>'; 									
+									echo '<td><b>'.($key + 1).'</b></td>'; 
+									echo '<td><b>'.$value['number'].'</td>'; 
+									echo '<td style="text-align: right"><b>'.$value['interval'].' Tag(e)</b></td>'; 
+	
+								echo '</tr>';  
+							} ?>
+					  	</tbody>
+					</table>  
+                 </div>
+            </div>
+        </div>
+<?php }?>
+<!-- Umsatzübersicht -->		
+        <div style="margin-top:50px;" class="col-md-3 col-md-offset-<?php  if(!empty($warningBilling)) {echo '0';} else { echo '4'; } ?>">                    
             <div class="panel panel-info" >
                  <div class="panel-body" >
                     <?php
@@ -47,7 +80,7 @@
         	</div>
        </div> 
 
-       <div style="" class="col-md-12">                    
+       <div style="padding-left: 0" class="col-md-12">                    
             <div class="panel panel-info" >
                  <div class="panel-body">
                  	<table class="table table-striped visible-sm">
@@ -173,7 +206,7 @@
 			<div class="col-md-6">
 				<div class="panel panel-info" >
 		        	<div class="panel-heading">
-		        		<h4>Top 5 der meistbestelltesten <u><b>Produkte</b></u> im laufenden Kalenderjahr</h4>
+		        		<h4>Top 5 der meistbestellten <u><b>Produkte</b></u> im laufenden Kalenderjahr</h4>
 		        	</div>
 		            <div class="panel-body" >
 		            	<table class="table table-striped">
