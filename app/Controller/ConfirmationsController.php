@@ -65,13 +65,15 @@ class ConfirmationsController extends AppController {
 		if (!$this->Confirmation->exists($id)) {
 			throw new NotFoundException(__('Invalid confirmation'));
 		}
-		$options = array('conditions' => array('Process.confirmation_id' => $id, 'Process.type' => ''));
-		$process = $this->Process->find('first', $options);
-		
-		$this->set('confirmation', $process);
+		// $options = array('conditions' => array('Process.confirmation_id' => $id, 'Process.type' => ''));
+		// $process = $this->Process->find('first', $options);
+// 		
+		 
+// 		
+		// $this->set('confirmation', $process);
 		$this->set('pdf', null);
 	
-		$this->generateData($this->Process->find('first', array('conditions' => 'Process.confirmation_id = '.$id.' AND Process.type = "" OR Process.type = "full"')));
+		$this->generateData($this->Process->find('first', array('conditions' => '(Process.confirmation_id = "100") AND (Process.type = "" OR Process.type = "full")')));
 	}
 
 /**
@@ -553,7 +555,7 @@ class ConfirmationsController extends AppController {
 				if(empty($confirmation['Confirmation']['additional_text'])) {
 					$confirmation['Confirmation']['additional_text'] = Configure::read('padcon.Auftragsbestaetigung.additional_text.default');
 				} 
-								
+
 				$confirmation['CartProducts'] = $this->getSettingCartProducts($confirmation);
 				
 				$cart = $this->Cart->findById($confirmation['Confirmation']['cart_id']);
@@ -763,7 +765,6 @@ class ConfirmationsController extends AppController {
 		$Carts = new CartsController();
 
 	    $this->request->data = $process;
-		
 		
 		if(!empty($process)) {
 			
