@@ -17,7 +17,7 @@ class BillingsController extends AppController {
 	public function beforeFilter() {
 		if(isset($this->Auth)) {
 			$this->Auth->deny('*');
-			$this->Auth->allow('createPdf');
+			$this->Auth->allow('createPdf', 'admin_getWarning');
 			
 		}
 	}
