@@ -8,7 +8,12 @@
 		<ul class="toggle">
 			<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-dashboard" style="color: grey"></i> <span class="hidden-sm">Dashboard</span>', '/admin/Pages/dashboard', array('escape' => false)); ?>
 				<?php if(!empty($warningBilling)) {
-					echo '<i style="color: red; left: -15px; font-size: 15px; top: 3px; cursor: pointer" 
+					echo '<i style="
+	color: red;
+    cursor: pointer;
+    font-size: 15px;
+    left: -55px;
+    top: 5px" 
 						class="glyphicon glyphicon-alert pull-right" 
 						data-original-title="" 
 						data-toggle="popover"
