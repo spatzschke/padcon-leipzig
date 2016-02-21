@@ -23,8 +23,8 @@ if(empty($this->data['Pages'])) {
 		<?php 
 		
 			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $pageCur, 'maxPage' => count($pages), 'logo' => true)); 				
-			
-			if($this->data['Confirmation']['order_date']) {
+						
+			if($this->data['Confirmation']['order_date'] && $pageCur < 2) {
 				
 				if($this->data['Confirmation']['order_number'] != '' || $this->data['Confirmation']['order_number'] != null) {
 					echo '<p class="offerText">'.sprintf(Configure::read('padcon.Auftragsbestaetigung.header.Bestellnummer'),$this->data['Confirmation']['order_number'],$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y')).'</p>';
