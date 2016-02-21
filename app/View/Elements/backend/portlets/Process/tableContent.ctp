@@ -12,7 +12,11 @@ foreach ($processes as $key => $process):
 		if($process['Confirmation']['custom']) { $action = 'edit_individual';}
 		
 		if(isset($processes[$key+1]))
-			$isPartProcess = $process['Process']['confirmation_id'] == $processes[$key+1]['Process']['confirmation_id'];
+			if($process['Process']['offer_id'] != 0 && $process['Process']['confirmation_id'] == 0) {
+				$isPartProcess = false;
+			} else {
+				$isPartProcess = $process['Process']['confirmation_id'] == $processes[$key+1]['Process']['confirmation_id'];
+			}
 		else
 			$isPartProcess = false;
 	?>
@@ -47,7 +51,7 @@ foreach ($processes as $key => $process):
 		<div class="col-md-2 col-xs-2 processStepContainer stepOffer">
 			<div class="processLine <?php echo ($confirmationActive && $offerActive && !$isPartProcess ? 'success' : ''); ?>"></div>
 			<?php if($process['Offer']['id'] && !$isPartProcess) { echo '<div class="stepId">'.$process['Offer']['id'].'</div>'; } ?>
-			<?php if(!$isPartProcess || $process['Process']['offer_id'] == 0) { ?>
+			<?php if(!$isPartProcess || $process['Process']['offer_id'] != 0) { ?>
 				<div class="processStep <?php echo ($offerActive ? 'status-'.$process['Offer']['status'] : ''); ?>">
 				<?php 
 				if($process['Offer']['id']) {
