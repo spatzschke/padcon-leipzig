@@ -21,7 +21,7 @@ if(empty($this->data['Pages'])) {
 <article class="module width_full sheet business noInput">		
 		<?php 		
 			echo $this->element('backend/portlets/Cheet/header', array('pdf' => $pdf, 'page' => $pageCur, 'maxPage' => count($pages), 'logo' => true)); 			
-			if($page == 1) {
+			if($pageCur < 2) {
 				if($this->data['Offer']['request_date'] != '0000-00-00') {
 					if($this->data['Offer']['request_number'] != '' || $this->data['Offer']['request_number'] != null) {
 						echo '<p class="offerText">'.sprintf(Configure::read('padcon.Angebot.header.Anfragenummer'),$this->Time->format($this->data['Offer']['request_date'], '%d.%m.%Y'), $this->data['Offer']['request_number']).'</p>';

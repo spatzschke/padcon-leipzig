@@ -162,8 +162,13 @@ class ProductsController extends AppController {
 		
 	}
 	
-		function getColors($material = null) {
-		
+	function isExternal($id = null) {
+		$product = $this->getProduct($id);
+		return $product['Product']['external'];
+	}
+	
+	
+	function getColors($material = null) {		
 		
 		$colors = $this->Color->find('all',array('conditions' => array('Color.material_id' => $material)));
 		return $colors;	
