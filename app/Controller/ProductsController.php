@@ -57,7 +57,18 @@ class ProductsController extends AppController {
 	}
 	
 	function admin_indexAjax($layout = null, $cart_id = null, $controller_id = null, $controller_name = null) {
-		$this->admin_index($layout, $cart_id);
+		//$this->admin_index($layout, $cart_id);
+		
+		$this->Product->recursive = 0;
+		 $this->Paginator->settings = array(
+		 	'conditions' => array('Product.external' => '0'),
+	        'order' => array('Product.name' => 'ASC'),
+	        'limit' => 25
+	    );
+		$products = $this->Paginator->paginate('Product');
+		
+		$this->set(compact('products', 'cart_id'));
+		$this->set('ajax', 0);
 		
 		$this->set(compact('controller_name', 'controller_id'));
 		$this->render('/Elements/backend/portlets/Product/productPortletAjax');
@@ -884,6 +895,7 @@ debug($data);
 			$Carts = new CartsController();
 			$data['Product']['price'] = $Carts->convertPriceToSql($data['Product']['price']);
 			$data['Product']['retail_price'] = $Carts->convertPriceToSql($data['Product']['retail_price']);
+			$data['Product']['external'] = true;
 						
 			if ($this->Product->save($data)) {
 				$this->Session->setFlash(__('Das Produkt wurde gespeichert', true));

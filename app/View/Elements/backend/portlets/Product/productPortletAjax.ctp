@@ -1,5 +1,4 @@
 <?php 
-	$products = $this->requestAction('Products/getProducts/');
 	echo $this->Html->script('jquery.dynamicSearch', false);	
 	echo $this->Html->script('jquery.bootstrap.modal', false);
 	
