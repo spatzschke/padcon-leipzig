@@ -385,7 +385,7 @@ class CartsController extends AppController {
 				$featureCount += count($features)+$standardProductRow; // 5 Standardzeile
 								
 				if($featureCount > $rowPerPage -$rowMinus  || (count($cartProducts) == 1 && $pages > 1)) {
-					//$page[$j] = $prodArr;
+					$page[$j] = $prodArr;
 					$featureCount = 0;
 					$prodArr = array();
 					array_push($prodArr, array('product' => $value , 'count' => count($features)+$standardProductRow));
