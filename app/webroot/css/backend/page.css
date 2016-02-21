@@ -129,7 +129,7 @@ article.sheet {
 	border-bottom: 1px dotted #000000;
     border-top: 1px dotted #000000;
     float: left;
-    margin-bottom: 10px;
+    margin-bottom: -1px;
     margin-top: 10px;
     padding: 5px 0;
     width: 100%;
@@ -137,7 +137,7 @@ article.sheet {
 
 .offerHeader div {float: left;}
 
-.sheetItem { width: 100%; clear: both; margin-bottom: 0px; padding-bottom: 5px; float: left;}
+.sheetItem { width: 100%; clear: both; margin-bottom: 0px; padding-bottom: 5px; float: left; margin-top: 10px}
 .sheetItem > div, .sheetItem .content > div{float: left;}
 
 .offerMiddle .content { 
@@ -179,8 +179,8 @@ article.sheet {
 	font-size: 14px;
 }
 
-.pages .row-fluid .offerText input.text { width: 100%;}
-.pages .row-fluid .offerText { width: 100%; float: left;}
+.pages .row-fluid .offerText input.text { width: 100%; }
+.pages .row-fluid .offerText { width: 100%; float: left; margin-top: 11px}
 
 .offerMiddle .price input {max-width: 65px; margin-top: -1px;}
 
