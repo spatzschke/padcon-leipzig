@@ -184,12 +184,14 @@ class BillingsController extends AppController {
 		
 		if (!empty($this->data)) {
 			$confirmation = null;			
+			$Carts = new CartsController();
 			
 			$data = $this->data;
+			
 			$data['Billing']['created'] = date('Y-m-d',strtotime($data['Billing']['created']));
 			$data['Billing']['id'] = $id;
-			$billing['Billing']['billing_price'] = $this->$data['Billing']['billing_price'];
-			
+			$data['Billing']['billing_price'] = $Carts->convertPriceToSql($data['Billing']['billing_price']);
+
 			//Filtere Zahlungsziel aus Text heraus
 			$data['Billing']['payment_target'] = $this->findPaymentTarget($data);
 			
@@ -199,7 +201,7 @@ class BillingsController extends AppController {
 			//Filtere Skonto aus Text heraus
 			$data['Billing']['skonto'] = $this->findSkonto($data);
 			
-			$Carts = new CartsController();
+			
 			$data['Confirmation']['billing_price'] = $Carts->convertPriceToSql($this->$data['Billing']['billing_price']);
 			
 			if($this->Billing->save($data)) {
