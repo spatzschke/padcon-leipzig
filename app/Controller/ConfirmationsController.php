@@ -73,7 +73,7 @@ class ConfirmationsController extends AppController {
 		// $this->set('confirmation', $process);
 		$this->set('pdf', null);
 	
-		$this->generateData($this->Process->find('first', array('conditions' => '(Process.confirmation_id = "100") AND (Process.type = "" OR Process.type = "full")')));
+		$this->generateData($this->Process->find('first', array('conditions' => '(Process.confirmation_id = '.$id.') AND (Process.type = "" OR Process.type = "full")')));
 	}
 
 /**

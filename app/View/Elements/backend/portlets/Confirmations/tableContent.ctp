@@ -39,16 +39,16 @@
 								echo $item['Confirmation']['customer_id'];	
 								echo '&nbsp;';
 								if(!is_null($item['Address']['id'])) {
-									echo '<i class="glyphicon glyphicon-info-sign" style="color: teal; cursor: pointer"
-										 data-toggle="popover"
-										 data-content="';
+									echo "<i class='glyphicon glyphicon-info-sign' style='color: teal; cursor: pointer'
+										 data-toggle='popover'
+										 data-content='";
 										 	echo $item['Address']['organisation'].'<br>';
 											echo $item['Address']['department'].'<br>';
 										 	echo $item['Customer']['name'].'<br>'.
-										 '"
-										 data-trigger="hover"
+										 "'
+										 data-trigger='hover'
 									
-									></i>';
+									></i>";
 								}
 							}
 						 ?>
