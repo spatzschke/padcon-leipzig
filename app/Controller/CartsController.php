@@ -346,6 +346,24 @@ class CartsController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 	
+	function isEnoughSpaceAtPage($page = null, $space = 0) {
+		
+		//Ist auf der letzten Seite noch Platz?
+		if(count($page) >= 1) {
+			$lastPage = end($page);
+			$lastPageCount = 0;
+			foreach (end($page) as $key => $value) {
+				if(isset($value['count']))
+					$lastPageCount += $value['count'];	
+			}
+	
+			return $lastPageCount + $space;
+		} else {
+			return 0;
+		}
+		
+	}
+	
 	function calcPageLoad($cart = null, $cRow = 7, $tRow = 6) {
 		$Products = new ProductsController();
 		
@@ -382,9 +400,14 @@ class CartsController extends AppController {
 		for($j = 0; $j <= $pages; $j++) {
 			foreach ($cartProducts as $key => $value) {
 				$features = $Products->seperatFeatureList($value['product_id']);
+				
+				if($Products->isExternal($value['product_id'])) {
+					$standardProductRow = 1;
+				} 
+				
 				$featureCount += count($features)+$standardProductRow; // 5 Standardzeile
-								
-				if($featureCount > $rowPerPage -$rowMinus  || (count($cartProducts) == 1 && $pages > 1)) {
+												
+				if(($featureCount > $rowPerPage -$rowMinus)  || (count($cartProducts) == 1 && $pages > 1)) {
 					$page[$j] = $prodArr;
 					$featureCount = 0;
 					$prodArr = array();
@@ -396,30 +419,57 @@ class CartsController extends AppController {
 					unset($cartProducts[$key]);
 					continue;
 				}
-			}
+			}			
 			
 			$addProdArr = array();
 			
 			if(!empty($prodArr)) {
+				foreach ($prodArr as $key => $value) {
 					
-				if($calcRow > 0 ) {					
-					if(($featureCount + $calcRow) < $rowPerPage) {
-						array_push($prodArr, 'C');
-					} else {
-						array_push($addProdArr, 'C');
+					if($this->isEnoughSpaceAtPage($page, $value['count']) < $rowPerPage) {
+						
+						if(empty($page)) {
+							$page[0] = array();
+							array_push($page[0],$value);
+						} else {
+							array_push($page[count($page)-1],$value);
+						}	
+						
+						unset($prodArr[$key]);
 					}
-				}				
+				}	
 					
-				if(($featureCount + $calcRow + $textRow) < $rowPerPage) {
-					array_push($prodArr, 'T');
+				if($this->isEnoughSpaceAtPage($page, $calcRow) < $rowPerPage) {
+						array_push($page[count($page)-1],'C');
+				} else {
+					array_push($addProdArr, 'C');
+				}
+				
+				if($this->isEnoughSpaceAtPage($page, $textRow) < $rowPerPage) {
+						array_push($page[count($page)-1],'T');
 				} else {
 					array_push($addProdArr, 'T');
-				}	
-				
-				$page[$j] = $prodArr;
+				}
+									
+							
+				// if($calcRow > 0 ) {					
+					// if(($featureCount + $calcRow) < $rowPerPage) {
+						// array_push($prodArr, 'C');
+					// } else {
+						// array_push($addProdArr, 'C');
+					// }
+				// }				
+// 					
+				// if(($featureCount + $calcRow + $textRow) < $rowPerPage) {
+					// array_push($prodArr, 'T');
+				// } else {
+					// array_push($addProdArr, 'T');
+				// }	
+// 				
+				if(!empty($prodArr))
+					$page[$j] = $prodArr;
 				$prodArr = array();
 			}
-				
 			
 			//auf die letzte Seite die restlichten Produkte packen
 			if(!empty($addProdArr)) {	
