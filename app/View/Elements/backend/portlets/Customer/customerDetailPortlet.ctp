@@ -19,15 +19,19 @@ $(document).ready(function() {
             html:true
         });
         
-    $('.add_address').on('click', function(){
-								
-		var c = $('.address_dummy').length;
+    <?php if($this->request->params['action'] != "admin_add") { ?>
+				
+		$('.add_address').on('click', function(){
+				
+			$('#address_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/add\/<?php echo $this->data['Customer']['id'];?>');
+			$('#address_add').modal('show');
 			
-		$('#address_add .modal-content').load('<?php echo FULL_BASE_URL.$this->base;?>\/admin\/Addresses\/add\/<?php echo $this->data['Customer']['id'];?>');
-		$('#address_add').modal('show');
-		
-		return false;
-	});	
+			return false;
+		});	
+			
+	<?php } ?>
+        
+    
 	
 	$('.edit_btn').on('click', function(){
 		
@@ -37,6 +41,40 @@ $(document).ready(function() {
 		
 		return false;
 	});	
+	
+	 $("[name='merchant-cb']").bootstrapSwitch({
+			size: "small",
+			onText: "I", 
+			offText: "O",
+			handleWidth: "10px", 
+			disabled: <?php 
+				if($this->request->params['action'] != "admin_add") {
+					echo 'true';						
+				} else {
+					echo 'false';
+				}
+			?>,
+			state: <?php 
+			if($this->request->params['action'] != "admin_add") {
+				if(!$this->data['Customer']['merchant']) {
+					echo 'false';
+				} else {
+					echo 'true';					
+				}
+			} else {
+				echo 'false';
+			}	
+			?>,
+			onSwitchChange: function(event, state) {
+			if(state) {
+				$("#merchant").attr('value','1')
+			} else {
+				$("#merchant").attr('value','0')
+			}
+				
+			return event.isDefaultPrevented();
+			}
+		});
 									
 });
 
@@ -70,7 +108,7 @@ $(document).ready(function() {
 					<div class="col-md-12">
 						<h4>Kundendaten</h4>
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-3">
 	                            <div class="input-group">
 	                                <span class="input-group-addon"><b data-toggle="popover" 
 										 data-content=""
@@ -99,7 +137,7 @@ $(document).ready(function() {
 									?>                                      
 	                             </div>
 	                         </div>
-                        	<div class="col-md-8">
+                        	<div class="col-md-7">
 	                            <div class="input-group">
 	                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
 	                                <?php 
@@ -124,6 +162,22 @@ $(document).ready(function() {
 										'disabled' => $disable
 									));
 									?>                                      
+	                             </div>
+	                         </div>
+	                         <div class="col-md-2">
+	                             <div class="input-group">
+	                             	<i class='glyphicon glyphicon-briefcase' style='color: teal; cursor: pointer; font-size: 20px; margin-right: 10px'
+										 data-toggle='popover'
+										 data-content='Handelsvertreter?'
+										 data-trigger='hover'
+										 data-placement='left'
+									></i>
+	                                <input type="checkbox" name="merchant-cb">    
+	                                <?php echo $this->Form->input('merchant2', array(
+									    'hidden' => true,
+										'id' => "merchant",
+										'label' => false));
+									?>                                 
 	                             </div>
 	                         </div>
                          </div>

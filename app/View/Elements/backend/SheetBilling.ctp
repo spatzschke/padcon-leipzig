@@ -22,7 +22,7 @@ if(empty($this->data['Pages'])) {
 			if($this->data['Confirmation']['order_date'] && $pageCur < 2) {
 				
 				if($this->data['Confirmation']['order_number'] != '' || $this->data['Confirmation']['order_number'] != null && isset($this->data['Delivery'])) {
-					echo '<p class="offerText">'.sprintf(Configure::read('padcon.Rechnung.header.Bestellnummer'),$this->data['Confirmation']['order_number'],$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y'),$this->data['Delivery']['delivery_number'],$this->Time->format($this->data['Delivery']['modified'], '%d.%m.%Y')).'</p>';
+					echo '<p class="offerText">'.sprintf(Configure::read('padcon.Rechnung.header.Bestellnummer'),$this->data['Confirmation']['order_number'],$this->Time->format($this->data['Confirmation']['order_date'], '%d.%m.%Y'),$this->data['Delivery']['delivery_number'],$this->Time->format($this->data['Delivery']['created'], '%d.%m.%Y')).'</p>';
 				} elseif(!isset($this->data['Delivery'])) {
 					echo '<p class="offerText">'.Configure::read('padcon.Rechnung.header.default').'</p>';
 				} else {

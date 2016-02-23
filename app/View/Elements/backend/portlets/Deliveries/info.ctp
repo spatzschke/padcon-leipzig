@@ -72,12 +72,14 @@ function saveAndReloadDeliveryHeader(id) {
 					echo $this->Form->input('created', array('type' => 'text', 'label' => false, 'data-model' => 'Delivery', 'data-field' => 'created', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));
 				
 				echo '</div>';
+				if(!$this->request->data['Customer']['merchant']) {
 				echo '<div class="controls col-md-12">';
 				
 					echo '<label for="DeliveryCustomer" class="col-md-4">Kunde:</label>';
 					echo $this->Form->input('customer_id', array('value' => $this->request->data['Confirmation']['customer_id'], 'type' => 'text', 'label' => false, 'data-model' => 'Confirmation', 'data-field' => 'customer_id', 'autoComplete' => false, 'div' => false, 'class' => 'noValid col-md-8'));
 				
 				echo '</div>';
+				}
 				echo '<div class="controls col-md-12">';
 							
 				echo '<label for="DeliveryAgent" class="col-md-4">Bearbeiter:</label>';
