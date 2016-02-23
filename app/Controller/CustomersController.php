@@ -147,7 +147,11 @@ class CustomersController extends AppController {
 		$this->layout = 'admin';
 		if (!empty($this->request->data)) {
 			$this->Customer->create();
-			if ($this->Customer->save($this->request->data)) {
+			
+			$data = $this->request->data;
+			$data['Customer']['merchant'] = $this->request->data['Customer']['merchant2'];
+			
+			if ($this->Customer->save($data)) {
 				
 				$lastId = $this->Customer->getLastInsertID();			
 					
