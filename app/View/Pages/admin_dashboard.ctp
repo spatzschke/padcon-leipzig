@@ -165,6 +165,62 @@
         	</div>
        </div>
   </div>
+  
+<?php 
+	$chartSize = '110';
+	$defaultColor = '#008080';
+	$defaultHighlightColor = '#FF5A5E';
+	$defaultTransparentColor = '#f5f5f5';
+	
+	
+?>
+  
+  
+  <div class="col-md-12">   
+  	<div class="panel panel-info" >
+    <div class="panel-body">
+  	<div class="row">
+  		
+  		<?php 
+  		foreach($cheetCharts as $info) {?>
+  		
+		 <div class="chartEntry col-md-3">
+        	<div class="title"><?php echo $info['title'] ?></div>
+        	<div class="chart">
+        		<div class="data"><?php echo $info['percent'] ?></div>
+        		<div id="canvas-holder">
+					<canvas id="chart-<?php echo $info['data'] ?>" width="<?php echo $chartSize ?>" height="<?php echo $chartSize ?>"/>
+					<script>
+						var data<?php echo $info['data'] ?> = [
+							{
+								value: <?php echo $info['ownCount'] ?>,
+								color:'<?php echo $defaultColor ?>',
+								highlight: '<?php echo $defaultHighlightColor ?>'
+							}
+							<?php if($info['percent'] != "100%" ) {?>
+							,
+							{
+								value: <?php echo $info['allCount'] ?>,
+								color: '<?php echo $defaultTransparentColor ?>',
+								highlight: '<?php echo $defaultTransparentColor ?>'
+								
+							}
+							<?php } ?>
+						];
+						var ctx<?php echo $info['data'] ?> = document.getElementById("chart-<?php echo $info['data'] ?>").getContext("2d");
+						window.myPie = new Chart(ctx<?php echo $info['data'] ?>).<?php echo $info['type'] ?>(data<?php echo $info['data'] ?>, {});
+						
+					</script> 
+				</div>
+			</div>
+        </div> 
+        <?php } ?>                       
+	</div>
+	</div>
+	</div>
+  </div>
+					
+  
         
     <div class="col-md-12">  
     	<div class="row">            
