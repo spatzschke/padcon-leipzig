@@ -118,7 +118,12 @@ $(document).ready(function() {
 							<div class="col-md-6">
 								<div class="input-group">
 	                                <span class="input-group-addon"><i class="glyphicon glyphicon-bullhorn"></i></span>
-	                                <?php echo $this->Form->select('salutation', array('Herr' => 'Herr', 'Frau' => 'Frau'), array(
+	                                <?php echo $this->Form->select('salutation', array(
+	                                		'' => '', 
+	                                		'Herr' => 'Herr', 
+	                                		'Frau' => 'Frau', 
+	                                		'Pfleger' => 'Pfleger', 
+	                                		'Schwester' => 'Schwester'), array(
 										'class' => 'form-control',
 										'label' => FALSE, 
 										'div' => FALSE,
