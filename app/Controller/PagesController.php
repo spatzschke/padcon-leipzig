@@ -36,7 +36,7 @@ class PagesController extends AppController {
  *
  * @var array
  */
- 	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'AddressAddresstype', 'Billing', 'Process');
+ 	public $uses = array('Offer', 'Product', 'CartProduct', 'Cart', 'CustomerAddress', 'Customer', 'Address', 'Color', 'Confirmation', 'AddressAddresstype', 'Billing', 'Process', 'Confirmation', 'Delivery');
 	
 /**
  * Displays a view
@@ -90,6 +90,8 @@ class PagesController extends AppController {
 		$this->umsatz();
 		$this->platzierungKunde();
 		$this->platzierungProdukt();
+		
+		$this->openCharts();
 	
 	}
 	
@@ -158,6 +160,111 @@ class PagesController extends AppController {
 		
 		$this->set('umsatz', $umsatz);
 	}  
+	
+	private function openCharts() {
+			
+		$tempCustomer = array();	
+		
+		$view = new View($this);
+        $Number = $view->loadHelper('Number');
+		
+// Anzahl offene Angebote
+		
+		$openOfferCount = $this->Offer->find('count', array('conditions' => array('Offer.status' => 'open'))); 
+		$allOfferCount = $this->Offer->find('count');
+
+		$percent = 0;
+		if($allOfferCount != 0) {
+			$percent = $openOfferCount / $allOfferCount;
+		}
+		
+		$offerArray = array('title' => 'Offene Angebote', 
+			'percent' => $Number->toPercentage($percent, 0, array(
+			    'multiply' => true
+			)),
+			'ownCount' => $openOfferCount,
+			'allCount' => $allOfferCount-$openOfferCount,
+			'description' => '',	
+			'type' => 'Doughnut'	
+		);
+		if (strpos($offerArray['title'],' ') !== false) {
+		    $offerArray += array('data' => strtolower(str_replace(' ', '', $offerArray['title'])));
+		}
+		$offerArray += array('data' => strtolower($offerArray['title']));
+		
+		array_push($tempCustomer, $offerArray);
+		
+		
+// Anzahl der offenen Auftragsbestätigun
+		
+		$openCount = $this->Confirmation->find('count', array('conditions' => array('Confirmation.status' => 'open'))); 
+		$allCount = $this->Confirmation->find('count');
+
+		$percent = 0; if($allCount != 0) { $percent = $openCount / $allCount; }
+		
+		$data = array('title' => 'Offene ABs', 
+			'percent' => $Number->toPercentage($percent, 0, array(
+			    'multiply' => true
+			)),
+			'ownCount' => $openCount,
+			'allCount' => $allCount-$openCount,
+			'description' => '',	
+			'type' => 'Doughnut'	
+		);
+		if (strpos($data['title'],' ') !== false) {
+		    $data += array('data' => strtolower(str_replace(' ', '', $data['title'])));
+		}
+		$data += array('data' => strtolower($data['title']));
+		array_push($tempCustomer, $data);
+	
+// Anzahl der offenen Lieferscheine
+		
+		$openCount = $this->Delivery->find('count', array('conditions' => array('Delivery.status' => 'open'))); 
+		$allCount = $this->Delivery->find('count');
+
+		$percent = 0; if($allCount != 0) { $percent = $openCount / $allCount; }
+		
+		$data = array('title' => 'Offene Lieferscheine', 
+			'percent' => $Number->toPercentage($percent, 0, array(
+			    'multiply' => true
+			)),
+			'ownCount' => $openCount,
+			'allCount' => $allCount-$openCount,
+			'description' => '',	
+			'type' => 'Doughnut'	
+		);
+		if (strpos($data['title'],' ') !== false) {
+		    $data += array('data' => strtolower(str_replace(' ', '', $data['title'])));
+		}
+		$data += array('data' => strtolower($data['title']));
+		array_push($tempCustomer, $data);
+		
+// Anzahl der offenen Billing
+		
+		$openCount = $this->Billing->find('count', array('conditions' => array('Billing.status' => 'open'))); 
+		$allCount = $this->Billing->find('count');
+
+		$percent = 0; if($allCount != 0) { $percent = $openCount / $allCount; }
+		
+		$data = array('title' => 'Offene Rechnungen', 
+			'percent' => $Number->toPercentage($percent, 0, array(
+			    'multiply' => true
+			)),
+			'ownCount' => $openCount,
+			'allCount' => $allCount-$openCount,
+			'description' => '',	
+			'type' => 'Doughnut'	
+		);
+		if (strpos($data['title'],' ') !== false) {
+		    $data += array('data' => strtolower(str_replace(' ', '', $data['title'])));
+		}
+		$data += array('data' => strtolower($data['title']));
+		array_push($tempCustomer, $data);
+		
+		$this->set('cheetCharts', $tempCustomer);
+	}
+	
+	
 
 }
 
