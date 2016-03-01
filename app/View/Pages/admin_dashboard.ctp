@@ -3,14 +3,7 @@
 	<!--
 	- analytics
 	
-	
-	- Offene Angebote
-	
 	- Lieferungen ohen Trackingcode
-	
-	- Offene Rechnungen
-	
-	- Rechnung in Mahnverfahren
 	
 
 -->

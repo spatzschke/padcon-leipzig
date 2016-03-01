@@ -348,15 +348,17 @@ class CartsController extends AppController {
 	
 	function isEnoughSpaceAtPage($page = null, $space = 0) {
 		
-		//Ist auf der letzten Seite noch Platz?
+		//Ist auf der letzten Seite noch Platz?		
 		if(count($page) >= 1) {
-			$lastPage = end($page);
+			$lastPage = end($page);			
 			$lastPageCount = 0;
 			foreach (end($page) as $key => $value) {
-				if(isset($value['count']))
-					$lastPageCount += $value['count'];	
-			}
-	
+ 				if(isset($value['count'])) {
+					$lastPageCount += $value['count'];
+				} else {
+					$lastPageCount += $space;
+				}	
+			}	
 			return $lastPageCount + $space;
 		} else {
 			return 0;
@@ -367,7 +369,7 @@ class CartsController extends AppController {
 	function calcPageLoad($cart = null, $cRow = 7, $tRow = 6) {
 		$Products = new ProductsController();
 		
-		$rowPerPage = 30;
+		$rowPerPage = 26;
 		$standardProductRow = 5;
 		$rowMinus = 5;
 		$calcRow = $cRow;
@@ -419,13 +421,13 @@ class CartsController extends AppController {
 					unset($cartProducts[$key]);
 					continue;
 				}
-			}			
+			}					
 			
 			$addProdArr = array();
 			
 			if(!empty($prodArr)) {
 				foreach ($prodArr as $key => $value) {
-					
+										
 					if($this->isEnoughSpaceAtPage($page, $value['count']) < $rowPerPage) {
 						
 						if(empty($page)) {
@@ -438,6 +440,7 @@ class CartsController extends AppController {
 						unset($prodArr[$key]);
 					}
 				}	
+				
 					
 				if($this->isEnoughSpaceAtPage($page, $calcRow) < $rowPerPage) {
 						array_push($page[count($page)-1],'C');
@@ -451,21 +454,6 @@ class CartsController extends AppController {
 					array_push($addProdArr, 'T');
 				}
 									
-							
-				// if($calcRow > 0 ) {					
-					// if(($featureCount + $calcRow) < $rowPerPage) {
-						// array_push($prodArr, 'C');
-					// } else {
-						// array_push($addProdArr, 'C');
-					// }
-				// }				
-// 					
-				// if(($featureCount + $calcRow + $textRow) < $rowPerPage) {
-					// array_push($prodArr, 'T');
-				// } else {
-					// array_push($addProdArr, 'T');
-				// }	
-// 				
 				if(!empty($prodArr))
 					$page[$j] = $prodArr;
 				$prodArr = array();
