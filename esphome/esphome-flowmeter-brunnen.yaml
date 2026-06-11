@@ -1,0 +1,66 @@
+esphome:
+  name: "esphome-flowmeter-brunnen"
+  friendly_name: ESPHome FlowMeter Brunnen
+  min_version: 2024.11.0
+  name_add_mac_suffix: false
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "0AQiEFZ1sJu+roG+0WHY0IpJ3w1UkzAEZzbsve3Kmi0="
+
+# Allow Over-The-Air updates
+ota:
+- platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "FlowMeter_Brunnen"
+    password: "1M8zNPlKGoye"
+
+logger:
+
+# To have a "next url" for improv serial
+web_server:
+
+globals:
+  - id: last_raw_total
+    type: float
+    restore_value: no
+    initial_value: '0'
+
+  - id: blocked_total
+    type: float
+    restore_value: yes
+    initial_value: '0'
+
+sensor:
+  - platform: pulse_counter
+    pin: GPIO4
+    name: "Water Flow Rate"
+    unit_of_measurement: 'L/min'
+    id: flow_rate_3
+    accuracy_decimals: 0
+    update_interval: 1s
+    filters:
+      - lambda: |-
+          if (x < 240) {
+            return (x / 120.0); // 240 pulse/min equals 2 liter/min
+          } else {
+            return (((x / 60.0) + 8.0) / 6.0);
+          }
+
+    total:
+      name: "Total Water Pulses"
+      unit_of_measurement: 'pulses'
+      id: total_water_pulses_3
+      accuracy_decimals: 0
