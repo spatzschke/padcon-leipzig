@@ -33,30 +33,31 @@ logger:
 web_server:
 
 globals:
-  - id: last_raw_total
-    type: float
-    restore_value: no
-    initial_value: '0'
-
-  - id: blocked_total
+  - id: total_liters
     type: float
     restore_value: yes
     initial_value: '0'
 
 sensor:
   - platform: pulse_counter
-    pin: GPIO4
+    pin:
+      number: GPIO4
+      mode:
+        input: true
+        pullup: true
     name: "Water Flow Rate"
     unit_of_measurement: 'L/min'
     id: flow_rate_3
-    accuracy_decimals: 0
-    update_interval: 1s
+    accuracy_decimals: 2
+    update_interval: 10s
+    internal_filter: 13us
     filters:
       - lambda: |-
+          if (x <= 0) return 0.0;
           if (x < 240) {
-            return (x / 120.0); // 240 pulse/min equals 2 liter/min
+            return x / 120.0;
           } else {
-            return (((x / 60.0) + 8.0) / 6.0);
+            return ((x / 60.0) + 8.0) / 6.0;
           }
 
     total:
@@ -64,3 +65,15 @@ sensor:
       unit_of_measurement: 'pulses'
       id: total_water_pulses_3
       accuracy_decimals: 0
+      on_value:
+        then:
+          - lambda: |-
+              id(total_liters) += x / 120.0;
+
+  - platform: template
+    name: "Total Water Volume"
+    unit_of_measurement: 'L'
+    id: total_water_volume
+    accuracy_decimals: 1
+    lambda: return id(total_liters);
+    update_interval: 10s
